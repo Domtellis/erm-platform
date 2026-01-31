@@ -1,0 +1,45 @@
+name: Generate PDFs from Markdown
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install pandoc
+        run: sudo apt-get update && sudo apt-get install -y pandoc
+
+      - name: Generate PDFs for all value stream markdown files
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          SRC_DIR="docs/value-architecture/value-streams"
+          OUT_DIR="exports/value-streams"
+
+          mkdir -p "$OUT_DIR"
+
+          shopt -s nullglob
+          files=("$SRC_DIR"/*.md)
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "No .md files found in $SRC_DIR"
+            exit 1
+          fi
+
+          for file in "${files[@]}"; do
+            base="$(basename "${file%.md}")"
+            echo "Converting: $file -> $OUT_DIR/$base.pdf"
+            pandoc "$file" -o "$OUT_DIR/$base.pdf"
+          done
+
+          echo "Done. PDFs generated in $OUT_DIR:"
+          ls -la "$OUT_DIR"
+
+      - name: Upload PDFs as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: value-stream-pdfs
+          path: exports/value-streams/*.pdf
