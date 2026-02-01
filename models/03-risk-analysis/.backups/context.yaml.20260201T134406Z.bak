@@ -31,4 +31,4 @@ metrics: 'Flow: assessment cycle time; rework rate after challenge; WIP of asses
   assessment QA score; % with evidence; consistency across BUs.<br>Risk: % material
   risks with quantified view (where policy requires); override frequency.'
 source_file: docs\value-architecture\value-streams\VS-03-risk-analysis.md
-last_updated: '2026-02-01T13:44:06.329221Z'
+last_updated: '2026-02-01T13:05:19.857383Z'

@@ -27,4 +27,4 @@ metrics: 'Flow: signal-to-triage time; triage throughput; WIP of unreviewed sign
   relevance score of signals; stakeholder utilisation.<br>Risk: “surprise events”
   count; % emerging risks reviewed.'
 source_file: docs\value-architecture\value-streams\VS-01-risk-sensing.md
-last_updated: '2026-02-01T13:44:06.232016Z'
+last_updated: '2026-02-01T13:05:19.774213Z'

@@ -37,4 +37,4 @@ metrics: 'Flow: time to evaluate vs appetite; throughput of exceptions processed
   % decisions using criteria; decision consistency index; stakeholder satisfaction.<br>Risk:
   appetite breach rate; time to remediate; risk-adjusted performance indicators.'
 source_file: docs\value-architecture\value-streams\VS-00-risk-appetite-criteria-guardrails.md
-last_updated: '2026-02-01T13:44:06.195339Z'
+last_updated: '2026-02-01T13:05:19.735490Z'

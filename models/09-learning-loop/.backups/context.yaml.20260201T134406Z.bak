@@ -29,4 +29,4 @@ metrics: 'Flow: time to RCA completion; CAPA closure cycle time.<br>Performance:
   adoption rate; verification pass rate.<br>Risk: recurrence rate; reduction in similar
   events; loss trend.'
 source_file: docs\value-architecture\value-streams\VS-09-learnings-incidents-near-miss.md
-last_updated: '2026-02-01T13:44:06.535217Z'
+last_updated: '2026-02-01T13:05:20.176443Z'

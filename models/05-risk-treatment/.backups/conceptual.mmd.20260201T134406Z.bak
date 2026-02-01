@@ -22,4 +22,4 @@ classDiagram
   Activity8_7ReassessResidualDelta --> Activity9_8RecordAcceptanceWith
   Activity9_8RecordAcceptanceWith --> Output1_treatmentPlansControlDesigns : produces
   %% source: docs\value-architecture\value-streams\VS-05-risk-treatment-control-design.md, generated: 2026-02-01T13:05:19.945166Z
-%% source: docs\value-architecture\value-streams\VS-05-risk-treatment-control-design.md, generated: 2026-02-01T13:44:06.422448Z
+%% source: docs\value-architecture\value-streams\VS-05-risk-treatment-control-design.md, generated: 2026-02-01T13:05:19.945166Z
