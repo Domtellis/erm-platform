@@ -1,0 +1,33 @@
+%% Auto-generated conceptual diagram — edit source .md to regenerate
+flowchart LR
+  subgraph Inputs
+    I1["Context packs (VS-01), workshop outputs, incident learnings (VS-09), org/service maps, supplier lists."]
+  end
+  subgraph Activities
+    A1["1) Execute identification methods (workshops, interviews, data mining)"]
+    A2["2) Draft cause–event–impact statements"]
+    A3["3) Classify to taxonomy"]
+    A4["4) Assign owners and reviewers"]
+    A5["5) Link to objectives/KPIs, services/assets, suppliers"]
+    A6["6) Identify duplicates and consolidate"]
+    A7["7) Triage materiality/urgency"]
+    A8["8) Queue for assessment (VS-03)"]
+  end
+  subgraph Outputs
+    O1["Normalised risk records"]
+    O2["ownership"]
+    O3["dependency links"]
+    O4["triage status"]
+    O5["assessment backlog entries."]
+  end
+  I1-->A1
+  A1-->A2
+  A2-->A3
+  A3-->A4
+  A4-->A5
+  A5-->A6
+  A6-->A7
+  A7-->A8
+  A8-->O1
+  classDef meta fill:#f9f9f9,stroke:#eee;
+  %% source: docs\value-architecture\value-streams\VS-02-risk-identification.md, generated: 2026-02-01T12:39:19.904015Z

@@ -1,0 +1,29 @@
+%% Auto-generated conceptual diagram — edit source .md to regenerate
+flowchart LR
+  subgraph Inputs
+    I1["Strategy/OKRs, loss history, critical services, regulatory constraints, capital plans, risk taxonomy."]
+  end
+  subgraph Activities
+    A1["1) Define appetite by risk class"]
+    A2["2) Convert to tolerances/thresholds"]
+    A3["3) Define risk criteria and scoring model (incl. velocity/vulnerability)"]
+    A4["4) Align to KPIs and resource allocation"]
+    A5["5) Define escalation and acceptance rules"]
+    A6["6) Embed into stage gates (investment, architecture, suppliers)"]
+    A7["7) Publish playbooks and decision templates"]
+    A8["8) Configure platform rules engine."]
+  end
+  subgraph Outputs
+    O1["Appetite statement, scoring model configuration, escalation matrix, gate checklists, waiver workflows."]
+  end
+  I1-->A1
+  A1-->A2
+  A2-->A3
+  A3-->A4
+  A4-->A5
+  A5-->A6
+  A6-->A7
+  A7-->A8
+  A8-->O1
+  classDef meta fill:#f9f9f9,stroke:#eee;
+  %% source: docs\value-architecture\value-streams\VS-00-risk-appetite-criteria-guardrails.md, generated: 2026-02-01T12:39:19.820860Z

@@ -1,0 +1,32 @@
+id: VS-09
+name: Learnings - Incidents and Near-Miss
+short_description: Convert real events into improved risk understanding, controls,
+  and KRIs; reduce recurrence.
+owner: null
+stakeholders:
+- Ops/SOC/ITSM, Risk Function, Control Owners, ExCo (for material events)
+triggers:
+- Incidents, near misses, outages, fraud, compliance breaches, safety events.
+inputs:
+- ITSM/SOC incidents, RCA outputs, loss data, control performance, service impact
+  metrics.
+entry_criteria: ''
+key_activities:
+- 1) Capture and classify event
+- 2) Contain and implement immediate mitigations
+- 3) Perform RCA and contributing factors analysis
+- 4) Identify control gaps/failures
+- 5) Create CAPA actions with owners and dates
+- 6) Validate closure effectiveness
+- 7) Update risks/assessments and KRIs
+- 8) Publish lessons learned.
+decisions_and_gates: []
+outputs:
+- Post-incident reviews, updated risk/control records, CAPA plans, updated KRIs, lessons
+  learned library.
+exit_criteria: ''
+metrics: 'Flow: time to RCA completion; CAPA closure cycle time.<br>Performance: learning
+  adoption rate; verification pass rate.<br>Risk: recurrence rate; reduction in similar
+  events; loss trend.'
+source_file: docs\value-architecture\value-streams\VS-09-learnings-incidents-near-miss.md
+last_updated: '2026-02-01T12:39:20.064708Z'

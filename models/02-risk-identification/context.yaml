@@ -1,0 +1,36 @@
+id: VS-02
+name: Risk Identification
+short_description: Produce a structured, linked, owned risk inventory that is actionable
+  and portfolio-ready.
+owner: null
+stakeholders:
+- Risk Owners, BU leadership, Risk Function, Change teams, Procurement, Security
+triggers:
+- Periodic cycle, new initiative, post-incident review, regulatory request, emerging
+  risk flagged (VS-01).
+inputs:
+- Context packs (VS-01), workshop outputs, incident learnings (VS-09), org/service
+  maps, supplier lists.
+entry_criteria: ''
+key_activities:
+- 1) Execute identification methods (workshops, interviews, data mining)
+- 2) Draft cause–event–impact statements
+- 3) Classify to taxonomy
+- 4) Assign owners and reviewers
+- 5) Link to objectives/KPIs, services/assets, suppliers
+- 6) Identify duplicates and consolidate
+- 7) Triage materiality/urgency
+- 8) Queue for assessment (VS-03)
+decisions_and_gates: []
+outputs:
+- Normalised risk records
+- ownership
+- dependency links
+- triage status
+- assessment backlog entries.
+exit_criteria: ''
+metrics: 'Flow: time from identification to triage; throughput of risks normalised;
+  WIP of unowned risks.<br>Performance: % risks meeting quality standard; duplication
+  rate.<br>Risk: proportion of material risks lacking assessment schedule.'
+source_file: docs\value-architecture\value-streams\VS-02-risk-identification.md
+last_updated: '2026-02-01T12:39:19.904015Z'

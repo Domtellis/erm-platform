@@ -1,0 +1,25 @@
+# ==========================
+# ERM Value Streams ownership
+# ==========================
+
+# Default owner for the whole pack
+/docs/value-architecture/value-streams/            @your-org/risk-function
+
+# Value Stream specific reviewers (aligns to your pack titles)
+/docs/value-architecture/value-streams/VS-00-*.md  @your-org/risk-committee @your-org/finance
+/docs/value-architecture/value-streams/VS-01-*.md  @your-org/security @your-org/data-owners
+/docs/value-architecture/value-streams/VS-02-*.md  @your-org/risk-function @your-org/business-owners
+/docs/value-architecture/value-streams/VS-03-*.md  @your-org/risk-function @your-org/finance
+/docs/value-architecture/value-streams/VS-04-*.md  @your-org/risk-committee @your-org/portfolio-governance
+/docs/value-architecture/value-streams/VS-05-*.md  @your-org/control-owners @your-org/architecture-governance
+/docs/value-architecture/value-streams/VS-06-*.md  @your-org/audit-assurance @your-org/control-owners
+/docs/value-architecture/value-streams/VS-07-*.md  @your-org/ops @your-org/risk-function
+/docs/value-architecture/value-streams/VS-08-*.md  @your-org/legal-compliance @your-org/risk-function
+/docs/value-architecture/value-streams/VS-09-*.md  @your-org/incident-management @your-org/risk-function
+
+# Templates and governance docs
+/docs/value-architecture/value-streams/_templates/  @your-org/risk-function
+/adr/                                              @your-org/architecture-governance @your-org/risk-function
+
+# Repo governance
+/.github/                                          @your-org/platform-engineering

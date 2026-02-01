@@ -1,0 +1,33 @@
+id: VS-04
+name: Risk Evaluation and Prioritisation
+short_description: Turn assessed risks into prioritised decisions, funded treatments,
+  and portfolio views (including concentrations/systemic risk).
+owner: null
+stakeholders:
+- ExCo/Board, Risk Committee, Portfolio/Finance, Risk Owners
+triggers:
+- Completion of analysis, quarterly review, appetite breach, budget cycle.
+inputs:
+- Residual risk results (VS-03), appetite/criteria (VS-00), monitoring and control
+  health (VS-06/VS-07), strategic priorities.
+entry_criteria: ''
+key_activities:
+- 1) Evaluate residual vs appetite
+- 2) Rank and cluster (themes/systemic/concentration)
+- 3) Identify single points of failure and critical service exposures
+- 4) Select response approach per risk
+- 5) Build prioritised treatment backlog
+- 6) Allocate owners and funding
+- 7) Set review cadence by volatility
+- 8) Publish portfolio decisions and actions.
+decisions_and_gates: []
+outputs:
+- Top risk portfolio, heatmaps, concentration view, funded treatment backlog, escalation
+  log, decision ledger.
+exit_criteria: ''
+metrics: 'Flow: decision lead time; throughput of funded treatments; WIP of unfunded
+  high risks.<br>Performance: board clarity score; “one version of truth” disputes.<br>Risk:
+  % high risks with funded plans; concentration indices; number of unresolved appetite
+  breaches.'
+source_file: docs\value-architecture\value-streams\VS-04-risk-evaluation-prioritisation.md
+last_updated: '2026-02-01T12:39:19.956308Z'

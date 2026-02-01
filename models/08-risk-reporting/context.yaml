@@ -1,0 +1,32 @@
+id: VS-08
+name: Risk Reporting and Decision Support
+short_description: Provide coherent, decision-focused reporting and an audit-ready
+  record of risk decisions and actions.
+owner: null
+stakeholders:
+- Board/ExCo, Risk Committee, Regulators/customers (as needed), Business Leaders
+triggers:
+- Governance cadence, regulatory/customer requests, major incidents, portfolio changes.
+inputs:
+- Portfolio data (VS-02, VS-07), decision ledger (VS-04, VS-00), evidence (VS-06),
+  incidents (VS-09), treatments (VS-05).
+entry_criteria: ''
+key_activities:
+- 1) Standardise narrative and decision asks
+- 2) Produce portfolio views and trends
+- 3) Build decision packs with options and trade-offs
+- 4) Generate external assurance artefacts
+- 5) Provide traceability links
+- 6) Capture decisions and actions
+- 7) Validate “one version of truth”
+- 8) Improve reporting based on feedback.
+decisions_and_gates: []
+outputs:
+- Board packs, dashboards, external assurance artefacts, decision logs, traceability
+  graphs.
+exit_criteria: ''
+metrics: 'Flow: pack production cycle time; time to answer stakeholder queries.<br>Performance:
+  stakeholder satisfaction; % reporting automated; disputes rate.<br>Risk: decision
+  latency reduction; unresolved top risks visibility.'
+source_file: docs\value-architecture\value-streams\VS-08-risk-reporting-decision-support.md
+last_updated: '2026-02-01T12:39:20.040110Z'

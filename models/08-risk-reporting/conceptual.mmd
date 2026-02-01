@@ -1,0 +1,29 @@
+%% Auto-generated conceptual diagram — edit source .md to regenerate
+flowchart LR
+  subgraph Inputs
+    I1["Portfolio data (VS-02, VS-07), decision ledger (VS-04, VS-00), evidence (VS-06), incidents (VS-09), treatments (VS-05)."]
+  end
+  subgraph Activities
+    A1["1) Standardise narrative and decision asks"]
+    A2["2) Produce portfolio views and trends"]
+    A3["3) Build decision packs with options and trade-offs"]
+    A4["4) Generate external assurance artefacts"]
+    A5["5) Provide traceability links"]
+    A6["6) Capture decisions and actions"]
+    A7["7) Validate “one version of truth”"]
+    A8["8) Improve reporting based on feedback."]
+  end
+  subgraph Outputs
+    O1["Board packs, dashboards, external assurance artefacts, decision logs, traceability graphs."]
+  end
+  I1-->A1
+  A1-->A2
+  A2-->A3
+  A3-->A4
+  A4-->A5
+  A5-->A6
+  A6-->A7
+  A7-->A8
+  A8-->O1
+  classDef meta fill:#f9f9f9,stroke:#eee;
+  %% source: docs\value-architecture\value-streams\VS-08-risk-reporting-decision-support.md, generated: 2026-02-01T12:39:20.040110Z

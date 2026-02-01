@@ -1,0 +1,25 @@
+%% Auto-generated conceptual diagram — edit source .md to regenerate
+flowchart LR
+  subgraph Inputs
+    I1["Threat intel, regulatory feeds, macro indicators, Incidents, audit findings, complaints, supplier performance."]
+  end
+  subgraph Activities
+    A1["1) Define sensing scope and critical dependencies"]
+    A2["2) Ingest external signals"]
+    A3["3) Ingest internal operational signals"]
+    A4["4) Consult stakeholders and validate implications"]
+    A5["5) Update context assumptions and dependency maps"]
+    A6["6) Publish emerging risk watchlist"]
+  end
+  subgraph Outputs
+    O1["Sensing dashboard, emerging risk list."]
+  end
+  I1-->A1
+  A1-->A2
+  A2-->A3
+  A3-->A4
+  A4-->A5
+  A5-->A6
+  A6-->O1
+  classDef meta fill:#f9f9f9,stroke:#eee;
+  %% source: docs\value-architecture\value-streams\VS-01-risk-sensing.md, generated: 2026-02-01T12:39:19.872632Z

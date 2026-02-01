@@ -1,0 +1,29 @@
+%% Auto-generated conceptual diagram — edit source .md to regenerate
+flowchart LR
+  subgraph Inputs
+    I1["Risk records (VS-02), appetite/criteria (VS-00), control data (VS-06), KRI data (VS-07), loss/incidents (VS-09)."]
+  end
+  subgraph Activities
+    A1["1) Select analysis technique (tiered: quick qualification → detailed scenario)"]
+    A2["2) Assess inherent likelihood/impact"]
+    A3["3) Assess control design and operating effectiveness"]
+    A4["4) Compute residual risk and confidence"]
+    A5["5) Quantify exposure where required (ranges/scenarios)"]
+    A6["6) Perform sensitivity/uncertainty review"]
+    A7["7) Document evidence and assumptions"]
+    A8["8) Submit for challenge/approval"]
+  end
+  subgraph Outputs
+    O1["Inherent/residual ratings, scenario analysis artefacts, quantified exposure bands, assumptions and evidence logs."]
+  end
+  I1-->A1
+  A1-->A2
+  A2-->A3
+  A3-->A4
+  A4-->A5
+  A5-->A6
+  A6-->A7
+  A7-->A8
+  A8-->O1
+  classDef meta fill:#f9f9f9,stroke:#eee;
+  %% source: docs\value-architecture\value-streams\VS-03-risk-analysis.md, generated: 2026-02-01T12:39:19.934057Z
