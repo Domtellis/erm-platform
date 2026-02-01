@@ -29,11 +29,24 @@ jobs:
         run: |
           python scripts/generate_value_streams.py --source docs/value-architecture/value-streams --models models
 
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install mermaid-cli
+        run: |
+          npm install -g @mermaid-js/mermaid-cli
+
+      - name: Run draw.io exporter (render previews)
+        run: |
+          python scripts/export_drawio.py
+
       - name: Validate generated artifacts are up-to-date
         run: |
-          # if generator produced changes to tracked files, fail the check so PR authors must run generator locally and include changes
+          # if generator or exporter produced changes to tracked files, fail the check so PR authors must run generator locally and include changes
           if [ -n "$(git status --porcelain)" ]; then
-            echo "ERROR: Generated artifacts are out of date. Please run 'python scripts/generate_value_streams.py' and commit regenerated files.";
+            echo "ERROR: Generated artifacts are out of date. Please run 'python scripts/generate_value_streams.py' and 'python scripts/export_drawio.py' and commit regenerated files.";
             git --no-pager status --porcelain
             exit 1
           else

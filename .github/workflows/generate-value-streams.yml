@@ -33,13 +33,24 @@ jobs:
         run: |
           python scripts/generate_value_streams.py --source docs/value-architecture/value-streams --models models
 
+      - name: Export draw.io and previews (SVG/HTML)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Install mermaid-cli
+        run: |
+          npm install -g @mermaid-js/mermaid-cli
+      - name: Run draw.io exporter
+        run: |
+          python scripts/export_drawio.py
+
       - name: Commit and push changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           if [ -n "$(git status --porcelain)" ]; then
             git add -A
-            git commit -m "chore: regenerate value-stream model artifacts from docs"
+            git commit -m "chore: regenerate value-stream model artifacts and draw.io exports"
             git push
           else
             echo "No changes to commit"
