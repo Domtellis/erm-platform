@@ -21,4 +21,4 @@ classDiagram
   WaiverException "0..1" --> "1" Risk : relatesTo
   WaiverException "1" --> "0..*" Approval : approvedVia
   Approval "1" --> "1" WaiverException : approves
-%% source: docs\value-architecture\value-streams\VS-00-risk-appetite-criteria-guardrails.md, generated: 2026-02-01T13:05:19.735490Z
+%% source: docs\value-architecture\value-streams\VS-00-risk-appetite-criteria-guardrails.md, generated: 2026-02-01T12:57:43.490385Z

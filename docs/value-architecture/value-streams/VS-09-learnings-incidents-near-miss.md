@@ -12,3 +12,27 @@
 | Outputs | Post-incident reviews, updated risk/control records, CAPA plans, updated KRIs, lessons learned library. |
 | DoD | RCA completed; CAPA implemented and validated; risk posture updated; recurrence controls defined. |
 | Metrics | Flow: time to RCA completion; CAPA closure cycle time.<br>Performance: learning adoption rate; verification pass rate.<br>Risk: recurrence rate; reduction in similar events; loss trend. |
+
+```mmd
+classDiagram
+  class Input1_itsmSocIncidentsRca
+  class Activity1_1CaptureAndClassify
+  class Activity2_2ContainAndImplement
+  class Activity3_3PerformRcaAnd
+  class Activity4_4IdentifyControlGaps
+  class Activity5_5CreateCapaActions
+  class Activity6_6ValidateClosureEffectiveness
+  class Activity7_7UpdateRisksAssessments
+  class Activity8_8PublishLessonsLearned
+  class Output1_postIncidentReviewsUpdated
+  Input1_itsmSocIncidentsRca "1" --> "0..*" Activity1_1CaptureAndClassify : feeds
+  Activity1_1CaptureAndClassify --> Activity2_2ContainAndImplement
+  Activity2_2ContainAndImplement --> Activity3_3PerformRcaAnd
+  Activity3_3PerformRcaAnd --> Activity4_4IdentifyControlGaps
+  Activity4_4IdentifyControlGaps --> Activity5_5CreateCapaActions
+  Activity5_5CreateCapaActions --> Activity6_6ValidateClosureEffectiveness
+  Activity6_6ValidateClosureEffectiveness --> Activity7_7UpdateRisksAssessments
+  Activity7_7UpdateRisksAssessments --> Activity8_8PublishLessonsLearned
+  Activity8_8PublishLessonsLearned --> Output1_postIncidentReviewsUpdated : produces
+  %% source: docs\value-architecture\value-streams\VS-09-learnings-incidents-near-miss.md, generated: 2026-02-01T13:05:20.176443Z
+```

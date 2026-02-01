@@ -12,27 +12,3 @@
 | Outputs | Inherent/residual ratings, scenario analysis artefacts, quantified exposure bands, assumptions and evidence logs. |
 | DoD | Assessment meets QA standard; evidence attached; assumptions recorded; approvals captured; next-step decision required identified. |
 | Metrics | Flow: assessment cycle time; rework rate after challenge; WIP of assessments.<br>Performance: assessment QA score; % with evidence; consistency across BUs.<br>Risk: % material risks with quantified view (where policy requires); override frequency. |
-
-```mmd
-classDiagram
-  class Input1_riskRecordsVs02
-  class Activity1_1SelectAnalysisTechnique
-  class Activity2_2AssessInherentLikelihood
-  class Activity3_3AssessControlDesign
-  class Activity4_4ComputeResidualRisk
-  class Activity5_5QuantifyExposureWhere
-  class Activity6_6PerformSensitivityUncertainty
-  class Activity7_7DocumentEvidenceAnd
-  class Activity8_8SubmitForChallenge
-  class Output1_inherentResidualRatingsScenario
-  Input1_riskRecordsVs02 "1" --> "0..*" Activity1_1SelectAnalysisTechnique : feeds
-  Activity1_1SelectAnalysisTechnique --> Activity2_2AssessInherentLikelihood
-  Activity2_2AssessInherentLikelihood --> Activity3_3AssessControlDesign
-  Activity3_3AssessControlDesign --> Activity4_4ComputeResidualRisk
-  Activity4_4ComputeResidualRisk --> Activity5_5QuantifyExposureWhere
-  Activity5_5QuantifyExposureWhere --> Activity6_6PerformSensitivityUncertainty
-  Activity6_6PerformSensitivityUncertainty --> Activity7_7DocumentEvidenceAnd
-  Activity7_7DocumentEvidenceAnd --> Activity8_8SubmitForChallenge
-  Activity8_8SubmitForChallenge --> Output1_inherentResidualRatingsScenario : produces
-  %% source: docs\value-architecture\value-streams\VS-03-risk-analysis.md, generated: 2026-02-01T13:05:19.857383Z
-```

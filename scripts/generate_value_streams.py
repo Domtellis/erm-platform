@@ -109,6 +109,69 @@ def extract_mermaid_block(md_text: str):
     return None
 
 
+# Helpers to auto-generate a classDiagram when none is provided in the source .md
+def _sanitize_to_classname(s: str) -> str:
+    parts = re.findall(r"\w+", s)
+    if not parts:
+        return 'X'
+    # Take up to first 4 words to avoid extremely long names
+    parts = parts[:4]
+    return ''.join(p.capitalize() for p in parts)
+
+
+def generate_class_diagram_from_context(context: dict) -> str:
+    """Create a mermaid classDiagram representing inputs, activities and outputs."""
+    lines = []
+    lines.append('classDiagram')
+
+    inputs = context.get('inputs', [])
+    activities = context.get('key_activities', [])
+    outputs = context.get('outputs', [])
+    decisions = context.get('decisions_and_gates', [])
+
+    # Create classes
+    in_names = []
+    for i, inp in enumerate(inputs, start=1):
+        name = _sanitize_to_classname(f'Input{i}_{inp}')
+        in_names.append(name)
+        lines.append(f'  class {name}')
+
+    act_names = []
+    for i, act in enumerate(activities, start=1):
+        name = _sanitize_to_classname(f'Activity{i}_{act}')
+        act_names.append(name)
+        lines.append(f'  class {name}')
+
+    out_names = []
+    for i, out in enumerate(outputs, start=1):
+        name = _sanitize_to_classname(f'Output{i}_{out}')
+        out_names.append(name)
+        lines.append(f'  class {name}')
+
+    dec_names = []
+    for i, dec in enumerate(decisions, start=1):
+        name = _sanitize_to_classname(f'Decision{i}_{dec}')
+        dec_names.append(name)
+        lines.append(f'  class {name}')
+
+    # Relationships
+    if in_names and act_names:
+        lines.append(f'  {in_names[0]} "1" --> "0..*" {act_names[0]} : feeds')
+    for i in range(len(act_names) - 1):
+        lines.append(f'  {act_names[i]} --> {act_names[i+1]}')
+    if act_names and out_names:
+        lines.append(f'  {act_names[-1]} --> {out_names[0]} : produces')
+
+    # Decisions attached to first activity if present
+    if dec_names and act_names:
+        for dec in dec_names:
+            lines.append(f'  {dec} "1" --> "0..*" {act_names[0]} : governs')
+
+    # Include a source footnote
+    lines.append(f'  %% source: {context.get("source_file")}, generated: {context.get("last_updated")}')
+    return '\n'.join(lines)
+
+
 def generate_mermaid(context):
     # If the source markdown included a mermaid block, use it verbatim
     if context.get('mermaid_raw'):
@@ -118,55 +181,10 @@ def generate_mermaid(context):
         lines.append(f'%% source: {context.get("source_file")}, generated: {context.get("last_updated")}')
         return '\n'.join(lines)
 
-    # Fallback: simple flowchart generated from Inputs/Activities/Outputs
+    # Fallback: generate a classDiagram from Inputs/Activities/Outputs
     lines = []
-    lines.append('%% Auto-generated conceptual diagram — generated flowchart from .md')
-    lines.append('flowchart LR')
-
-    # Inputs
-    if context['inputs']:
-        lines.append('  subgraph Inputs')
-        for i, inp in enumerate(context['inputs'], start=1):
-            lines.append(f'    I{i}["{inp}"]')
-        lines.append('  end')
-
-    # Activities
-    if context['key_activities']:
-        lines.append('  subgraph Activities')
-        for i, act in enumerate(context['key_activities'], start=1):
-            # keep nodes short
-            label = act if len(act) < 80 else act[:77] + '...'
-            lines.append(f'    A{i}["{label}"]')
-        lines.append('  end')
-
-    # Outputs
-    if context['outputs']:
-        lines.append('  subgraph Outputs')
-        for i, out in enumerate(context['outputs'], start=1):
-            lines.append(f'    O{i}["{out}"]')
-        lines.append('  end')
-
-    # Connections - simple linear flow: first input -> first activity -> ... -> first output
-    conn = []
-    if context['inputs'] and context['key_activities']:
-        conn.append(f'I1-->A1')
-    for i in range(1, len(context['key_activities'])):
-        conn.append(f'A{i}-->A{i+1}')
-    if context['key_activities'] and context['outputs']:
-        conn.append(f'A{len(context['key_activities'])}-->O1')
-
-    # If no inputs but activities exist, chain activities
-    if not context['inputs'] and context['key_activities']:
-        for i in range(1, len(context['key_activities'])):
-            conn.append(f'A{i}-->A{i+1}')
-        if context['outputs']:
-            conn.append(f'A{len(context['key_activities'])}-->O1')
-
-    lines.extend(['  ' + c for c in conn])
-
-    # Add metadata footnote
-    lines.append(f'  classDef meta fill:#f9f9f9,stroke:#eee;')
-    lines.append(f'  %% source: {context.get("source_file")}, generated: {context.get("last_updated")}')
+    lines.append('%% Auto-generated conceptual diagram — generated classDiagram from .md')
+    lines.append(generate_class_diagram_from_context(context))
 
     return '\n'.join(lines)
 
@@ -236,8 +254,21 @@ def process_file(md_path: Path, models_dir: Path):
     mermaid_raw = extract_mermaid_block(text)
     if mermaid_raw:
         context['mermaid_raw'] = mermaid_raw
+    else:
+        # No mermaid provided — auto-generate a classDiagram and append it to the source .md
+        generated = generate_class_diagram_from_context(context)
+        # Backup the source .md before modifying
+        md_backup_root = md_path.parent / BACKUP_DIR_NAME
+        backup_file(md_path, md_backup_root)
+        # Append a fenced mermaid block to the end of the markdown
+        new_block = '\n\n```mmd\n' + generated + '\n```\n'
+        text = text + new_block
+        md_path.write_text(text, encoding='utf-8')
+        print(f'Appended generated mermaid block to {md_path}')
+        # set context mermaid_raw so conceptual.mmd uses the same content
+        context['mermaid_raw'] = generated
 
-    # write conceptual.mmd (use mermaid block if present, otherwise generate a flowchart)
+    # write conceptual.mmd (use mermaid block if present, otherwise generate a fallback)
     mmd = generate_mermaid(context)
     mmd_path = model_dir / 'conceptual.mmd'
     write_file(mmd_path, mmd)

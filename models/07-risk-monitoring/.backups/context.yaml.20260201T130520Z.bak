@@ -29,4 +29,4 @@ metrics: 'Flow: time to detect/acknowledge/escalate; throughput of breach triage
   false alert rate; data freshness compliance.<br>Risk: breach recurrence; % leading
   indicators; residual movement triggered by evidence.'
 source_file: docs\value-architecture\value-streams\VS-07-risk-monitoring.md
-last_updated: '2026-02-01T13:05:20.040725Z'
+last_updated: '2026-02-01T12:57:43.679467Z'

@@ -1,25 +1,19 @@
-%% Auto-generated conceptual diagram — generated flowchart from .md
-flowchart LR
-  subgraph Inputs
-    I1["Threat intel, regulatory feeds, macro indicators, Incidents, audit findings, complaints, supplier performance."]
-  end
-  subgraph Activities
-    A1["1) Define sensing scope and critical dependencies"]
-    A2["2) Ingest external signals"]
-    A3["3) Ingest internal operational signals"]
-    A4["4) Consult stakeholders and validate implications"]
-    A5["5) Update context assumptions and dependency maps"]
-    A6["6) Publish emerging risk watchlist"]
-  end
-  subgraph Outputs
-    O1["Sensing dashboard, emerging risk list."]
-  end
-  I1-->A1
-  A1-->A2
-  A2-->A3
-  A3-->A4
-  A4-->A5
-  A5-->A6
-  A6-->O1
-  classDef meta fill:#f9f9f9,stroke:#eee;
-  %% source: docs\value-architecture\value-streams\VS-01-risk-sensing.md, generated: 2026-02-01T12:57:43.513982Z
+%% Auto-generated conceptual diagram — from mermaid block in source .md
+classDiagram
+  class Input1_threatIntelRegulatoryFeeds
+  class Activity1_1DefineSensingScope
+  class Activity2_2IngestExternalSignals
+  class Activity3_3IngestInternalOperational
+  class Activity4_4ConsultStakeholdersAnd
+  class Activity5_5UpdateContextAssumptions
+  class Activity6_6PublishEmergingRisk
+  class Output1_sensingDashboardEmergingRisk
+  Input1_threatIntelRegulatoryFeeds "1" --> "0..*" Activity1_1DefineSensingScope : feeds
+  Activity1_1DefineSensingScope --> Activity2_2IngestExternalSignals
+  Activity2_2IngestExternalSignals --> Activity3_3IngestInternalOperational
+  Activity3_3IngestInternalOperational --> Activity4_4ConsultStakeholdersAnd
+  Activity4_4ConsultStakeholdersAnd --> Activity5_5UpdateContextAssumptions
+  Activity5_5UpdateContextAssumptions --> Activity6_6PublishEmergingRisk
+  Activity6_6PublishEmergingRisk --> Output1_sensingDashboardEmergingRisk : produces
+  %% source: docs\value-architecture\value-streams\VS-01-risk-sensing.md, generated: 2026-02-01T13:05:19.774213Z
+%% source: docs\value-architecture\value-streams\VS-01-risk-sensing.md, generated: 2026-02-01T13:05:19.774213Z

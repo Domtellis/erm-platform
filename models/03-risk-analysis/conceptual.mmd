@@ -1,29 +1,23 @@
-%% Auto-generated conceptual diagram — generated flowchart from .md
-flowchart LR
-  subgraph Inputs
-    I1["Risk records (VS-02), appetite/criteria (VS-00), control data (VS-06), KRI data (VS-07), loss/incidents (VS-09)."]
-  end
-  subgraph Activities
-    A1["1) Select analysis technique (tiered: quick qualification → detailed scenario)"]
-    A2["2) Assess inherent likelihood/impact"]
-    A3["3) Assess control design and operating effectiveness"]
-    A4["4) Compute residual risk and confidence"]
-    A5["5) Quantify exposure where required (ranges/scenarios)"]
-    A6["6) Perform sensitivity/uncertainty review"]
-    A7["7) Document evidence and assumptions"]
-    A8["8) Submit for challenge/approval"]
-  end
-  subgraph Outputs
-    O1["Inherent/residual ratings, scenario analysis artefacts, quantified exposure bands, assumptions and evidence logs."]
-  end
-  I1-->A1
-  A1-->A2
-  A2-->A3
-  A3-->A4
-  A4-->A5
-  A5-->A6
-  A6-->A7
-  A7-->A8
-  A8-->O1
-  classDef meta fill:#f9f9f9,stroke:#eee;
-  %% source: docs\value-architecture\value-streams\VS-03-risk-analysis.md, generated: 2026-02-01T12:57:43.575025Z
+%% Auto-generated conceptual diagram — from mermaid block in source .md
+classDiagram
+  class Input1_riskRecordsVs02
+  class Activity1_1SelectAnalysisTechnique
+  class Activity2_2AssessInherentLikelihood
+  class Activity3_3AssessControlDesign
+  class Activity4_4ComputeResidualRisk
+  class Activity5_5QuantifyExposureWhere
+  class Activity6_6PerformSensitivityUncertainty
+  class Activity7_7DocumentEvidenceAnd
+  class Activity8_8SubmitForChallenge
+  class Output1_inherentResidualRatingsScenario
+  Input1_riskRecordsVs02 "1" --> "0..*" Activity1_1SelectAnalysisTechnique : feeds
+  Activity1_1SelectAnalysisTechnique --> Activity2_2AssessInherentLikelihood
+  Activity2_2AssessInherentLikelihood --> Activity3_3AssessControlDesign
+  Activity3_3AssessControlDesign --> Activity4_4ComputeResidualRisk
+  Activity4_4ComputeResidualRisk --> Activity5_5QuantifyExposureWhere
+  Activity5_5QuantifyExposureWhere --> Activity6_6PerformSensitivityUncertainty
+  Activity6_6PerformSensitivityUncertainty --> Activity7_7DocumentEvidenceAnd
+  Activity7_7DocumentEvidenceAnd --> Activity8_8SubmitForChallenge
+  Activity8_8SubmitForChallenge --> Output1_inherentResidualRatingsScenario : produces
+  %% source: docs\value-architecture\value-streams\VS-03-risk-analysis.md, generated: 2026-02-01T13:05:19.857383Z
+%% source: docs\value-architecture\value-streams\VS-03-risk-analysis.md, generated: 2026-02-01T13:05:19.857383Z

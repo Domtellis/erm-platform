@@ -1,0 +1,29 @@
+%% Auto-generated conceptual diagram — generated flowchart from .md
+flowchart LR
+  subgraph Inputs
+    I1["Appetite thresholds (VS-00), monitoring data feeds, incident signals, control health, supplier performance."]
+  end
+  subgraph Activities
+    A1["1) Define/maintain KRIs/KCIs linked to risks and appetite"]
+    A2["2) Build data pipelines and freshness checks"]
+    A3["3) Monitor dashboards and alerts"]
+    A4["4) Correlate signals and triage breaches"]
+    A5["5) Escalate and launch mitigations"]
+    A6["6) Update risk ratings or confidence"]
+    A7["7) Track recurrence and false alerts"]
+    A8["8) Improve indicator set and thresholds."]
+  end
+  subgraph Outputs
+    O1["Indicator catalogue, live dashboards, breach logs, mitigation actions, updated risk posture."]
+  end
+  I1-->A1
+  A1-->A2
+  A2-->A3
+  A3-->A4
+  A4-->A5
+  A5-->A6
+  A6-->A7
+  A7-->A8
+  A8-->O1
+  classDef meta fill:#f9f9f9,stroke:#eee;
+  %% source: docs\value-architecture\value-streams\VS-07-risk-monitoring.md, generated: 2026-02-01T12:57:43.679467Z

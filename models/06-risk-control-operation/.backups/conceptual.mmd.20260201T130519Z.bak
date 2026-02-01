@@ -1,0 +1,29 @@
+%% Auto-generated conceptual diagram — generated flowchart from .md
+flowchart LR
+  subgraph Inputs
+    I1["Control library (VS-05), operational data sources, test plans, evidence standards, issues/CAPA."]
+  end
+  subgraph Activities
+    A1["1) Execute controls (manual/automated)"]
+    A2["2) Capture evidence with provenance"]
+    A3["3) Test controls (design/operating)"]
+    A4["4) Identify exceptions and open issues"]
+    A5["5) Drive remediation and validate closure"]
+    A6["6) Run attestation campaigns"]
+    A7["7) Coordinate audit requests and provide packs"]
+    A8["8) Feed control health back to risk assessments (VS-03/VS-07)."]
+  end
+  subgraph Outputs
+    O1["Control performance data, test results, evidence records, issues/actions, attestations, audit/customer packs."]
+  end
+  I1-->A1
+  A1-->A2
+  A2-->A3
+  A3-->A4
+  A4-->A5
+  A5-->A6
+  A6-->A7
+  A7-->A8
+  A8-->O1
+  classDef meta fill:#f9f9f9,stroke:#eee;
+  %% source: docs\value-architecture\value-streams\VS-06-risk-control-operation-assurance.md, generated: 2026-02-01T12:57:43.651785Z

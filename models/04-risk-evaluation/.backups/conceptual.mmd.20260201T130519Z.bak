@@ -1,0 +1,29 @@
+%% Auto-generated conceptual diagram — generated flowchart from .md
+flowchart LR
+  subgraph Inputs
+    I1["Residual risk results (VS-03), appetite/criteria (VS-00), monitoring and control health (VS-06/VS-07), strategic priorities."]
+  end
+  subgraph Activities
+    A1["1) Evaluate residual vs appetite"]
+    A2["2) Rank and cluster (themes/systemic/concentration)"]
+    A3["3) Identify single points of failure and critical service exposures"]
+    A4["4) Select response approach per risk"]
+    A5["5) Build prioritised treatment backlog"]
+    A6["6) Allocate owners and funding"]
+    A7["7) Set review cadence by volatility"]
+    A8["8) Publish portfolio decisions and actions."]
+  end
+  subgraph Outputs
+    O1["Top risk portfolio, heatmaps, concentration view, funded treatment backlog, escalation log, decision ledger."]
+  end
+  I1-->A1
+  A1-->A2
+  A2-->A3
+  A3-->A4
+  A4-->A5
+  A5-->A6
+  A6-->A7
+  A7-->A8
+  A8-->O1
+  classDef meta fill:#f9f9f9,stroke:#eee;
+  %% source: docs\value-architecture\value-streams\VS-04-risk-evaluation-prioritisation.md, generated: 2026-02-01T12:57:43.598785Z

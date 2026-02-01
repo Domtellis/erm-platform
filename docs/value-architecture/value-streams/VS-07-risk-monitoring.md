@@ -12,3 +12,27 @@
 | Outputs | Indicator catalogue, live dashboards, breach logs, mitigation actions, updated risk posture. |
 | DoD | Monitoring live; breach workflow tested; response SLAs met; indicator improvement loop operating. |
 | Metrics | Flow: time to detect/acknowledge/escalate; throughput of breach triage.<br>Performance: false alert rate; data freshness compliance.<br>Risk: breach recurrence; % leading indicators; residual movement triggered by evidence. |
+
+```mmd
+classDiagram
+  class Input1_appetiteThresholdsVs00
+  class Activity1_1DefineMaintainKris
+  class Activity2_2BuildDataPipelines
+  class Activity3_3MonitorDashboardsAnd
+  class Activity4_4CorrelateSignalsAnd
+  class Activity5_5EscalateAndLaunch
+  class Activity6_6UpdateRiskRatings
+  class Activity7_7TrackRecurrenceAnd
+  class Activity8_8ImproveIndicatorSet
+  class Output1_indicatorCatalogueLiveDashboards
+  Input1_appetiteThresholdsVs00 "1" --> "0..*" Activity1_1DefineMaintainKris : feeds
+  Activity1_1DefineMaintainKris --> Activity2_2BuildDataPipelines
+  Activity2_2BuildDataPipelines --> Activity3_3MonitorDashboardsAnd
+  Activity3_3MonitorDashboardsAnd --> Activity4_4CorrelateSignalsAnd
+  Activity4_4CorrelateSignalsAnd --> Activity5_5EscalateAndLaunch
+  Activity5_5EscalateAndLaunch --> Activity6_6UpdateRiskRatings
+  Activity6_6UpdateRiskRatings --> Activity7_7TrackRecurrenceAnd
+  Activity7_7TrackRecurrenceAnd --> Activity8_8ImproveIndicatorSet
+  Activity8_8ImproveIndicatorSet --> Output1_indicatorCatalogueLiveDashboards : produces
+  %% source: docs\value-architecture\value-streams\VS-07-risk-monitoring.md, generated: 2026-02-01T13:05:20.040725Z
+```

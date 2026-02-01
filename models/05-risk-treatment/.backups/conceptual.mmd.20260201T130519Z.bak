@@ -1,0 +1,31 @@
+%% Auto-generated conceptual diagram — generated flowchart from .md
+flowchart LR
+  subgraph Inputs
+    I1["Prioritised backlog (VS-04), control performance gaps (VS-06), KRIs (VS-07), obligations/compliance needs."]
+  end
+  subgraph Activities
+    A1["1) Select response option (avoid/reduce/transfer/accept)"]
+    A2["2) Design control set (prevent/detect/correct"]
+    A3["key controls)"]
+    A4["3) Define control objectives and evidence/test approach"]
+    A5["4) Break into delivery work (epics/stories)"]
+    A6["5) Implement via change/project pathways"]
+    A7["6) Verify completion and evidence"]
+    A8["7) Reassess residual delta"]
+    A9["8) Record acceptance with expiry/conditions where needed."]
+  end
+  subgraph Outputs
+    O1["Treatment plans, control designs, delivery backlog items, updated residuals, acceptance records with conditions/expiry."]
+  end
+  I1-->A1
+  A1-->A2
+  A2-->A3
+  A3-->A4
+  A4-->A5
+  A5-->A6
+  A6-->A7
+  A7-->A8
+  A8-->A9
+  A9-->O1
+  classDef meta fill:#f9f9f9,stroke:#eee;
+  %% source: docs\value-architecture\value-streams\VS-05-risk-treatment-control-design.md, generated: 2026-02-01T12:57:43.627234Z
