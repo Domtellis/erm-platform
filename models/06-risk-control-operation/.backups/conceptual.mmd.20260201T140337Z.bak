@@ -1,4 +1,4 @@
-%% Auto-generated conceptual diagram — from source .md block
+%% Auto-generated conceptual diagram — from mermaid block in source .md
 classDiagram
   class Input1_controlLibraryVs05
   class Activity1_1ExecuteControlsManual
@@ -20,3 +20,4 @@ classDiagram
   Activity7_7CoordinateAuditRequests --> Activity8_8FeedControlHealth
   Activity8_8FeedControlHealth --> Output1_controlPerformanceDataTest : produces
   %% source: docs\value-architecture\value-streams\VS-06-risk-control-operation-assurance.md, generated: 2026-02-01T13:05:19.980612Z
+%% source: docs\value-architecture\value-streams\VS-06-risk-control-operation-assurance.md, generated: 2026-02-01T13:44:06.448836Z

@@ -1,4 +1,4 @@
-%% Auto-generated conceptual diagram — from source .md block
+%% Auto-generated conceptual diagram — from mermaid block in source .md
 classDiagram
   class Input1_contextPacksVs01
   class Activity1_1ExecuteIdentificationMethods
@@ -24,3 +24,4 @@ classDiagram
   Activity7_7TriageMaterialityUrgency --> Activity8_8QueueForAssessment
   Activity8_8QueueForAssessment --> Output1_normalisedRiskRecords : produces
   %% source: docs\value-architecture\value-streams\VS-02-risk-identification.md, generated: 2026-02-01T13:05:19.819061Z
+%% source: docs\value-architecture\value-streams\VS-02-risk-identification.md, generated: 2026-02-01T13:44:06.265547Z

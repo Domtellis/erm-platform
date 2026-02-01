@@ -1,4 +1,4 @@
-%% Auto-generated conceptual diagram — from source .md block
+%% Auto-generated conceptual diagram — from mermaid block in source .md
 classDiagram
   class Input1_residualRiskResultsVs
   class Activity1_1EvaluateResidualVs
@@ -20,3 +20,4 @@ classDiagram
   Activity7_7SetReviewCadence --> Activity8_8PublishPortfolioDecisions
   Activity8_8PublishPortfolioDecisions --> Output1_topRiskPortfolioHeatmaps : produces
   %% source: docs\value-architecture\value-streams\VS-04-risk-evaluation-prioritisation.md, generated: 2026-02-01T13:05:19.905669Z
+%% source: docs\value-architecture\value-streams\VS-04-risk-evaluation-prioritisation.md, generated: 2026-02-01T13:44:06.385585Z

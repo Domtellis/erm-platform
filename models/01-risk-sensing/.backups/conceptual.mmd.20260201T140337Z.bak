@@ -1,4 +1,4 @@
-%% Auto-generated conceptual diagram — from source .md block
+%% Auto-generated conceptual diagram — from mermaid block in source .md
 classDiagram
   class Input1_threatIntelRegulatoryFeeds
   class Activity1_1DefineSensingScope
@@ -16,3 +16,4 @@ classDiagram
   Activity5_5UpdateContextAssumptions --> Activity6_6PublishEmergingRisk
   Activity6_6PublishEmergingRisk --> Output1_sensingDashboardEmergingRisk : produces
   %% source: docs\value-architecture\value-streams\VS-01-risk-sensing.md, generated: 2026-02-01T13:05:19.774213Z
+%% source: docs\value-architecture\value-streams\VS-01-risk-sensing.md, generated: 2026-02-01T13:44:06.232016Z
