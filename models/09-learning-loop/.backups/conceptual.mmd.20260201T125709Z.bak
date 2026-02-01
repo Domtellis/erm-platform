@@ -1,4 +1,4 @@
-%% Auto-generated conceptual diagram — generated flowchart from .md
+%% Auto-generated conceptual diagram — edit source .md to regenerate
 flowchart LR
   subgraph Inputs
     I1["ITSM/SOC incidents, RCA outputs, loss data, control performance, service impact metrics."]
@@ -26,4 +26,4 @@ flowchart LR
   A7-->A8
   A8-->O1
   classDef meta fill:#f9f9f9,stroke:#eee;
-  %% source: docs\value-architecture\value-streams\VS-09-learnings-incidents-near-miss.md, generated: 2026-02-01T12:57:43.735083Z
+  %% source: docs\value-architecture\value-streams\VS-09-learnings-incidents-near-miss.md, generated: 2026-02-01T12:39:20.064708Z

@@ -12,3 +12,28 @@
 | Outputs | Appetite statement, scoring model configuration, escalation matrix, gate checklists, waiver workflows. |
 | Exit criteria / DoD | Appetite and criteria published; embedded into at least 3 critical gates; breach workflow operational; first breach review executed. |
 | Metrics | Flow: time to evaluate vs appetite; throughput of exceptions processed.<br>Performance: % decisions using criteria; decision consistency index; stakeholder satisfaction.<br>Risk: appetite breach rate; time to remediate; risk-adjusted performance indicators. |
+
+```mmd
+classDiagram
+  class RiskAppetiteStatement
+  class ToleranceThreshold
+  class RiskCriteriaModelVersion
+  class EscalationRule
+  class DecisionGate
+  class WaiverException
+  class Approval
+  class BreachCase
+  class Risk
+
+  RiskAppetiteStatement "1" --> "0..*" ToleranceThreshold : defines
+  ToleranceThreshold "1" --> "1" RiskAppetiteStatement : belongsTo
+  DecisionGate "1" --> "1" RiskCriteriaModelVersion : uses
+  RiskCriteriaModelVersion "0..*" --> "0..*" DecisionGate : referencedBy
+  EscalationRule "1" --> "0..*" BreachCase : routes
+  BreachCase "1" --> "1" EscalationRule : routedBy
+  DecisionGate "1" --> "0..*" WaiverException : hasWaiver
+  WaiverException "1" --> "1" DecisionGate : grantedAgainst
+  WaiverException "0..1" --> "1" Risk : relatesTo
+  WaiverException "1" --> "0..*" Approval : approvedVia
+  Approval "1" --> "1" WaiverException : approves
+```

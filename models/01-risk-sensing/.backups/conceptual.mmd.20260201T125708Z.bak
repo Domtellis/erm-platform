@@ -1,4 +1,4 @@
-%% Auto-generated conceptual diagram — generated flowchart from .md
+%% Auto-generated conceptual diagram — edit source .md to regenerate
 flowchart LR
   subgraph Inputs
     I1["Threat intel, regulatory feeds, macro indicators, Incidents, audit findings, complaints, supplier performance."]
@@ -22,4 +22,4 @@ flowchart LR
   A5-->A6
   A6-->O1
   classDef meta fill:#f9f9f9,stroke:#eee;
-  %% source: docs\value-architecture\value-streams\VS-01-risk-sensing.md, generated: 2026-02-01T12:57:43.513982Z
+  %% source: docs\value-architecture\value-streams\VS-01-risk-sensing.md, generated: 2026-02-01T12:39:19.872632Z

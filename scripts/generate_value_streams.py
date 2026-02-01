@@ -78,9 +78,49 @@ def generate_context(md_path, table, title_id, title_text):
     return context
 
 
+def extract_mermaid_block(md_text: str):
+    """Extract a mermaid block from markdown text.
+
+    Looks for fenced blocks with ```mmd or ```mermaid first; otherwise looks for an inline
+    `classDiagram` block (consecutive lines starting with `classDiagram` until a blank line
+    or a markdown header).
+    Returns the mermaid content string (without the enclosing fences), or None.
+    """
+    # fenced code blocks
+    fenced = re.search(r"```(?:mmd|mermaid)\n(?P<body>.*?)(?:\n```)", md_text, re.S | re.I)
+    if fenced:
+        return fenced.group('body').strip()
+
+    # inline classDiagram block
+    lines = md_text.splitlines()
+    start = None
+    for idx, line in enumerate(lines):
+        if line.strip().startswith('classDiagram'):
+            start = idx
+            break
+    if start is not None:
+        body_lines = []
+        for line in lines[start:]:
+            if line.strip() == '' or line.strip().startswith('## '):
+                break
+            body_lines.append(line.rstrip())
+        return '\n'.join(body_lines).strip()
+
+    return None
+
+
 def generate_mermaid(context):
+    # If the source markdown included a mermaid block, use it verbatim
+    if context.get('mermaid_raw'):
+        lines = []
+        lines.append('%% Auto-generated conceptual diagram — from mermaid block in source .md')
+        lines.append(context.get('mermaid_raw').rstrip())
+        lines.append(f'%% source: {context.get("source_file")}, generated: {context.get("last_updated")}')
+        return '\n'.join(lines)
+
+    # Fallback: simple flowchart generated from Inputs/Activities/Outputs
     lines = []
-    lines.append('%% Auto-generated conceptual diagram — edit source .md to regenerate')
+    lines.append('%% Auto-generated conceptual diagram — generated flowchart from .md')
     lines.append('flowchart LR')
 
     # Inputs
@@ -192,7 +232,12 @@ def process_file(md_path: Path, models_dir: Path):
     yaml_path = model_dir / 'context.yaml'
     write_file(yaml_path, yaml.safe_dump(context, sort_keys=False, allow_unicode=True))
 
-    # write conceptual.mmd
+    # extract any mermaid block from the source markdown (prefer fenced ```mmd / ```mermaid, or inline classDiagram)
+    mermaid_raw = extract_mermaid_block(text)
+    if mermaid_raw:
+        context['mermaid_raw'] = mermaid_raw
+
+    # write conceptual.mmd (use mermaid block if present, otherwise generate a flowchart)
     mmd = generate_mermaid(context)
     mmd_path = model_dir / 'conceptual.mmd'
     write_file(mmd_path, mmd)

@@ -30,4 +30,4 @@ metrics: 'Flow: decision lead time; throughput of funded treatments; WIP of unfu
   % high risks with funded plans; concentration indices; number of unresolved appetite
   breaches.'
 source_file: docs\value-architecture\value-streams\VS-04-risk-evaluation-prioritisation.md
-last_updated: '2026-02-01T12:57:43.598785Z'
+last_updated: '2026-02-01T12:39:19.956308Z'

@@ -30,4 +30,4 @@ flowchart LR
   A7-->A8
   A8-->O1
   classDef meta fill:#f9f9f9,stroke:#eee;
-  %% source: docs\value-architecture\value-streams\VS-02-risk-identification.md, generated: 2026-02-01T12:57:43.547956Z
+  %% source: docs\value-architecture\value-streams\VS-02-risk-identification.md, generated: 2026-02-01T12:57:08.930910Z

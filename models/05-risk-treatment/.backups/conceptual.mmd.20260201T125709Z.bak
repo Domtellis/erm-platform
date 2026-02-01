@@ -1,4 +1,4 @@
-%% Auto-generated conceptual diagram — generated flowchart from .md
+%% Auto-generated conceptual diagram — edit source .md to regenerate
 flowchart LR
   subgraph Inputs
     I1["Prioritised backlog (VS-04), control performance gaps (VS-06), KRIs (VS-07), obligations/compliance needs."]
@@ -28,4 +28,4 @@ flowchart LR
   A8-->A9
   A9-->O1
   classDef meta fill:#f9f9f9,stroke:#eee;
-  %% source: docs\value-architecture\value-streams\VS-05-risk-treatment-control-design.md, generated: 2026-02-01T12:57:43.627234Z
+  %% source: docs\value-architecture\value-streams\VS-05-risk-treatment-control-design.md, generated: 2026-02-01T12:39:19.976768Z

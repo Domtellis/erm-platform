@@ -1,4 +1,4 @@
-%% Auto-generated conceptual diagram — generated flowchart from .md
+%% Auto-generated conceptual diagram — edit source .md to regenerate
 flowchart LR
   subgraph Inputs
     I1["Control library (VS-05), operational data sources, test plans, evidence standards, issues/CAPA."]
@@ -26,4 +26,4 @@ flowchart LR
   A7-->A8
   A8-->O1
   classDef meta fill:#f9f9f9,stroke:#eee;
-  %% source: docs\value-architecture\value-streams\VS-06-risk-control-operation-assurance.md, generated: 2026-02-01T12:57:43.651785Z
+  %% source: docs\value-architecture\value-streams\VS-06-risk-control-operation-assurance.md, generated: 2026-02-01T12:39:19.997627Z

@@ -26,4 +26,4 @@ flowchart LR
   A7-->A8
   A8-->O1
   classDef meta fill:#f9f9f9,stroke:#eee;
-  %% source: docs\value-architecture\value-streams\VS-08-risk-reporting-decision-support.md, generated: 2026-02-01T12:57:43.711510Z
+  %% source: docs\value-architecture\value-streams\VS-08-risk-reporting-decision-support.md, generated: 2026-02-01T12:57:09.153364Z

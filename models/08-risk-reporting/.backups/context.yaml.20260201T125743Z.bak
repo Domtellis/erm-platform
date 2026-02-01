@@ -29,4 +29,4 @@ metrics: 'Flow: pack production cycle time; time to answer stakeholder queries.<
   stakeholder satisfaction; % reporting automated; disputes rate.<br>Risk: decision
   latency reduction; unresolved top risks visibility.'
 source_file: docs\value-architecture\value-streams\VS-08-risk-reporting-decision-support.md
-last_updated: '2026-02-01T12:57:43.711510Z'
+last_updated: '2026-02-01T12:57:09.153364Z'

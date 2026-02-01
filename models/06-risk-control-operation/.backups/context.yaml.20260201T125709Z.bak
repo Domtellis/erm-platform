@@ -31,4 +31,4 @@ metrics: 'Flow: time to evidence collection; issue remediation cycle time; throu
   evidence automation rate.<br>Risk: key control failure rate; recurrence rate of
   control deficiencies.'
 source_file: docs\value-architecture\value-streams\VS-06-risk-control-operation-assurance.md
-last_updated: '2026-02-01T12:57:43.651785Z'
+last_updated: '2026-02-01T12:39:19.997627Z'
