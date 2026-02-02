@@ -1,30 +1,12 @@
-id: VS-01
-name: Risk Sensing
-short_description: Maintain a continuously refreshed context so risk work is evidence-driven
-  and timely.
-owner: null
-stakeholders:
-- Risk Function, Business Leaders, Security, Ops, Compliance/Legal, Strategy teams
-triggers:
-- External shocks, regulatory change, supplier disruption, material trends in incidents,
-  threat intel updates.
-inputs:
-- Threat intel, regulatory feeds, macro indicators, Incidents, audit findings, complaints,
-  supplier performance.
-entry_criteria: ''
-key_activities:
-- 1) Define sensing scope and critical dependencies
-- 2) Ingest external signals
-- 3) Ingest internal operational signals
-- 4) Consult stakeholders and validate implications
-- 5) Update context assumptions and dependency maps
-- 6) Publish emerging risk watchlist
-decisions_and_gates: []
-outputs:
-- Sensing dashboard, emerging risk list.
-exit_criteria: ''
-metrics: 'Flow: signal-to-triage time; triage throughput; WIP of unreviewed signals.<br>Performance:
-  relevance score of signals; stakeholder utilisation.<br>Risk: “surprise events”
-  count; % emerging risks reviewed.'
-source_file: docs\value-architecture\value-streams\VS-01-risk-sensing.md
-last_updated: '2026-02-01T14:03:37.576835Z'
+id: VS-01-risk-sensing
+name: VS-01-risk-sensing
+short_description: ''
+owner: []
+stakeholders: []
+inputs: []
+outputs: []
+triggers: []
+bounded_contexts: []
+dependencies: []
+last_updated: '2026-02-02'
+source_file: docs/value-architecture/value-streams/VS-01-risk-sensing.md

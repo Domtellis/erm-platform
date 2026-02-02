@@ -1,48 +1,46 @@
-name: Generate Value Stream artifacts
+name: Generate Value Stream Artifacts
 
 on:
   push:
     paths:
-      - 'docs/value-architecture/value-streams/**'
-      - 'scripts/generate_value_streams.py'
+      - 'docs/value-architecture/value-streams/**.md'
   pull_request:
     paths:
-      - 'docs/value-architecture/value-streams/**'
-      - 'scripts/generate_value_streams.py'
+      - 'docs/value-architecture/value-streams/**.md'
+  workflow_dispatch: {}
 
 jobs:
   generate:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
           persist-credentials: true
+          fetch-depth: 0
 
-      - name: Set up Python
+      - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: '3.x'
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install PyYAML
+          pip install -r scripts/requirements.txt
 
       - name: Run generator
         run: |
-          python scripts/generate_value_streams.py --source docs/value-architecture/value-streams --models models
+          python scripts/generate_value_streams.py
 
       - name: Commit and push changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if [ -n "$(git status --porcelain)" ]; then
-            git add -A
-            git commit -m "chore: regenerate value-stream model artifacts from docs"
-            git push
-          else
+          git add models/**/context.yaml models/**/conceptual.mmd || true
+          if git diff --staged --quiet; then
             echo "No changes to commit"
+          else
+            git commit -m "chore: regenerate value stream artifacts [skip ci]"
+            git push
           fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

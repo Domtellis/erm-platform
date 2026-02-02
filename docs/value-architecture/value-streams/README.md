@@ -13,3 +13,19 @@ Source of truth lives in this folder. Word/PDF exports (if needed) are in /expor
 - [VS-07 — Risk Monitoring](./VS-07-risk-monitoring.md)
 - [VS-08 — Risk Reporting and Decision Support](./VS-08-risk-reporting-decision-support.md)
 - [VS-09 — Learnings - Incidents and Near-Miss](./VS-09-learnings-incidents-near-miss.md)
+
+---
+
+## Automation
+A generator script (`scripts/generate_value_streams.py`) will create/update `context.yaml` and `conceptual.mmd` artifacts under the matching `models/<NN>-<slug>/` folder for each `VS-*.md` file.
+
+A GitHub Actions workflow (`.github/workflows/generate-value-streams.yml`) runs on pushes and pull requests when files under this folder change and will commit generated artifacts back to the repo.
+
+If you need to run locally, install dependencies and run:
+
+```bash
+python -m pip install -r scripts/requirements.txt
+python scripts/generate_value_streams.py
+```
+
+

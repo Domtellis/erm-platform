@@ -1,21 +1,7 @@
-%% Auto-generated conceptual diagram — cloned from models/00-risk-appetite/conceptual.mmd
+%% Auto-generated conceptual diagram — source: docs\value-architecture\value-streams\VS-07-risk-monitoring.md, generated: 2026-02-02T10:13:02.567679Z
 classDiagram
-class RiskAppetiteStatement
-class ToleranceThreshold
-class RiskCriteriaModelVersion
-class EscalationRule
-class DecisionGate
-class WaiverException
-class Approval
-RiskAppetiteStatement "1" --> "0..*" ToleranceThreshold : defines
-ToleranceThreshold "1" --> "1" RiskAppetiteStatement : belongsTo
-DecisionGate "1" --> "1" RiskCriteriaModelVersion : uses
-RiskCriteriaModelVersion "0..*" --> "0..*" DecisionGate : referencedBy
-EscalationRule "1" --> "0..*" BreachCase : routes
-BreachCase "1" --> "1" EscalationRule : routedBy
-DecisionGate "1" --> "0..*" WaiverException : hasWaiver
-WaiverException "1" --> "1" DecisionGate : grantedAgainst
-WaiverException "0..1" --> "1" Risk : relatesTo
-WaiverException "1" --> "0..*" Approval : approvedVia
-Approval "1" --> "1" WaiverException : approves
-%% cloned-from: models/00-risk-appetite/conceptual.mmd
+
+  class VS_07_risk_monitoring {
+    +id: string
+    +purpose: string
+  }

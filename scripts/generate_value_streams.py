@@ -1,250 +1,184 @@
-"""Generate context.yaml and conceptual.mmd for value streams from docs markdown.
-
-Usage: python scripts/generate_value_streams.py [--source docs/value-architecture/value-streams] [--models models]
-
-This script:
-- Scans the source folder for VS-*.md files
-- Parses the table of sections and content
-- Produces a context.yaml with structured fields
-- Produces a `conceptual.mmd` mermaid flowchart showing Inputs -> Activities -> Outputs
-- Backs up existing files before overwriting
+#!/usr/bin/env python3
 """
-
+Generate `context.yaml` and `conceptual.mmd` for value streams from their `.md` files.
+Usage: python scripts/generate_value_streams.py [--docs docs/value-architecture/value-streams]
+"""
 import argparse
 import os
 import re
+import sys
 import shutil
+import datetime
 import yaml
-from datetime import datetime
-from pathlib import Path
 
-MD_SRC_DEFAULT = "docs/value-architecture/value-streams"
-MODELS_DIR_DEFAULT = "models"
-BACKUP_DIR_NAME = ".backups"
+ROOT = os.path.dirname(os.path.dirname(__file__))
 
-ROW_RE = re.compile(r"^\|\s*(?P<key>[^|]+?)\s*\|\s*(?P<val>.+?)\s*\|\s*$")
-TITLE_RE = re.compile(r"^##\s*(?P<id>VS-\d{2})\s*—\s*(?P<title>.+)$")
-
-def parse_table(md_text):
-    table = {}
-    lines = md_text.splitlines()
-    in_table = False
-    for line in lines:
-        if line.strip().startswith("|") and "---" not in line:
-            m = ROW_RE.match(line)
-            if m:
-                k = m.group('key').strip()
-                v = m.group('val').strip()
-                table[k] = v
-                in_table = True
-        else:
-            if in_table and line.strip() == "":
-                # end of table
-                break
-    return table
+def read_front_matter(md_text):
+    m = re.match(r"\A---\s*\n(.*?)\n---\s*\n", md_text, flags=re.S)
+    if not m:
+        return {}, md_text
+    fm = m.group(1)
+    try:
+        data = yaml.safe_load(fm) or {}
+    except Exception:
+        data = {}
+    rest = md_text[m.end():]
+    return data, rest
 
 
-def split_items(s):
-    if not s:
-        return []
-    # split on <br> or semicolon or comma
-    parts = re.split(r"<br\s*/?>|;|,\\s*", s)
-    parts = [p.strip() for p in parts if p.strip()]
-    return parts
-
-
-def normalize_key(k):
-    return k.lower().replace('/', '_').replace(' ', '_')
-
-
-def generate_context(md_path, table, title_id, title_text):
-    context = {
-        'id': title_id,
-        'name': title_text,
-        'short_description': table.get('Purpose (value)', '').strip(),
-        'owner': None,
-        'stakeholders': split_items(table.get('Customers / stakeholders', '')),
-        'triggers': split_items(table.get('Triggers', '')),
-        'inputs': split_items(table.get('Inputs', '')),
-        'entry_criteria': table.get('Entry criteria / DoR', ''),
-        'key_activities': split_items(table.get('Key activities', '')),
-        'decisions_and_gates': split_items(table.get('Decisions & stage gates', '')),
-        'outputs': split_items(table.get('Outputs', '')),
-        'exit_criteria': table.get('Exit criteria / DoD', ''),
-        'metrics': table.get('Metrics', ''),
-        'source_file': str(md_path),
-        'last_updated': datetime.utcnow().isoformat() + 'Z'
-    }
-    return context
-
-
-def extract_diagram(md_text):
-    """
-    Extract an explicit mermaid diagram block from the markdown source.
-    Supports fenced blocks (```mmd or ```mermaid) and unfenced blocks starting with `classDiagram`.
-    Returns the diagram content (string) or None.
-    """
-    # look for fenced blocks with explicit mmd/mermaid
-    fenced = re.findall(r'```(?:mmd|mermaid)\n(.*?)\n```', md_text, re.S)
-    for b in fenced:
-        if 'classDiagram' in b or re.search(r'^\s*class\s+\w+', b, re.M):
-            return b.strip()
-    # any fenced block that looks like a class diagram
-    fenced_any = re.findall(r'```[^\n]*\n(.*?)\n```', md_text, re.S)
-    for b in fenced_any:
-        if b.strip().startswith('classDiagram') or re.search(r'^\s*class\s+\w+', b, re.M):
-            return b.strip()
-    # unfenced block starting with classDiagram (lines until next header or blank line)
-    m = re.search(r'(^classDiagram(?:\n(?:^(?!#).*)+)?)', md_text, re.M)
+def extract_mermaid(md_text):
+    # Find a fenced mermaid or mmd block (case-insensitive)
+    m = re.search(r"```(?:mermaid|mmd)\s*(.*?)```", md_text, flags=re.S | re.I)
     if m:
         return m.group(1).strip()
     return None
 
 
-def generate_mermaid(context):
-    lines = []
-    lines.append('%% Auto-generated conceptual diagram — edit source .md to regenerate')
-    lines.append('flowchart LR')
-
-    # Inputs
-    if context['inputs']:
-        lines.append('  subgraph Inputs')
-        for i, inp in enumerate(context['inputs'], start=1):
-            lines.append(f'    I{i}["{inp}"]')
-        lines.append('  end')
-
-    # Activities
-    if context['key_activities']:
-        lines.append('  subgraph Activities')
-        for i, act in enumerate(context['key_activities'], start=1):
-            # keep nodes short
-            label = act if len(act) < 80 else act[:77] + '...'
-            lines.append(f'    A{i}["{label}"]')
-        lines.append('  end')
-
-    # Outputs
-    if context['outputs']:
-        lines.append('  subgraph Outputs')
-        for i, out in enumerate(context['outputs'], start=1):
-            lines.append(f'    O{i}["{out}"]')
-        lines.append('  end')
-
-    # Connections - simple linear flow: first input -> first activity -> ... -> first output
-    conn = []
-    if context['inputs'] and context['key_activities']:
-        conn.append(f'I1-->A1')
-    for i in range(1, len(context['key_activities'])):
-        conn.append(f'A{i}-->A{i+1}')
-    if context['key_activities'] and context['outputs']:
-        conn.append(f'A{len(context['key_activities'])}-->O1')
-
-    # If no inputs but activities exist, chain activities
-    if not context['inputs'] and context['key_activities']:
-        for i in range(1, len(context['key_activities'])):
-            conn.append(f'A{i}-->A{i+1}')
-        if context['outputs']:
-            conn.append(f'A{len(context['key_activities'])}-->O1')
-
-    lines.extend(['  ' + c for c in conn])
-
-    # Add metadata footnote
-    lines.append(f'  classDef meta fill:#f9f9f9,stroke:#eee;')
-    lines.append(f'  %% source: {context.get("source_file")}, generated: {context.get("last_updated")}')
-
-    return '\n'.join(lines)
+def extract_all_mermaid_blocks(md_text):
+    """Return a list of all mermaid/mmd fenced code block contents (order preserved)."""
+    blocks = re.findall(r"```(?:mermaid|mmd)\s*(.*?)```", md_text, flags=re.S | re.I)
+    return [b.strip() for b in blocks]
 
 
-def backup_file(path: Path, backup_root: Path):
-    backup_root.mkdir(parents=True, exist_ok=True)
-    if path.exists():
-        ts = datetime.utcnow().strftime('%Y%m%dT%H%M%SZ')
-        dest = backup_root / f"{path.name}.{ts}.bak"
-        shutil.copy(path, dest)
-        print(f'Backed up {path} -> {dest}')
+def generate_skeleton(id_, title, fm):
+    bcs = fm.get('bounded_contexts') or []
+    lines = ["classDiagram\n"]
+    vs_class = re.sub(r"[^0-9A-Za-z_]", "_", id_)
+    lines.append(f"  class {vs_class} {{")
+    lines.append("    +id: string")
+    lines.append("    +purpose: string")
+    lines.append("  }")
+    if not bcs:
+        # try to infer from a 'sections' key
+        bcs = []
+    for bc in bcs:
+        bc_id = bc.get('id') or re.sub(r"[^0-9A-Za-z_]", "", bc.get('name','BC'))
+        bc_class = re.sub(r"[^0-9A-Za-z_]", "", bc.get('name','Context'))
+        lines.append(f"  class {bc_class} {{")
+        lines.append("    +responsibilities: string")
+        lines.append("  }")
+        lines.append(f"  {vs_class} <|-- {bc_class} : contains")
+    # add simple dependency if defined
+    deps = fm.get('dependencies') or []
+    for d in deps:
+        # simple: d is string of other BC
+        src = re.sub(r"[^0-9A-Za-z_]", "", d)
+        for bc in bcs:
+            name = re.sub(r"[^0-9A-Za-z_]", "", bc.get('name',''))
+            if name:
+                lines.append(f"  {name} --> {src} : depends_on")
+    return "\n".join(lines)
 
 
-def write_file(path: Path, content: str):
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(content, encoding='utf-8')
-    print(f'Wrote {path}')
+def write_file_with_backup(path, content):
+    if os.path.exists(path):
+        ts = datetime.datetime.utcnow().strftime('%Y%m%d%H%M%S')
+        bak = path + f'.bak-{ts}'
+        shutil.copy2(path, bak)
+        print(f"Backed up {path} -> {bak}")
+    with open(path, 'w', encoding='utf-8') as f:
+        f.write(content)
 
 
-def process_file(md_path: Path, models_dir: Path):
-    text = md_path.read_text(encoding='utf-8')
-    title_id = None
-    title_text = md_path.stem
-    for line in text.splitlines():
-        m = TITLE_RE.match(line.strip())
-        if m:
-            title_id = m.group('id')
-            title_text = m.group('title').strip()
-            break
-    if not title_id:
-        # fall back to filename
-        title_id = md_path.stem
-
-    table = parse_table(text)
-    context = generate_context(md_path, table, title_id, title_text)
-
-    # map to models folder by numeric prefix
-    prefix_match = re.match(r"VS-(?P<num>\d{2})", title_id)
-    if prefix_match:
-        num = prefix_match.group('num')
-        # find a model dir with same numeric prefix
-        model_dir = None
-        for d in models_dir.iterdir():
-            if d.is_dir() and d.name.startswith(num + '-'):
-                model_dir = d
-                break
-        if not model_dir:
-            # create a folder with the slug from md filename
-            slug = md_path.stem.split('-', 1)[-1]
-            model_dir = models_dir / f"{num}-{slug}"
-            model_dir.mkdir(parents=True, exist_ok=True)
-    else:
-        # generic fallback
-        model_dir = models_dir / md_path.stem
-        model_dir.mkdir(parents=True, exist_ok=True)
-
-    # backup existing files
-    backup_root = model_dir / BACKUP_DIR_NAME
-    backup_file(model_dir / 'context.yaml', backup_root)
-    backup_file(model_dir / 'conceptual.mmd', backup_root)
-
-    # write context.yaml
-    yaml_path = model_dir / 'context.yaml'
-    write_file(yaml_path, yaml.safe_dump(context, sort_keys=False, allow_unicode=True))
-
-    # write conceptual.mmd (prefer explicit diagram block in source markdown if present)
-    diagram_block = extract_diagram(text)
-    if diagram_block:
-        mmd = '%% Auto-generated conceptual diagram — from source .md block\n' + diagram_block
-    else:
-        mmd = generate_mermaid(context)
-    mmd_path = model_dir / 'conceptual.mmd'
-    write_file(mmd_path, mmd)
-
-
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--source', default=MD_SRC_DEFAULT)
-    parser.add_argument('--models', default=MODELS_DIR_DEFAULT)
-    parser.add_argument('--dry-run', action='store_true')
-    args = parser.parse_args()
-
-    src = Path(args.source)
-    models = Path(args.models)
-
-    md_files = sorted(p for p in src.glob('VS-*.md') if '_templates' not in p.parts)
+def main(docs_dir):
+    docs_dir = os.path.abspath(docs_dir)
+    if not os.path.isdir(docs_dir):
+        print(f"Docs directory not found: {docs_dir}")
+        return 2
+    md_files = [p for p in os.listdir(docs_dir) if p.lower().endswith('.md') and p != 'README.md']
     if not md_files:
-        print('No value stream markdown files found.')
-        return
-
+        print("No value stream .md files found")
+        return 0
+    created = []
     for md in md_files:
-        print(f'Processing {md}')
-        process_file(md, models)
+        path = os.path.join(docs_dir, md)
+        with open(path, 'r', encoding='utf-8') as f:
+            text = f.read()
+        fm, rest = read_front_matter(text)
+        # derive id and title
+        id_ = fm.get('id') or os.path.splitext(md)[0]
+        title = fm.get('title') or fm.get('name') or id_
+        # Map file name to model folder: remove leading 'VS-' if present
+        basename = os.path.splitext(md)[0]
+        if basename.lower().startswith('vs-'):
+            model_slug = basename[3:]
+        else:
+            model_slug = basename
+        model_dir = os.path.join(ROOT, 'models', model_slug)
+        os.makedirs(model_dir, exist_ok=True)
+        # Build context.yaml
+        context = {}
+        context['id'] = id_
+        context['name'] = title
+        context['short_description'] = fm.get('short_description') or fm.get('description') or ''
+        context['owner'] = fm.get('owners') or fm.get('owner') or []
+        context['stakeholders'] = fm.get('stakeholders') or []
+        context['inputs'] = fm.get('inputs') or []
+        context['outputs'] = fm.get('outputs') or []
+        context['triggers'] = fm.get('triggers') or []
+        context['bounded_contexts'] = fm.get('bounded_contexts') or []
+        context['dependencies'] = fm.get('dependencies') or []
+        context['last_updated'] = datetime.date.today().isoformat()
+        context['source_file'] = os.path.relpath(path, ROOT).replace('\\','/')
+        ctx_path = os.path.join(model_dir, 'context.yaml')
+        write_file_with_backup(ctx_path, yaml.safe_dump(context, sort_keys=False))
+        # Build conceptual.mmd and add source header
+        blocks = extract_all_mermaid_blocks(text)
+        ts = datetime.datetime.utcnow().isoformat() + 'Z'
+        source_rel = os.path.relpath(path, ROOT).replace('\\\\','/')
 
-    print('Done.')
+        # Merge multiple classDiagram blocks if present
+        class_lines = []
+        seen = set()
+        non_class_blocks = []
+        for blk in blocks:
+            if re.search(r'(?i)classDiagram', blk):
+                # Remove leading classDiagram header from block
+                body = re.sub(r'(?im)^\s*classDiagram\s*\n?', '', blk).strip()
+                for ln in body.splitlines():
+                    ln_strip = ln.rstrip()
+                    if not ln_strip:
+                        continue
+                    if ln_strip not in seen:
+                        class_lines.append(ln_strip)
+                        seen.add(ln_strip)
+            else:
+                non_class_blocks.append(blk)
+
+        if class_lines:
+            # Build merged classDiagram
+            mmd_body = 'classDiagram\n' + "\n".join(class_lines)
+            if non_class_blocks:
+                # Preserve non-class mermaid blocks as comments for reference
+                commented = '\n\n%% Other mermaid blocks preserved:\n'
+                for nb in non_class_blocks:
+                    commented += '\n'.join('%% ' + l for l in nb.splitlines()) + '\n'
+                mmd_body = mmd_body + commented
+        else:
+            # No classDiagram blocks found — fall back to skeleton
+            mmd_body = generate_skeleton(id_, title, fm)
+            if blocks:
+                commented = '\n'.join('%% ' + line for line in '\n\n'.join(blocks).splitlines())
+                mmd_body = mmd_body + '\n\n%% Original mermaid blocks (no classDiagram found):\n' + commented
+
+        header = f"%% Auto-generated conceptual diagram — source: {source_rel}, generated: {ts}\n"
+        # If there is already an auto-generated header, replace it; otherwise prepend
+        if mmd_body.lstrip().startswith('%% Auto-generated'):
+            mmd_content = re.sub(r"\A%%.*?\n", header, mmd_body, flags=re.S)
+        else:
+            mmd_content = header + mmd_body
+        mmd_path = os.path.join(model_dir, 'conceptual.mmd')
+        write_file_with_backup(mmd_path, mmd_content)
+        created.append((ctx_path, mmd_path))
+        print(f"Generated for {md} -> {model_dir}")
+    print('\nSummary:')
+    for ctx, mmd in created:
+        print(f" - {ctx}")
+        print(f" - {mmd}")
+    return 0
 
 if __name__ == '__main__':
-    main()
+    p = argparse.ArgumentParser()
+    p.add_argument('--docs', default=os.path.join('docs','value-architecture','value-streams'))
+    args = p.parse_args()
+    sys.exit(main(args.docs))

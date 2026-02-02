@@ -1,34 +1,12 @@
-id: VS-03
-name: Risk Analysis
-short_description: Produce evidence-based understanding of exposure and drivers to
-  support prioritisation and treatment design.
-owner: null
-stakeholders:
-- Risk Owners, Risk Function, Finance, Security/Ops SMEs, ExCo/Board (for material
-  risks)
-triggers:
-- Material risks, critical service reviews, board deep dives, initiative gates, appetite
-  breaches.
-inputs:
-- Risk records (VS-02), appetite/criteria (VS-00), control data (VS-06), KRI data
-  (VS-07), loss/incidents (VS-09).
-entry_criteria: ''
-key_activities:
-- '1) Select analysis technique (tiered: quick qualification → detailed scenario)'
-- 2) Assess inherent likelihood/impact
-- 3) Assess control design and operating effectiveness
-- 4) Compute residual risk and confidence
-- 5) Quantify exposure where required (ranges/scenarios)
-- 6) Perform sensitivity/uncertainty review
-- 7) Document evidence and assumptions
-- 8) Submit for challenge/approval
-decisions_and_gates: []
-outputs:
-- Inherent/residual ratings, scenario analysis artefacts, quantified exposure bands,
-  assumptions and evidence logs.
-exit_criteria: ''
-metrics: 'Flow: assessment cycle time; rework rate after challenge; WIP of assessments.<br>Performance:
-  assessment QA score; % with evidence; consistency across BUs.<br>Risk: % material
-  risks with quantified view (where policy requires); override frequency.'
-source_file: docs\value-architecture\value-streams\VS-03-risk-analysis.md
-last_updated: '2026-02-01T14:03:37.639380Z'
+id: VS-03-risk-analysis
+name: VS-03-risk-analysis
+short_description: ''
+owner: []
+stakeholders: []
+inputs: []
+outputs: []
+triggers: []
+bounded_contexts: []
+dependencies: []
+last_updated: '2026-02-02'
+source_file: docs/value-architecture/value-streams/VS-03-risk-analysis.md
