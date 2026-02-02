@@ -13,6 +13,31 @@
 | DoD | Controls executed to schedule; evidence meets quality rules; testing completed; issues tracked with validated closure; attestations recorded. |
 | Metrics | Flow: time to evidence collection; issue remediation cycle time; throughput of attestations.<br>Performance: audit findings trend; cost of compliance per control; evidence automation rate.<br>Risk: key control failure rate; recurrence rate of control deficiencies. |
 
+## Conceptual diagram
+
+```mmd
+classDiagram
+class RiskAppetiteStatement
+class ToleranceThreshold
+class RiskCriteriaModelVersion
+class EscalationRule
+class DecisionGate
+class WaiverException
+class Approval
+RiskAppetiteStatement "1" --> "0..*" ToleranceThreshold : defines
+ToleranceThreshold "1" --> "1" RiskAppetiteStatement : belongsTo
+DecisionGate "1" --> "1" RiskCriteriaModelVersion : uses
+RiskCriteriaModelVersion "0..*" --> "0..*" DecisionGate : referencedBy
+EscalationRule "1" --> "0..*" BreachCase : routes
+BreachCase "1" --> "1" EscalationRule : routedBy
+DecisionGate "1" --> "0..*" WaiverException : hasWaiver
+WaiverException "1" --> "1" DecisionGate : grantedAgainst
+WaiverException "0..1" --> "1" Risk : relatesTo
+WaiverException "1" --> "0..*" Approval : approvedVia
+Approval "1" --> "1" WaiverException : approves
+```
+
+
 ```mmd
 classDiagram
   class Input1_controlLibraryVs05

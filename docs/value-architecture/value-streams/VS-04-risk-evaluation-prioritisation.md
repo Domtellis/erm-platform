@@ -13,6 +13,31 @@
 | DoD | Priorities agreed; funding assigned; treatments created; escalations captured; reporting baseline established. |
 | Metrics | Flow: decision lead time; throughput of funded treatments; WIP of unfunded high risks.<br>Performance: board clarity score; “one version of truth” disputes.<br>Risk: % high risks with funded plans; concentration indices; number of unresolved appetite breaches. |
 
+## Conceptual diagram
+
+```mmd
+classDiagram
+class RiskAppetiteStatement
+class ToleranceThreshold
+class RiskCriteriaModelVersion
+class EscalationRule
+class DecisionGate
+class WaiverException
+class Approval
+RiskAppetiteStatement "1" --> "0..*" ToleranceThreshold : defines
+ToleranceThreshold "1" --> "1" RiskAppetiteStatement : belongsTo
+DecisionGate "1" --> "1" RiskCriteriaModelVersion : uses
+RiskCriteriaModelVersion "0..*" --> "0..*" DecisionGate : referencedBy
+EscalationRule "1" --> "0..*" BreachCase : routes
+BreachCase "1" --> "1" EscalationRule : routedBy
+DecisionGate "1" --> "0..*" WaiverException : hasWaiver
+WaiverException "1" --> "1" DecisionGate : grantedAgainst
+WaiverException "0..1" --> "1" Risk : relatesTo
+WaiverException "1" --> "0..*" Approval : approvedVia
+Approval "1" --> "1" WaiverException : approves
+```
+
+
 ```mmd
 classDiagram
   class Input1_residualRiskResultsVs
