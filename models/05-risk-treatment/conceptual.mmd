@@ -1,24 +1,21 @@
-%% Auto-generated conceptual diagram — from source .md block
+%% Auto-generated conceptual diagram — cloned from models/00-risk-appetite/conceptual.mmd
 classDiagram
-  class Input1_prioritisedBacklogVs04
-  class Activity1_1SelectResponseOption
-  class Activity2_2DesignControlSet
-  class Activity3_keyControls
-  class Activity4_3DefineControlObjectives
-  class Activity5_4BreakIntoDelivery
-  class Activity6_5ImplementViaChange
-  class Activity7_6VerifyCompletionAnd
-  class Activity8_7ReassessResidualDelta
-  class Activity9_8RecordAcceptanceWith
-  class Output1_treatmentPlansControlDesigns
-  Input1_prioritisedBacklogVs04 "1" --> "0..*" Activity1_1SelectResponseOption : feeds
-  Activity1_1SelectResponseOption --> Activity2_2DesignControlSet
-  Activity2_2DesignControlSet --> Activity3_keyControls
-  Activity3_keyControls --> Activity4_3DefineControlObjectives
-  Activity4_3DefineControlObjectives --> Activity5_4BreakIntoDelivery
-  Activity5_4BreakIntoDelivery --> Activity6_5ImplementViaChange
-  Activity6_5ImplementViaChange --> Activity7_6VerifyCompletionAnd
-  Activity7_6VerifyCompletionAnd --> Activity8_7ReassessResidualDelta
-  Activity8_7ReassessResidualDelta --> Activity9_8RecordAcceptanceWith
-  Activity9_8RecordAcceptanceWith --> Output1_treatmentPlansControlDesigns : produces
-  %% source: docs\value-architecture\value-streams\VS-05-risk-treatment-control-design.md, generated: 2026-02-01T13:05:19.945166Z
+class RiskAppetiteStatement
+class ToleranceThreshold
+class RiskCriteriaModelVersion
+class EscalationRule
+class DecisionGate
+class WaiverException
+class Approval
+RiskAppetiteStatement "1" --> "0..*" ToleranceThreshold : defines
+ToleranceThreshold "1" --> "1" RiskAppetiteStatement : belongsTo
+DecisionGate "1" --> "1" RiskCriteriaModelVersion : uses
+RiskCriteriaModelVersion "0..*" --> "0..*" DecisionGate : referencedBy
+EscalationRule "1" --> "0..*" BreachCase : routes
+BreachCase "1" --> "1" EscalationRule : routedBy
+DecisionGate "1" --> "0..*" WaiverException : hasWaiver
+WaiverException "1" --> "1" DecisionGate : grantedAgainst
+WaiverException "0..1" --> "1" Risk : relatesTo
+WaiverException "1" --> "0..*" Approval : approvedVia
+Approval "1" --> "1" WaiverException : approves
+%% cloned-from: models/00-risk-appetite/conceptual.mmd
