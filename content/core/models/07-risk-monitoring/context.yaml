@@ -1,0 +1,66 @@
+name: "Monitoring & Breaches (KRIs/KCIs, Alerts, Breach Workflow)"
+id: "80-monitoring-breaches"
+value_streams:
+  primary: ["VS-07"]
+owners:
+  business: ["Ops Leaders", "Risk Owners", "Risk Function"]
+  product: ["Product Owner - Monitoring"]
+  engineering: ["Domain Tech Lead - Monitoring Domain (not pipelines)"]
+scope:
+  in:
+    - Indicator definitions linked to risks
+    - Threshold rules and governance linkage to appetite tolerances
+    - DataFeed conceptual linkage (freshness SLA concept)
+    - Alerts and breach case workflow objects
+    - Escalation routing for breach cases
+    - Mitigation actions associated with breach cases
+  out:
+    - Physical telemetry pipelines and anomaly detection implementation
+    - Board pack production (VS-08) (consumes outputs)
+entities:
+  primary:
+    - IndicatorDefinition
+    - ThresholdRule
+    - DataFeed
+    - Alert
+    - BreachCase
+    - MitigationAction
+  referenced:
+    - Risk
+    - ToleranceThreshold
+    - EscalationRule
+interfaces:
+  upstream:
+    - context: "10-governance-policy"
+      contracts: ["ToleranceThreshold", "EscalationRule"]
+    - context: "30-risk-inventory"
+      contracts: ["Risk"]
+    - context: "70-controls-assurance"
+      contracts: ["Control health/performance signals (conceptual)"]
+    - context: "20-sensing-context"
+      contracts: ["Signals that may influence monitoring (conceptual)"]
+  downstream:
+    - context: "40-risk-assessment"
+      contracts: ["Breach posture used for recalibration (conceptual)"]
+    - context: "90-reporting-disclosure"
+      contracts: ["Breach logs and posture for reporting (conceptual)"]
+governance:
+  decisions_and_gates:
+    - D1: "Threshold approval (Risk + BU)"
+    - D2: "Escalation decision (delegated authority)"
+    - D3: "Rating recalibration approval (Risk Owner)"
+model_invariants:
+  - "IndicatorDefinition monitors 1..* Risk."
+  - "IndicatorDefinition has 1..* ThresholdRule."
+  - "IndicatorDefinition triggers 0..* Alert."
+  - "Alert may open 0..1 BreachCase; each BreachCase is triggered by 1..* Alert."
+  - "BreachCase routes via exactly 1 EscalationRule and contains 0..* MitigationAction."
+versioning_and_audit:
+  versioning_strategy:
+    - "ThresholdRule changes are versioned/effective-dated; avoid overwrite."
+    - "Alerts and BreachCases are immutable event records; updates via state transitions."
+  audit_requirements:
+    - "Breach handling must be auditable (acknowledge/escalate/close timestamps and owners)."
+files:
+  conceptual_model: "conceptual.mmd"
+  logical_er_model: "logical-er.mmd"

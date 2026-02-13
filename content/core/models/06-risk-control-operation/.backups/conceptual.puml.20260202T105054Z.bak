@@ -1,0 +1,7 @@
+' Auto-generated conceptual diagram — source: docs/value-architecture/value-streams/VS-06-risk-control.md, generated: 2026-02-02T10:49:51.843618Z
+@startuml
+class VS_06_risk_control {
+  +id: string
+  +purpose: string
+}
+@enduml

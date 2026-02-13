@@ -1,0 +1,129 @@
+schema_version: "1.0"
+time_horizon: "Y1"
+owner_group: "Product & Platform"
+cadence: "Quarterly review, monthly check-ins"
+okrs:
+  - okr_id: "OKR-Y1-A"
+    objective: "Make risk appetite actionable (embedded decision guardrails, not slides)"
+    north_star_alignment: "Indirect (enables quality + governance of actions)"
+    key_results:
+      - kr_id: "OKR-Y1-A-KR1"
+        metric: "% material risks with current appetite + tolerance + owner + review cadence"
+        baseline: null
+        target: 0.80
+        measurement_cadence: "Monthly"
+      - kr_id: "OKR-Y1-A-KR2"
+        metric: "% tolerance exceedances automatically routed with approvals + rationale logged"
+        baseline: null
+        target: 0.70
+        measurement_cadence: "Monthly"
+      - kr_id: "OKR-Y1-A-KR3"
+        metric: "Committee pack preparation time (median) reduction"
+        baseline: null
+        target: 0.50
+        measurement_cadence: "Quarterly"
+    guardrails:
+      - "No increase in unapproved appetite changes"
+      - "Audit log completeness >= 99% for appetite decisions"
+
+  - okr_id: "OKR-Y1-B"
+    objective: "Operationalise governance (committees, cadence, decision logs, action accountability)"
+    north_star_alignment: "Indirect (improves throughput + accountability)"
+    key_results:
+      - kr_id: "OKR-Y1-B-KR1"
+        metric: "% committees using platform agenda packs with linked risks/actions/evidence"
+        baseline: null
+        target: 0.90
+      - kr_id: "OKR-Y1-B-KR2"
+        metric: "Action capture completeness within 24h of committee (median)"
+        baseline: null
+        target: 0.95
+      - kr_id: "OKR-Y1-B-KR3"
+        metric: "Cycle time: action created -> accepted/approved (median working days)"
+        baseline: null
+        target_days: 5
+
+  - okr_id: "OKR-Y1-C"
+    objective: "Shift from register maintenance to risk reduction (actions closed with evidence)"
+    north_star_alignment: "Direct (primary driver)"
+    key_results:
+      - kr_id: "OKR-Y1-C-KR1"
+        metric: "% priority actions closed on/before due date with required evidence"
+        baseline: null
+        target: 0.75
+      - kr_id: "OKR-Y1-C-KR2"
+        metric: "Overdue high-severity actions reduction"
+        baseline: null
+        target: 0.40
+      - kr_id: "OKR-Y1-C-KR3"
+        metric: "Treatment plan completeness for top risks"
+        baseline: null
+        target: 0.80
+
+  - okr_id: "OKR-Y1-D"
+    objective: "Deliver continuous monitoring and early warning (KRIs + breaches with workflows)"
+    north_star_alignment: "Supporting (prevents recurrence; drives better actions)"
+    key_results:
+      - kr_id: "OKR-Y1-D-KR1"
+        metric: "Number of KRIs implemented with thresholds + owners + escalation"
+        baseline: 0
+        target_count: 10
+      - kr_id: "OKR-Y1-D-KR2"
+        metric: "Signal detected -> owner notified (median minutes)"
+        baseline: null
+        target_minutes: 15
+      - kr_id: "OKR-Y1-D-KR3"
+        metric: "% breaches following standard triage->decision->action workflow"
+        baseline: null
+        target: 0.60
+
+  - okr_id: "OKR-Y1-E"
+    objective: "Be audit-ready by default (policy/controls/evidence automation)"
+    north_star_alignment: "Direct (evidence-complete closures)"
+    key_results:
+      - kr_id: "OKR-Y1-E-KR1"
+        metric: "% recurring evidence auto-collected from integrated systems"
+        baseline: null
+        target: 0.50
+      - kr_id: "OKR-Y1-E-KR2"
+        metric: "Standard audit request fulfilment time (hours)"
+        baseline: null
+        target_hours: 24
+      - kr_id: "OKR-Y1-E-KR3"
+        metric: "% key controls with owner + frequency + last test + evidence"
+        baseline: null
+        target: 0.90
+
+  - okr_id: "OKR-Y1-F"
+    objective: "Prove platform trust (secure, reliable, scalable multi-tenant foundations)"
+    north_star_alignment: "Enabler (adoption + credibility)"
+    key_results:
+      - kr_id: "OKR-Y1-F-KR1"
+        metric: "Availability"
+        baseline: null
+        target: 0.999
+      - kr_id: "OKR-Y1-F-KR2"
+        metric: "Audit log completeness for sensitive actions"
+        baseline: null
+        target: 0.99
+      - kr_id: "OKR-Y1-F-KR3"
+        metric: "Everything-as-code export/import coverage for core taxonomies"
+        baseline: null
+        target: 1.00
+
+  - okr_id: "OKR-Y1-G"
+    objective: "Reach demonstrable design-partner traction (repeatable wins, not pilots)"
+    north_star_alignment: "Indirect (adoption + retention drivers)"
+    key_results:
+      - kr_id: "OKR-Y1-G-KR1"
+        metric: "Design partners live in production"
+        baseline: 0
+        target_count: 3
+      - kr_id: "OKR-Y1-G-KR2"
+        metric: "Design partners converted to paid annual contracts"
+        baseline: 0
+        target_count: 2
+      - kr_id: "OKR-Y1-G-KR3"
+        metric: "% target users active monthly (risk/control owners)"
+        baseline: null
+        target: 0.60

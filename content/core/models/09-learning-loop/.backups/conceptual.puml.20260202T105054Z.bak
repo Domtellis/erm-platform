@@ -1,0 +1,7 @@
+' Auto-generated conceptual diagram — source: docs/value-architecture/value-streams/VS-09-learning-loop.md, generated: 2026-02-02T10:49:51.895467Z
+@startuml
+class VS_09_learning_loop {
+  +id: string
+  +purpose: string
+}
+@enduml

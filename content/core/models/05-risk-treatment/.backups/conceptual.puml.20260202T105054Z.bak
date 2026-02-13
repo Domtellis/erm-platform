@@ -1,0 +1,7 @@
+' Auto-generated conceptual diagram — source: docs/value-architecture/value-streams/VS-05-risk-treatment.md, generated: 2026-02-02T10:49:51.825745Z
+@startuml
+class VS_05_risk_treatment {
+  +id: string
+  +purpose: string
+}
+@enduml

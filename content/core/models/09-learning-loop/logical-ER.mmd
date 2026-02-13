@@ -1,0 +1,116 @@
+erDiagram
+  Incident ||--o| RCA : mayHaveRCA
+  RCA ||--o{ CAPAPlan : createsCAPA
+  CAPAPlan ||--o{ TreatmentAction : containsActions
+
+  LessonLearned ||--o{ LessonRiskLink : updatesRisk
+  Risk ||--o{ LessonRiskLink : updatedByLesson
+
+  LessonLearned ||--o{ LessonControlImplLink : updatesControlImpl
+  ControlImplementation ||--o{ LessonControlImplLink : updatedByLesson
+
+  LessonLearned ||--o{ LessonIndicatorLink : updatesIndicator
+  IndicatorDefinition ||--o{ LessonIndicatorLink : updatedByLesson
+
+  CAPAPlan ||--o{ CAPAApprovalLink : approvedVia
+  Approval ||--o{ CAPAApprovalLink : recordedAs
+
+  Incident {
+    string IncidentId PK
+    string incidentType
+    string severity
+    datetime occurredAt
+    datetime recordedAt
+    string ownerRole
+    string status
+  }
+
+  RCA {
+    string RCAId PK
+    string IncidentId FK
+    string method
+    string summary
+    datetime completedAt
+    string completedByRole
+    string status
+  }
+
+  CAPAPlan {
+    string CAPAPlanId PK
+    string RCAId FK
+    string status
+    datetime approvedAt
+    string approvedByRole
+    datetime dueBy
+  }
+
+  TreatmentAction {
+    string TreatmentActionId PK
+    string CAPAPlanId FK
+    string actionType
+    string ownerRole
+    datetime dueBy
+    string status
+    string rationale
+  }
+
+  LessonLearned {
+    string LessonLearnedId PK
+    string title
+    string summary
+    datetime publishedAt
+    string publishedByRole
+    string status
+  }
+
+  Risk {
+    string RiskId PK
+  }
+
+  ControlImplementation {
+    string ControlImplementationId PK
+  }
+
+  IndicatorDefinition {
+    string IndicatorDefinitionId PK
+  }
+
+  LessonRiskLink {
+    string LessonLearnedId PK, FK
+    string RiskId PK, FK
+    string changeType
+    string rationale
+    datetime linkedAt
+  }
+
+  LessonControlImplLink {
+    string LessonLearnedId PK, FK
+    string ControlImplementationId PK, FK
+    string changeType
+    string rationale
+    datetime linkedAt
+  }
+
+  LessonIndicatorLink {
+    string LessonLearnedId PK, FK
+    string IndicatorDefinitionId PK, FK
+    string changeType
+    string rationale
+    datetime linkedAt
+  }
+
+  Approval {
+    string ApprovalId PK
+    string approvalType
+    string decision
+    string authorityLevel
+    string approverRole
+    datetime approvedAt
+    string comments
+  }
+
+  CAPAApprovalLink {
+    string CAPAPlanId PK, FK
+    string ApprovalId PK, FK
+    string approvalPurpose
+  }

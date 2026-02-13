@@ -1,0 +1,96 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "sb-01/breach-detected.schema.json",
+    "title": "BreachDetected",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "event_id",
+        "source",
+        "received_at",
+        "bu_id",
+        "category",
+        "signal",
+        "measurement"
+    ],
+    "properties": {
+        "event_id": {
+            "type": "string"
+        },
+        "source": {
+            "type": "string",
+            "enum": [
+                "monitoring_stub",
+                "monitoring_real"
+            ]
+        },
+        "received_at": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "bu_id": {
+            "type": "string"
+        },
+        "category": {
+            "type": "string",
+            "enum": [
+                "safety"
+            ]
+        },
+        "signal": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "title",
+                "description",
+                "location"
+            ],
+            "properties": {
+                "title": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "occurred_at": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            }
+        },
+        "measurement": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "metric_name",
+                "value"
+            ],
+            "properties": {
+                "metric_name": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "number"
+                },
+                "unit": {
+                    "type": "string"
+                }
+            }
+        },
+        "severity_hint": {
+            "type": "string",
+            "enum": [
+                "low",
+                "medium",
+                "high"
+            ]
+        },
+        "raw_ref": {
+            "type": "string",
+            "description": "Pointer to raw payload storage if retained."
+        }
+    }
+}

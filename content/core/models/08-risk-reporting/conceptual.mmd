@@ -1,0 +1,18 @@
+classDiagram
+class BoardPack
+class RiskPortfolioView
+class DecisionLedgerEntry
+class Disclosure
+class EvidenceItem
+class Risk
+class Incident
+BoardPack "1" --> "0..*" RiskPortfolioView : includesView
+RiskPortfolioView "0..*" --> "0..*" BoardPack : includedInPack
+BoardPack "1" --> "0..*" DecisionLedgerEntry : includesDecision
+DecisionLedgerEntry "0..*" --> "0..*" BoardPack : includedInPack
+Disclosure "0..*" --> "0..*" EvidenceItem : referencesEvidence
+EvidenceItem "0..*" --> "0..*" Disclosure : supportsDisclosure
+Disclosure "0..*" --> "0..*" Risk : referencesRisk
+Risk "0..*" --> "0..*" Disclosure : referencedByDisclosure
+Disclosure "0..*" --> "0..*" Incident : referencesIncident
+Incident "0..*" --> "0..*" Disclosure : referencedByDisclosure

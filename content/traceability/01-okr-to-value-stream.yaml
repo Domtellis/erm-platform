@@ -1,0 +1,66 @@
+schema_version: "1.0"
+links:
+  - link_id: "L-OKR-VS-0001"
+    okr_id: "OKR-Y1-A"
+    vs_id: "VS-00"
+    contribution: "primary"
+    confidence: 0.90
+    rationale: "Appetite/criteria are the core scope of Objective A."
+  - link_id: "L-OKR-VS-0002"
+    okr_id: "OKR-Y1-A"
+    vs_id: "VS-01"
+    contribution: "supporting"
+    confidence: 0.70
+    rationale: "Authority matrix and approvals are governed via operating model."
+
+  - link_id: "L-OKR-VS-0003"
+    okr_id: "OKR-Y1-B"
+    vs_id: "VS-01"
+    contribution: "primary"
+    confidence: 0.95
+    rationale: "Committee cadence, decision logs, and action follow-ups are governance execution."
+
+  - link_id: "L-OKR-VS-0004"
+    okr_id: "OKR-Y1-C"
+    vs_id: "VS-03"
+    contribution: "primary"
+    confidence: 0.90
+    rationale: "Risk reduction is realised through actions, treatments, and controls."
+  - link_id: "L-OKR-VS-0005"
+    okr_id: "OKR-Y1-C"
+    vs_id: "VS-05"
+    contribution: "supporting"
+    confidence: 0.75
+    rationale: "Verified closure requires evidence and auditability."
+
+  - link_id: "L-OKR-VS-0006"
+    okr_id: "OKR-Y1-D"
+    vs_id: "VS-04"
+    contribution: "primary"
+    confidence: 0.95
+    rationale: "KRIs and breaches are the monitoring value stream."
+
+  - link_id: "L-OKR-VS-0007"
+    okr_id: "OKR-Y1-E"
+    vs_id: "VS-05"
+    contribution: "primary"
+    confidence: 0.95
+    rationale: "Evidence operations underpin audit readiness."
+  - link_id: "L-OKR-VS-0008"
+    okr_id: "OKR-Y1-F"
+    vs_id: "VS-10"
+    contribution: "primary"
+    confidence: 0.95
+    rationale: "Multi-tenant + security + audit trail + everything-as-code are platform foundations."
+  - link_id: "L-OKR-VS-0009"
+    okr_id: "OKR-Y1-G"
+    vs_id: "VS-06"
+    contribution: "supporting"
+    confidence: 0.70
+    rationale: "Insights/reporting supports adoption and perceived value."
+  - link_id: "L-OKR-VS-0010"
+    okr_id: "OKR-Y1-G"
+    vs_id: "VS-10"
+    contribution: "supporting"
+    confidence: 0.70
+    rationale: "Design partner success depends on secure, operable platform foundations."

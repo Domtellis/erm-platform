@@ -1,0 +1,108 @@
+schema_version: "1.0"
+links:
+  - link_id: "L-VS-CAP-0001"
+    vs_id: "VS-00"
+    capability_id: "CAP-RAC-01"
+    contribution: "primary"
+    confidence: 0.95
+    rationale: "Appetite statement authoring/versioning is the core artefact."
+  - link_id: "L-VS-CAP-0002"
+    vs_id: "VS-00"
+    capability_id: "CAP-RAC-02"
+    contribution: "primary"
+    confidence: 0.95
+    rationale: "Tolerance thresholds/criteria make appetite executable."
+  - link_id: "L-VS-CAP-0003"
+    vs_id: "VS-00"
+    capability_id: "CAP-RAC-03"
+    contribution: "supporting"
+    confidence: 0.80
+    rationale: "Waivers/decision gates operationalise exceptions."
+
+  - link_id: "L-VS-CAP-0004"
+    vs_id: "VS-01"
+    capability_id: "CAP-RG-01"
+    contribution: "primary"
+    confidence: 0.95
+    rationale: "Committee packs, actions, minutes, decision logs = governance execution."
+  - link_id: "L-VS-CAP-0005"
+    vs_id: "VS-01"
+    capability_id: "CAP-RG-02"
+    contribution: "primary"
+    confidence: 0.90
+    rationale: "Escalation/authority matrix drives approvals and delegations."
+  - link_id: "L-VS-CAP-0006"
+    vs_id: "VS-01"
+    capability_id: "CAP-RG-03"
+    contribution: "supporting"
+    confidence: 0.75
+    rationale: "Three-lines alignment enables oversight and handoffs."
+
+  - link_id: "L-VS-CAP-0007"
+    vs_id: "VS-03"
+    capability_id: "CAP-RTC-01"
+    contribution: "primary"
+    confidence: 0.95
+    rationale: "Treatment/action planning is where outcomes are executed."
+  - link_id: "L-VS-CAP-0008"
+    vs_id: "VS-03"
+    capability_id: "CAP-RTC-02"
+    contribution: "supporting"
+    confidence: 0.80
+    rationale: "Control library/testing links treatments to assurance."
+  - link_id: "L-VS-CAP-0009"
+    vs_id: "VS-03"
+    capability_id: "CAP-EVD-01"
+    contribution: "supporting"
+    confidence: 0.85
+    rationale: "Verified closure requires evidence capture and linkage."
+
+  - link_id: "L-VS-CAP-0010"
+    vs_id: "VS-04"
+    capability_id: "CAP-MON-01"
+    contribution: "primary"
+    confidence: 0.95
+    rationale: "KRIs/thresholds define what to monitor."
+  - link_id: "L-VS-CAP-0011"
+    vs_id: "VS-04"
+    capability_id: "CAP-MON-02"
+    contribution: "primary"
+    confidence: 0.95
+    rationale: "Breach workflow converts signals into decisions and actions."
+
+  - link_id: "L-VS-CAP-0012"
+    vs_id: "VS-05"
+    capability_id: "CAP-EVD-01"
+    contribution: "primary"
+    confidence: 0.95
+    rationale: "Evidence management is the spine of audit readiness."
+  - link_id: "L-VS-CAP-0013"
+    vs_id: "VS-05"
+    capability_id: "CAP-POL-01"
+    contribution: "supporting"
+    confidence: 0.80
+    rationale: "Policy library underpins evidence requirements and attestations."
+  - link_id: "L-VS-CAP-0014"
+    vs_id: "VS-10"
+    capability_id: "CAP-PLT-01"
+    contribution: "primary"
+    confidence: 0.95
+    rationale: "Tenant isolation/provisioning is foundational."
+  - link_id: "L-VS-CAP-0015"
+    vs_id: "VS-10"
+    capability_id: "CAP-PLT-02"
+    contribution: "primary"
+    confidence: 0.90
+    rationale: "RBAC/LoD views are required for enterprise adoption."
+  - link_id: "L-VS-CAP-0016"
+    vs_id: "VS-10"
+    capability_id: "CAP-PLT-03"
+    contribution: "primary"
+    confidence: 0.90
+    rationale: "Audit logging/immutable trail is non-negotiable for ERM."
+  - link_id: "L-VS-CAP-0017"
+    vs_id: "VS-10"
+    capability_id: "CAP-PLT-04"
+    contribution: "supporting"
+    confidence: 0.85
+    rationale: "Everything-as-code enables governance + repeatability + CI."

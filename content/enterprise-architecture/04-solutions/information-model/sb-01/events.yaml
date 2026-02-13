@@ -1,0 +1,68 @@
+version: 0.1.0
+domain: sb-01-appetite-breach-response
+
+event_stream:
+  name: sb-01-audit-events
+  retention_class: governance_audit
+
+events:
+  - type: BREACH_CASE_CREATED
+    description: "A new breach case was created (manual or from signal)."
+    payload:
+      required: [breach_case_id, bu_id, category, severity, created_by, created_at]
+  - type: BREACH_SIGNAL_LINKED
+    description: "A breach signal was linked to the case."
+    payload:
+      required: [breach_case_id, breach_signal_id, source, received_at]
+  - type: OWNER_ASSIGNED
+    description: "Case owner assigned/changed."
+    payload:
+      required: [breach_case_id, owner_user_id]
+  - type: CASE_TRIAGED
+    description: "Case triage completed."
+    payload:
+      required: [breach_case_id, severity, location]
+  - type: APPETITE_SELECTED
+    description: "Appetite statement version selected for evaluation."
+    payload:
+      required: [breach_case_id, appetite_statement_version_id]
+  - type: THRESHOLD_EVALUATED
+    description: "Threshold evaluation performed."
+    payload:
+      required: [breach_case_id, evaluation_id, threshold_id, measured_value, result, computed_severity]
+  - type: ESCALATION_TRIGGERED
+    description: "Escalation triggered due to severity/threshold/delegation."
+    payload:
+      required: [breach_case_id, reason, escalated_to_role]
+  - type: DECISION_SUBMITTED
+    description: "Decision submitted for approval."
+    payload:
+      required: [breach_case_id, decision_id, decision_type, submitted_by]
+  - type: APPROVAL_REQUESTED
+    description: "Approval request created."
+    payload:
+      required: [decision_id, approver_user_id, approver_role]
+  - type: DECISION_APPROVED
+    description: "Decision approved (SoD checked)."
+    payload:
+      required: [breach_case_id, decision_id, approver_user_id, approver_role, sod_check_passed]
+  - type: EVIDENCE_ATTACHED
+    description: "Evidence attached to the case."
+    payload:
+      required: [breach_case_id, evidence_id, type, uri]
+  - type: ACTION_CREATED
+    description: "Action item created."
+    payload:
+      required: [breach_case_id, action_item_id, owner_user_id]
+  - type: ACTION_COMPLETED
+    description: "Action item completed."
+    payload:
+      required: [breach_case_id, action_item_id]
+  - type: CASE_CLOSED
+    description: "Case closed after evidence policy check."
+    payload:
+      required: [breach_case_id, closed_by]
+  - type: AUDIT_PACK_EXPORTED
+    description: "Audit pack exported."
+    payload:
+      required: [breach_case_id, exported_by, export_format]

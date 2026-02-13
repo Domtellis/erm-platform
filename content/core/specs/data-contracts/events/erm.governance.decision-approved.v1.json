@@ -1,0 +1,38 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Decision Approved Event",
+    "description": "Schema for the erm.governance.decision-approved.v1 event",
+    "type": "object",
+    "required": [
+        "breach_case_id",
+        "decision_id",
+        "approver_user_id",
+        "approver_role",
+        "sod_check_passed"
+    ],
+    "properties": {
+        "breach_case_id": {
+            "type": "string"
+        },
+        "decision_id": {
+            "type": "string"
+        },
+        "approver_user_id": {
+            "type": "string"
+        },
+        "approver_role": {
+            "type": "string",
+            "enum": [
+                "risk_lead",
+                "bu_risk_owner"
+            ]
+        },
+        "sod_check_passed": {
+            "type": "boolean"
+        },
+        "approved_at": {
+            "type": "string",
+            "format": "date-time"
+        }
+    }
+}

@@ -1,0 +1,38 @@
+version: 0.1.0
+scope:
+  lighthouse: sb-01
+  category: safety
+
+approval_policies:
+  - id: ap-001
+    name: "Low severity decision approval"
+    applies_to_severity: low
+    required_approvals:
+      - role: risk_lead
+        count: 1
+    optional_reviewers:
+      - role: incident_lead
+
+  - id: ap-002
+    name: "Medium severity decision approval"
+    applies_to_severity: medium
+    required_approvals:
+      - role: risk_lead
+        count: 1
+    notifications:
+      - role: bu_risk_owner
+        required: false
+
+  - id: ap-003
+    name: "High severity decision approval"
+    applies_to_severity: high
+    required_approvals:
+      - role: bu_risk_owner
+        count: 1
+    required_preconditions:
+      - "evidence_policy_passed_for_severity"
+      - "sod_rules_passed"
+    notifications:
+      - role: teams_channel
+        required: true
+        target: "BU-01-Safety-Risk"

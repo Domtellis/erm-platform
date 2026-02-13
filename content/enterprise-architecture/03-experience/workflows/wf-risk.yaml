@@ -1,0 +1,103 @@
+schema_version: "1.0"
+workflow_id: "wf-risk"
+entity: "risk"
+description: "Risk record lifecycle across identification, review, activation, reassessment, acceptance, escalation, and archive."
+value_stream_alignment: ["VS-02","VS-07","VS-09"]
+states:
+  - { state: "draft", type: "initial" }
+  - { state: "in_review", type: "normal" }
+  - { state: "active", type: "normal" }
+  - { state: "under_reassessment", type: "normal" }
+  - { state: "accepted", type: "normal" }
+  - { state: "escalated", type: "normal" }
+  - { state: "archived", type: "terminal" }
+
+validations:
+  minimum_fields_for_review:
+    - "title"
+    - "risk_statement.cause_event_impact"
+    - "taxonomy.classification"
+    - "owner"
+    - "reviewer"
+    - "links.at_least_one_of: [objective_kpi, service_asset, supplier_third_party]"
+  minimum_fields_for_active:
+    - "triage.materiality"
+    - "triage.urgency"
+    - "assessment_backlog_entry"
+
+commands:
+  - command: "create_risk"
+    actor_roles: ["bu_risk_owner","enterprise_risk_lead","incident_monitoring_lead"]
+    produces_events: ["risk_created"]
+  - command: "submit_for_review"
+    actor_roles: ["bu_risk_owner"]
+    preconditions: ["state == draft", "validations.minimum_fields_for_review"]
+    produces_events: ["risk_submitted_for_review"]
+  - command: "request_changes"
+    actor_roles: ["enterprise_risk_lead","reviewer"]
+    preconditions: ["state == in_review"]
+    produces_events: ["risk_changes_requested"]
+  - command: "approve_risk"
+    actor_roles: ["enterprise_risk_lead","reviewer"]
+    preconditions: ["state == in_review", "validations.minimum_fields_for_active"]
+    produces_events: ["risk_approved"]
+  - command: "archive_risk"
+    actor_roles: ["enterprise_risk_lead"]
+    preconditions: ["state in [active, accepted, escalated]"]
+    produces_events: ["risk_archived"]
+  - command: "flag_for_reassessment"
+    actor_roles: ["enterprise_risk_lead","incident_monitoring_lead","system"]
+    preconditions: ["state == active"]
+    produces_events: ["risk_reassessment_requested"]
+  - command: "escalate_risk"
+    actor_roles: ["bu_risk_owner","enterprise_risk_lead","system"]
+    preconditions: ["state in [active, under_reassessment]"]
+    produces_events: ["risk_escalated"]
+  - command: "accept_residual"
+    actor_roles: ["bu_risk_owner","delegated_authority"]
+    preconditions: ["state == under_reassessment", "delegation_checks.passed == true"]
+    produces_events: ["risk_accepted"]
+
+events:
+  - { event: "risk_created", audit: true }
+  - { event: "risk_submitted_for_review", audit: true }
+  - { event: "risk_changes_requested", audit: true }
+  - { event: "risk_approved", audit: true }
+  - { event: "risk_reassessment_requested", audit: true }
+  - { event: "risk_escalated", audit: true }
+  - { event: "risk_accepted", audit: true }
+  - { event: "risk_archived", audit: true }
+
+transitions:
+  - { from: "draft", "on": "risk_submitted_for_review", to: "in_review" }
+  - { from: "in_review", "on": "risk_changes_requested", to: "draft" }
+  - { from: "in_review", "on": "risk_approved", to: "active" }
+  - { from: "active", "on": "risk_reassessment_requested", to: "under_reassessment" }
+  - { from: "under_reassessment", "on": "risk_accepted", to: "accepted" }
+  - { from: "active", "on": "risk_escalated", to: "escalated" }
+  - { from: "under_reassessment", "on": "risk_escalated", to: "escalated" }
+  - { from: "active", "on": "risk_archived", to: "archived" }
+  - { from: "accepted", "on": "risk_archived", to: "archived" }
+  - { from: "escalated", "on": "risk_archived", to: "archived" }
+
+segregation_of_duties:
+  rules:
+    - rule_id: "sod-001"
+      description: "Creator cannot be sole approver for risk activation."
+      enforced_on_commands: ["approve_risk"]
+    - rule_id: "sod-002"
+      description: "Acceptance requires delegated authority check when outside tolerance."
+      enforced_on_commands: ["accept_residual"]
+
+audit_logging:
+  required: true
+  include_fields:
+    - "entity_id"
+    - "event"
+    - "timestamp"
+    - "actor_id"
+    - "actor_role"
+    - "before_state"
+    - "after_state"
+    - "criteria_model_version"
+    - "rationale_ref"

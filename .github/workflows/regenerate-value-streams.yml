@@ -1,0 +1,36 @@
+name: Regenerate value stream artifacts
+
+on:
+  push:
+    paths:
+      - 'content/enterprise-architecture/02-business/value-streams/**'
+  pull_request:
+    paths:
+      - 'content/enterprise-architecture/02-business/value-streams/**'
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml
+
+      - name: Run generator
+        run: |
+          python tools/generate_value_streams.py
+
+      - name: Commit generated files
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "chore(generated): regenerate value-stream artifacts"
+          file_pattern: "content/core/models/**/context.yaml,content/core/models/**/conceptual.mmd"

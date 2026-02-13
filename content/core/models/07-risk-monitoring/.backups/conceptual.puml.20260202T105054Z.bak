@@ -1,0 +1,7 @@
+' Auto-generated conceptual diagram — source: docs/value-architecture/value-streams/VS-07-risk-monitoring.md, generated: 2026-02-02T10:49:51.859555Z
+@startuml
+class VS_07_risk_monitoring {
+  +id: string
+  +purpose: string
+}
+@enduml

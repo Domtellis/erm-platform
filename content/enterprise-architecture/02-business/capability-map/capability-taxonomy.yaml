@@ -1,0 +1,720 @@
+# capability-taxonomy.yaml
+schema_version: "1.0"
+taxonomy:
+  id: "ERM-L0"
+  level: "L0"
+  name: "AI-Enabled Enterprise Risk Management Platform"
+  description: "Enterprise-wide capabilities to govern, sense, assess, treat, assure, monitor and report risk, with AI-enabled acceleration and controls."
+  source: "User-provided ERM capability map"
+  children:
+
+    - id: "ERM-L1-01"
+      level: "L1"
+      name: "Risk Governance and Operating Model"
+      children:
+        - id: "ERM-L2-01.01"
+          level: "L2"
+          name: "Governance structures and decision rights"
+          children:
+            - id: "ERM-L3-01.01.01"
+              level: "L3"
+              name: "Committee and cadence management"
+              scope: ["agenda packs", "actions", "minutes", "decision log"]
+            - id: "ERM-L3-01.01.02"
+              level: "L3"
+              name: "Escalation and authority matrix"
+              scope: ["thresholds", "approvals", "delegations"]
+            - id: "ERM-L3-01.01.03"
+              level: "L3"
+              name: "Three-lines alignment"
+              scope: ["role demarcation", "handoffs", "oversight views"]
+
+        - id: "ERM-L2-01.02"
+          level: "L2"
+          name: "ERM policy, standards, and methodology"
+          children:
+            - id: "ERM-L3-01.02.01"
+              level: "L3"
+              name: "Policy library management"
+              scope: ["versioning", "exceptions", "attestations"]
+            - id: "ERM-L3-01.02.02"
+              level: "L3"
+              name: "Method configuration"
+              scope: ["risk scales", "scoring logic", "criteria definitions"]
+            - id: "ERM-L3-01.02.03"
+              level: "L3"
+              name: "ERM lifecycle definition"
+              scope: ["states", "workflow", "SLAs"]
+
+        - id: "ERM-L2-01.03"
+          level: "L2"
+          name: "Taxonomy and enterprise structures"
+          children:
+            - id: "ERM-L3-01.03.01"
+              level: "L3"
+              name: "Risk taxonomy management"
+              scope: ["categories", "sub-types", "mapping rules"]
+            - id: "ERM-L3-01.03.02"
+              level: "L3"
+              name: "Organisational modelling"
+              scope: ["legal entities", "BUs", "regions", "functions"]
+            - id: "ERM-L3-01.03.03"
+              level: "L3"
+              name: "Accountability modelling"
+              scope: ["risk owners", "control owners", "approvers"]
+
+    - id: "ERM-L1-02"
+      level: "L1"
+      name: "Risk Appetite, Risk Criteria, and Decision Guardrails"
+      children:
+        - id: "ERM-L2-02.01"
+          level: "L2"
+          name: "Appetite and tolerance definition"
+          children:
+            - id: "ERM-L3-02.01.01"
+              level: "L3"
+              name: "Appetite statements by risk class"
+              scope: ["financial", "cyber", "safety", "compliance", "resilience"]
+            - id: "ERM-L3-02.01.02"
+              level: "L3"
+              name: "Thresholds and limits"
+              scope: ["tolerances", "triggers", "early warning bands"]
+            - id: "ERM-L3-02.01.03"
+              level: "L3"
+              name: "Conditional appetite rules"
+              scope: ["geography", "customer segment", "product line"]
+
+        - id: "ERM-L2-02.02"
+          level: "L2"
+          name: "Risk criteria and evaluation rules"
+          children:
+            - id: "ERM-L3-02.02.01"
+              level: "L3"
+              name: "Impact/likelihood scales"
+              scope: ["velocity", "persistence", "detectability"]
+            - id: "ERM-L3-02.02.02"
+              level: "L3"
+              name: "Scoring model management"
+              scope: ["qualitative", "semi-quant", "quant"]
+            - id: "ERM-L3-02.02.03"
+              level: "L3"
+              name: "Acceptability rules"
+              scope: ["acceptable", "treat", "avoid", "transfer"]
+
+        - id: "ERM-L2-02.03"
+          level: "L2"
+          name: "Decision gating and approvals"
+          children:
+            - id: "ERM-L3-02.03.01"
+              level: "L3"
+              name: "Risk-based stage gates"
+              scope: ["investment", "architecture", "go-live", "procurement"]
+            - id: "ERM-L3-02.03.02"
+              level: "L3"
+              name: "Exception handling"
+              scope: ["waivers", "time-bound approvals", "compensating controls"]
+            - id: "ERM-L3-02.03.03"
+              level: "L3"
+              name: "Risk acceptance management"
+              scope: ["sign-off", "expiry", "conditions", "renewals"]
+
+    - id: "ERM-L1-03"
+      level: "L1"
+      name: "Risk Sensing and Context Intelligence"
+      children:
+        - id: "ERM-L2-03.01"
+          level: "L2"
+          name: "External risk intelligence"
+          children:
+            - id: "ERM-L3-03.01.01"
+              level: "L3"
+              name: "Horizon scanning"
+              scope: ["regulatory", "geopolitical", "macro", "industry"]
+            - id: "ERM-L3-03.01.02"
+              level: "L3"
+              name: "Threat intelligence ingestion"
+              scope: ["cyber feeds", "advisories"]
+            - id: "ERM-L3-03.01.03"
+              level: "L3"
+              name: "External signal triage"
+              scope: ["materiality tagging", "routing"]
+
+        - id: "ERM-L2-03.02"
+          level: "L2"
+          name: "Internal signal capture"
+          children:
+            - id: "ERM-L3-03.02.01"
+              level: "L3"
+              name: "Operational telemetry ingestion"
+              scope: ["availability", "incidents", "performance"]
+            - id: "ERM-L3-03.02.02"
+              level: "L3"
+              name: "Audit/assurance findings ingestion"
+              scope: ["issues", "ratings", "themes"]
+            - id: "ERM-L3-03.02.03"
+              level: "L3"
+              name: "Customer/complaint signals"
+              scope: ["voice-of-customer", "service quality"]
+
+        - id: "ERM-L2-03.03"
+          level: "L2"
+          name: "AI-enabled signal processing"
+          children:
+            - id: "ERM-L3-03.03.01"
+              level: "L3"
+              name: "NLP classification and deduplication"
+              scope: ["theme extraction", "clustering"]
+            - id: "ERM-L3-03.03.02"
+              level: "L3"
+              name: "Emerging risk detection"
+              scope: ["trend breaks", "weak-signal surfacing"]
+            - id: "ERM-L3-03.03.03"
+              level: "L3"
+              name: "Context packs for assessments"
+              scope: ["auto-generated briefings", "sources"]
+
+    - id: "ERM-L1-04"
+      level: "L1"
+      name: "Risk Identification and Portfolio Structuring"
+      children:
+        - id: "ERM-L2-04.01"
+          level: "L2"
+          name: "Risk intake and capture"
+          children:
+            - id: "ERM-L3-04.01.01"
+              level: "L3"
+              name: "Multi-channel intake"
+              scope: ["forms", "email", "API", "chat", "ticketing"]
+            - id: "ERM-L3-04.01.02"
+              level: "L3"
+              name: "Structured risk statement builder"
+              scope: ["cause–event–impact"]
+            - id: "ERM-L3-04.01.03"
+              level: "L3"
+              name: "Ownership and accountability assignment"
+              scope: ["primary owners", "secondary owners"]
+
+        - id: "ERM-L2-04.02"
+          level: "L2"
+          name: "Dependency mapping"
+          children:
+            - id: "ERM-L3-04.02.01"
+              level: "L3"
+              name: "Link risks to objectives and KPIs"
+              scope: ["strategy alignment"]
+            - id: "ERM-L3-04.02.02"
+              level: "L3"
+              name: "Link to services/assets/processes"
+              scope: ["critical services", "applications", "sites"]
+            - id: "ERM-L3-04.02.03"
+              level: "L3"
+              name: "Link to third parties"
+              scope: ["suppliers", "partners", "outsourcers"]
+
+        - id: "ERM-L2-04.03"
+          level: "L2"
+          name: "Portfolio rationalisation"
+          children:
+            - id: "ERM-L3-04.03.01"
+              level: "L3"
+              name: "Duplicate detection"
+              scope: ["semantic similarity", "consolidation workflow"]
+            - id: "ERM-L3-04.03.02"
+              level: "L3"
+              name: "Risk hierarchy"
+              scope: ["parent/child", "systemic vs local"]
+            - id: "ERM-L3-04.03.03"
+              level: "L3"
+              name: "Thematic clustering"
+              scope: ["driver", "control family", "business domain"]
+
+    - id: "ERM-L1-05"
+      level: "L1"
+      name: "Risk Assessment and Modelling"
+      children:
+        - id: "ERM-L2-05.01"
+          level: "L2"
+          name: "Risk analysis"
+          children:
+            - id: "ERM-L3-05.01.01"
+              level: "L3"
+              name: "Inherent risk assessment"
+              scope: ["before controls"]
+            - id: "ERM-L3-05.01.02"
+              level: "L3"
+              name: "Control effectiveness assessment"
+              scope: ["design vs operating"]
+            - id: "ERM-L3-05.01.03"
+              level: "L3"
+              name: "Residual risk calculation"
+              scope: ["modelled", "explainable"]
+
+        - id: "ERM-L2-05.02"
+          level: "L2"
+          name: "Quantification and scenario methods"
+          children:
+            - id: "ERM-L3-05.02.01"
+              level: "L3"
+              name: "Scenario definition"
+              scope: ["stress tests", "tail events", "plausible severe"]
+            - id: "ERM-L3-05.02.02"
+              level: "L3"
+              name: "Loss modelling"
+              scope: ["ranges", "distributions", "Monte Carlo hooks where needed"]
+            - id: "ERM-L3-05.02.03"
+              level: "L3"
+              name: "Sensitivity/assumption management"
+              scope: ["assumption logs", "dominance analysis"]
+
+        - id: "ERM-L2-05.03"
+          level: "L2"
+          name: "Assessment quality and challenge"
+          children:
+            - id: "ERM-L3-05.03.01"
+              level: "L3"
+              name: "Second-line review workflow"
+              scope: ["challenge", "revise", "approve"]
+            - id: "ERM-L3-05.03.02"
+              level: "L3"
+              name: "Evidence management"
+              scope: ["citations", "attachments", "data provenance"]
+            - id: "ERM-L3-05.03.03"
+              level: "L3"
+              name: "Assessment QA scoring"
+              scope: ["completeness", "rationale quality", "consistency"]
+
+        - id: "ERM-L2-05.04"
+          level: "L2"
+          name: "AI-enabled assessment acceleration"
+          children:
+            - id: "ERM-L3-05.04.01"
+              level: "L3"
+              name: "Drafting assistance"
+              scope: ["risk narratives", "drivers", "impacts"]
+            - id: "ERM-L3-05.04.02"
+              level: "L3"
+              name: "Control suggestion and mapping"
+              scope: ["recommended control families"]
+            - id: "ERM-L3-05.04.03"
+              level: "L3"
+              name: "Explainable scoring rationales"
+              scope: ["why rating changed", "what drove it"]
+
+    - id: "ERM-L1-06"
+      level: "L1"
+      name: "Risk Evaluation and Portfolio Optimisation"
+      children:
+        - id: "ERM-L2-06.01"
+          level: "L2"
+          name: "Appetite/criteria evaluation"
+          children:
+            - id: "ERM-L3-06.01.01"
+              level: "L3"
+              name: "Automated breach detection"
+              scope: ["against appetite/thresholds"]
+            - id: "ERM-L3-06.01.02"
+              level: "L3"
+              name: "Prioritisation logic"
+              scope: ["materiality", "velocity", "concentration", "confidence"]
+            - id: "ERM-L3-06.01.03"
+              level: "L3"
+              name: "Escalation triggers"
+              scope: ["board/ExCo thresholds", "critical service flags"]
+
+        - id: "ERM-L2-06.02"
+          level: "L2"
+          name: "Portfolio views and concentration"
+          children:
+            - id: "ERM-L3-06.02.01"
+              level: "L3"
+              name: "Heatmaps and distribution analytics"
+              scope: ["by BU", "region", "risk class"]
+            - id: "ERM-L3-06.02.02"
+              level: "L3"
+              name: "Concentration risk analysis"
+              scope: ["single points of failure", "systemic clusters"]
+            - id: "ERM-L3-06.02.03"
+              level: "L3"
+              name: "Portfolio what-if"
+              scope: ["impact of treatments", "funding scenarios"]
+
+        - id: "ERM-L2-06.03"
+          level: "L2"
+          name: "Risk decisioning"
+          children:
+            - id: "ERM-L3-06.03.01"
+              level: "L3"
+              name: "Decision log and rationale"
+              scope: ["traceability to evidence"]
+            - id: "ERM-L3-06.03.02"
+              level: "L3"
+              name: "Funding alignment"
+              scope: ["initiatives", "CAPEX/OPEX"]
+            - id: "ERM-L3-06.03.03"
+              level: "L3"
+              name: "Risk acceptance / transfer decisions"
+              scope: ["formalisation", "controls"]
+
+    - id: "ERM-L1-07"
+      level: "L1"
+      name: "Risk Treatment and Control Design"
+      children:
+        - id: "ERM-L2-07.01"
+          level: "L2"
+          name: "Treatment planning"
+          children:
+            - id: "ERM-L3-07.01.01"
+              level: "L3"
+              name: "Response option management"
+              scope: ["avoid", "reduce", "transfer", "accept"]
+            - id: "ERM-L3-07.01.02"
+              level: "L3"
+              name: "Treatment backlog"
+              scope: ["epics", "features", "stories", "prioritisation"]
+            - id: "ERM-L3-07.01.03"
+              level: "L3"
+              name: "Ownership, due dates, dependencies"
+              scope: ["delivery governance"]
+
+        - id: "ERM-L2-07.02"
+          level: "L2"
+          name: "Control library and design"
+          children:
+            - id: "ERM-L3-07.02.01"
+              level: "L3"
+              name: "Control taxonomy"
+              scope: ["prevent", "detect", "correct", "manual", "automated"]
+            - id: "ERM-L3-07.02.02"
+              level: "L3"
+              name: "Control objectives and standards"
+              scope: ["expected evidence", "frequency"]
+            - id: "ERM-L3-07.02.03"
+              level: "L3"
+              name: "Control-to-risk mapping"
+              scope: ["coverage", "gaps", "overlaps"]
+
+        - id: "ERM-L2-07.03"
+          level: "L2"
+          name: "Treatment effectiveness management"
+          children:
+            - id: "ERM-L3-07.03.01"
+              level: "L3"
+              name: "Post-treatment reassessment"
+              scope: ["residual risk delta"]
+            - id: "ERM-L3-07.03.02"
+              level: "L3"
+              name: "Compensating controls management"
+              scope: ["temporary mitigations"]
+            - id: "ERM-L3-07.03.03"
+              level: "L3"
+              name: "Acceptance conditions and expiry"
+              scope: ["renewal workflow"]
+
+        - id: "ERM-L2-07.04"
+          level: "L2"
+          name: "AI-enabled treatment optimisation"
+          children:
+            - id: "ERM-L3-07.04.01"
+              level: "L3"
+              name: "Recommended treatments"
+              scope: ["patterns", "similar risks", "prior outcomes"]
+            - id: "ERM-L3-07.04.02"
+              level: "L3"
+              name: "Control gap inference"
+              scope: ["failure clusters", "missing control families"]
+            - id: "ERM-L3-07.04.03"
+              level: "L3"
+              name: "Action plan drafting"
+              scope: ["SMART actions", "owners", "milestones"]
+
+    - id: "ERM-L1-08"
+      level: "L1"
+      name: "Control Operation, Assurance, and Compliance"
+      children:
+        - id: "ERM-L2-08.01"
+          level: "L2"
+          name: "Control execution and evidence"
+          children:
+            - id: "ERM-L3-08.01.01"
+              level: "L3"
+              name: "Control execution scheduling"
+              scope: ["frequencies", "calendars"]
+            - id: "ERM-L3-08.01.02"
+              level: "L3"
+              name: "Evidence capture automation"
+              scope: ["APIs", "logs", "snapshots"]
+            - id: "ERM-L3-08.01.03"
+              level: "L3"
+              name: "Evidence quality checks"
+              scope: ["completeness", "freshness", "tamper-evidence"]
+
+        - id: "ERM-L2-08.02"
+          level: "L2"
+          name: "Control testing and monitoring"
+          children:
+            - id: "ERM-L3-08.02.01"
+              level: "L3"
+              name: "Test plans and sampling"
+              scope: ["walkthroughs", "design tests", "operating tests"]
+            - id: "ERM-L3-08.02.02"
+              level: "L3"
+              name: "Continuous controls monitoring"
+              scope: ["where telemetry supports it"]
+            - id: "ERM-L3-08.02.03"
+              level: "L3"
+              name: "Control performance analytics"
+              scope: ["failure trends", "weak controls"]
+
+        - id: "ERM-L2-08.03"
+          level: "L2"
+          name: "Compliance and obligation management"
+          children:
+            - id: "ERM-L3-08.03.01"
+              level: "L3"
+              name: "Obligations register"
+              scope: ["regs/standards/contractual commitments"]
+            - id: "ERM-L3-08.03.02"
+              level: "L3"
+              name: "Control-to-obligation mapping"
+              scope: ["coverage", "attestations"]
+            - id: "ERM-L3-08.03.03"
+              level: "L3"
+              name: "Audit coordination"
+              scope: ["request management", "PBC tracking"]
+
+        - id: "ERM-L2-08.04"
+          level: "L2"
+          name: "Issues, actions, and remediation"
+          children:
+            - id: "ERM-L3-08.04.01"
+              level: "L3"
+              name: "Findings management"
+              scope: ["severity", "root cause", "ownership"]
+            - id: "ERM-L3-08.04.02"
+              level: "L3"
+              name: "Corrective action workflow"
+              scope: ["CAPA", "validation of closure"]
+            - id: "ERM-L3-08.04.03"
+              level: "L3"
+              name: "Recurrence prevention"
+              scope: ["link issues to risks/controls", "lessons learned"]
+
+    - id: "ERM-L1-09"
+      level: "L1"
+      name: "Risk Monitoring, KRIs, and Early Warning"
+      children:
+        - id: "ERM-L2-09.01"
+          level: "L2"
+          name: "KRI/KPI instrumentation"
+          children:
+            - id: "ERM-L3-09.01.01"
+              level: "L3"
+              name: "Indicator catalogue"
+              scope: ["definitions", "owners", "data sources"]
+            - id: "ERM-L3-09.01.02"
+              level: "L3"
+              name: "Threshold and banding"
+              scope: ["aligned to appetite"]
+            - id: "ERM-L3-09.01.03"
+              level: "L3"
+              name: "Data pipelines"
+              scope: ["batch ingestion", "stream ingestion"]
+
+        - id: "ERM-L2-09.02"
+          level: "L2"
+          name: "Eventing and breach management"
+          children:
+            - id: "ERM-L3-09.02.01"
+              level: "L3"
+              name: "Alerts and routing"
+              scope: ["who is notified", "escalation path"]
+            - id: "ERM-L3-09.02.02"
+              level: "L3"
+              name: "Breach triage workflows"
+              scope: ["classification", "immediate actions"]
+            - id: "ERM-L3-09.02.03"
+              level: "L3"
+              name: "Risk rating recalibration"
+              scope: ["auto-suggested updates", "human approval"]
+
+        - id: "ERM-L2-09.03"
+          level: "L2"
+          name: "AI-enabled anomaly detection"
+          children:
+            - id: "ERM-L3-09.03.01"
+              level: "L3"
+              name: "Leading indicator detection"
+              scope: ["trend breaks", "drift", "weak signals"]
+            - id: "ERM-L3-09.03.02"
+              level: "L3"
+              name: "Noise reduction"
+              scope: ["alert deduplication", "suppression", "correlation"]
+            - id: "ERM-L3-09.03.03"
+              level: "L3"
+              name: "Predictive risk forecasting"
+              scope: ["probable breaches", "exposure trajectories"]
+
+    - id: "ERM-L1-10"
+      level: "L1"
+      name: "Reporting, Disclosure, and Decision Support"
+      children:
+        - id: "ERM-L2-10.01"
+          level: "L2"
+          name: "Executive and board reporting"
+          children:
+            - id: "ERM-L3-10.01.01"
+              level: "L3"
+              name: "Board risk pack generation"
+              scope: ["top risks", "movements", "hotspots"]
+            - id: "ERM-L3-10.01.02"
+              level: "L3"
+              name: "Thematic deep dives"
+              scope: ["systemic risks", "concentrations", "critical services"]
+            - id: "ERM-L3-10.01.03"
+              level: "L3"
+              name: "Decision-focused reporting"
+              scope: ["options", "trade-offs", "recommendations"]
+
+        - id: "ERM-L2-10.02"
+          level: "L2"
+          name: "Stakeholder reporting"
+          children:
+            - id: "ERM-L3-10.02.01"
+              level: "L3"
+              name: "Regulator reporting packs"
+              scope: ["evidence-linked outputs"]
+            - id: "ERM-L3-10.02.02"
+              level: "L3"
+              name: "Customer assurance"
+              scope: ["questionnaires", "control narratives"]
+            - id: "ERM-L3-10.02.03"
+              level: "L3"
+              name: "Internal management dashboards"
+              scope: ["role-based views"]
+
+        - id: "ERM-L2-10.03"
+          level: "L2"
+          name: "AI-assisted narrative and insights"
+          children:
+            - id: "ERM-L3-10.03.01"
+              level: "L3"
+              name: "Auto-summarisation with traceability"
+              scope: ["findings → narrative → evidence"]
+            - id: "ERM-L3-10.03.02"
+              level: "L3"
+              name: "Risk movement explanation"
+              scope: ["why changed", "key drivers"]
+            - id: "ERM-L3-10.03.03"
+              level: "L3"
+              name: "Q&A copilot"
+              scope: ["cited answers", "time-bound comparisons"]
+
+    - id: "ERM-L1-11"
+      level: "L1"
+      name: "Incident, Loss Event, and Learning Loop"
+      children:
+        - id: "ERM-L2-11.01"
+          level: "L2"
+          name: "Event capture and classification"
+          children:
+            - id: "ERM-L3-11.01.01"
+              level: "L3"
+              name: "Incident/loss intake"
+              scope: ["integrations with ITSM/SOC/safety systems"]
+            - id: "ERM-L3-11.01.02"
+              level: "L3"
+              name: "Severity and impact modelling"
+              scope: ["service", "customer", "financial"]
+            - id: "ERM-L3-11.01.03"
+              level: "L3"
+              name: "Event-to-risk/control linkage"
+              scope: ["what failed", "what was missing"]
+
+        - id: "ERM-L2-11.02"
+          level: "L2"
+          name: "Investigation and root cause"
+          children:
+            - id: "ERM-L3-11.02.01"
+              level: "L3"
+              name: "Root cause frameworks"
+              scope: ["5 whys", "fishbone", "contributing factors"]
+            - id: "ERM-L3-11.02.02"
+              level: "L3"
+              name: "Control failure analysis"
+              scope: ["design gaps", "operating gaps"]
+            - id: "ERM-L3-11.02.03"
+              level: "L3"
+              name: "Accountability and follow-ups"
+              scope: ["actions", "owners", "deadlines"]
+
+        - id: "ERM-L2-11.03"
+          level: "L2"
+          name: "Learning and prevention"
+          children:
+            - id: "ERM-L3-11.03.01"
+              level: "L3"
+              name: "Lessons learned library"
+              scope: ["searchable", "reusable"]
+            - id: "ERM-L3-11.03.02"
+              level: "L3"
+              name: "Risk/control updates from events"
+              scope: ["feedback automation"]
+            - id: "ERM-L3-11.03.03"
+              level: "L3"
+              name: "Recurrence analytics"
+              scope: ["repeat patterns", "hotspots"]
+
+    - id: "ERM-L1-12"
+      level: "L1"
+      name: "Risk Culture, Enablement, and Collaboration"
+      children:
+        - id: "ERM-L2-12.01"
+          level: "L2"
+          name: "Guidance and playbooks"
+          children:
+            - id: "ERM-L3-12.01.01"
+              level: "L3"
+              name: "Standard templates"
+              scope: ["risk statements", "assessments", "treatments"]
+            - id: "ERM-L3-12.01.02"
+              level: "L3"
+              name: "Role-based checklists"
+              scope: ["risk owners", "control owners", "project leads"]
+            - id: "ERM-L3-12.01.03"
+              level: "L3"
+              name: "Communities and clinics"
+              scope: ["peer review workflows"]
+
+        - id: "ERM-L2-12.02"
+          level: "L2"
+          name: "Training and certification"
+          children:
+            - id: "ERM-L3-12.02.01"
+              level: "L3"
+              name: "Curriculum management"
+              scope: ["learning paths", "tracking"]
+            - id: "ERM-L3-12.02.02"
+              level: "L3"
+              name: "Competency assessments"
+              scope: ["knowledge checks", "role readiness"]
+            - id: "ERM-L3-12.02.03"
+              level: "L3"
+              name: "Adoption analytics"
+              scope: ["coverage", "usage", "quality scores"]
+
+        - id: "ERM-L2-12.03"
+          level: "L2"
+          name: "Collaboration"
+          children:
+            - id: "ERM-L3-12.03.01"
+              level: "L3"
+              name: "Tasking and workflow"
+              scope: ["assignments", "reminders", "approvals"]
+            - id: "ERM-L3-12.03.02"
+              level: "L3"
+              name: "Discussion and commentary"
+              scope: ["contextual threads on risks/controls"]
+            - id: "ERM-L3-12.03.03"
+              level: "L3"
+              name: "Stakeholder consultation tracking"
+              scope: ["who was consulted", "outcomes"]

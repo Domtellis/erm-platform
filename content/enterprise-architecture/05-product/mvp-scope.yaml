@@ -1,0 +1,62 @@
+id: sb-01
+name: Appetite breach response
+version: 0.1.1
+
+context:
+  bu: BU-01
+  breach_category: safety
+  notification_channel: teams
+
+value_streams: [VS-07, VS-00, VS-08]
+
+personas:
+  - id: incident_lead
+  - id: risk_lead
+  - id: bu_risk_owner
+
+in_scope:
+  breach_triggers:
+    - manual_breach_submission
+    - integration_stub_monitoring_event
+
+  features_in_scope:   # NEW: delivery planning unit between epics and stories
+    - F-01-01  # Case intake (manual + stub)
+    - F-01-02  # Workflow state machine + timeline
+    - F-01-03  # Triage + SLA timers + Teams notify
+    - F-02-01  # Appetite/threshold selection
+    - F-02-02  # Threshold evaluation + severity mapping
+    - F-03-01  # Escalation rules + Teams notification
+    - F-03-02  # Decision submission
+    - F-03-03  # Approvals + SoD (High -> BU Risk Owner)
+    - F-04-01  # Evidence capture + indexing
+    - F-04-02  # Evidence policy gating
+    - F-04-03  # Action plan management
+    - F-04-04  # Closure + post-action notes
+    - F-05-01  # Audit events pipeline (append-only)
+    - F-05-02  # Audit pack export
+
+  minimum_controls_day1:
+    - segregation_of_duties
+    - approval_workflow
+    - immutable_audit_trail
+    - evidence_requirements_by_severity
+    - retention_policy_reference
+
+out_of_scope:
+  - ml_recommendations
+  - enterprise_taxonomy_migration
+  - full_policy_library_management
+  - advanced_analytics_heatmaps
+  - full_ticketing_integration
+
+assumptions:
+  - "BU-01 pilot has named champions for Incident Lead, Risk Lead, BU Risk Owner."
+  - "Teams webhook/connector is permitted by IT policy for notifications."
+  - "Identity provider available or mocked with role mapping for pilot."
+
+dependencies:
+  - identity_and_access_model
+  - evidence_store
+  - audit_log_store
+  - notification_service_teams
+  - appetite_and_threshold_reference_data

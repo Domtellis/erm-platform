@@ -1,0 +1,48 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Evidence Attached Event",
+    "description": "Schema for the erm.evidence.evidence-attached.v1 event",
+    "type": "object",
+    "required": [
+        "breach_case_id",
+        "evidence_id",
+        "type",
+        "uri",
+        "hash"
+    ],
+    "properties": {
+        "breach_case_id": {
+            "type": "string"
+        },
+        "evidence_id": {
+            "type": "string"
+        },
+        "type": {
+            "type": "string",
+            "enum": [
+                "incident_report",
+                "photo",
+                "witness_statement",
+                "risk_assessment",
+                "rca",
+                "corrective_action_proof",
+                "other"
+            ]
+        },
+        "uri": {
+            "type": "string",
+            "format": "uri"
+        },
+        "hash": {
+            "type": "string",
+            "description": "SHA-256 hash of the evidence file"
+        },
+        "uploaded_by": {
+            "type": "string"
+        },
+        "uploaded_at": {
+            "type": "string",
+            "format": "date-time"
+        }
+    }
+}

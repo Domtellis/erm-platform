@@ -1,0 +1,103 @@
+erDiagram
+  RiskAppetiteStatement ||--o{ ToleranceThreshold : defines
+  RiskCriteriaModelVersion ||--o{ DecisionGate : usedBy
+  DecisionGate ||--o{ WaiverException : grants
+  WaiverException ||--o{ WaiverApprovalLink : requires
+  Approval ||--o{ WaiverApprovalLink : recordedAs
+  EscalationRule ||--o{ BreachCase : routes
+
+  RiskAppetiteStatement {
+    string RiskAppetiteStatementId PK
+    string policyCycle
+    string scopeKey
+    string status
+    datetime approvedAt
+    string approvedByRole
+    string version
+  }
+
+  ToleranceThreshold {
+    string ToleranceThresholdId PK
+    string RiskAppetiteStatementId FK
+    string riskClass
+    string metric
+    string comparator
+    string value
+    string unit
+    string segmentType
+    string segmentRef
+    datetime effectiveFrom
+    datetime effectiveTo
+    string status
+  }
+
+  RiskCriteriaModelVersion {
+    string RiskCriteriaModelVersionId PK
+    string modelName
+    string version
+    string status
+    datetime approvedAt
+    string approvedByRole
+    string changeSummary
+  }
+
+  DecisionGate {
+    string DecisionGateId PK
+    string RiskCriteriaModelVersionId FK
+    string gateType
+    string gateName
+    string scopeKey
+    string status
+    datetime effectiveFrom
+    datetime effectiveTo
+  }
+
+  WaiverException {
+    string WaiverExceptionId PK
+    string DecisionGateId FK
+    string RiskId FK
+    string waiverType
+    string justification
+    string conditionsSummary
+    datetime effectiveFrom
+    datetime expiryAt
+    string status
+  }
+
+  Approval {
+    string ApprovalId PK
+    string approvalType
+    string decision
+    string authorityLevel
+    string approverRole
+    string approverId
+    datetime approvedAt
+    string comments
+  }
+
+  WaiverApprovalLink {
+    string WaiverExceptionId PK, FK
+    string ApprovalId PK, FK
+    string rationale
+    decimal confidenceScore
+  }
+
+  EscalationRule {
+    string EscalationRuleId PK
+    string ruleName
+    string triggerType
+    string routeToRole
+    string routeToGroup
+    string severityBand
+    datetime effectiveFrom
+    datetime effectiveTo
+    string status
+  }
+
+  BreachCase {
+    string BreachCaseId PK
+    string EscalationRuleId FK
+    string status
+    datetime openedAt
+    datetime closedAt
+  }

@@ -1,0 +1,57 @@
+name: "Treatment & Acceptance (Plans, Actions, Residual Acceptance)"
+id: "60-treatment-acceptance"
+value_streams:
+  primary: ["VS-05"]
+owners:
+  business: ["Risk Owners", "Control Owners", "Delivery Leads", "Architecture/Change Governance"]
+  product: ["Product Owner - Treatment & Controls Design"]
+  engineering: ["Domain Tech Lead - Treatment"]
+scope:
+  in:
+    - Treatment plans linked to risks (target residual)
+    - Treatment actions (work items at domain level)
+    - Acceptance records for residual risk with expiry/conditions
+    - Funding references (conceptual linkage to allocation)
+  out:
+    - Control operation and evidence collection (VS-06)
+    - Reporting and assurance (VS-08)
+entities:
+  primary:
+    - TreatmentPlan
+    - TreatmentAction
+    - AcceptanceRecord
+  referenced:
+    - Risk
+    - RiskAssessment
+    - FundingAllocation
+interfaces:
+  upstream:
+    - context: "50-portfolio-decisions"
+      contracts: ["FundingAllocation", "DecisionLedgerEntry decisions triggering plans"]
+    - context: "40-risk-assessment"
+      contracts: ["RiskAssessment residual posture for acceptance"]
+  downstream:
+    - context: "70-controls-assurance"
+      contracts: ["Control designs/implementations derived from treatment outcomes (conceptual)"]
+    - context: "90-reporting-disclosure"
+      contracts: ["Treatment status for governance reporting (conceptual)"]
+governance:
+  decisions_and_gates:
+    - D1: "Treatment selection and funding (Risk Owner + thresholds)"
+    - D2: "Control design approval (Control Owner + 2nd line)"
+    - D3: "Residual acceptance (delegated authority)"
+model_invariants:
+  - "TreatmentPlan contains 1..* TreatmentAction; each action belongs to exactly 1 plan."
+  - "TreatmentPlan reduces exactly 1 Risk; a Risk can have 0..* TreatmentPlan."
+  - "AcceptanceRecord accepts exactly 1 RiskAssessment residual."
+  - "FundingAllocation may fund 0..* TreatmentPlan."
+versioning_and_audit:
+  versioning_strategy:
+    - "AcceptanceRecord is immutable once approved; amendments are new records."
+    - "TreatmentPlan changes are tracked via state transitions and action history, not overwrite."
+  audit_requirements:
+    - "Acceptance expiry/conditions must be queryable and enforceable."
+files:
+  conceptual_model: "conceptual.mmd"
+  logical_er_model: "logical-er.mmd"
+

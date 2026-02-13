@@ -1,0 +1,32 @@
+version: 0.1.0
+lighthouse: sb-01
+
+inbound:
+  breach_detected:
+    schema: contracts/breach-detected.schema.json
+    mapping_to_entities:
+      BreachSignal:
+        breach_signal_id: "$.event_id"
+        source: "$.source"
+        received_at: "$.received_at"
+        payload_ref: "$.raw_ref"
+      BreachCase:
+        bu_id: "$.bu_id"
+        category: "$.category"
+        title: "$.signal.title"
+        description: "$.signal.description"
+        location: "$.signal.location"
+        occurred_at: "$.signal.occurred_at"
+        severity: "$.severity_hint (fallback: medium)"
+        status: "Detected"
+
+outbound:
+  teams_notification:
+    trigger_events:
+      - ESCALATION_TRIGGERED
+      - APPROVAL_REQUESTED
+    target:
+      channel: "BU-01-Safety-Risk"
+    template:
+      title: "[SB-01] Safety breach requires attention"
+      body: "Case {{breach_case_id}} is {{status}} (severity={{severity}}). Action: {{action_required}}"

@@ -1,0 +1,23 @@
+classDiagram
+class SignalSource
+class Signal
+class EmergingRisk
+class ContextPack
+class Assumption
+class DependencyMap
+class Service
+class Asset
+class Supplier
+SignalSource "1" --> "0..*" Signal : produces
+Signal "1" --> "1" SignalSource : originatesFrom
+Signal "0..*" --> "0..*" EmergingRisk : contributesTo
+EmergingRisk "0..*" --> "0..*" Signal : supportedBy
+ContextPack "1" --> "0..*" Signal : references
+Signal "0..*" --> "0..*" ContextPack : referencedIn
+ContextPack "1" --> "0..*" Assumption : includes
+Assumption "1" --> "1" ContextPack : belongsTo
+DependencyMap "1" --> "0..*" Service : covers
+DependencyMap "1" --> "0..*" Asset : covers
+DependencyMap "1" --> "0..*" Supplier : covers
+%% Interface to Risk Inventory
+EmergingRisk "0..*" ..> "0..*" Risk : spawnsOrUpdates

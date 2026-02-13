@@ -1,0 +1,56 @@
+name: "Sensing & Context (Signals, Emerging Risk, Context Packs)"
+id: "20-sensing-context"
+value_streams:
+  primary: ["VS-01"]
+owners:
+  business: ["Risk Function", "Security", "Compliance/Legal", "Ops Leadership"]
+  product: ["Product Owner - Risk Intelligence"]
+  engineering: ["Domain Tech Lead - Ingestion & Context"]
+scope:
+  in:
+    - Signal sources onboarding and governance (conceptual approvals handled elsewhere if needed)
+    - Signals ingestion (external/internal) as domain objects (not pipeline implementation)
+    - Emerging risk identification (watchlist) and linkage to signals
+    - Context packs (assumptions, referenced signals, dependency maps)
+    - Dependency maps across services/assets/suppliers (critical dependencies)
+  out:
+    - Authoritative risk record creation (VS-02)
+    - Indicator monitoring (VS-07)
+    - Physical ingestion pipelines, ETL, connectors (data platform delivery)
+entities:
+  primary:
+    - SignalSource
+    - Signal
+    - EmergingRisk
+    - ContextPack
+    - Assumption
+    - DependencyMap
+    - Service
+    - Asset
+    - Supplier
+interfaces:
+  upstream:
+    - context: "External/Internal Data Products"
+      contracts: ["Threat Intel", "Regulatory Feeds", "Operational Signals", "Supplier Performance"]
+  downstream:
+    - context: "30-risk-inventory"
+      contracts: ["EmergingRisk", "ContextPack", "DependencyMap"]
+governance:
+  decisions_and_gates:
+    - D1: "Source onboarding approval (Security/Data)"
+    - D2: "Emerging risk designation (Risk Committee)"
+    - D3: "Trigger deep-dive assessment (Risk + BU owners)"
+model_invariants:
+  - "SignalSource produces 0..* Signal; each Signal originates from exactly 1 SignalSource."
+  - "Signals and EmergingRisk have a many-to-many contribution relationship (with rationale captured in logical model if required)."
+  - "ContextPack references 0..* Signal and includes 0..* Assumption."
+  - "DependencyMap covers 0..* Service/Asset/Supplier."
+versioning_and_audit:
+  versioning_strategy:
+    - "Signals are immutable observations; corrections are new signals with provenance."
+    - "ContextPack is versioned per publishing cycle; assumptions are maintained as versioned entries."
+  audit_requirements:
+    - "Source onboarding and emerging-risk designation decisions must be traceable to approvers."
+files:
+  conceptual_model: "conceptual.mmd"
+  logical_er_model: "logical-er.mmd"

@@ -1,0 +1,30 @@
+classDiagram
+class Control
+class ControlImplementation
+class ControlExecution
+class ControlTest
+class EvidenceItem
+class Issue
+class TreatmentAction
+class CAPAPlan
+Control "1" --> "0..*" ControlImplementation : instantiatedBy
+ControlImplementation "1" --> "1" Control : implements
+ControlImplementation "1" --> "0..*" ControlExecution : hasExecution
+ControlExecution "1" --> "1" ControlImplementation : executes
+ControlImplementation "1" --> "0..*" ControlTest : hasTest
+ControlTest "1" --> "1" ControlImplementation : tests
+ControlExecution "0..*" --> "0..*" EvidenceItem : producesEvidence
+EvidenceItem "0..*" --> "0..*" ControlExecution : producedByExecution
+ControlTest "0..*" --> "0..*" EvidenceItem : usesOrProducesEvidence
+EvidenceItem "0..*" --> "0..*" ControlTest : supportsTest
+ControlTest "0..*" --> "0..*" Issue : createsOrUpdates
+Issue "0..*" --> "0..*" ControlTest : evidencedByTests
+Issue "0..*" --> "0..*" TreatmentAction : drivesRemediation
+TreatmentAction "0..*" --> "0..*" Issue : addressesIssue
+Issue "0..*" --> "0..*" CAPAPlan : mayDriveCAPA
+CAPAPlan "0..*" --> "0..*" Issue : mayAddressIssue
+
+
+
+
+

@@ -1,0 +1,147 @@
+version: 0.1.1
+lighthouse: sb-01
+release: MVP
+
+stories:
+  - id: S-01
+    epic_id: E-01
+    feature_id: F-01-01
+    title: "Create Safety breach case (manual)"
+    primary_actor: incident_lead
+    acceptance:
+      - "Creates BreachCase with status=Detected and unique breach_case_id"
+      - "Emits BREACH_CASE_CREATED audit event"
+
+  - id: S-02
+    epic_id: E-01
+    feature_id: F-01-01
+    title: "Ingest breach-detected event (stub webhook)"
+    primary_actor: system
+    acceptance:
+      - "Validates payload against breach-detected.schema.json"
+      - "Creates BreachSignal and links to BreachCase"
+      - "Emits BREACH_SIGNAL_LINKED (and BREACH_CASE_CREATED if new case)"
+
+  - id: S-03
+    epic_id: E-01
+    feature_id: F-01-02
+    title: "Enforce workflow state machine transitions"
+    primary_actor: system
+    acceptance:
+      - "Invalid transitions are rejected"
+      - "State change emits the correct audit event(s)"
+
+  - id: S-04
+    epic_id: E-01
+    feature_id: F-01-03
+    title: "Complete triage (severity, location, impact summary) and start SLA clocks"
+    primary_actor: incident_lead
+    acceptance:
+      - "Requires severity and location before moving to Triaged"
+      - "Emits CASE_TRIAGED"
+      - "Starts SLA timers per slas.yaml"
+
+  - id: S-05
+    epic_id: E-02
+    feature_id: F-02-01
+    title: "Select appetite statement version and threshold"
+    primary_actor: risk_lead
+    acceptance:
+      - "Stores appetite_statement_version_id and threshold_id on Evaluation context"
+      - "Emits APPETITE_SELECTED"
+
+  - id: S-06
+    epic_id: E-02
+    feature_id: F-02-02
+    title: "Evaluate measured value against threshold with mandatory rationale"
+    primary_actor: risk_lead
+    acceptance:
+      - "Computes result (within_appetite/breach) and computed_severity"
+      - "Rationale is mandatory"
+      - "Emits THRESHOLD_EVALUATED"
+
+  - id: S-07
+    epic_id: E-03
+    feature_id: F-03-01
+    title: "Trigger escalation for High severity and notify Teams channel"
+    primary_actor: system
+    acceptance:
+      - "High severity triggers ESCALATION_TRIGGERED"
+      - "Teams notification sent to BU-01-Safety-Risk"
+
+  - id: S-08
+    epic_id: E-03
+    feature_id: F-03-02
+    title: "Submit decision (accept/mitigate/stop/waive) with evidence references"
+    primary_actor: risk_lead
+    acceptance:
+      - "Decision includes rationale and optional evidence_refs"
+      - "Emits DECISION_SUBMITTED"
+      - "Creates approval request(s) per approval-policy.yaml (APPROVAL_REQUESTED)"
+
+  - id: S-09
+    epic_id: E-03
+    feature_id: F-03-03
+    title: "Approve High severity decision (BU Risk Owner) with SoD checks"
+    primary_actor: bu_risk_owner
+    acceptance:
+      - "SoD enforced: approver != decision.submitted_by"
+      - "High severity requires BU Risk Owner approval"
+      - "Emits DECISION_APPROVED with sod_check_passed=true"
+      - "Locks decision fields post-approval"
+
+  - id: S-10
+    epic_id: E-04
+    feature_id: F-04-01
+    title: "Attach evidence to case (typed, indexed, auditable)"
+    primary_actor: incident_lead
+    acceptance:
+      - "EvidenceItem stores type, uri, uploaded_by, uploaded_at"
+      - "Emits EVIDENCE_ATTACHED"
+
+  - id: S-11
+    epic_id: E-04
+    feature_id: F-04-02
+    title: "Gate DecisionApproved and Closed based on evidence policy"
+    primary_actor: system
+    acceptance:
+      - "High severity cannot reach DecisionApproved unless required evidence present"
+      - "High severity cannot reach Closed unless actions completed and evidence complete"
+
+  - id: S-12
+    epic_id: E-04
+    feature_id: F-04-03
+    title: "Create and track action items with completion proof"
+    primary_actor: incident_lead
+    acceptance:
+      - "Creates ActionItem with owner and status"
+      - "Emits ACTION_CREATED"
+      - "Completion emits ACTION_COMPLETED and supports completion_evidence_refs"
+
+  - id: S-13
+    epic_id: E-04
+    feature_id: F-04-04
+    title: "Close case with post-action review notes"
+    primary_actor: risk_lead
+    acceptance:
+      - "Closure blocked unless policy satisfied"
+      - "Emits CASE_CLOSED"
+      - "Captures post-action review note (what happened, what changed, learnings)"
+
+  - id: S-14
+    epic_id: E-05
+    feature_id: F-05-01
+    title: "Emit append-only audit events for all control actions"
+    primary_actor: system
+    acceptance:
+      - "All control events listed in audit-events-catalog.yaml are emitted"
+      - "Audit events are immutable once written"
+
+  - id: S-15
+    epic_id: E-05
+    feature_id: F-05-02
+    title: "Export audit pack (governance narrative)"
+    primary_actor: risk_lead
+    acceptance:
+      - "Audit pack includes: case summary, evaluation, decision, approvals, evidence index, action history, audit timeline"
+      - "Emits AUDIT_PACK_EXPORTED"

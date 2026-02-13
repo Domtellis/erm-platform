@@ -1,0 +1,29 @@
+version: 0.1.1
+lighthouse: sb-01
+category: safety
+
+epics:
+  - id: E-01
+    name: "Breach case lifecycle"
+    intent: "Allow BU-01 to create, progress, and manage Safety breach cases end-to-end."
+    feature_ids: [F-01-01, F-01-02, F-01-03]
+
+  - id: E-02
+    name: "Appetite and threshold evaluation"
+    intent: "Validate a breach against the correct appetite statement and thresholds with rationale."
+    feature_ids: [F-02-01, F-02-02]
+
+  - id: E-03
+    name: "Escalation, decisioning, approvals and SoD"
+    intent: "Ensure correct delegation, approvals, and SoD enforcement (High -> BU Risk Owner)."
+    feature_ids: [F-03-01, F-03-02, F-03-03]
+
+  - id: E-04
+    name: "Evidence, actions, closure"
+    intent: "Capture evidence, execute action plans, and close breaches compliantly."
+    feature_ids: [F-04-01, F-04-02, F-04-03, F-04-04]
+
+  - id: E-05
+    name: "Auditability and export"
+    intent: "Provide immutable audit timeline and exportable audit pack for governance."
+    feature_ids: [F-05-01, F-05-02]

@@ -1,0 +1,115 @@
+erDiagram
+  Control ||--o{ ControlImplementation : instantiatedBy
+  ControlImplementation ||--o{ ControlExecution : hasExecution
+  ControlImplementation ||--o{ ControlTest : hasTest
+
+  ControlExecution ||--o{ ExecutionEvidenceLink : producesEvidence
+  EvidenceItem ||--o{ ExecutionEvidenceLink : producedByExecution
+
+  ControlTest ||--o{ TestEvidenceLink : usesOrProducesEvidence
+  EvidenceItem ||--o{ TestEvidenceLink : supportsTest
+
+  ControlTest ||--o{ Issue : createsOrUpdates
+  Issue ||--o{ IssueRemediationLink : drivesRemediation
+  TreatmentAction ||--o{ IssueRemediationLink : addressesIssue
+
+  Issue ||--o{ IssueCAPALink : mayDriveCAPA
+  CAPAPlan ||--o{ IssueCAPALink : mayAddressIssue
+
+  Control {
+    string ControlId PK
+    string controlName
+    string controlType
+    string objective
+    string frequency
+    string status
+  }
+
+  ControlImplementation {
+    string ControlImplementationId PK
+    string ControlId FK
+    string scopeType
+    string scopeRef
+    string implementationType
+    datetime effectiveFrom
+    datetime effectiveTo
+    string status
+  }
+
+  ControlExecution {
+    string ControlExecutionId PK
+    string ControlImplementationId FK
+    datetime executedAt
+    string executedByRole
+    string outcome
+    string status
+  }
+
+  ControlTest {
+    string ControlTestId PK
+    string ControlImplementationId FK
+    string testType
+    datetime testedAt
+    string testerRole
+    string result
+    string status
+  }
+
+  EvidenceItem {
+    string EvidenceItemId PK
+    string evidenceType
+    string sourceSystem
+    string sourceRef
+    datetime capturedAt
+    string integrityHashRef
+    string status
+  }
+
+  ExecutionEvidenceLink {
+    string ControlExecutionId PK, FK
+    string EvidenceItemId PK, FK
+    string provenanceNote
+    string qualityRating
+    datetime linkedAt
+  }
+
+  TestEvidenceLink {
+    string ControlTestId PK, FK
+    string EvidenceItemId PK, FK
+    string provenanceNote
+    string qualityRating
+    datetime linkedAt
+  }
+
+  Issue {
+    string IssueId PK
+    string severity
+    string issueType
+    string description
+    string status
+    datetime openedAt
+    datetime dueBy
+    string slaBand
+  }
+
+  TreatmentAction {
+    string TreatmentActionId PK
+  }
+
+  IssueRemediationLink {
+    string IssueId PK, FK
+    string TreatmentActionId PK, FK
+    string rationale
+    datetime linkedAt
+  }
+
+  CAPAPlan {
+    string CAPAPlanId PK
+    string status
+  }
+
+  IssueCAPALink {
+    string IssueId PK, FK
+    string CAPAPlanId PK, FK
+    string rationale
+  }

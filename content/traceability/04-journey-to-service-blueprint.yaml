@@ -1,0 +1,38 @@
+schema_version: "1.0"
+links:
+  - link_id: "L-JRN-BP-0001"
+    journey_id: "JRN-001"
+    blueprint_id: "BP-001"
+    contribution: "primary"
+    confidence: 0.95
+    rationale: "Appetite journey is realised through an end-to-end blueprint covering review/approval."
+  - link_id: "L-JRN-BP-0002"
+    journey_id: "JRN-002"
+    blueprint_id: "BP-002"
+    contribution: "primary"
+    confidence: 0.95
+    rationale: "Governance journey maps directly to the committee cycle blueprint."
+  - link_id: "L-JRN-BP-0003"
+    journey_id: "JRN-003"
+    blueprint_id: "BP-003"
+    contribution: "primary"
+    confidence: 0.95
+    rationale: "Treatment execution depends on verified action closure blueprint."
+  - link_id: "L-JRN-BP-0004"
+    journey_id: "JRN-004"
+    blueprint_id: "BP-004"
+    contribution: "primary"
+    confidence: 0.95
+    rationale: "Monitoring/breaches are captured in a dedicated detection-to-action blueprint."
+  - link_id: "L-JRN-BP-0005"
+    journey_id: "JRN-005"
+    blueprint_id: "BP-005"
+    contribution: "primary"
+    confidence: 0.95
+    rationale: "Audit requests are handled via evidence fulfilment blueprint."
+  - link_id: "L-JRN-BP-0006"
+    journey_id: "JRN-006"
+    blueprint_id: "BP-006"
+    contribution: "primary"
+    confidence: 0.95
+    rationale: "Admin journey is realised by tenant/access/everything-as-code blueprint."

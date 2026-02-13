@@ -1,0 +1,53 @@
+id: VS-06-risk-control
+name: "VS-06 \u2014 Control Operation and Assurance"
+short_description: Demonstrate control operation and effectiveness with evidence;
+  manage issues and provide attestations/audit packs.
+owner:
+- Management
+- Internal/External Audit
+- Regulators/customers
+stakeholders:
+- Management
+- Internal/External Audit
+- Regulators/customers
+- Control Owners
+- Risk Function
+triggers:
+- Control schedules
+- audits
+- compliance obligations
+- customer assurance
+- control exceptions.
+inputs:
+- Control library (VS-05)
+- operational data sources
+- test plans
+- evidence standards
+- issues/CAPA.
+entry_criteria: ''
+key_activities:
+- 1) Execute controls (manual/automated)
+- 2) Capture evidence with provenance
+- 3) Test controls (design/operating)
+- 4) Identify exceptions and open issues
+- 5) Drive remediation and validate closure
+- 6) Run attestation campaigns
+- 7) Coordinate audit requests and provide packs
+- 8) Feed control health back to risk assessments (VS-03/VS-07).
+decisions_and_gates: []
+outputs:
+- Control performance data
+- test results
+- evidence records
+- issues/actions
+- attestations
+- audit/customer packs.
+exit_criteria: ''
+metrics: 'Flow: time to evidence collection; issue remediation cycle time; throughput
+  of attestations.<br>Performance: audit findings trend; cost of compliance per control;
+  evidence automation rate.<br>Risk: key control failure rate; recurrence rate of
+  control deficiencies.'
+source_file: docs/value-architecture/value-streams/VS-06-risk-control.md
+last_updated: '2026-02-02'
+bounded_contexts: []
+dependencies: []

@@ -1,0 +1,7 @@
+' Auto-generated conceptual diagram — source: docs/value-architecture/value-streams/VS-00-risk-appetite.md, generated: 2026-02-02T10:49:51.703049Z
+@startuml
+class VS_00_risk_appetite {
+  +id: string
+  +purpose: string
+}
+@enduml

@@ -1,0 +1,92 @@
+schema_version: "1.0"
+workflow_id: "wf-treatment-plan"
+entity: "treatment_plan"
+description: "Convert prioritised risks into funded, delivered, verified treatments with reassessed residual risk and acceptance conditions."
+value_stream_alignment: ["VS-05","VS-04"]
+states:
+  - { state: "proposed", type: "initial" }
+  - { state: "funded", type: "normal" }
+  - { state: "in_delivery", type: "normal" }
+  - { state: "verified", type: "normal" }
+  - { state: "residual_reassessed", type: "normal" }
+  - { state: "accepted", type: "terminal" }
+  - { state: "closed", type: "terminal" }
+
+validations:
+  minimum_for_funding:
+    - "target_residual_defined == true"
+    - "verification_plan_present == true"
+    - "delivery_owner_assigned == true"
+  minimum_for_verification:
+    - "verification_evidence_items[]"
+    - "control_changes_recorded_if_applicable == true"
+  minimum_for_acceptance:
+    - "acceptance_conditions_present_if_needed == true"
+    - "acceptance_expiry_present_if_needed == true"
+
+commands:
+  - command: "propose_treatment"
+    actor_roles: ["bu_risk_owner"]
+    produces_events: ["treatment_proposed"]
+  - command: "approve_funding"
+    actor_roles: ["portfolio_governance","exco","delegated_authority"]
+    preconditions: ["state == proposed", "validations.minimum_for_funding"]
+    produces_events: ["treatment_funded"]
+  - command: "start_delivery"
+    actor_roles: ["delivery_owner"]
+    preconditions: ["state == funded"]
+    produces_events: ["treatment_delivery_started"]
+  - command: "submit_for_verification"
+    actor_roles: ["delivery_owner"]
+    preconditions: ["state == in_delivery", "validations.minimum_for_verification"]
+    produces_events: ["treatment_submitted_for_verification"]
+  - command: "verify_completion"
+    actor_roles: ["enterprise_risk_lead","second_line_assurance"]
+    preconditions: ["state == verified"]
+    produces_events: ["treatment_verified"]
+  - command: "reassess_residual"
+    actor_roles: ["bu_risk_owner"]
+    preconditions: ["state == verified"]
+    produces_events: ["treatment_residual_reassessed"]
+  - command: "accept_residual_with_conditions"
+    actor_roles: ["delegated_authority","bu_risk_owner"]
+    preconditions: ["state == residual_reassessed", "validations.minimum_for_acceptance"]
+    produces_events: ["treatment_accepted"]
+  - command: "close_treatment"
+    actor_roles: ["system"]
+    preconditions: ["state == accepted"]
+    produces_events: ["treatment_closed"]
+
+events:
+  - { event: "treatment_proposed", audit: true }
+  - { event: "treatment_funded", audit: true }
+  - { event: "treatment_delivery_started", audit: true }
+  - { event: "treatment_submitted_for_verification", audit: true }
+  - { event: "treatment_verified", audit: true }
+  - { event: "treatment_residual_reassessed", audit: true }
+  - { event: "treatment_accepted", audit: true }
+  - { event: "treatment_closed", audit: true }
+
+transitions:
+  - { from: "proposed", "on": "treatment_funded", to: "funded" }
+  - { from: "funded", "on": "treatment_delivery_started", to: "in_delivery" }
+  - { from: "in_delivery", "on": "treatment_submitted_for_verification", to: "verified" }
+  - { from: "verified", "on": "treatment_verified", to: "verified" }
+  - { from: "verified", "on": "treatment_residual_reassessed", to: "residual_reassessed" }
+  - { from: "residual_reassessed", "on": "treatment_accepted", to: "accepted" }
+  - { from: "accepted", "on": "treatment_closed", to: "closed" }
+
+segregation_of_duties:
+  rules:
+    - rule_id: "sod-020"
+      description: "Delivery owner cannot be sole verifier."
+      enforced_on_commands: ["verify_completion"]
+
+audit_logging:
+  required: true
+  include_fields:
+    - "entity_id"
+    - "funding_approval_ref"
+    - "verification_evidence_set_hash"
+    - "acceptance_conditions_ref"
+    - "acceptance_expiry"

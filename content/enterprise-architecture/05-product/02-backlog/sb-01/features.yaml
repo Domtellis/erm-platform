@@ -1,0 +1,74 @@
+version: 0.1.1
+lighthouse: sb-01
+category: safety
+
+features:
+  - id: F-01-01
+    epic_id: E-01
+    name: "Case intake (manual + stub)"
+    outcome: "Incident Lead can create a Safety breach case; system can ingest breach-detected stub events."
+
+  - id: F-01-02
+    epic_id: E-01
+    name: "Workflow state machine + timeline"
+    outcome: "Cases follow enforced states with an auditable timeline."
+
+  - id: F-01-03
+    epic_id: E-01
+    name: "Triage + SLA timers + Teams notify"
+    outcome: "Triage captured consistently; SLA clocks run; notifications sent when required."
+
+  - id: F-02-01
+    epic_id: E-02
+    name: "Appetite/threshold selection"
+    outcome: "Risk Lead selects the correct appetite statement version and threshold for evaluation."
+
+  - id: F-02-02
+    epic_id: E-02
+    name: "Threshold evaluation + severity mapping"
+    outcome: "Measured value evaluated; computed severity derived; rationale recorded."
+
+  - id: F-03-01
+    epic_id: E-03
+    name: "Escalation rules + Teams notification"
+    outcome: "Escalations occur deterministically (High => escalation + Teams alert)."
+
+  - id: F-03-02
+    epic_id: E-03
+    name: "Decision submission"
+    outcome: "Risk Lead submits a decision with rationale and evidence references."
+
+  - id: F-03-03
+    epic_id: E-03
+    name: "Approvals + SoD enforcement (High -> BU Risk Owner)"
+    outcome: "High severity decisions require BU Risk Owner approval; SoD rules block invalid approvals."
+
+  - id: F-04-01
+    epic_id: E-04
+    name: "Evidence capture + indexing"
+    outcome: "Evidence is captured with type/URI/metadata and is discoverable."
+
+  - id: F-04-02
+    epic_id: E-04
+    name: "Evidence policy gating"
+    outcome: "Evidence requirements block approval/closure when missing."
+
+  - id: F-04-03
+    epic_id: E-04
+    name: "Action plan management"
+    outcome: "Actions can be created, assigned, tracked, and completed with proof."
+
+  - id: F-04-04
+    epic_id: E-04
+    name: "Closure + post-action notes"
+    outcome: "Cases close only when policy satisfied; post-action review is recorded."
+
+  - id: F-05-01
+    epic_id: E-05
+    name: "Audit events pipeline (append-only)"
+    outcome: "All control events are emitted to an immutable, append-only audit log."
+
+  - id: F-05-02
+    epic_id: E-05
+    name: "Audit pack export"
+    outcome: "One-click export contains the full governance narrative and references."

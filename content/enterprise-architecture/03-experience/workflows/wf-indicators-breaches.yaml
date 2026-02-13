@@ -1,0 +1,96 @@
+schema_version: "1.0"
+workflow_id: "wf-indicators-breaches"
+entity: "monitoring"
+description: "Indicator definition lifecycle + alert triage + breach case management and escalation."
+value_stream_alignment: ["VS-07","VS-01"]
+sub_entities: ["indicator_definition","alert","breach_case","mitigation_action"]
+
+states:
+  indicator_definition:
+    - { state: "draft", type: "initial" }
+    - { state: "approved", type: "normal" }
+    - { state: "live", type: "normal" }
+    - { state: "retired", type: "terminal" }
+
+  alert:
+    - { state: "new", type: "initial" }
+    - { state: "triaged", type: "normal" }
+    - { state: "confirmed", type: "normal" }
+    - { state: "false_positive", type: "terminal" }
+    - { state: "closed", type: "terminal" }
+
+  breach_case:
+    - { state: "open", type: "initial" }
+    - { state: "routed", type: "normal" }
+    - { state: "escalated", type: "normal" }
+    - { state: "mitigation_in_progress", type: "normal" }
+    - { state: "resolved", type: "normal" }
+    - { state: "post_review_completed", type: "terminal" }
+
+validations:
+  data_freshness_gate:
+    rule: "if freshness_sla_breached then suppress_or_flag_alert"
+  triage_minimums:
+    - "triage_outcome"
+    - "linked_risk_or_pending_link"
+    - "initial_impact_estimate"
+
+commands:
+  - command: "approve_indicator_definition"
+    actor_roles: ["enterprise_risk_lead","bu_risk_owner"]
+    preconditions: ["indicator_definition.state == draft"]
+    produces_events: ["indicator_approved"]
+  - command: "publish_indicator_live"
+    actor_roles: ["system"]
+    preconditions: ["indicator_definition.state == approved"]
+    produces_events: ["indicator_live"]
+  - command: "triage_alert"
+    actor_roles: ["incident_monitoring_lead"]
+    preconditions: ["alert.state == new", "validations.triage_minimums"]
+    produces_events: ["alert_triaged"]
+  - command: "confirm_breach"
+    actor_roles: ["incident_monitoring_lead","bu_risk_owner"]
+    preconditions: ["alert.state == triaged"]
+    produces_events: ["breach_confirmed"]
+  - command: "open_breach_case"
+    actor_roles: ["system"]
+    preconditions: ["event == breach_confirmed"]
+    produces_events: ["breach_case_opened"]
+  - command: "escalate_breach_case"
+    actor_roles: ["bu_risk_owner","enterprise_risk_lead","system"]
+    preconditions: ["breach_case.state in [open, routed]"]
+    produces_events: ["breach_case_escalated"]
+  - command: "launch_mitigation"
+    actor_roles: ["incident_monitoring_lead","bu_risk_owner"]
+    preconditions: ["breach_case.state in [open, escalated]"]
+    produces_events: ["mitigation_launched"]
+  - command: "verify_mitigation"
+    actor_roles: ["enterprise_risk_lead","second_line_assurance"]
+    preconditions: ["breach_case.state == mitigation_in_progress"]
+    produces_events: ["mitigation_verified"]
+  - command: "close_breach_case"
+    actor_roles: ["system"]
+    preconditions: ["event == mitigation_verified"]
+    produces_events: ["breach_case_resolved"]
+
+events:
+  - { event: "indicator_approved", audit: true }
+  - { event: "indicator_live", audit: true }
+  - { event: "alert_triaged", audit: true }
+  - { event: "breach_confirmed", audit: true }
+  - { event: "breach_case_opened", audit: true }
+  - { event: "breach_case_escalated", audit: true }
+  - { event: "mitigation_launched", audit: true }
+  - { event: "mitigation_verified", audit: true }
+  - { event: "breach_case_resolved", audit: true }
+
+audit_logging:
+  required: true
+  include_fields:
+    - "indicator_id"
+    - "alert_id"
+    - "breach_case_id"
+    - "freshness_status"
+    - "routing_path"
+    - "sla_timers"
+    - "escalation_rule_ref"

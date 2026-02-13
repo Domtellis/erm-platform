@@ -1,0 +1,65 @@
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #0F172A;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: #F8FAFC;
+}
+
+#root {
+  width: 100%;
+}
+
+@layer base {
+  h1 {
+    @apply text-3xl font-bold text-crm-brand tracking-tight;
+  }
+
+  h2 {
+    @apply text-2xl font-semibold text-crm-brand;
+  }
+
+  h3 {
+    @apply text-xl font-medium text-crm-brand;
+  }
+
+  p {
+    @apply text-crm-muted leading-relaxed;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply px-4 py-2 rounded-lg font-medium transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:pointer-events-none;
+  }
+
+  .btn-primary {
+    @apply bg-crm-accent text-white hover:bg-crm-accent/90 shadow-sm shadow-crm-accent/20;
+  }
+
+  .btn-secondary {
+    @apply bg-white text-crm-brand border border-slate-200 hover:bg-slate-50;
+  }
+
+  .card {
+    @apply bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden;
+  }
+}

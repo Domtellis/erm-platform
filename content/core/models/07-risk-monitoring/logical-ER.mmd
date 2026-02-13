@@ -1,0 +1,114 @@
+erDiagram
+  IndicatorDefinition ||--o{ RiskIndicatorLink : monitors
+  Risk ||--o{ RiskIndicatorLink : monitoredBy
+
+  IndicatorDefinition ||--o{ IndicatorFeedLink : fedBy
+  DataFeed ||--o{ IndicatorFeedLink : feeds
+
+  IndicatorDefinition ||--o{ ThresholdRule : hasThresholdRules
+
+  IndicatorDefinition ||--o{ IndicatorToleranceLink : governedBy
+  ToleranceThreshold ||--o{ IndicatorToleranceLink : governs
+
+  IndicatorDefinition ||--o{ Alert : triggers
+  Alert ||--o| BreachCase : mayOpen
+
+  EscalationRule ||--o{ BreachCase : routes
+  BreachCase ||--o{ MitigationAction : contains
+
+  IndicatorDefinition {
+    string IndicatorDefinitionId PK
+    string indicatorName
+    string indicatorType
+    string unit
+    string ownerRole
+    string status
+  }
+
+  Risk {
+    string RiskId PK
+  }
+
+  RiskIndicatorLink {
+    string IndicatorDefinitionId PK, FK
+    string RiskId PK, FK
+    string rationale
+    decimal confidenceScore
+    datetime effectiveFrom
+    datetime effectiveTo
+  }
+
+  DataFeed {
+    string DataFeedId PK
+    string feedName
+    string sourceSystem
+    string freshnessSla
+    string status
+  }
+
+  IndicatorFeedLink {
+    string IndicatorDefinitionId PK, FK
+    string DataFeedId PK, FK
+    string mappingNote
+    string freshnessSlaOverride
+  }
+
+  ThresholdRule {
+    string ThresholdRuleId PK
+    string IndicatorDefinitionId FK
+    string ruleType
+    string comparator
+    string thresholdValue
+    string thresholdUnit
+    datetime effectiveFrom
+    datetime effectiveTo
+    string status
+  }
+
+  ToleranceThreshold {
+    string ToleranceThresholdId PK
+    datetime effectiveFrom
+    datetime effectiveTo
+  }
+
+  IndicatorToleranceLink {
+    string IndicatorDefinitionId PK, FK
+    string ToleranceThresholdId PK, FK
+    string mappingRationale
+    string scopeKey
+  }
+
+  Alert {
+    string AlertId PK
+    string IndicatorDefinitionId FK
+    datetime triggeredAt
+    string severity
+    string status
+  }
+
+  BreachCase {
+    string BreachCaseId PK
+    string EscalationRuleId FK
+    datetime openedAt
+    datetime acknowledgedAt
+    datetime escalatedAt
+    datetime closedAt
+    string status
+    string ownerRole
+  }
+
+  EscalationRule {
+    string EscalationRuleId PK
+    datetime effectiveFrom
+    datetime effectiveTo
+  }
+
+  MitigationAction {
+    string MitigationActionId PK
+    string BreachCaseId FK
+    string actionType
+    string ownerRole
+    datetime dueBy
+    string status
+    string rationale
+  }

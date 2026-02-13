@@ -1,0 +1,80 @@
+erDiagram
+  RiskPortfolioView ||--o{ PortfolioRiskMembership : includes
+  Risk ||--o{ PortfolioRiskMembership : appearsIn
+
+  DecisionLedgerEntry ||--o{ DecisionRiskLink : decidesOn
+  Risk ||--o{ DecisionRiskLink : decidedBy
+
+  FundingAllocation ||--o{ TreatmentPlan : funds
+
+  DecisionLedgerEntry ||--o{ DecisionApprovalLink : requires
+  Approval ||--o{ DecisionApprovalLink : recordedAs
+
+  RiskPortfolioView {
+    string RiskPortfolioViewId PK
+    string segmentationKey
+    string cutType
+    datetime producedAt
+    string producedByRole
+    string version
+  }
+
+  Risk {
+    string RiskId PK
+  }
+
+  PortfolioRiskMembership {
+    string RiskPortfolioViewId PK, FK
+    string RiskId PK, FK
+    int rank
+    string clusterKey
+    string theme
+    decimal concentrationScore
+  }
+
+  DecisionLedgerEntry {
+    string DecisionLedgerEntryId PK
+    string decisionType
+    string decisionOutcome
+    string rationale
+    string decidedByRole
+    datetime decidedAt
+    string authorityLevel
+    string status
+  }
+
+  DecisionRiskLink {
+    string DecisionLedgerEntryId PK, FK
+    string RiskId PK, FK
+    string decisionScope
+  }
+
+  FundingAllocation {
+    string FundingAllocationId PK
+    string budgetCycle
+    string fundingType
+    string amountRange
+    string currency
+    string approvedByRole
+    datetime approvedAt
+    string status
+  }
+
+  TreatmentPlan {
+    string TreatmentPlanId PK
+  }
+
+  Approval {
+    string ApprovalId PK
+    string approvalType
+    string decision
+    string authorityLevel
+    string approverRole
+    datetime approvedAt
+  }
+
+  DecisionApprovalLink {
+    string DecisionLedgerEntryId PK, FK
+    string ApprovalId PK, FK
+    string approvalPurpose
+  }

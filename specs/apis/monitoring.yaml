@@ -1,0 +1,70 @@
+openapi: 3.0.3
+info:
+  title: Monitoring & Breaches API
+  version: 1.0.0
+  description: API for managing breach signals and cases.
+paths:
+  /breaches:
+    get:
+      summary: List breach cases
+      responses:
+        '200':
+          description: A list of breach cases
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BreachCase'
+  /breaches/{id}:
+    get:
+      summary: Get breach case details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Breach case details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BreachCase'
+  /breaches/manual-submission:
+    post:
+      summary: Manually submit a breach signal
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [title, description, category, bu_id]
+              properties:
+                title: { type: string }
+                description: { type: string }
+                category: { type: string, enum: [safety] }
+                bu_id: { type: string }
+      responses:
+        '201':
+          description: Breach case created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  breach_case_id: { type: string }
+
+components:
+  schemas:
+    BreachCase:
+      type: object
+      properties:
+        breach_case_id: { type: string }
+        bu_id: { type: string }
+        status: { type: string }
+        severity: { type: string }
+        title: { type: string }
+        created_at: { type: string, format: date-time }

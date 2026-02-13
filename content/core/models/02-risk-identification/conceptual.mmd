@@ -1,0 +1,23 @@
+classDiagram
+class Risk
+class RiskStatementVersion
+class MaterialityTriage
+class AssessmentBacklogItem
+class Service
+class Asset
+class Supplier
+class LinkTarget
+Risk "1" --> "1..*" RiskStatementVersion : hasStatement
+RiskStatementVersion "1" --> "1" Risk : belongsTo
+Risk "1" --> "0..*" MaterialityTriage : hasTriageHistory
+MaterialityTriage "1" --> "1" Risk : appliesTo
+Risk "1" --> "0..*" AssessmentBacklogItem : queuedForAssessment
+AssessmentBacklogItem "1" --> "1" Risk : isFor
+%% Traceability links (conceptual)
+Risk "1" --> "0..*" Service : linksTo
+Service "0..*" --> "0..*" Risk : linkedFrom
+Risk "1" --> "0..*" Asset : linksTo
+Asset "0..*" --> "0..*" Risk : linkedFrom
+Risk "1" --> "0..*" Supplier : linksTo
+Supplier "0..*" --> "0..*" Risk : linkedFrom
+%% (Extend LinkTarget with Objective/KPI later if needed)

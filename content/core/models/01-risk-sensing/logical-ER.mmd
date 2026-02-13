@@ -1,0 +1,146 @@
+erDiagram
+  SignalSource ||--o{ Signal : produces
+  Signal }o--o{ EmergingRisk : contributesTo
+  EmergingRisk ||--o{ EmergingRiskSignalLink : explainedBy
+  Signal ||--o{ EmergingRiskSignalLink : supports
+
+  ContextPack ||--o{ ContextPackSignalLink : references
+  Signal ||--o{ ContextPackSignalLink : referencedIn
+
+  ContextPack ||--o{ Assumption : includes
+
+  DependencyMap ||--o{ DependencyMapServiceLink : covers
+  DependencyMap ||--o{ DependencyMapAssetLink : covers
+  DependencyMap ||--o{ DependencyMapSupplierLink : covers
+
+  EmergingRisk ||--o{ EmergingRiskRiskLink : spawnsOrUpdates
+
+  SignalSource {
+    string SignalSourceId PK
+    string sourceName
+    string sourceType
+    string ownerRole
+    string onboardingStatus
+    string freshnessSla
+  }
+
+  Signal {
+    string SignalId PK
+    string SignalSourceId FK
+    string signalType
+    string headline
+    string observedAt
+    string severityHint
+    string provenanceRef
+    string status
+  }
+
+  EmergingRisk {
+    string EmergingRiskId PK
+    string title
+    string description
+    string designationStatus
+    datetime designatedAt
+    string designatedByRole
+    string watchlistCategory
+  }
+
+  EmergingRiskSignalLink {
+    string EmergingRiskId PK, FK
+    string SignalId PK, FK
+    string rationale
+    decimal confidenceScore
+    datetime linkedAt
+  }
+
+  ContextPack {
+    string ContextPackId PK
+    string title
+    string scopeKey
+    datetime publishedAt
+    string publishedByRole
+    string status
+    string version
+  }
+
+  ContextPackSignalLink {
+    string ContextPackId PK, FK
+    string SignalId PK, FK
+    string whyIncluded
+    decimal confidenceScore
+  }
+
+  Assumption {
+    string AssumptionId PK
+    string ContextPackId FK
+    string statement
+    string assumptionType
+    decimal confidenceScore
+    datetime recordedAt
+    string status
+  }
+
+  DependencyMap {
+    string DependencyMapId PK
+    string scopeKey
+    string mapType
+    datetime publishedAt
+    string version
+  }
+
+  Service {
+    string ServiceId PK
+    string name
+    string criticality
+    string ownerRole
+  }
+
+  Asset {
+    string AssetId PK
+    string name
+    string assetType
+    string ownerRole
+  }
+
+  Supplier {
+    string SupplierId PK
+    string name
+    string tier
+    string ownerRole
+  }
+
+  DependencyMapServiceLink {
+    string DependencyMapId PK, FK
+    string ServiceId PK, FK
+    string dependencyType
+    string criticality
+    string rationale
+  }
+
+  DependencyMapAssetLink {
+    string DependencyMapId PK, FK
+    string AssetId PK, FK
+    string dependencyType
+    string criticality
+    string rationale
+  }
+
+  DependencyMapSupplierLink {
+    string DependencyMapId PK, FK
+    string SupplierId PK, FK
+    string dependencyType
+    string criticality
+    string rationale
+  }
+
+  Risk {
+    string RiskId PK
+  }
+
+  EmergingRiskRiskLink {
+    string EmergingRiskId PK, FK
+    string RiskId PK, FK
+    string actionType
+    string rationale
+    datetime linkedAt
+  }

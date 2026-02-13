@@ -1,0 +1,49 @@
+id: VS-05-risk-treatment
+name: VS-05-risk-treatment
+short_description: '## VS-05 — Risk Treatment and Control Design'
+owner:
+- Risk Owners
+- Control Owners
+- Delivery teams
+stakeholders:
+- Risk Owners
+- Control Owners
+- Delivery teams
+- Procurement
+- Architecture/Change governance
+triggers:
+- Unacceptable residuals
+- required treatments from VS-04
+- new control requirements
+- incident learnings.
+inputs:
+- Prioritised backlog (VS-04)
+- control performance gaps (VS-06)
+- KRIs (VS-07)
+- obligations/compliance needs.
+entry_criteria: ''
+key_activities:
+- 1) Select response option (avoid/reduce/transfer/accept)
+- 2) Design control set (prevent/detect/correct
+- key controls)
+- 3) Define control objectives and evidence/test approach
+- 4) Break into delivery work (epics/stories)
+- 5) Implement via change/project pathways
+- 6) Verify completion and evidence
+- 7) Reassess residual delta
+- 8) Record acceptance with expiry/conditions where needed.
+decisions_and_gates: []
+outputs:
+- Treatment plans
+- control designs
+- delivery backlog items
+- updated residuals
+- acceptance records with conditions/expiry.
+exit_criteria: ''
+metrics: 'Flow: treatment lead time; throughput; WIP of overdue treatments.<br>Performance:
+  % delivered on time; verification pass rate.<br>Risk: residual reduction achieved;
+  acceptance expiry breaches.'
+source_file: docs/value-architecture/value-streams/VS-05-risk-treatment.md
+last_updated: '2026-02-02'
+bounded_contexts: []
+dependencies: []

@@ -1,0 +1,60 @@
+name: "Controls & Assurance (Execution, Testing, Evidence, Attestation)"
+id: "70-controls-assurance"
+value_streams:
+  primary: ["VS-06"]
+owners:
+  business: ["Control Owners", "Internal/External Audit", "Risk Function"]
+  product: ["Product Owner - Controls & Assurance"]
+  engineering: ["Domain Tech Lead - Controls"]
+scope:
+  in:
+    - Control catalogue and control implementations
+    - Control executions and control tests (design/operating)
+    - Evidence linkage to executions/tests with provenance intent
+    - Issues raised by tests and their remediation linkage
+    - Attestation/audit pack readiness (conceptual)
+  out:
+    - Risk assessment scoring logic (VS-03) (consumes control health)
+    - Monitoring data pipeline implementation (engineering concern)
+entities:
+  primary:
+    - Control
+    - ControlImplementation
+    - ControlExecution
+    - ControlTest
+    - EvidenceItem
+    - Issue
+  referenced:
+    - TreatmentAction
+    - CAPAPlan
+interfaces:
+  upstream:
+    - context: "60-treatment-acceptance"
+      contracts: ["TreatmentPlan/Actions that create or modify controls (conceptual)"]
+  downstream:
+    - context: "40-risk-assessment"
+      contracts: ["Control health signals used in assessment (conceptual)"]
+    - context: "80-monitoring-breaches"
+      contracts: ["Control performance signals (conceptual)"]
+    - context: "95-incidents-learnings"
+      contracts: ["Issues may trigger CAPA (operating model dependent)"]
+governance:
+  decisions_and_gates:
+    - D1: "Control exception approval (delegated authority)"
+    - D2: "Issue severity and SLA assignment (2nd line)"
+    - D3: "Closure validation sign-off (independent reviewer)"
+model_invariants:
+  - "Control is instantiated by 0..* ControlImplementation; each implementation implements exactly 1 Control."
+  - "ControlImplementation has 0..* ControlExecution and 0..* ControlTest."
+  - "ControlExecution/Test can link to 0..* EvidenceItem; evidence supports auditability."
+  - "ControlTest can create/update 0..* Issue; Issues drive remediation actions and/or CAPA plans."
+versioning_and_audit:
+  versioning_strategy:
+    - "EvidenceItem is immutable; corrections are new evidence with provenance."
+    - "Tests/executions are immutable records; changes are new events."
+  audit_requirements:
+    - "Issue lifecycle and closure validation must be retained for audit packs."
+files:
+  conceptual_model: "conceptual.mmd"
+  logical_er_model: "logical-er.mmd"
+

@@ -1,0 +1,97 @@
+schema_version: "1.0"
+links:
+  - link_id: "L-CAP-JRN-0001"
+    capability_id: "CAP-RAC-01"
+    journey_id: "JRN-001"
+    contribution: "primary"
+    confidence: 0.95
+    rationale: "Appetite definition is the centre of the CRO/ERM lead journey."
+  - link_id: "L-CAP-JRN-0002"
+    capability_id: "CAP-RAC-02"
+    journey_id: "JRN-001"
+    contribution: "primary"
+    confidence: 0.95
+    rationale: "Threshold modelling is required to operationalise appetite."
+  - link_id: "L-CAP-JRN-0003"
+    capability_id: "CAP-RAC-03"
+    journey_id: "JRN-001"
+    contribution: "supporting"
+    confidence: 0.80
+    rationale: "Waivers/exceptions are an extension of appetite governance."
+
+  - link_id: "L-CAP-JRN-0004"
+    capability_id: "CAP-RG-01"
+    journey_id: "JRN-002"
+    contribution: "primary"
+    confidence: 0.95
+    rationale: "Committee operations and decision logs are the governance journey."
+  - link_id: "L-CAP-JRN-0005"
+    capability_id: "CAP-RG-02"
+    journey_id: "JRN-002"
+    contribution: "primary"
+    confidence: 0.90
+    rationale: "Escalation/authority matrix is exercised through committees."
+  - link_id: "L-CAP-JRN-0006"
+    capability_id: "CAP-RG-03"
+    journey_id: "JRN-002"
+    contribution: "supporting"
+    confidence: 0.75
+    rationale: "Three-lines alignment shapes roles and oversight views."
+
+  - link_id: "L-CAP-JRN-0007"
+    capability_id: "CAP-RTC-01"
+    journey_id: "JRN-003"
+    contribution: "primary"
+    confidence: 0.95
+    rationale: "Risk owners primarily execute risk treatment actions."
+  - link_id: "L-CAP-JRN-0008"
+    capability_id: "CAP-EVD-01"
+    journey_id: "JRN-003"
+    contribution: "supporting"
+    confidence: 0.85
+    rationale: "Evidence is required for verified closure."
+
+  - link_id: "L-CAP-JRN-0009"
+    capability_id: "CAP-MON-01"
+    journey_id: "JRN-004"
+    contribution: "primary"
+    confidence: 0.95
+    rationale: "Monitoring depends on KRI definitions and thresholds."
+  - link_id: "L-CAP-JRN-0010"
+    capability_id: "CAP-MON-02"
+    journey_id: "JRN-004"
+    contribution: "primary"
+    confidence: 0.95
+    rationale: "Breach triage and escalation is the core response loop."
+
+  - link_id: "L-CAP-JRN-0011"
+    capability_id: "CAP-EVD-01"
+    journey_id: "JRN-005"
+    contribution: "primary"
+    confidence: 0.95
+    rationale: "Audit/assurance consumes evidence and traceability."
+  - link_id: "L-CAP-JRN-0012"
+    capability_id: "CAP-POL-01"
+    journey_id: "JRN-005"
+    contribution: "supporting"
+    confidence: 0.80
+    rationale: "Policies define evidence requirements and attestations."
+
+  - link_id: "L-CAP-JRN-0013"
+    capability_id: "CAP-PLT-01"
+    journey_id: "JRN-006"
+    contribution: "primary"
+    confidence: 0.95
+    rationale: "Tenant provisioning is owned by platform ops/admin."
+  - link_id: "L-CAP-JRN-0014"
+    capability_id: "CAP-PLT-02"
+    journey_id: "JRN-006"
+    contribution: "primary"
+    confidence: 0.90
+    rationale: "Access and LoD views are administered."
+  - link_id: "L-CAP-JRN-0015"
+    capability_id: "CAP-PLT-04"
+    journey_id: "JRN-006"
+    contribution: "supporting"
+    confidence: 0.85
+    rationale: "Everything-as-code import/export is typically admin-driven."

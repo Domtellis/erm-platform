@@ -1,0 +1,170 @@
+{
+    "breach_case": {
+        "breach_case_id": "BC-2026-000123",
+        "bu_id": "BU-01",
+        "category": "safety",
+        "title": "Safety breach at Quay 3 - Lost Time Injury",
+        "description": "Worker sustained injury during cargo handling operations at Quay 3. Initial assessment indicates potential breach of safety appetite threshold.",
+        "status": "Escalated",
+        "severity": "high",
+        "location": "Quay 3, Terminal A",
+        "occurred_at": "2026-02-06T09:30:00Z",
+        "created_at": "2026-02-06T09:45:00Z",
+        "created_by": "john.smith@example.com",
+        "owner_user_id": "john.smith@example.com",
+        "risk_lead_user_id": "sarah.jones@example.com",
+        "bu_risk_owner_user_id": "michael.chen@example.com",
+        "sla_clock": {
+            "triage": {
+                "target_minutes": 60,
+                "elapsed_minutes": 45,
+                "status": "on_track"
+            },
+            "decision": {
+                "target_minutes": 480,
+                "elapsed_minutes": 120,
+                "status": "on_track"
+            }
+        },
+        "tags": [
+            "safety",
+            "lti",
+            "quay-operations"
+        ]
+    },
+    "appetite_statement": {
+        "appetite_statement_version_id": "AS-2026-01",
+        "appetite_statement_id": "AS-SAFETY",
+        "version": "2026.01",
+        "category": "safety",
+        "effective_from": "2026-01-01",
+        "approved_by": "board@example.com",
+        "approved_at": "2025-12-15T10:00:00Z"
+    },
+    "threshold": {
+        "threshold_id": "TH-SAFETY-HIGH",
+        "appetite_statement_version_id": "AS-2026-01",
+        "metric_name": "lost_time_injury_rate",
+        "operator": ">",
+        "limit_value": 70,
+        "unit": "per 100,000 hours",
+        "severity_mapping": {
+            "low": "0-50",
+            "medium": "51-70",
+            "high": ">70"
+        }
+    },
+    "evaluation": {
+        "evaluation_id": "EVAL-2026-000456",
+        "breach_case_id": "BC-2026-000123",
+        "appetite_statement_version_id": "AS-2026-01",
+        "threshold_id": "TH-SAFETY-HIGH",
+        "measured_value": 85,
+        "result": "breach",
+        "computed_severity": "high",
+        "confidence": "high",
+        "rationale": "Measured LTI rate of 85 exceeds the threshold of 70. This represents a significant breach requiring immediate attention and BU Risk Owner approval.",
+        "evaluated_by": "sarah.jones@example.com",
+        "evaluated_at": "2026-02-06T11:30:00Z"
+    },
+    "decision": {
+        "decision_id": "DEC-2026-000789",
+        "breach_case_id": "BC-2026-000123",
+        "decision_type": "mitigate",
+        "rationale": "Immediate mitigation required. Implementing enhanced safety protocols and additional training for quay operations staff.",
+        "submitted_by": "sarah.jones@example.com",
+        "submitted_at": "2026-02-06T12:00:00Z",
+        "status": "submitted",
+        "evidence_refs": [
+            "EV-001",
+            "EV-002"
+        ]
+    },
+    "approval": {
+        "approval_id": "APR-2026-000321",
+        "decision_id": "DEC-2026-000789",
+        "approver_user_id": "michael.chen@example.com",
+        "approver_role": "bu_risk_owner",
+        "status": "pending",
+        "sod_check_passed": true
+    },
+    "evidence_items": [
+        {
+            "evidence_id": "EV-001",
+            "breach_case_id": "BC-2026-000123",
+            "type": "incident_report",
+            "uri": "sharepoint://evidence/BC-2026-000123/incident-report.pdf",
+            "uploaded_by": "john.smith@example.com",
+            "uploaded_at": "2026-02-06T10:00:00Z",
+            "description": "Initial incident report from site supervisor"
+        },
+        {
+            "evidence_id": "EV-002",
+            "breach_case_id": "BC-2026-000123",
+            "type": "photo",
+            "uri": "sharepoint://evidence/BC-2026-000123/site-photo.jpg",
+            "uploaded_by": "john.smith@example.com",
+            "uploaded_at": "2026-02-06T10:15:00Z",
+            "description": "Photo of incident location"
+        }
+    ],
+    "action_items": [
+        {
+            "action_item_id": "ACT-001",
+            "breach_case_id": "BC-2026-000123",
+            "title": "Implement enhanced safety protocols for quay operations",
+            "owner_user_id": "john.smith@example.com",
+            "due_date": "2026-02-14",
+            "status": "in_progress"
+        },
+        {
+            "action_item_id": "ACT-002",
+            "breach_case_id": "BC-2026-000123",
+            "title": "Conduct additional safety training for cargo handlers",
+            "owner_user_id": "emily.wong@example.com",
+            "due_date": "2026-02-21",
+            "status": "open"
+        },
+        {
+            "action_item_id": "ACT-003",
+            "breach_case_id": "BC-2026-000123",
+            "title": "Complete root cause analysis",
+            "owner_user_id": "sarah.jones@example.com",
+            "due_date": "2026-02-10",
+            "status": "open"
+        }
+    ],
+    "users": {
+        "john.smith@example.com": {
+            "name": "John Smith",
+            "role": "Incident Lead",
+            "avatar": "JS"
+        },
+        "sarah.jones@example.com": {
+            "name": "Sarah Jones",
+            "role": "Risk Lead",
+            "avatar": "SJ"
+        },
+        "michael.chen@example.com": {
+            "name": "Michael Chen",
+            "role": "BU Risk Owner",
+            "avatar": "MC"
+        },
+        "emily.wong@example.com": {
+            "name": "Emily Wong",
+            "role": "Safety Manager",
+            "avatar": "EW"
+        }
+    },
+    "evidence_requirements": {
+        "high": [
+            "incident_report",
+            "rca",
+            "corrective_action_proof"
+        ],
+        "medium": [
+            "incident_report"
+        ],
+        "low": []
+    }
+}

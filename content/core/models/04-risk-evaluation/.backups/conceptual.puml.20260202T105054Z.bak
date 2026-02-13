@@ -1,0 +1,7 @@
+' Auto-generated conceptual diagram — source: docs/value-architecture/value-streams/VS-04-risk-evaluation.md, generated: 2026-02-02T10:49:51.804905Z
+@startuml
+class VS_04_risk_evaluation {
+  +id: string
+  +purpose: string
+}
+@enduml

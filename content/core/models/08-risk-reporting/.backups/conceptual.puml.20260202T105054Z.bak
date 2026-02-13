@@ -1,0 +1,7 @@
+' Auto-generated conceptual diagram — source: docs/value-architecture/value-streams/VS-08-risk-reporting.md, generated: 2026-02-02T10:49:51.877228Z
+@startuml
+class VS_08_risk_reporting {
+  +id: string
+  +purpose: string
+}
+@enduml

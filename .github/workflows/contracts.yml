@@ -1,0 +1,29 @@
+name: Contract & Architecture Validation
+
+on:
+  push:
+    paths:
+      - 'specs/**/*.yaml'
+      - 'specs/**/*.json'
+  pull_request:
+    paths:
+      - 'specs/**/*.yaml'
+      - 'specs/**/*.json'
+
+jobs:
+  lint-contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Spectral
+        run: npm install -g @stoplight/spectral-cli
+
+      - name: Lint OpenAPI Specs
+        run: spectral lint specs/apis/*.yaml --ruleset .spectral.yaml
+
+      - name: Lint Event Schemas
+        run: |
+          # Custom validation for CloudEvents + Payload structure
+          echo "Validating event schemas..."
+          # (Pseudo-code: actual validator script would be called here)

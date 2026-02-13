@@ -1,0 +1,107 @@
+erDiagram
+  Risk ||--o{ RiskStatementVersion : hasStatement
+  Risk ||--o{ MaterialityTriage : hasTriageHistory
+  Risk ||--o{ AssessmentBacklogItem : queuedForAssessment
+
+  Risk ||--o{ RiskServiceLink : linksTo
+  Service ||--o{ RiskServiceLink : linkedFrom
+
+  Risk ||--o{ RiskAssetLink : linksTo
+  Asset ||--o{ RiskAssetLink : linkedFrom
+
+  Risk ||--o{ RiskSupplierLink : linksTo
+  Supplier ||--o{ RiskSupplierLink : linkedFrom
+
+  Risk {
+    string RiskId PK
+    string riskKey
+    string riskClass
+    string ownerRole
+    string reviewerRole
+    string status
+    datetime createdAt
+  }
+
+  RiskStatementVersion {
+    string RiskStatementVersionId PK
+    string RiskId FK
+    int versionNumber
+    string cause
+    string event
+    string impact
+    string statementText
+    datetime effectiveFrom
+    datetime effectiveTo
+    string status
+  }
+
+  MaterialityTriage {
+    string MaterialityTriageId PK
+    string RiskId FK
+    string triageBand
+    string urgency
+    string rationale
+    decimal confidenceScore
+    datetime triagedAt
+    string triagedByRole
+  }
+
+  AssessmentBacklogItem {
+    string AssessmentBacklogItemId PK
+    string RiskId FK
+    string priority
+    datetime scheduledFor
+    string queueStatus
+    string requestedByRole
+  }
+
+  Service {
+    string ServiceId PK
+    string name
+    string criticality
+    string ownerRole
+  }
+
+  Asset {
+    string AssetId PK
+    string name
+    string assetType
+    string ownerRole
+  }
+
+  Supplier {
+    string SupplierId PK
+    string name
+    string tier
+    string ownerRole
+  }
+
+  RiskServiceLink {
+    string RiskId PK, FK
+    string ServiceId PK, FK
+    string linkType
+    string rationale
+    decimal confidenceScore
+    datetime effectiveFrom
+    datetime effectiveTo
+  }
+
+  RiskAssetLink {
+    string RiskId PK, FK
+    string AssetId PK, FK
+    string linkType
+    string rationale
+    decimal confidenceScore
+    datetime effectiveFrom
+    datetime effectiveTo
+  }
+
+  RiskSupplierLink {
+    string RiskId PK, FK
+    string SupplierId PK, FK
+    string linkType
+    string rationale
+    decimal confidenceScore
+    datetime effectiveFrom
+    datetime effectiveTo
+  }

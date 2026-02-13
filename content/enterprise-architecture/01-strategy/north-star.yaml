@@ -1,0 +1,19 @@
+schema_version: "1.0"
+
+north_star:
+  nsm_id: "NSM-001"
+  name: "Verified Risk Actions Closed On-Time (weighted)"
+  definition: "Sum(ActionWeight * 1[action closed on/before due date with required evidence + approval where needed]) per account per month"
+
+  weight_drivers:
+    - "risk_criticality (inherent/residual rating)"
+    - "tolerance_breach_status"
+    - "material_risk_tag"
+
+  quality_guardrails:
+    - metric: "% actions linked to material risks"
+      target: ">= 0.70"
+    - metric: "Overdue high-severity actions"
+      target: "Downward trend"
+    - metric: "Repeat breaches for same risk"
+      target: "Downward trend"

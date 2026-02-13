@@ -1,0 +1,106 @@
+erDiagram
+  Risk ||--o{ RiskAssessment : hasAssessment
+  RiskCriteriaModelVersion ||--o{ RiskAssessment : referencedBy
+  RiskAssessment ||--o{ ScenarioExposure : quantifiesVia
+
+  RiskAssessment }o--o{ EvidenceItem : usesEvidence
+  RiskAssessment ||--o{ AssessmentEvidenceLink : evidenceLink
+  EvidenceItem ||--o{ AssessmentEvidenceLink : referencedIn
+
+  RiskAssessment }o--o{ Assumption : recordsAssumption
+  RiskAssessment ||--o{ AssessmentAssumptionLink : assumptionLink
+  Assumption ||--o{ AssessmentAssumptionLink : usedIn
+
+  RiskAssessment ||--o{ AssessmentApprovalLink : requires
+  Approval ||--o{ AssessmentApprovalLink : recordedAs
+
+  Risk {
+    string RiskId PK
+  }
+
+  RiskCriteriaModelVersion {
+    string RiskCriteriaModelVersionId PK
+    string modelName
+    string version
+    string status
+    datetime approvedAt
+  }
+
+  RiskAssessment {
+    string RiskAssessmentId PK
+    string RiskId FK
+    string RiskCriteriaModelVersionId FK
+    string method
+    string inherentRating
+    string residualRating
+    decimal confidenceScore
+    string qaStatus
+    datetime assessedAt
+    string assessedByRole
+    string status
+  }
+
+  ScenarioExposure {
+    string ScenarioExposureId PK
+    string RiskAssessmentId FK
+    string scenarioName
+    string exposureType
+    string rangeLow
+    string rangeHigh
+    string unit
+    string rationale
+  }
+
+  EvidenceItem {
+    string EvidenceItemId PK
+    string evidenceType
+    string sourceSystem
+    string sourceRef
+    string capturedByRole
+    datetime capturedAt
+    string integrityHashRef
+    string status
+  }
+
+  AssessmentEvidenceLink {
+    string RiskAssessmentId PK, FK
+    string EvidenceItemId PK, FK
+    string claimType
+    string rationale
+    decimal weight
+    decimal confidenceScore
+    datetime linkedAt
+  }
+
+  Assumption {
+    string AssumptionId PK
+    string statement
+    string sourceContextPackId
+    decimal baseConfidence
+    datetime recordedAt
+    string status
+  }
+
+  AssessmentAssumptionLink {
+    string RiskAssessmentId PK, FK
+    string AssumptionId PK, FK
+    string usageType
+    string rationale
+    decimal confidenceScore
+  }
+
+  Approval {
+    string ApprovalId PK
+    string approvalType
+    string decision
+    string authorityLevel
+    string approverRole
+    datetime approvedAt
+    string comments
+  }
+
+  AssessmentApprovalLink {
+    string RiskAssessmentId PK, FK
+    string ApprovalId PK, FK
+    string approvalPurpose
+  }

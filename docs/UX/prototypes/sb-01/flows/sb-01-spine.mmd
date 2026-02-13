@@ -1,0 +1,64 @@
+%% SB-01 Spine (Happy Path)
+%% Appetite Breach Response Workflow
+
+flowchart LR
+    subgraph Intake["1. Intake"]
+        A1[Alert Received]
+        A2[Create Case]
+    end
+
+    subgraph Triage["2. Triage"]
+        B1[Open Case]
+        B2[Set Severity]
+        B3[Set Location]
+        B4[Start SLA]
+    end
+
+    subgraph Evaluation["3. Evaluation"]
+        C1[Select Appetite]
+        C2[Select Threshold]
+        C3[Enter Measurement]
+        C4[Compute Severity]
+    end
+
+    subgraph Escalation["4. Escalation"]
+        D1{High Severity?}
+        D2[Auto-Escalate]
+        D3[Notify BU Risk Owner]
+    end
+
+    subgraph Decision["5. Decision"]
+        E1[Submit Decision]
+        E2[Reference Evidence]
+        E3[Request Approval]
+    end
+
+    subgraph Approval["6. Approval"]
+        F1[Decision Ask]
+        F2[SoD Check]
+        F3[Approve/Reject]
+    end
+
+    subgraph Actions["7. Actions"]
+        G1[Create Actions]
+        G2[Assign Owners]
+        G3[Track Completion]
+    end
+
+    subgraph Closure["8. Closure"]
+        H1[Verify Evidence]
+        H2[Post-Action Notes]
+        H3[Close Case]
+        H4[Export Audit Pack]
+    end
+
+    A1 --> A2 --> B1
+    B1 --> B2 --> B3 --> B4
+    B4 --> C1 --> C2 --> C3 --> C4
+    C4 --> D1
+    D1 -->|Yes| D2 --> D3 --> E1
+    D1 -->|No| E1
+    E1 --> E2 --> E3 --> F1
+    F1 --> F2 --> F3
+    F3 --> G1 --> G2 --> G3
+    G3 --> H1 --> H2 --> H3 --> H4

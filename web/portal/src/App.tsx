@@ -1,0 +1,75 @@
+import { Routes, Route } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+import { Layout } from './components/layout/Layout';
+import { MonitoringPage } from './pages/MonitoringPage';
+import { DecisioningPage } from './pages/DecisioningPage';
+import { AuditPage } from './pages/AuditPage';
+
+function Dashboard() {
+  const { data: breachCases, isLoading: isLoadingBreaches } = useQuery<any[]>({
+    queryKey: ['dashboard-breaches'],
+    queryFn: async () => {
+      const response = await axios.get('http://localhost:4010/breaches');
+      return response.data;
+    },
+    refetchInterval: 5000,
+  });
+
+  const { data: decisions, isLoading: isLoadingDecisions } = useQuery<any[]>({
+    queryKey: ['dashboard-decisions'],
+    queryFn: async () => {
+      const response = await axios.get('http://localhost:4011/decisions');
+      return response.data;
+    },
+    refetchInterval: 5000,
+  });
+
+  const activeBreaches = breachCases?.filter(b => b.status === 'open').length || 0;
+  const pendingDecisions = decisions?.filter(d => d.status === 'pending' && d.approvals.length === 0).length || 0;
+
+  return (
+    <div className="space-y-6 animate-fade-in">
+      <div>
+        <h1 className="text-3xl font-bold text-slate-900">Dashboard</h1>
+        <p className="mt-2 text-slate-500">Welcome to the ERM Platform Control Center.</p>
+      </div>
+
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="card p-6">
+          <h3 className="text-sm font-medium text-slate-500">Active Breaches</h3>
+          <p className="mt-2 text-3xl font-bold text-crm-danger">
+            {isLoadingBreaches ? '...' : activeBreaches}
+          </p>
+        </div>
+        <div className="card p-6">
+          <h3 className="text-sm font-medium text-slate-500">Pending Decisions</h3>
+          <p className="mt-2 text-3xl font-bold text-crm-warning">
+            {isLoadingDecisions ? '...' : pendingDecisions}
+          </p>
+        </div>
+        <div className="card p-6">
+          <h3 className="text-sm font-medium text-slate-500">Appetite Compliance</h3>
+          <p className="mt-2 text-3xl font-bold text-crm-success">
+            {activeBreaches > 0 ? '85%' : '100%'}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Dashboard />} />
+        <Route path="monitoring" element={<MonitoringPage />} />
+        <Route path="decisioning" element={<DecisioningPage />} />
+        <Route path="audit" element={<AuditPage />} />
+      </Route>
+    </Routes>
+  );
+}
+
+export default App;

@@ -1,0 +1,26 @@
+version: 0.1.0
+scope:
+  lighthouse: sb-01
+  category: safety
+
+retention:
+  breach_cases:
+    default_years: 7
+    rationale: "Safety incidents often fall under regulatory and audit retention expectations."
+  audit_events:
+    default_years: 7
+    immutable: true
+  evidence_items:
+    default_years: 7
+    storage_class: "governance-archive"
+    access_controls:
+      - "role_based_access"
+      - "least_privilege"
+      - "download_logged"
+
+disposal:
+  method: "cryptographic_delete_or_equivalent"
+  requires:
+    - "retention_period_elapsed"
+    - "legal_hold_not_active"
+    - "audit_event_logged"

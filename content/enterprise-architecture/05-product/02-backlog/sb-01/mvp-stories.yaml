@@ -1,0 +1,49 @@
+version: 0.1.1
+lighthouse: sb-01
+release: MVP
+source_of_truth: "delivery/backlog/sb-01/stories.yaml"
+
+mvp:
+  epics:
+    - id: E-01
+      features:
+        - id: F-01-01
+          story_ids: [S-01, S-02]
+        - id: F-01-02
+          story_ids: [S-03]
+        - id: F-01-03
+          story_ids: [S-04]
+
+    - id: E-02
+      features:
+        - id: F-02-01
+          story_ids: [S-05]
+        - id: F-02-02
+          story_ids: [S-06]
+
+    - id: E-03
+      features:
+        - id: F-03-01
+          story_ids: [S-07]
+        - id: F-03-02
+          story_ids: [S-08]
+        - id: F-03-03
+          story_ids: [S-09]
+
+    - id: E-04
+      features:
+        - id: F-04-01
+          story_ids: [S-10]
+        - id: F-04-02
+          story_ids: [S-11]
+        - id: F-04-03
+          story_ids: [S-12]
+        - id: F-04-04
+          story_ids: [S-13]
+
+    - id: E-05
+      features:
+        - id: F-05-01
+          story_ids: [S-14]
+        - id: F-05-02
+          story_ids: [S-15]

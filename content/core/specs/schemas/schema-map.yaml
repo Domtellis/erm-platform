@@ -1,0 +1,11 @@
+schema_version: "1.0"
+mappings:
+  - schema: "content/core/specs/schemas/persona-catalogue.schema.json"
+    files:
+      - "content/core/catalogues/personas/*.yaml"
+      - "content/core/catalogues/personas/*.yml"
+
+  - schema: "content/core/specs/schemas/workflow-spec.schema.json"
+    files:
+      - "content/enterprise-architecture/03-experience/workflows/*.yaml"
+      - "content/enterprise-architecture/03-experience/workflows/*.yml"

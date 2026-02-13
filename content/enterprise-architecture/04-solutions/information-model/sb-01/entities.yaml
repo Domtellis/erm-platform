@@ -1,0 +1,140 @@
+version: 0.1.0
+domain: sb-01-appetite-breach-response
+category: safety
+
+entities:
+  - name: BreachCase
+    description: "A managed case representing a detected Safety breach and its full lifecycle."
+    keys: [breach_case_id]
+    fields:
+      - { name: breach_case_id, type: string, required: true, example: "BC-2026-000123" }
+      - { name: bu_id, type: string, required: true, example: "BU-01" }
+      - { name: category, type: enum, required: true, values: [safety] }
+      - { name: title, type: string, required: true }
+      - { name: description, type: text, required: true }
+      - { name: status, type: enum, required: true, values: [Detected, Triaged, ValidatedAgainstAppetite, Escalated, DecisionRecorded, DecisionApproved, ActionPlanActive, Monitoring, Closed] }
+      - { name: severity, type: enum, required: true, values: [low, medium, high] }
+      - { name: location, type: string, required: false }
+      - { name: occurred_at, type: datetime, required: false }
+      - { name: created_at, type: datetime, required: true }
+      - { name: created_by, type: string, required: true }
+      - { name: owner_user_id, type: string, required: true }
+      - { name: risk_lead_user_id, type: string, required: false }
+      - { name: bu_risk_owner_user_id, type: string, required: false }
+      - { name: sla_clock, type: object, required: false, description: "Derived SLA timers (triage/decision/close)." }
+      - { name: tags, type: array, required: false, items: string }
+
+  - name: BreachSignal
+    description: "An input signal that triggered or informed the breach case (manual or system event)."
+    keys: [breach_signal_id]
+    fields:
+      - { name: breach_signal_id, type: string, required: true }
+      - { name: source, type: enum, required: true, values: [manual, monitoring_stub, monitoring_real] }
+      - { name: received_at, type: datetime, required: true }
+      - { name: payload_ref, type: string, required: false, description: "Pointer to raw event payload storage." }
+      - { name: breach_case_id, type: string, required: true }
+
+  - name: AppetiteStatementVersion
+    description: "Versioned appetite statement used for evaluation (governance controlled)."
+    keys: [appetite_statement_version_id]
+    fields:
+      - { name: appetite_statement_version_id, type: string, required: true }
+      - { name: appetite_statement_id, type: string, required: true }
+      - { name: version, type: string, required: true, example: "2026.01" }
+      - { name: category, type: enum, required: true, values: [safety] }
+      - { name: effective_from, type: date, required: true }
+      - { name: effective_to, type: date, required: false }
+      - { name: approved_by, type: string, required: true }
+      - { name: approved_at, type: datetime, required: true }
+
+  - name: Threshold
+    description: "A threshold/tolerance rule used to determine whether a measured value constitutes a breach."
+    keys: [threshold_id]
+    fields:
+      - { name: threshold_id, type: string, required: true }
+      - { name: appetite_statement_version_id, type: string, required: true }
+      - { name: metric_name, type: string, required: true, example: "lost_time_injury_rate" }
+      - { name: operator, type: enum, required: true, values: [">", ">=", "<", "<=", "=="] }
+      - { name: limit_value, type: number, required: true }
+      - { name: unit, type: string, required: false }
+      - { name: severity_mapping, type: object, required: true, description: "Mapping of exceedance to severity." }
+
+  - name: Evaluation
+    description: "Evaluation output comparing breach measurement(s) to appetite thresholds."
+    keys: [evaluation_id]
+    fields:
+      - { name: evaluation_id, type: string, required: true }
+      - { name: breach_case_id, type: string, required: true }
+      - { name: appetite_statement_version_id, type: string, required: true }
+      - { name: threshold_id, type: string, required: true }
+      - { name: measured_value, type: number, required: true }
+      - { name: result, type: enum, required: true, values: [within_appetite, breach] }
+      - { name: computed_severity, type: enum, required: true, values: [low, medium, high] }
+      - { name: confidence, type: enum, required: false, values: [low, medium, high] }
+      - { name: rationale, type: text, required: true }
+      - { name: evaluated_by, type: string, required: true }
+      - { name: evaluated_at, type: datetime, required: true }
+      - { name: evidence_refs, type: array, required: false, items: string }
+
+  - name: Decision
+    description: "A decision taken in response to the breach (recorded and governed)."
+    keys: [decision_id]
+    fields:
+      - { name: decision_id, type: string, required: true }
+      - { name: breach_case_id, type: string, required: true }
+      - { name: decision_type, type: enum, required: true, values: [accept, mitigate, stop, waive] }
+      - { name: rationale, type: text, required: true }
+      - { name: submitted_by, type: string, required: true }
+      - { name: submitted_at, type: datetime, required: true }
+      - { name: status, type: enum, required: true, values: [submitted, approved, rejected] }
+      - { name: effective_from, type: date, required: false }
+      - { name: effective_to, type: date, required: false }
+      - { name: evidence_refs, type: array, required: false, items: string }
+
+  - name: Approval
+    description: "An approval record with SoD checks and authority context."
+    keys: [approval_id]
+    fields:
+      - { name: approval_id, type: string, required: true }
+      - { name: decision_id, type: string, required: true }
+      - { name: approver_user_id, type: string, required: true }
+      - { name: approver_role, type: enum, required: true, values: [risk_lead, bu_risk_owner] }
+      - { name: approved_at, type: datetime, required: false }
+      - { name: status, type: enum, required: true, values: [pending, approved, rejected] }
+      - { name: sod_check_passed, type: boolean, required: true }
+      - { name: comments, type: text, required: false }
+
+  - name: ActionItem
+    description: "A discrete corrective/preventive action resulting from the decision."
+    keys: [action_item_id]
+    fields:
+      - { name: action_item_id, type: string, required: true }
+      - { name: breach_case_id, type: string, required: true }
+      - { name: title, type: string, required: true }
+      - { name: owner_user_id, type: string, required: true }
+      - { name: due_date, type: date, required: false }
+      - { name: status, type: enum, required: true, values: [open, in_progress, done, blocked] }
+      - { name: completion_evidence_refs, type: array, required: false, items: string }
+
+  - name: EvidenceItem
+    description: "An evidence artefact attached or referenced by the case."
+    keys: [evidence_id]
+    fields:
+      - { name: evidence_id, type: string, required: true }
+      - { name: breach_case_id, type: string, required: true }
+      - { name: type, type: enum, required: true, values: [incident_report, photo, witness_statement, risk_assessment, rca, corrective_action_proof, other] }
+      - { name: uri, type: string, required: true, description: "Pointer to object storage or external system." }
+      - { name: uploaded_by, type: string, required: true }
+      - { name: uploaded_at, type: datetime, required: true }
+      - { name: description, type: text, required: false }
+
+  - name: AuditEvent
+    description: "Append-only event for audit trail and analytics."
+    keys: [audit_event_id]
+    fields:
+      - { name: audit_event_id, type: string, required: true }
+      - { name: breach_case_id, type: string, required: true }
+      - { name: event_type, type: string, required: true }
+      - { name: actor_user_id, type: string, required: true }
+      - { name: occurred_at, type: datetime, required: true }
+      - { name: data, type: object, required: false }

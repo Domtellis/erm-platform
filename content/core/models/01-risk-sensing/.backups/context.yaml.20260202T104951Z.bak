@@ -1,0 +1,36 @@
+id: VS-01-risk-sensing
+name: "VS-01 \u2014 Risk Sensing"
+short_description: Maintain a continuously refreshed context so risk work is evidence-driven
+  and timely.
+owner:
+- Risk Function
+- Business Leaders
+- Security
+stakeholders:
+- Risk Function
+- Business Leaders
+- Security
+- Ops
+- Compliance/Legal
+- Strategy teams
+inputs:
+- Threat intel
+- regulatory feeds
+- macro indicators
+- Incidents
+- audit findings
+- complaints
+- supplier performance.
+outputs:
+- Sensing dashboard
+- emerging risk list.
+triggers:
+- External shocks
+- regulatory change
+- supplier disruption
+- material trends in incidents
+- threat intel updates.
+bounded_contexts: []
+dependencies: []
+last_updated: '2026-02-02'
+source_file: docs/value-architecture/value-streams/VS-01-risk-sensing.md

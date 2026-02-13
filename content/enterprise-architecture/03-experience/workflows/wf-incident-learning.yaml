@@ -1,0 +1,70 @@
+schema_version: "1.0"
+workflow_id: "wf-incident-learning"
+entity: "incident_learning"
+description: "Incident capture → RCA → CAPA → verification → updates to risks, controls, and KRIs."
+value_stream_alignment: ["VS-09","VS-07","VS-03"]
+sub_entities: ["incident","rca","capa_plan","lesson_learned"]
+
+states:
+  incident:
+    - { state: "captured", type: "initial" }
+    - { state: "contained", type: "normal" }
+    - { state: "rca_in_progress", type: "normal" }
+    - { state: "capa_in_progress", type: "normal" }
+    - { state: "closed_verified", type: "terminal" }
+
+commands:
+  - command: "capture_incident"
+    actor_roles: ["incident_monitoring_lead"]
+    produces_events: ["incident_captured"]
+  - command: "classify_severity"
+    actor_roles: ["incident_monitoring_lead","enterprise_risk_lead"]
+    produces_events: ["incident_severity_classified"]
+  - command: "complete_containment"
+    actor_roles: ["incident_monitoring_lead"]
+    produces_events: ["incident_contained"]
+  - command: "start_rca"
+    actor_roles: ["incident_monitoring_lead"]
+    produces_events: ["rca_started"]
+  - command: "publish_rca"
+    actor_roles: ["incident_monitoring_lead","enterprise_risk_lead"]
+    produces_events: ["rca_published"]
+  - command: "create_capa_plan"
+    actor_roles: ["incident_monitoring_lead","bu_risk_owner"]
+    produces_events: ["capa_created"]
+  - command: "approve_capa_funding"
+    actor_roles: ["delegated_authority","exco"]
+    produces_events: ["capa_funded"]
+  - command: "verify_capa_effectiveness"
+    actor_roles: ["independent_reviewer"]
+    produces_events: ["capa_effectiveness_verified"]
+  - command: "trigger_updates"
+    actor_roles: ["system"]
+    produces_events:
+      - "risk_reassessment_requested"
+      - "indicator_tuning_requested"
+      - "control_change_requested"
+
+events:
+  - { event: "incident_captured", audit: true }
+  - { event: "incident_severity_classified", audit: true }
+  - { event: "incident_contained", audit: true }
+  - { event: "rca_started", audit: true }
+  - { event: "rca_published", audit: true }
+  - { event: "capa_created", audit: true }
+  - { event: "capa_funded", audit: true }
+  - { event: "capa_effectiveness_verified", audit: true }
+  - { event: "risk_reassessment_requested", audit: true }
+  - { event: "indicator_tuning_requested", audit: true }
+  - { event: "control_change_requested", audit: true }
+
+audit_logging:
+  required: true
+  include_fields:
+    - "incident_id"
+    - "severity"
+    - "rca_ref"
+    - "capa_plan_ref"
+    - "verification_evidence_set_hash"
+    - "linked_risk_ids"
+    - "linked_control_ids"

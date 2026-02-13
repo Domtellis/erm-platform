@@ -1,0 +1,7 @@
+' Auto-generated conceptual diagram — source: docs/value-architecture/value-streams/VS-02-risk-identification.md, generated: 2026-02-02T10:49:51.759862Z
+@startuml
+class VS_02_risk_identification {
+  +id: string
+  +purpose: string
+}
+@enduml

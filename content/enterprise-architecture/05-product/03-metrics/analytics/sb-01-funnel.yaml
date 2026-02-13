@@ -1,0 +1,30 @@
+version: 0.1.0
+lighthouse: sb-01
+category: safety
+
+funnel:
+  name: sb-01-breach-lifecycle
+  steps:
+    - name: case_created
+      event: BREACH_CASE_CREATED
+    - name: triaged
+      event: CASE_TRIAGED
+    - name: evaluated
+      event: THRESHOLD_EVALUATED
+    - name: decision_submitted
+      event: DECISION_SUBMITTED
+    - name: decision_approved
+      event: DECISION_APPROVED
+    - name: closed
+      event: CASE_CLOSED
+
+kpis:
+  - name: time_to_triage
+    start_event: BREACH_CASE_CREATED
+    end_event: CASE_TRIAGED
+  - name: time_to_decision
+    start_event: CASE_TRIAGED
+    end_event: DECISION_APPROVED
+  - name: time_to_close
+    start_event: ACTION_CREATED
+    end_event: CASE_CLOSED

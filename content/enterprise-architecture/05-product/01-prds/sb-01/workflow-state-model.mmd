@@ -1,0 +1,23 @@
+stateDiagram-v2
+  [*] --> Detected: case_created / breach_signal_received
+
+  Detected --> Triaged: triage_completed
+  Triaged --> ValidatedAgainstAppetite: appetite_selected + threshold_evaluated
+
+  ValidatedAgainstAppetite --> Escalated: escalation_required
+  ValidatedAgainstAppetite --> DecisionRecorded: escalation_not_required
+
+  Escalated --> DecisionRecorded: decision_submitted
+
+  DecisionRecorded --> DecisionApproved: approvals_complete + sod_pass
+  DecisionApproved --> ActionPlanActive: actions_created
+
+  ActionPlanActive --> Monitoring: actions_in_progress
+  Monitoring --> Closed: actions_completed + evidence_complete
+
+  Closed --> [*]
+
+  note right of DecisionApproved
+    High severity requires BU Risk Owner approval.
+    SoD: creator cannot approve their own decision.
+  end note

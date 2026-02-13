@@ -1,0 +1,34 @@
+id: VS-07-risk-monitoring
+name: "VS-07 \u2014 Risk Monitoring"
+short_description: Keep risk posture current through indicators and breach workflows;
+  trigger timely mitigation and escalation.
+owner:
+- Ops leaders
+- Risk Owners
+- Risk Function
+stakeholders:
+- Ops leaders
+- Risk Owners
+- Risk Function
+- ExCo/Board
+inputs:
+- Appetite thresholds (VS-00)
+- monitoring data feeds
+- incident signals
+- control health
+- supplier performance.
+outputs:
+- Indicator catalogue
+- live dashboards
+- breach logs
+- mitigation actions
+- updated risk posture.
+triggers:
+- KRI/KCI thresholds
+- anomaly detection
+- operational events
+- emerging risk signals.
+bounded_contexts: []
+dependencies: []
+last_updated: '2026-02-02'
+source_file: docs/value-architecture/value-streams/VS-07-risk-monitoring.md

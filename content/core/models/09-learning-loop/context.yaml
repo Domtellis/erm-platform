@@ -1,0 +1,61 @@
+name: "Incidents & Learnings (RCA, CAPA, Lessons Learned Feedback Loop)"
+id: "95-incidents-learnings"
+value_streams:
+  primary: ["VS-09"]
+owners:
+  business: ["Ops/SOC/ITSM", "Risk Function", "Control Owners", "ExCo (material events)"]
+  product: ["Product Owner - Incidents & Learnings"]
+  engineering: ["Domain Tech Lead - Incidents"]
+scope:
+  in:
+    - Incident capture and classification (domain-level, not ITSM tooling specifics)
+    - RCA artefacts linked to incidents
+    - CAPA plans and actions (can reuse TreatmentAction as the action abstraction)
+    - Lessons learned library and feedback updates to risks, controls, indicators
+  out:
+    - Real-time incident response tooling execution (may live in ITSM/SOC systems)
+    - Physical integration specifics with ITSM platforms
+entities:
+  primary:
+    - Incident
+    - RCA
+    - CAPAPlan
+    - LessonLearned
+  referenced:
+    - TreatmentAction
+    - Risk
+    - ControlImplementation
+    - IndicatorDefinition
+interfaces:
+  upstream:
+    - context: "External/Operational Systems"
+      contracts: ["ITSM/SOC incident records", "Loss data", "Service impact metrics"]
+  downstream:
+    - context: "30-risk-inventory"
+      contracts: ["LessonLearned updates that influence risk records"]
+    - context: "40-risk-assessment"
+      contracts: ["Incident learnings to inform reassessment (conceptual)"]
+    - context: "70-controls-assurance"
+      contracts: ["ControlImplementation updates from learnings"]
+    - context: "80-monitoring-breaches"
+      contracts: ["IndicatorDefinition updates from learnings"]
+governance:
+  decisions_and_gates:
+    - D1: "Severity designation (Ops + Risk)"
+    - D2: "CAPA approval and funding (BU/ExCo thresholds)"
+    - D3: "Closure verification (independent)"
+model_invariants:
+  - "Incident may have 0..1 RCA; each RCA analyses exactly 1 Incident."
+  - "RCA creates 0..* CAPAPlan; each CAPAPlan derives from exactly 1 RCA."
+  - "CAPAPlan contains 1..* TreatmentAction (or equivalent action abstraction)."
+  - "LessonLearned updates 0..* Risk, 0..* ControlImplementation, 0..* IndicatorDefinition."
+versioning_and_audit:
+  versioning_strategy:
+    - "Incident and RCA artefacts are immutable once approved/closed; corrections are new artefacts."
+    - "LessonLearned entries are append-only; updates create new learnings or supersede prior."
+  audit_requirements:
+    - "Closure verification and effectiveness validation must be retained for audit."
+files:
+  conceptual_model: "conceptual.mmd"
+  logical_er_model: "logical-er.mmd"
+

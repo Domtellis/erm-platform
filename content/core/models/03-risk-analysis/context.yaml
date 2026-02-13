@@ -1,0 +1,61 @@
+name: "Risk Assessment & Analysis (Inherent/Residual, Scenarios, Evidence)"
+id: "40-risk-assessment"
+value_streams:
+  primary: ["VS-03"]
+owners:
+  business: ["Risk Owners", "Risk Function", "Finance", "Security/Ops SMEs"]
+  product: ["Product Owner - Risk Assessment"]
+  engineering: ["Domain Tech Lead - Assessment"]
+scope:
+  in:
+    - Risk assessments linked to a risk
+    - Mandatory reference to a scoring/criteria model version
+    - Scenario/exposure quantification artefacts
+    - Evidence linkage and assumption recording
+    - Approval workflow for method selection and residual rating (conceptual)
+  out:
+    - Portfolio evaluation/prioritisation decisions (VS-04)
+    - Monitoring indicator calibration (VS-07) (as downstream usage)
+entities:
+  primary:
+    - RiskAssessment
+    - ScenarioExposure
+    - EvidenceItem
+    - Assumption
+    - Approval
+  referenced:
+    - Risk
+    - RiskCriteriaModelVersion
+interfaces:
+  upstream:
+    - context: "30-risk-inventory"
+      contracts: ["Risk", "RiskStatementVersion", "MaterialityTriage"]
+    - context: "10-governance-policy"
+      contracts: ["RiskCriteriaModelVersion", "ToleranceThreshold (policy)", "EscalationRule (policy)"]
+    - context: "70-controls-assurance"
+      contracts: ["Control health summaries (conceptual)"]
+    - context: "95-incidents-learnings"
+      contracts: ["Loss/incident signals and learnings references"]
+  downstream:
+    - context: "50-portfolio-decisions"
+      contracts: ["RiskAssessment outputs: residual posture, confidence, recommended action"]
+governance:
+  decisions_and_gates:
+    - D1: "Method selection for material risks (Risk Function)"
+    - D2: "Residual rating approval (Risk Owner + delegated authority)"
+    - D3: "Quant model sign-off (Finance/Risk depending)"
+model_invariants:
+  - "Risk has 0..* RiskAssessment; each RiskAssessment assesses exactly 1 Risk."
+  - "Each RiskAssessment references exactly 1 RiskCriteriaModelVersion."
+  - "RiskAssessment may quantify via 0..* ScenarioExposure."
+  - "RiskAssessment may use 0..* EvidenceItem and record 0..* Assumption."
+  - "Approvals (0..*) can be attached to RiskAssessment for auditability."
+versioning_and_audit:
+  versioning_strategy:
+    - "RiskAssessment is immutable once approved; corrections are superseding assessments."
+    - "Assumptions are versioned/append-only within an assessment context."
+  audit_requirements:
+    - "Evidence provenance must be retained; approval trail must be queryable."
+files:
+  conceptual_model: "conceptual.mmd"
+  logical_er_model: "logical-er.mmd"

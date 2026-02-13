@@ -1,0 +1,59 @@
+name: "Reporting & Disclosure (Board Packs, Decision Support, Assurance)"
+id: "90-reporting-disclosure"
+value_streams:
+  primary: ["VS-08"]
+owners:
+  business: ["Board/ExCo", "Risk Committee", "Legal/Compliance", "Data Owner"]
+  product: ["Product Owner - Reporting"]
+  engineering: ["Domain Tech Lead - Reporting"]
+scope:
+  in:
+    - Board packs as governance artefacts and their composition
+    - Portfolio views included in packs (segmented/ranked risk sets)
+    - Decision ledger entries included in packs
+    - Disclosures/external assurance artefacts referencing evidence, risks, incidents
+    - Traceability via explicit references (not UI graphs)
+  out:
+    - Narrative writing standards/content authoring tools (optional)
+    - External publishing channels and comms distribution mechanisms
+entities:
+  primary:
+    - BoardPack
+    - RiskPortfolioView
+    - DecisionLedgerEntry
+    - Disclosure
+    - EvidenceItem
+  referenced:
+    - Risk
+    - Incident
+interfaces:
+  upstream:
+    - context: "50-portfolio-decisions"
+      contracts: ["RiskPortfolioView", "DecisionLedgerEntry"]
+    - context: "70-controls-assurance"
+      contracts: ["EvidenceItem references for assurance"]
+    - context: "95-incidents-learnings"
+      contracts: ["Incident references for material events"]
+    - context: "60-treatment-acceptance"
+      contracts: ["Treatment status (conceptual)"]
+  downstream:
+    - context: "External Stakeholders"
+      contracts: ["Disclosure exports (regulator/customer assurance)"]
+governance:
+  decisions_and_gates:
+    - D1: "Board pack sign-off (Risk Committee Chair/Service Owner)"
+    - D2: "External disclosure approval (Legal/Compliance)"
+    - D3: "Data certification (Data Owner)"
+model_invariants:
+  - "BoardPack includes 0..* RiskPortfolioView and 0..* DecisionLedgerEntry."
+  - "Disclosure references 0..* EvidenceItem, 0..* Risk, and 0..* Incident."
+versioning_and_audit:
+  versioning_strategy:
+    - "BoardPack becomes immutable once signed off; revisions are new versions."
+    - "Disclosure becomes immutable once approved; amendments are new disclosures referencing prior."
+  audit_requirements:
+    - "Sign-off, disclosure approval, and data certification must be captured and queryable."
+files:
+  conceptual_model: "conceptual.mmd"
+  logical_er_model: "logical-er.mmd"
+

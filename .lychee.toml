@@ -1,0 +1,27 @@
+# Lychee runs in CI to check both internal + external links.
+# Internal links are additionally validated by scripts/check_internal_links.py (deterministic).
+
+verbose = "warn"
+no_progress = true
+max_concurrency = 16
+timeout = 20
+retry_wait_time = 2
+max_retries = 2
+accept = ["200", "204", "206", "301", "302", "307", "308", "429"]
+exclude_mail = true
+
+# Avoid noisy/unstable targets if needed (add as you find them)
+exclude = [
+  "^http://localhost",
+  "^http://127\\.0\\.0\\.1"
+]
+
+# Where to scan
+include = [
+  "**/*.md"
+]
+
+exclude_path = [
+  "node_modules",
+  ".venv"
+]

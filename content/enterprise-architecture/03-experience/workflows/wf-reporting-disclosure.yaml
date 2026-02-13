@@ -1,0 +1,71 @@
+schema_version: "1.0"
+workflow_id: "wf-reporting-disclosure"
+entity: "reporting"
+description: "Decision-ready reporting with data certification, approvals, decision ledger capture, and disclosure workflow."
+value_stream_alignment: ["VS-08","VS-00","VS-04"]
+sub_entities: ["board_pack","decision_ledger_entry","disclosure","data_certification"]
+
+states:
+  board_pack:
+    - { state: "draft", type: "initial" }
+    - { state: "compiled", type: "normal" }
+    - { state: "certified", type: "normal" }
+    - { state: "signed_off", type: "normal" }
+    - { state: "published", type: "terminal" }
+
+  disclosure:
+    - { state: "draft", type: "initial" }
+    - { state: "legal_review", type: "normal" }
+    - { state: "approved", type: "normal" }
+    - { state: "released", type: "terminal" }
+
+commands:
+  - command: "compile_board_pack"
+    actor_roles: ["risk_reporting_owner","system"]
+    preconditions: ["board_pack.state == draft"]
+    produces_events: ["board_pack_compiled"]
+  - command: "certify_data"
+    actor_roles: ["data_owner"]
+    preconditions: ["board_pack.state == compiled", "one_version_of_truth_checks_passed == true", "lineage_complete == true"]
+    produces_events: ["board_pack_certified"]
+  - command: "sign_off_board_pack"
+    actor_roles: ["risk_committee_chair","service_owner"]
+    preconditions: ["board_pack.state == certified"]
+    produces_events: ["board_pack_signed_off"]
+  - command: "publish_board_pack"
+    actor_roles: ["system"]
+    preconditions: ["board_pack.state == signed_off"]
+    produces_events: ["board_pack_published"]
+  - command: "record_decision_ledger_entry"
+    actor_roles: ["risk_reporting_owner","system"]
+    produces_events: ["decision_ledger_entry_recorded"]
+  - command: "start_disclosure"
+    actor_roles: ["legal_compliance"]
+    produces_events: ["disclosure_started"]
+  - command: "approve_disclosure"
+    actor_roles: ["legal_compliance"]
+    preconditions: ["disclosure.state == legal_review", "data_certified == true", "traceability_complete == true"]
+    produces_events: ["disclosure_approved"]
+  - command: "release_disclosure"
+    actor_roles: ["system"]
+    preconditions: ["disclosure.state == approved"]
+    produces_events: ["disclosure_released"]
+
+events:
+  - { event: "board_pack_compiled", audit: true }
+  - { event: "board_pack_certified", audit: true }
+  - { event: "board_pack_signed_off", audit: true }
+  - { event: "board_pack_published", audit: true }
+  - { event: "decision_ledger_entry_recorded", audit: true }
+  - { event: "disclosure_started", audit: true }
+  - { event: "disclosure_approved", audit: true }
+  - { event: "disclosure_released", audit: true }
+
+audit_logging:
+  required: true
+  include_fields:
+    - "board_pack_id"
+    - "certification_checks"
+    - "lineage_report_ref"
+    - "decision_ledger_ids"
+    - "approval_chain"

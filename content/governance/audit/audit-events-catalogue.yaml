@@ -1,0 +1,32 @@
+version: 0.1.0
+scope:
+  lighthouse: sb-01
+
+catalog:
+  - event_type: BREACH_CASE_CREATED
+    is_control_event: true
+    must_log_fields: [actor_user_id, occurred_at, breach_case_id]
+  - event_type: CASE_TRIAGED
+    is_control_event: true
+    must_log_fields: [severity, location]
+  - event_type: THRESHOLD_EVALUATED
+    is_control_event: true
+    must_log_fields: [evaluation_id, threshold_id, measured_value, result, computed_severity]
+  - event_type: ESCALATION_TRIGGERED
+    is_control_event: true
+    must_log_fields: [reason, escalated_to_role]
+  - event_type: DECISION_SUBMITTED
+    is_control_event: true
+    must_log_fields: [decision_id, decision_type]
+  - event_type: DECISION_APPROVED
+    is_control_event: true
+    must_log_fields: [approver_user_id, approver_role, sod_check_passed]
+  - event_type: EVIDENCE_ATTACHED
+    is_control_event: true
+    must_log_fields: [evidence_id, type, uri]
+  - event_type: CASE_CLOSED
+    is_control_event: true
+    must_log_fields: [actor_user_id, occurred_at]
+  - event_type: AUDIT_PACK_EXPORTED
+    is_control_event: false
+    must_log_fields: [export_format]

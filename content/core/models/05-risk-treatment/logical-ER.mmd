@@ -1,0 +1,80 @@
+erDiagram
+  Risk ||--o{ TreatmentPlan : hasTreatments
+  TreatmentPlan ||--o{ TreatmentAction : contains
+
+  RiskAssessment ||--o{ AcceptanceRecord : mayHaveAcceptance
+  AcceptanceRecord ||--o{ AcceptanceCondition : setsConditions
+
+  FundingAllocation ||--o{ TreatmentPlan : funds
+
+  AcceptanceRecord ||--o{ AcceptanceApprovalLink : requires
+  Approval ||--o{ AcceptanceApprovalLink : recordedAs
+
+  Risk {
+    string RiskId PK
+  }
+
+  TreatmentPlan {
+    string TreatmentPlanId PK
+    string RiskId FK
+    string targetResidual
+    string planStatus
+    datetime createdAt
+    string ownerRole
+    datetime dueBy
+  }
+
+  TreatmentAction {
+    string TreatmentActionId PK
+    string TreatmentPlanId FK
+    string actionType
+    string actionStatus
+    string ownerRole
+    datetime dueBy
+    string externalWorkItemRef
+    string rationale
+  }
+
+  RiskAssessment {
+    string RiskAssessmentId PK
+    string RiskId FK
+  }
+
+  AcceptanceRecord {
+    string AcceptanceRecordId PK
+    string RiskAssessmentId FK
+    string acceptanceType
+    datetime effectiveFrom
+    datetime expiryAt
+    string status
+    string authorityLevel
+    string rationale
+  }
+
+  AcceptanceCondition {
+    string AcceptanceConditionId PK
+    string AcceptanceRecordId FK
+    string conditionType
+    string conditionValue
+    string monitoringExpectation
+  }
+
+  FundingAllocation {
+    string FundingAllocationId PK
+    string status
+  }
+
+  Approval {
+    string ApprovalId PK
+    string approvalType
+    string decision
+    string authorityLevel
+    string approverRole
+    datetime approvedAt
+  }
+
+  AcceptanceApprovalLink {
+    string AcceptanceRecordId PK, FK
+    string ApprovalId PK, FK
+    string approvalPurpose
+  }

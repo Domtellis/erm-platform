@@ -1,0 +1,44 @@
+version: 0.1.0
+scope:
+  lighthouse: sb-01
+  category: safety
+
+evidence_policy:
+  - severity: low
+    required_types:
+      - incident_report
+    recommended_types:
+      - photo
+      - risk_assessment
+    notes:
+      - "Low severity must still document what happened and why it is within acceptable boundaries."
+
+  - severity: medium
+    required_types:
+      - incident_report
+      - risk_assessment
+    recommended_types:
+      - photo
+      - witness_statement
+      - rca
+    notes:
+      - "Medium severity requires documented assessment and at least one supporting artefact."
+
+  - severity: high
+    required_types:
+      - incident_report
+      - risk_assessment
+      - rca
+      - corrective_action_proof
+    recommended_types:
+      - photo
+      - witness_statement
+    gating:
+      block_state_transitions:
+        - to_state: DecisionApproved
+          unless: "required_types_present"
+        - to_state: Closed
+          unless: "required_types_present AND actions_completed"
+    notes:
+      - "High severity requires a minimum evidence bundle before approval and closure."
+      - "Rationale must reference evidence IDs in the Decision and Evaluation records."

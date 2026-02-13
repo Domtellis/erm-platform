@@ -1,0 +1,142 @@
+erDiagram
+  BoardPack ||--o{ BoardPackPortfolioLink : includesView
+  RiskPortfolioView ||--o{ BoardPackPortfolioLink : includedInPack
+
+  BoardPack ||--o{ BoardPackDecisionLink : includesDecision
+  DecisionLedgerEntry ||--o{ BoardPackDecisionLink : includedInPack
+
+  Disclosure ||--o{ DisclosureEvidenceLink : referencesEvidence
+  EvidenceItem ||--o{ DisclosureEvidenceLink : supportsDisclosure
+
+  Disclosure ||--o{ DisclosureRiskLink : referencesRisk
+  Risk ||--o{ DisclosureRiskLink : referencedByDisclosure
+
+  Disclosure ||--o{ DisclosureIncidentLink : referencesIncident
+  Incident ||--o{ DisclosureIncidentLink : referencedByDisclosure
+
+  BoardPack ||--o{ BoardPackSignOffLink : signedOffVia
+  Disclosure ||--o{ DisclosureApprovalLink : approvedVia
+  DataCertification ||--o{ BoardPackCertificationLink : certifies
+
+  Approval ||--o{ BoardPackSignOffLink : recordedAs
+  Approval ||--o{ DisclosureApprovalLink : recordedAs
+
+  BoardPack {
+    string BoardPackId PK
+    string packType
+    string reportingPeriod
+    datetime producedAt
+    string producedByRole
+    string status
+    string version
+  }
+
+  RiskPortfolioView {
+    string RiskPortfolioViewId PK
+    string segmentationKey
+    datetime producedAt
+    string version
+  }
+
+  DecisionLedgerEntry {
+    string DecisionLedgerEntryId PK
+    string decisionType
+    string decisionOutcome
+    datetime decidedAt
+    string authorityLevel
+    string status
+  }
+
+  BoardPackPortfolioLink {
+    string BoardPackId PK, FK
+    string RiskPortfolioViewId PK, FK
+    string includePurpose
+  }
+
+  BoardPackDecisionLink {
+    string BoardPackId PK, FK
+    string DecisionLedgerEntryId PK, FK
+    string includePurpose
+  }
+
+  Disclosure {
+    string DisclosureId PK
+    string disclosureType
+    string audience
+    datetime preparedAt
+    string preparedByRole
+    string status
+    string version
+  }
+
+  EvidenceItem {
+    string EvidenceItemId PK
+    string evidenceType
+    string sourceSystem
+    string sourceRef
+    datetime capturedAt
+    string integrityHashRef
+  }
+
+  DisclosureEvidenceLink {
+    string DisclosureId PK, FK
+    string EvidenceItemId PK, FK
+    string rationale
+    decimal confidenceScore
+  }
+
+  Risk {
+    string RiskId PK
+  }
+
+  DisclosureRiskLink {
+    string DisclosureId PK, FK
+    string RiskId PK, FK
+    string rationale
+  }
+
+  Incident {
+    string IncidentId PK
+  }
+
+  DisclosureIncidentLink {
+    string DisclosureId PK, FK
+    string IncidentId PK, FK
+    string rationale
+  }
+
+  Approval {
+    string ApprovalId PK
+    string approvalType
+    string decision
+    string authorityLevel
+    string approverRole
+    datetime approvedAt
+    string comments
+  }
+
+  BoardPackSignOffLink {
+    string BoardPackId PK, FK
+    string ApprovalId PK, FK
+    string signOffRole
+  }
+
+  DisclosureApprovalLink {
+    string DisclosureId PK, FK
+    string ApprovalId PK, FK
+    string approvalPurpose
+  }
+
+  DataCertification {
+    string DataCertificationId PK
+    string certifierRole
+    datetime certifiedAt
+    string scopeKey
+    string status
+  }
+
+  BoardPackCertificationLink {
+    string DataCertificationId PK, FK
+    string BoardPackId PK, FK
+    string certificationScope
+  }

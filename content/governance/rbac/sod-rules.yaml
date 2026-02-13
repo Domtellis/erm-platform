@@ -1,0 +1,34 @@
+version: 0.1.0
+scope:
+  lighthouse: sb-01
+  category: safety
+
+rules:
+  - id: sod-001
+    name: "Creator cannot approve own decision"
+    applies_when:
+      - decision.status == "submitted"
+    constraint:
+      disallow_if:
+        approver_user_id_equals: decision.submitted_by
+    severity: block
+
+  - id: sod-002
+    name: "High severity requires BU Risk Owner approval"
+    applies_when:
+      - breach_case.severity == "high"
+    constraint:
+      require_approver_role: bu_risk_owner
+    severity: block
+
+  - id: sod-003
+    name: "Risk Lead may review but cannot be sole approver for High severity"
+    applies_when:
+      - breach_case.severity == "high"
+    constraint:
+      disallow_sole_approver_role: risk_lead
+    severity: block
+
+notes:
+  - "SoD checks must be evaluated before decision status can move to approved."
+  - "SoD outcomes must be written into the audit event DECISION_APPROVED payload."

@@ -1,0 +1,88 @@
+schema_version: "1.0"
+workflow_id: "wf-risk-assessment"
+entity: "risk_assessment"
+description: "Versioned assessment lifecycle with evidence, assumptions, challenge, approval, and publication."
+value_stream_alignment: ["VS-03","VS-04"]
+states:
+  - { state: "planned", type: "initial" }
+  - { state: "in_progress", type: "normal" }
+  - { state: "challenged", type: "normal" }
+  - { state: "approved", type: "normal" }
+  - { state: "published", type: "terminal" }
+  - { state: "superseded", type: "terminal" }
+
+validations:
+  minimum_for_challenge:
+    - "inherent_rating"
+    - "control_effectiveness"
+    - "residual_rating"
+    - "confidence"
+    - "assumptions_log"
+    - "evidence_items[]"
+  minimum_for_approval:
+    - "method_tier"
+    - "evidence_minimums_met == true"
+    - "override_rationale_present_if_override == true"
+
+commands:
+  - command: "start_assessment"
+    actor_roles: ["bu_risk_owner"]
+    preconditions: ["state == planned"]
+    produces_events: ["assessment_started"]
+  - command: "submit_for_challenge"
+    actor_roles: ["bu_risk_owner"]
+    preconditions: ["state == in_progress", "validations.minimum_for_challenge"]
+    produces_events: ["assessment_submitted_for_challenge"]
+  - command: "challenge_assessment"
+    actor_roles: ["enterprise_risk_lead","second_line_assurance"]
+    preconditions: ["state == challenged"]
+    produces_events: ["assessment_challenged"]
+  - command: "request_rework"
+    actor_roles: ["enterprise_risk_lead","second_line_assurance"]
+    preconditions: ["state == challenged"]
+    produces_events: ["assessment_rework_requested"]
+  - command: "approve_assessment"
+    actor_roles: ["delegated_authority","enterprise_risk_lead"]
+    preconditions: ["state == challenged", "validations.minimum_for_approval"]
+    produces_events: ["assessment_approved"]
+  - command: "publish_assessment"
+    actor_roles: ["system"]
+    preconditions: ["state == approved"]
+    produces_events: ["assessment_published"]
+  - command: "supersede_assessment"
+    actor_roles: ["system"]
+    preconditions: ["state == published"]
+    produces_events: ["assessment_superseded"]
+
+events:
+  - { event: "assessment_started", audit: true }
+  - { event: "assessment_submitted_for_challenge", audit: true }
+  - { event: "assessment_rework_requested", audit: true }
+  - { event: "assessment_approved", audit: true }
+  - { event: "assessment_published", audit: true }
+  - { event: "assessment_superseded", audit: true }
+
+transitions:
+  - { from: "planned", "on": "assessment_started", to: "in_progress" }
+  - { from: "in_progress", "on": "assessment_submitted_for_challenge", to: "challenged" }
+  - { from: "challenged", "on": "assessment_rework_requested", to: "in_progress" }
+  - { from: "challenged", "on": "assessment_approved", to: "approved" }
+  - { from: "approved", "on": "assessment_published", to: "published" }
+  - { from: "published", "on": "assessment_superseded", to: "superseded" }
+
+segregation_of_duties:
+  rules:
+    - rule_id: "sod-010"
+      description: "Assessor cannot approve their own assessment."
+      enforced_on_commands: ["approve_assessment"]
+
+audit_logging:
+  required: true
+  include_fields:
+    - "entity_id"
+    - "assessment_version"
+    - "criteria_model_version"
+    - "evidence_set_hash"
+    - "override_flag"
+    - "override_rationale_ref"
+    - "timestamp"

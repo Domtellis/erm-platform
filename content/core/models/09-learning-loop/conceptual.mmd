@@ -1,0 +1,22 @@
+classDiagram
+class Incident
+class RCA
+class CAPAPlan
+class TreatmentAction
+class LessonLearned
+class Risk
+class ControlImplementation
+class IndicatorDefinition
+Incident "1" --> "0..1" RCA : mayHaveRCA
+RCA "1" --> "1" Incident : analyses
+RCA "1" --> "0..*" CAPAPlan : createsCAPA
+CAPAPlan "1" --> "1" RCA : derivedFrom
+CAPAPlan "1" --> "1..*" TreatmentAction : containsActions
+TreatmentAction "0..1" --> "0..1" CAPAPlan : mayBelongToCAPA
+LessonLearned "0..*" --> "0..*" Risk : updatesRisk
+Risk "0..*" --> "0..*" LessonLearned : updatedByLesson
+LessonLearned "0..*" --> "0..*" ControlImplementation : updatesControlImpl
+ControlImplementation "0..*" --> "0..*" LessonLearned : updatedByLesson
+LessonLearned "0..*" --> "0..*" IndicatorDefinition : updatesIndicator
+IndicatorDefinition "0..*" --> "0..*" LessonLearned : updatedByLesson
+

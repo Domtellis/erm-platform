@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Breach Detected Event",
+  "description": "Schema for the erm.monitoring.breach-detected.v1 event",
+  "type": "object",
+  "required": ["breach_case_id", "bu_id", "category", "severity", "created_by", "created_at"],
+  "properties": {
+    "breach_case_id": { "type": "string", "pattern": "^BC-[0-9]{4}-[0-9]+$" },
+    "bu_id": { "type": "string" },
+    "category": { "type": "string", "enum": ["safety", "financial", "operational"] },
+    "severity": { "type": "string", "enum": ["low", "medium", "high"] },
+    "created_by": { "type": "string" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "location": { "type": "string" },
+    "description": { "type": "string" }
+  }
+}

@@ -1,0 +1,37 @@
+id: VS-02-risk-identification
+name: "VS-02 \u2014 Risk Identification"
+short_description: Produce a structured, linked, owned risk inventory that is actionable
+  and portfolio-ready.
+owner:
+- Risk Owners
+- BU leadership
+- Risk Function
+stakeholders:
+- Risk Owners
+- BU leadership
+- Risk Function
+- Change teams
+- Procurement
+- Security
+inputs:
+- Context packs (VS-01)
+- workshop outputs
+- incident learnings (VS-09)
+- org/service maps
+- supplier lists.
+outputs:
+- Normalised risk records
+- ownership
+- dependency links
+- triage status
+- assessment backlog entries.
+triggers:
+- Periodic cycle
+- new initiative
+- post-incident review
+- regulatory request
+- emerging risk flagged (VS-01).
+bounded_contexts: []
+dependencies: []
+last_updated: '2026-02-02'
+source_file: docs/value-architecture/value-streams/VS-02-risk-identification.md

@@ -1,0 +1,7 @@
+' Auto-generated conceptual diagram — source: docs/value-architecture/value-streams/README.md, generated: 2026-02-02T10:49:51.675230Z
+@startuml
+class README {
+  +id: string
+  +purpose: string
+}
+@enduml

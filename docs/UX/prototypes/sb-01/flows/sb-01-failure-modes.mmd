@@ -1,0 +1,40 @@
+%% SB-01 Failure Modes
+%% Validation and gating flows
+
+flowchart TB
+    subgraph FM1["Failure Mode 1: Missing Rationale"]
+        A1[Evaluation Step 2]
+        A2[Submit without Rationale]
+        A3[Validation Error]
+        A4[Show Guidance]
+        A5[User adds Rationale]
+        A6[Submit Success]
+
+        A1 --> A2 --> A3
+        A3 --> A4 --> A5 --> A6
+    end
+
+    subgraph FM2["Failure Mode 2: Missing Evidence"]
+        B1[Decision Ask Screen]
+        B2[Click Approve]
+        B3[Evidence Check]
+        B4{Required Evidence Present?}
+        B5[Show Checklist]
+        B6[Highlight Missing: RCA]
+        B7[User Uploads RCA]
+        B8[Approve Enabled]
+
+        B1 --> B2 --> B3 --> B4
+        B4 -->|No| B5 --> B6 --> B7 --> B8
+        B4 -->|Yes| B8
+    end
+
+    subgraph FM3["Failure Mode 3: SoD Violation"]
+        C1[Decision Submitted by User A]
+        C2[User A tries to Approve]
+        C3[SoD Check]
+        C4[Block with Message]
+        C5[Show: Approver cannot be Submitter]
+
+        C1 --> C2 --> C3 --> C4 --> C5
+    end

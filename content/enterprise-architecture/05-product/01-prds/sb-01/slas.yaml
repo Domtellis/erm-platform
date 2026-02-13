@@ -1,0 +1,40 @@
+id: sb-01
+version: 0.1.0
+category: safety
+bu: BU-01
+
+slas:
+  - id: sla-triage
+    name: Triage SLA
+    applies_to_severity: [high, medium, low]
+    target_minutes:
+      high: 60
+      medium: 180
+      low: 480
+    start_event: BREACH_CASE_CREATED
+    stop_event: CASE_TRIAGED
+
+  - id: sla-decision
+    name: Decision SLA
+    applies_to_severity: [high, medium, low]
+    target_minutes:
+      high: 480
+      medium: 1440
+      low: 2880
+    start_event: CASE_TRIAGED
+    stop_event: DECISION_APPROVED
+
+  - id: sla-close
+    name: Closure SLA
+    applies_to_severity: [high, medium, low]
+    target_minutes:
+      high: 10080   # 7 days
+      medium: 20160 # 14 days
+      low: 43200    # 30 days
+    start_event: ACTION_PLAN_ACTIVATED
+    stop_event: CASE_CLOSED
+
+breach_escalation_expectations:
+  high: "Immediate escalation to BU Risk Owner via Teams notification and in-tool approval gate."
+  medium: "Escalation to Risk Lead; BU Risk Owner notified (no mandatory approval unless configured)."
+  low: "Managed by Incident Lead with Risk Lead oversight."

@@ -1,0 +1,57 @@
+name: "Portfolio & Decisions (Evaluation, Prioritisation, Funding)"
+id: "50-portfolio-decisions"
+value_streams:
+  primary: ["VS-04"]
+owners:
+  business: ["ExCo/Board", "Risk Committee", "Portfolio/Finance", "Risk Owners"]
+  product: ["Product Owner - Portfolio & Governance"]
+  engineering: ["Domain Tech Lead - Portfolio"]
+scope:
+  in:
+    - Portfolio views (segmented slices of risks with rankings/clusters)
+    - Decision ledger entries capturing decisions, rationale, and actions
+    - Funding allocations for treatment plans (conceptual)
+  out:
+    - Treatment planning (VS-05)
+    - Reporting pack composition (VS-08)
+entities:
+  primary:
+    - RiskPortfolioView
+    - DecisionLedgerEntry
+    - FundingAllocation
+  referenced:
+    - Risk
+    - TreatmentPlan
+interfaces:
+  upstream:
+    - context: "40-risk-assessment"
+      contracts: ["Residual posture and confidence outputs"]
+    - context: "10-governance-policy"
+      contracts: ["Appetite thresholds and acceptance/escalation rules"]
+    - context: "80-monitoring-breaches"
+      contracts: ["Breach history and indicator posture summaries"]
+    - context: "70-controls-assurance"
+      contracts: ["Control health summaries"]
+  downstream:
+    - context: "60-treatment-acceptance"
+      contracts: ["FundingAllocation", "DecisionLedgerEntry decisions to create TreatmentPlan"]
+    - context: "90-reporting-disclosure"
+      contracts: ["RiskPortfolioView", "DecisionLedgerEntry"]
+governance:
+  decisions_and_gates:
+    - D1: "Portfolio prioritisation and funding (ExCo)"
+    - D2: "Accept/avoid decisions (delegated authority/Board where required)"
+    - D3: "Review cadence and top risk set (Risk Committee)"
+model_invariants:
+  - "RiskPortfolioView includes 0..* Risk; risks can appear in multiple views."
+  - "DecisionLedgerEntry decides on 0..1 Risk (or a portfolio slice conceptually)."
+  - "FundingAllocation funds 0..* TreatmentPlan."
+versioning_and_audit:
+  versioning_strategy:
+    - "DecisionLedgerEntry is append-only; corrections via new entries."
+    - "Portfolio views are versioned per cut/cadence; do not overwrite published views."
+  audit_requirements:
+    - "Funding decisions must be traceable to decision entries and authority."
+files:
+  conceptual_model: "conceptual.mmd"
+  logical_er_model: "logical-er.mmd"

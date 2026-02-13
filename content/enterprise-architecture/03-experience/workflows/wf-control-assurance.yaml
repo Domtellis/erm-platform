@@ -1,0 +1,105 @@
+schema_version: "1.0"
+workflow_id: "wf-control-assurance"
+entity: "control_and_assurance"
+description: "Control design, execution, evidence provenance, testing, exceptions/issues, remediation, attestations, and audit packs."
+value_stream_alignment: ["VS-06","VS-05"]
+sub_entities: ["control","control_execution","control_test","issue","attestation","audit_pack"]
+
+states:
+  control:
+    - { state: "designed", type: "initial" }
+    - { state: "approved", type: "normal" }
+    - { state: "operational", type: "normal" }
+    - { state: "retired", type: "terminal" }
+
+  control_execution:
+    - { state: "scheduled", type: "initial" }
+    - { state: "executed", type: "normal" }
+    - { state: "evidence_validated", type: "normal" }
+    - { state: "exception_requested", type: "normal" }
+    - { state: "closed", type: "terminal" }
+
+  issue:
+    - { state: "open", type: "initial" }
+    - { state: "remediation_in_progress", type: "normal" }
+    - { state: "closure_pending_validation", type: "normal" }
+    - { state: "closed_verified", type: "terminal" }
+
+validations:
+  evidence_provenance_minimums:
+    - "source_system"
+    - "collected_by"
+    - "collected_at"
+    - "integrity_hash"
+    - "retention_classification"
+  issue_closure_requires_independent_validation: true
+
+commands:
+  - command: "approve_control_design"
+    actor_roles: ["control_owner","second_line_assurance"]
+    preconditions: ["control.state == designed"]
+    produces_events: ["control_design_approved"]
+  - command: "execute_control"
+    actor_roles: ["control_owner","system"]
+    preconditions: ["control.state in [approved, operational]", "control_execution.state == scheduled"]
+    produces_events: ["control_executed"]
+  - command: "validate_evidence"
+    actor_roles: ["second_line_assurance","system"]
+    preconditions: ["control_execution.state == executed", "validations.evidence_provenance_minimums"]
+    produces_events: ["evidence_validated"]
+  - command: "request_control_exception"
+    actor_roles: ["control_owner"]
+    preconditions: ["control_execution.state in [scheduled, executed]"]
+    produces_events: ["control_exception_requested"]
+  - command: "approve_control_exception"
+    actor_roles: ["delegated_authority"]
+    preconditions: ["control_execution.state == exception_requested"]
+    produces_events: ["control_exception_approved"]
+  - command: "open_issue"
+    actor_roles: ["second_line_assurance","internal_audit"]
+    preconditions: ["control_execution.state in [executed, evidence_validated]"]
+    produces_events: ["issue_opened"]
+  - command: "submit_issue_for_closure_validation"
+    actor_roles: ["control_owner"]
+    preconditions: ["issue.state == remediation_in_progress"]
+    produces_events: ["issue_submitted_for_validation"]
+  - command: "validate_issue_closure"
+    actor_roles: ["independent_reviewer"]
+    preconditions: ["issue.state == closure_pending_validation"]
+    produces_events: ["issue_closed_verified"]
+  - command: "run_attestation_campaign"
+    actor_roles: ["second_line_assurance"]
+    produces_events: ["attestation_campaign_started"]
+  - command: "generate_audit_pack"
+    actor_roles: ["second_line_assurance","internal_audit","system"]
+    produces_events: ["audit_pack_generated"]
+
+events:
+  - { event: "control_design_approved", audit: true }
+  - { event: "control_executed", audit: true }
+  - { event: "evidence_validated", audit: true }
+  - { event: "control_exception_requested", audit: true }
+  - { event: "control_exception_approved", audit: true }
+  - { event: "issue_opened", audit: true }
+  - { event: "issue_submitted_for_validation", audit: true }
+  - { event: "issue_closed_verified", audit: true }
+  - { event: "attestation_campaign_started", audit: true }
+  - { event: "audit_pack_generated", audit: true }
+
+segregation_of_duties:
+  rules:
+    - rule_id: "sod-030"
+      description: "Control owner cannot act as independent closure validator."
+    - rule_id: "sod-031"
+      description: "Exception approvals must be delegated; cannot be self-approved."
+
+audit_logging:
+  required: true
+  include_fields:
+    - "entity_id"
+    - "event"
+    - "actor_role"
+    - "evidence_set_hash"
+    - "exception_timebox"
+    - "issue_severity"
+    - "issue_sla"

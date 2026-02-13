@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/persona-catalogue.schema.json",
+  "title": "ERM Persona Catalogue",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "catalogue_id", "product_id", "generated_date", "value_streams", "personas"],
+  "properties": {
+    "schema_version": { "type": "string", "pattern": "^\\d+\\.\\d+$" },
+    "catalogue_id": { "type": "string", "minLength": 1 },
+    "product_id": { "type": "string", "minLength": 1 },
+    "generated_date": { "type": "string", "format": "date" },
+    "conventions": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "value_streams": {
+      "type": "object",
+      "minProperties": 1,
+      "patternProperties": {
+        "^VS-\\d{2}$": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name"],
+          "properties": {
+            "name": { "type": "string", "minLength": 1 }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "personas": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/persona" }
+    }
+  },
+  "$defs": {
+    "vs_id": { "type": "string", "pattern": "^VS-\\d{2}$" },
+    "workflow_id": { "type": "string", "pattern": "^wf-[a-z0-9-]+$" },
+    "persona": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["persona_id", "name", "short_name", "line_of_defense", "primary_value_streams", "goals"],
+      "properties": {
+        "persona_id": { "type": "string", "pattern": "^per-\\d{3}$" },
+        "name": { "type": "string", "minLength": 1 },
+        "short_name": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+        "line_of_defense": {
+          "type": "string",
+          "enum": ["governance", "first_line", "second_line", "third_line", "mixed_first_and_second_line"]
+        },
+        "primary_value_streams": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/vs_id" }
+        },
+        "secondary_value_streams": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/vs_id" }
+        },
+        "goals": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "kpis": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/kpi" }
+        },
+        "authorities": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/authority" }
+        },
+        "workflows_touched": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/workflow_id" }
+        },
+        "data_objects_most_used": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "kpi": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kpi_id", "name", "definition", "target", "cadence", "owner_role"],
+      "properties": {
+        "kpi_id": { "type": "string", "pattern": "^kpi-\\d{3}$" },
+        "name": { "type": "string", "minLength": 1 },
+        "definition": { "type": "string", "minLength": 1 },
+        "target": { "type": "string", "minLength": 1 },
+        "cadence": {
+          "type": "string",
+          "enum": ["weekly", "monthly", "quarterly", "monthly_or_quarterly", "annual", "event_driven"]
+        },
+        "owner_role": { "type": "string", "minLength": 1 }
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["authority_id", "decision", "scope", "approvers"],
+      "properties": {
+        "authority_id": { "type": "string", "pattern": "^auth-\\d{3}$" },
+        "decision": { "type": "string", "minLength": 1 },
+        "scope": { "type": "string", "minLength": 1 },
+        "approvers": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "constraints": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}

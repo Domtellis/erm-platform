@@ -1,0 +1,26 @@
+classDiagram
+class Risk
+class IndicatorDefinition
+class DataFeed
+class ThresholdRule
+class ToleranceThreshold
+class Alert
+class BreachCase
+class MitigationAction
+class EscalationRule
+IndicatorDefinition "1" --> "1..*" Risk : monitors
+Risk "0..*" --> "0..*" IndicatorDefinition : monitoredBy
+DataFeed "1..*" --> "1..*" IndicatorDefinition : feeds
+IndicatorDefinition "1..*" --> "1..*" DataFeed : fedBy
+IndicatorDefinition "1" --> "1..*" ThresholdRule : hasThresholdRules
+ThresholdRule "1" --> "1" IndicatorDefinition : configuredFor
+ToleranceThreshold "0..*" --> "0..*" IndicatorDefinition : governs
+IndicatorDefinition "0..*" --> "0..*" ToleranceThreshold : governedBy
+IndicatorDefinition "1" --> "0..*" Alert : triggers
+Alert "1" --> "1" IndicatorDefinition : originatesFrom
+Alert "0..*" --> "0..1" BreachCase : mayOpen
+BreachCase "1" --> "1..*" Alert : triggeredBy
+EscalationRule "1" --> "0..*" BreachCase : routes
+BreachCase "1" --> "1" EscalationRule : routedBy
+BreachCase "1" --> "0..*" MitigationAction : contains
+MitigationAction "1" --> "1" BreachCase : belongsTo

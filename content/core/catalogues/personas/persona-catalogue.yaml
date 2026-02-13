@@ -1,0 +1,305 @@
+schema_version: "1.0"
+catalogue_id: "persona_catalogue"
+product_id: "erm_platform"
+generated_date: "2026-02-03"
+conventions:
+  id_format: "per-###"
+  role_model: "three_lines"
+  value_stream_ids: ["VS-00","VS-01","VS-02","VS-03","VS-04","VS-05","VS-06","VS-07","VS-08","VS-09"]
+
+value_streams:
+  VS-00: { name: "Risk Appetite, Criteria, and Decision Guardrails" }
+  VS-01: { name: "Risk Sensing" }
+  VS-02: { name: "Risk Identification" }
+  VS-03: { name: "Risk Analysis" }
+  VS-04: { name: "Risk Evaluation and Prioritisation" }
+  VS-05: { name: "Risk Treatment and Control Design" }
+  VS-06: { name: "Control Operation and Assurance" }
+  VS-07: { name: "Risk Monitoring" }
+  VS-08: { name: "Risk Reporting and Decision Support" }
+  VS-09: { name: "Learnings - Incidents and Near-Miss" }
+
+personas:
+  - persona_id: "per-001"
+    name: "Board / ExCo Member"
+    short_name: "board_exco"
+    line_of_defense: "governance"
+    primary_value_streams: ["VS-00","VS-04","VS-08"]
+    secondary_value_streams: ["VS-07","VS-09"]
+    goals:
+      - "Approve risk appetite and guardrails; ensure consistent decisions and escalations."
+      - "Maintain a clear view of top risks, concentrations, and material changes."
+      - "Make timely, defensible accept/avoid/fund decisions with traceability."
+    kpis:
+      - kpi_id: "kpi-001"
+        name: "board_pack_on_time_rate"
+        definition: "% governance cycles where board pack is signed off by deadline"
+        target: ">= 95%"
+        cadence: "monthly_or_quarterly"
+        owner_role: "risk_reporting_owner"
+      - kpi_id: "kpi-002"
+        name: "decision_latency"
+        definition: "median time from decision_ask_created to decision_approved"
+        target: "<= 10 business days (cadence-dependent)"
+        cadence: "monthly"
+        owner_role: "enterprise_risk_lead"
+      - kpi_id: "kpi-003"
+        name: "decision_traceability_coverage"
+        definition: "% decisions with complete links to risks, evidence, and actions"
+        target: ">= 98%"
+        cadence: "monthly"
+        owner_role: "risk_reporting_owner"
+    authorities:
+      - authority_id: "auth-001"
+        decision: "approve_risk_appetite_statement"
+        scope: "enterprise"
+        approvers: ["board"]
+        constraints: ["must_reference_criteria_model_version"]
+      - authority_id: "auth-002"
+        decision: "approve_top_risk_set_and_funding"
+        scope: "enterprise_portfolio"
+        approvers: ["exco"]
+        constraints: ["requires_risk_committee_recommendation_for_material_changes"]
+      - authority_id: "auth-003"
+        decision: "approve_external_disclosure"
+        scope: "regulatory_customer"
+        approvers: ["legal_compliance"]
+        constraints: ["requires_data_certification_gate"]
+    workflows_touched: ["wf-reporting-disclosure","wf-indicators-breaches"]
+    data_objects_most_used:
+      - "risk_appetite_statement"
+      - "risk_criteria_model_version"
+      - "decision_gate"
+      - "decision_ledger_entry"
+      - "board_pack"
+      - "disclosure"
+
+  - persona_id: "per-002"
+    name: "Enterprise Risk Lead / CRO Function"
+    short_name: "risk_lead"
+    line_of_defense: "second_line"
+    primary_value_streams: ["VS-00","VS-03","VS-04","VS-08"]
+    secondary_value_streams: ["VS-01","VS-02","VS-05","VS-06","VS-07","VS-09"]
+    goals:
+      - "Operate a consistent ERM system: standards, QA, and challenge."
+      - "Ensure evidence-based assessments and defensible prioritisation."
+      - "Reduce rework and improve portfolio freshness and decision quality."
+    kpis:
+      - kpi_id: "kpi-010"
+        name: "assessment_rework_rate_after_challenge"
+        definition: "% assessments returned for rework after second-line challenge"
+        target: "<= 15%"
+        cadence: "monthly"
+        owner_role: "enterprise_risk_lead"
+      - kpi_id: "kpi-011"
+        name: "evidence_coverage_rate"
+        definition: "% material assessments meeting evidence minimums"
+        target: ">= 95%"
+        cadence: "monthly"
+        owner_role: "enterprise_risk_lead"
+      - kpi_id: "kpi-012"
+        name: "decision_consistency_index"
+        definition: "internal index measuring scoring consistency across BUs and cycles"
+        target: "improving trend quarter-on-quarter"
+        cadence: "quarterly"
+        owner_role: "enterprise_risk_lead"
+      - kpi_id: "kpi-013"
+        name: "surprise_event_rate"
+        definition: "count of material events not represented in emerging risk / portfolio views"
+        target: "downward trend"
+        cadence: "quarterly"
+        owner_role: "enterprise_risk_lead"
+    authorities:
+      - authority_id: "auth-010"
+        decision: "approve_criteria_scoring_model_version"
+        scope: "enterprise"
+        approvers: ["risk_committee"]
+        constraints: ["versioned_change_control_required","backward_compatibility_notes_required"]
+      - authority_id: "auth-011"
+        decision: "approve_method_selection_for_material_risks"
+        scope: "material_risks"
+        approvers: ["enterprise_risk_lead"]
+        constraints: ["method_tier_must_match_materiality_policy"]
+      - authority_id: "auth-012"
+        decision: "approve_issue_severity_and_sla_assignment"
+        scope: "control_issues"
+        approvers: ["second_line_assurance"]
+        constraints: ["requires_sod_enforced"]
+    workflows_touched:
+      ["wf-risk","wf-risk-assessment","wf-treatment-plan","wf-control-assurance","wf-indicators-breaches","wf-reporting-disclosure","wf-incident-learning"]
+    data_objects_most_used:
+      - "risk"
+      - "risk_assessment"
+      - "evidence_item"
+      - "treatment_plan"
+      - "control"
+      - "issue"
+      - "indicator_definition"
+      - "breach_case"
+      - "decision_ledger_entry"
+
+  - persona_id: "per-003"
+    name: "Business Unit Risk Owner"
+    short_name: "bu_risk_owner"
+    line_of_defense: "first_line"
+    primary_value_streams: ["VS-02","VS-03","VS-05","VS-07"]
+    secondary_value_streams: ["VS-01","VS-04","VS-08","VS-09"]
+    goals:
+      - "Maintain accurate, owned risk records and assessments."
+      - "Implement treatments that move residual risk and meet acceptance conditions."
+      - "Respond quickly to breaches and operational evidence."
+    kpis:
+      - kpi_id: "kpi-020"
+        name: "time_identification_to_triage"
+        definition: "median time from risk_created to triage_completed"
+        target: "<= 10 business days"
+        cadence: "monthly"
+        owner_role: "bu_risk_owner"
+      - kpi_id: "kpi-021"
+        name: "treatment_on_time_delivery_rate"
+        definition: "% treatment actions delivered by due_date"
+        target: ">= 85%"
+        cadence: "monthly"
+        owner_role: "delivery_owner"
+      - kpi_id: "kpi-022"
+        name: "appetite_breach_remediation_time"
+        definition: "median time from breach_confirmed to mitigation_verified"
+        target: "improving trend"
+        cadence: "monthly"
+        owner_role: "bu_risk_owner"
+    authorities:
+      - authority_id: "auth-020"
+        decision: "accept_residual_within_delegated_authority"
+        scope: "bu_scope"
+        approvers: ["bu_risk_owner"]
+        constraints: ["must_record_conditions_and_expiry_if_applicable","must_reference_evidence"]
+      - authority_id: "auth-021"
+        decision: "propose_treatment_and_funding_request"
+        scope: "risk_treatment"
+        approvers: ["portfolio_governance_or_exco"]
+        constraints: ["requires_target_residual_and_verification_plan"]
+    workflows_touched: ["wf-risk","wf-risk-assessment","wf-treatment-plan","wf-indicators-breaches","wf-incident-learning"]
+    data_objects_most_used: ["risk","risk_assessment","treatment_plan","mitigation_action","breach_case","incident","capa_plan","evidence_item"]
+
+  - persona_id: "per-004"
+    name: "Control Owner / Control Assurance Lead"
+    short_name: "control_owner_assurance"
+    line_of_defense: "mixed_first_and_second_line"
+    primary_value_streams: ["VS-05","VS-06"]
+    secondary_value_streams: ["VS-03","VS-07","VS-08"]
+    goals:
+      - "Execute and evidence controls with provenance; minimise audit fire drills."
+      - "Manage control exceptions and issues; validate closure independently."
+      - "Feed control health into risk posture and monitoring."
+    kpis:
+      - kpi_id: "kpi-030"
+        name: "evidence_automation_rate"
+        definition: "% control executions with evidence auto-ingested + provenance complete"
+        target: ">= 70% (maturing to 90%)"
+        cadence: "quarterly"
+        owner_role: "control_assurance_lead"
+      - kpi_id: "kpi-031"
+        name: "issue_remediation_cycle_time"
+        definition: "median time from issue_opened to issue_closed_verified"
+        target: "<= 45 days (severity dependent)"
+        cadence: "monthly"
+        owner_role: "control_owner"
+      - kpi_id: "kpi-032"
+        name: "repeat_finding_rate"
+        definition: "% audit findings repeated within 12 months"
+        target: "<= 5%"
+        cadence: "quarterly"
+        owner_role: "control_assurance_lead"
+    authorities:
+      - authority_id: "auth-030"
+        decision: "approve_control_design"
+        scope: "control_library"
+        approvers: ["control_owner","second_line_assurance"]
+        constraints: ["evidence_requirements_mandatory","testing_method_mandatory"]
+      - authority_id: "auth-031"
+        decision: "approve_control_exception"
+        scope: "control_execution"
+        approvers: ["delegated_authority"]
+        constraints: ["timeboxed","requires_rationale_and_risk_link"]
+    workflows_touched: ["wf-control-assurance","wf-treatment-plan","wf-risk-assessment","wf-reporting-disclosure"]
+    data_objects_most_used: ["control","control_execution","evidence_item","control_test","issue","attestation","audit_pack"]
+
+  - persona_id: "per-005"
+    name: "Incident & Monitoring Lead (Ops / SOC / ITSM)"
+    short_name: "incident_monitoring_lead"
+    line_of_defense: "first_line"
+    primary_value_streams: ["VS-07","VS-09"]
+    secondary_value_streams: ["VS-01","VS-03","VS-06"]
+    goals:
+      - "Detect, triage, and escalate breaches quickly and correctly."
+      - "Coordinate mitigations with clear ownership and SLAs."
+      - "Run the learning loop: RCA → CAPA → updates to risks/controls/KRIs."
+    kpis:
+      - kpi_id: "kpi-040"
+        name: "time_to_acknowledge_alert"
+        definition: "median time from alert_new to alert_triaged"
+        target: "<= 30 minutes (tier dependent)"
+        cadence: "weekly"
+        owner_role: "incident_monitoring_lead"
+      - kpi_id: "kpi-041"
+        name: "false_alert_rate"
+        definition: "% alerts closed as false_positive"
+        target: "downward trend"
+        cadence: "monthly"
+        owner_role: "incident_monitoring_lead"
+      - kpi_id: "kpi-042"
+        name: "recurrence_rate"
+        definition: "% incidents of similar class recurring within 90 days"
+        target: "downward trend"
+        cadence: "monthly"
+        owner_role: "incident_monitoring_lead"
+    authorities:
+      - authority_id: "auth-040"
+        decision: "classify_incident_severity"
+        scope: "incident_management"
+        approvers: ["ops_lead","risk_function_for_material_events"]
+        constraints: ["requires_event_taxonomy","requires_linkage_to_services_where_known"]
+      - authority_id: "auth-041"
+        decision: "launch_immediate_mitigation"
+        scope: "operational_response"
+        approvers: ["ops_lead"]
+        constraints: ["post_hoc_governance_required_if_emergency_override_used"]
+    workflows_touched: ["wf-indicators-breaches","wf-incident-learning","wf-risk"]
+    data_objects_most_used: ["indicator_definition","alert","breach_case","mitigation_action","incident","rca","capa_plan","evidence_item"]
+
+  - persona_id: "per-006"
+    name: "Compliance / Legal + Data Owner"
+    short_name: "compliance_legal_data_owner"
+    line_of_defense: "second_line"
+    primary_value_streams: ["VS-08"]
+    secondary_value_streams: ["VS-00","VS-06"]
+    goals:
+      - "Ensure disclosures are approved, consistent, and defensible."
+      - "Run data certification gates for official reporting."
+      - "Maintain audit-ready traceability and lineage."
+    kpis:
+      - kpi_id: "kpi-050"
+        name: "certification_first_pass_rate"
+        definition: "% reporting cycles passing data certification without rework"
+        target: ">= 95%"
+        cadence: "monthly_or_quarterly"
+        owner_role: "data_owner"
+      - kpi_id: "kpi-051"
+        name: "disclosure_cycle_time"
+        definition: "median time from disclosure_draft to disclosure_released"
+        target: "policy-defined"
+        cadence: "monthly"
+        owner_role: "legal_compliance"
+    authorities:
+      - authority_id: "auth-050"
+        decision: "approve_external_disclosure"
+        scope: "regulatory_customer"
+        approvers: ["legal_compliance"]
+        constraints: ["must_pass_data_certification","must_have_complete_decision_traceability"]
+      - authority_id: "auth-051"
+        decision: "certify_reporting_dataset"
+        scope: "reporting"
+        approvers: ["data_owner"]
+        constraints: ["one_version_of_truth_validation_mandatory","lineage_complete_required"]
+    workflows_touched: ["wf-reporting-disclosure","wf-control-assurance"]
+    data_objects_most_used: ["board_pack","disclosure","decision_ledger_entry","traceability_graph","evidence_item","audit_event"]

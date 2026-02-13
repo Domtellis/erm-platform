@@ -1,0 +1,46 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  schemas  = ["decisioning"]
+}
+
+model Decision {
+  id              String     @id @default(uuid())
+  breach_case_id  String
+  decision_type   String
+  rationale       String
+  status          String     @default("pending")
+  submitted_by    String
+  created_at      DateTime   @default(now())
+  approvals       Approval[]
+
+  @@schema("decisioning")
+}
+
+model Approval {
+  id              String   @id @default(uuid())
+  decision_id     String
+  decision        Decision @relation(fields: [decision_id], references: [id])
+  approver_user_id String
+  approver_role   String
+  status          String   @default("approved")
+  approved_at     DateTime @default(now())
+  sod_check_passed Boolean
+
+  @@schema("decisioning")
+}
+
+model Outbox {
+  id              String   @id @default(uuid())
+  type            String
+  payload         Json
+  occurred_at     DateTime @default(now())
+  processed_at    DateTime?
+
+  @@schema("decisioning")
+}

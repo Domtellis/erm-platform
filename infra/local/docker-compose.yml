@@ -1,0 +1,95 @@
+services:
+  # Event Bus (Redpanda - Kafka compatible)
+  redpanda:
+    image: docker.redpanda.com/redpandadata/redpanda:v23.2.19
+    container_name: erm-redpanda
+    command:
+      - redpanda start
+      - --overprovisioned
+      - --smp 1
+      - --memory 1G
+      - --reserve-memory 0M
+      - --node-id 0
+      - --check=false
+      - --kafka-addr PLAINTEXT://0.0.0.0:29092,OUTSIDE://0.0.0.0:9092
+      - --advertise-kafka-addr PLAINTEXT://redpanda:29092,OUTSIDE://localhost:9092
+    ports:
+      - "9092:9092"
+      - "9644:9644"
+    healthcheck:
+      test: [ "CMD-SHELL", "rpk cluster info" ]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+
+  # Database (Simplified Trust Auth)
+  postgres:
+    image: postgres:15-alpine
+    container_name: erm-postgres
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Observability (OTel Collector)
+  otel-collector:
+    image: otel/opentelemetry-collector:0.88.0
+    container_name: erm-otel-collector
+    volumes:
+      - ../../observability/otel/collector-config.yaml:/etc/otel-collector-config.yaml
+    command: [ "--config=/etc/otel-collector-config.yaml" ]
+    ports:
+      - "4317:4317" # OTLP gRPC
+      - "4318:4318" # OTLP HTTP
+    depends_on:
+      - jaeger
+
+  # Distributed Tracing (Jaeger)
+  jaeger:
+    image: jaegertracing/all-in-one:1.50
+    container_name: erm-jaeger
+    ports:
+      - "16686:16686" # UI
+      - "14268:14268"
+
+  # Policy Engine (OPA)
+  opa:
+    image: openpolicyagent/opa:latest
+    container_name: erm-opa
+    volumes:
+      - ../../policy/opa:/policy
+    command:
+      - "run"
+      - "--server"
+      - "--log-level=debug"
+      - "--addr"
+      - ":8181"
+      - "/policy"
+    ports:
+      - "8181:8181"
+
+  # Identity Provider (Keycloak)
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0.1
+    container_name: erm-keycloak
+    command: start-dev --import-realm
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
+      KC_DB_USERNAME: postgres
+      KC_DB_PASSWORD: password
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      KC_HEALTH_ENABLED: "true"
+    volumes:
+      - ../../infra/local/keycloak:/opt/keycloak/data/import
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy

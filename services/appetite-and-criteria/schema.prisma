@@ -1,0 +1,36 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  schemas  = ["appetite"]
+}
+
+model AppetiteStatement {
+  id              String       @id @default(uuid())
+  title           String
+  description     String
+  category        String
+  version         String
+  is_active       Boolean      @default(true)
+  created_at      DateTime     @default(now())
+  updated_at      DateTime     @updatedAt
+  thresholds      Threshold[]
+
+  @@schema("appetite")
+}
+
+model Threshold {
+  id              String             @id @default(uuid())
+  appetite_id     String
+  appetite        AppetiteStatement  @relation(fields: [appetite_id], references: [id])
+  metric_name     String
+  operator        String             // e.g. ">", "<", "="
+  limit_value     Float
+  severity_mapping Json              // e.g. {"0.8": "low", "1.0": "medium", "1.2": "high"}
+
+  @@schema("appetite")
+}

@@ -1,0 +1,100 @@
+{
+  "realm": "erm-platform",
+  "enabled": true,
+  "roles": {
+    "realm": [
+      {
+        "name": "site_manager",
+        "description": "Can submit breaches"
+      },
+      {
+        "name": "risk_lead",
+        "description": "Can review low/medium severity"
+      },
+      {
+        "name": "bu_risk_owner",
+        "description": "Can approve high severity"
+      }
+    ]
+  },
+  "users": [
+    {
+      "username": "site-user-01",
+      "enabled": true,
+      "email": "site01@erm.local",
+      "firstName": "Site",
+      "lastName": "Manager",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "site_manager"
+      ]
+    },
+    {
+      "username": "risk-lead-01",
+      "enabled": true,
+      "email": "risk01@erm.local",
+      "firstName": "Risk",
+      "lastName": "Lead",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "risk_lead"
+      ]
+    },
+    {
+      "username": "bu-owner-01",
+      "enabled": true,
+      "email": "owner01@erm.local",
+      "firstName": "BU",
+      "lastName": "Owner",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "bu_risk_owner"
+      ]
+    }
+  ],
+  "clients": [
+    {
+      "clientId": "erm-web-portal",
+      "enabled": true,
+      "publicClient": true,
+      "directAccessGrantsEnabled": true,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "rootUrl": "http://localhost:5180",
+      "redirectUris": [
+        "http://localhost:5180/*"
+      ],
+      "webOrigins": [
+        "+"
+      ]
+    },
+    {
+      "clientId": "erm-backend-service",
+      "enabled": true,
+      "publicClient": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "backend-secret",
+      "serviceAccountsEnabled": true,
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false
+    }
+  ]
+}

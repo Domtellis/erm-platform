@@ -1,0 +1,42 @@
+openapi: 3.0.3
+info:
+  title: Appetite & Criteria API
+  version: 1.0.0
+  description: API for managing appetite statements and thresholds.
+paths:
+  /appetites/current:
+    get:
+      summary: Get current active appetite statements
+      parameters:
+        - name: category
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [safety]
+      responses:
+        '200':
+          description: Current active appetite
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppetiteStatement'
+components:
+  schemas:
+    AppetiteStatement:
+      type: object
+      properties:
+        appetite_statement_id: { type: string }
+        version: { type: string }
+        thresholds:
+          type: array
+          items:
+            $ref: '#/components/schemas/Threshold'
+    Threshold:
+      type: object
+      properties:
+        threshold_id: { type: string }
+        metric_name: { type: string }
+        operator: { type: string }
+        limit_value: { type: number }
+        severity_mapping: { type: object }

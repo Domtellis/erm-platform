@@ -1,0 +1,56 @@
+name: "Risk Inventory (Identification, Ownership, Traceability Links)"
+id: "30-risk-inventory"
+value_streams:
+  primary: ["VS-02"]
+owners:
+  business: ["Risk Owners (1st line)", "BU Leadership", "Risk Function (2nd line)"]
+  product: ["Product Owner - Risk Inventory"]
+  engineering: ["Domain Tech Lead - Risk Core"]
+scope:
+  in:
+    - Risk records as first-class domain objects
+    - Versioned risk statements (cause–event–impact)
+    - Materiality triage history and current triage state
+    - Assessment backlog queueing
+    - Traceability links from risks to services/assets/suppliers (and future objective/KPI targets)
+    - De-duplication/consolidation (conceptual outcome; implementation may use matching services)
+  out:
+    - Risk assessment computation (VS-03)
+    - Portfolio prioritisation/funding decisions (VS-04)
+entities:
+  primary:
+    - Risk
+    - RiskStatementVersion
+    - MaterialityTriage
+    - AssessmentBacklogItem
+    - Service
+    - Asset
+    - Supplier
+interfaces:
+  upstream:
+    - context: "20-sensing-context"
+      contracts: ["ContextPack", "EmergingRisk", "DependencyMap"]
+    - context: "95-incidents-learnings"
+      contracts: ["LessonLearned (updates)", "Incident learnings inputs"]
+  downstream:
+    - context: "40-risk-assessment"
+      contracts: ["Risk", "RiskStatementVersion", "MaterialityTriage", "AssessmentBacklogItem"]
+governance:
+  decisions_and_gates:
+    - D1: "Risk acceptance into portfolio (Risk Function)"
+    - D2: "Ownership confirmation (BU Head)"
+    - D3: "Materiality triage threshold application (per Risk Committee criteria)"
+model_invariants:
+  - "Risk has 1..* RiskStatementVersion (versioned statements)."
+  - "Risk has 0..* MaterialityTriage records; latest is the current triage."
+  - "Risk has 0..* AssessmentBacklogItem; each backlog item is for exactly 1 Risk."
+  - "Risk may link to 0..* Service/Asset/Supplier for traceability."
+versioning_and_audit:
+  versioning_strategy:
+    - "RiskStatementVersion is append-only; never overwrite prior statements."
+    - "Materiality triage changes create new triage entries; keep history."
+  audit_requirements:
+    - "Ownership changes and portfolio acceptance decisions are auditable."
+files:
+  conceptual_model: "conceptual.mmd"
+  logical_er_model: "logical-er.mmd"

@@ -1,0 +1,80 @@
+flowchart LR
+
+%% SB-01 Service Blueprint (Safety)
+%% Layers represented as lanes: Frontstage, Backstage, Systems, Data, Controls
+
+subgraph Frontstage["Frontstage (People)"]
+  IL1["Incident Lead\nCreate/Receive Safety breach"]
+  IL2["Incident Lead\nTriage: severity, location, initial impact"]
+  RL1["Risk Lead\nValidate vs Appetite/Threshold"]
+  BU1["BU Risk Owner\nApprove High severity decision"]
+  IL3["Incident Lead\nExecute action plan + capture completion evidence"]
+  RL2["Risk Lead\nClose case + export audit pack"]
+end
+
+subgraph Backstage["Backstage (Platform behaviours)"]
+  P1["Auto-assign case ID + initial state=Detected"]
+  P2["Compute SLA timers + notify stakeholders"]
+  P3["Threshold evaluation engine\n(compare measurement vs threshold)"]
+  P4["Auto-escalation rules\n(severity/threshold/delegation)"]
+  P5["Approval workflow\n(SoD enforced)"]
+  P6["Audit event emission\n(append-only timeline)"]
+  P7["Evidence policy checks\n(block transitions if missing)"]
+  P8["Audit pack generator\n(PDF/ZIP export)"]
+end
+
+subgraph Systems["Systems / Integrations"]
+  S1["Manual UI"]
+  S2["Monitoring Stub Webhook\n(breach-detected)"]
+  S3["Microsoft Teams\nNotifications"]
+  S4["Identity Provider\n(AAD/Okta)"]
+  S5["Evidence Store\n(object storage)"]
+  S6["Audit Log Store\n(append-only)"]
+end
+
+subgraph Data["Data / Entities"]
+  D1["BreachCase"]
+  D2["BreachSignal"]
+  D3["AppetiteStatementVersion + Threshold"]
+  D4["Evaluation"]
+  D5["Decision + Approval"]
+  D6["ActionItem"]
+  D7["EvidenceItem"]
+  D8["AuditEvent"]
+end
+
+subgraph Controls["Controls / Governance"]
+  C1["SoD: creator ≠ approver\nHigh severity approver=BU Risk Owner"]
+  C2["Evidence bundle required by severity"]
+  C3["Immutable audit trail for key actions"]
+  C4["Retention policy for Safety records"]
+end
+
+%% Flow connections
+S1 --> IL1
+S2 --> IL1
+IL1 --> P1 --> D1
+P1 --> D2
+
+IL2 --> P2 --> S3
+IL2 --> D1
+
+RL1 --> P3 --> D4
+P3 --> D3
+P3 --> P4
+
+P4 --> RL1
+P4 --> BU1
+
+BU1 --> P5 --> D5
+P5 --> C1
+P5 --> P6 --> D8 --> S6
+
+IL3 --> D6
+IL3 --> D7 --> S5
+P7 --> C2
+P7 --> P6
+
+RL2 --> P8 --> C3
+P8 --> C4
+P8 --> S1

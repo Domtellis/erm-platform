@@ -1,0 +1,17 @@
+classDiagram
+class Risk
+class TreatmentPlan
+class TreatmentAction
+class RiskAssessment
+class AcceptanceRecord
+class FundingAllocation
+TreatmentPlan "1" --> "1..*" TreatmentAction : contains
+TreatmentAction "1" --> "1" TreatmentPlan : belongsTo
+TreatmentPlan "1" --> "1" Risk : reduces
+Risk "1" --> "0..*" TreatmentPlan : hasTreatments
+AcceptanceRecord "1" --> "1" RiskAssessment : acceptsResidualOf
+RiskAssessment "1" --> "0..*" AcceptanceRecord : mayHaveAcceptance
+FundingAllocation "0..1" --> "0..*" TreatmentPlan : funds
+TreatmentPlan "0..*" --> "0..1" FundingAllocation : fundedBy
+
+

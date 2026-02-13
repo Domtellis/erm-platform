@@ -1,0 +1,13 @@
+classDiagram
+class Risk
+class RiskPortfolioView
+class DecisionLedgerEntry
+class FundingAllocation
+class TreatmentPlan
+RiskPortfolioView "1" --> "0..*" Risk : includes
+Risk "0..*" --> "0..*" RiskPortfolioView : appearsIn
+DecisionLedgerEntry "1" --> "0..1" Risk : decidesOn
+Risk "1" --> "0..*" DecisionLedgerEntry : hasDecisionHistory
+FundingAllocation "1" --> "0..*" TreatmentPlan : funds
+TreatmentPlan "0..1" --> "0..1" FundingAllocation : fundedBy
+

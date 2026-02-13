@@ -1,0 +1,35 @@
+id: VS-03-risk-analysis
+name: "VS-03 \u2014 Risk Analysis"
+short_description: Produce evidence-based understanding of exposure and drivers to
+  support prioritisation and treatment design.
+owner:
+- Risk Owners
+- Risk Function
+- Finance
+stakeholders:
+- Risk Owners
+- Risk Function
+- Finance
+- Security/Ops SMEs
+- ExCo/Board (for material risks)
+inputs:
+- Risk records (VS-02)
+- appetite/criteria (VS-00)
+- control data (VS-06)
+- KRI data (VS-07)
+- loss/incidents (VS-09).
+outputs:
+- Inherent/residual ratings
+- scenario analysis artefacts
+- quantified exposure bands
+- assumptions and evidence logs.
+triggers:
+- Material risks
+- critical service reviews
+- board deep dives
+- initiative gates
+- appetite breaches.
+bounded_contexts: []
+dependencies: []
+last_updated: '2026-02-02'
+source_file: docs/value-architecture/value-streams/VS-03-risk-analysis.md

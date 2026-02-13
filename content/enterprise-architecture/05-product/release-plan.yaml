@@ -1,0 +1,45 @@
+version: 0.1.1
+product: ai-enabled-erm-platform
+
+releases:
+  - name: MVP
+    id: r-mvp
+    objective: "Run SB-01 end-to-end for BU-01 Safety breaches with governance-grade auditability."
+    scope_feature_ids:
+      - F-01-01
+      - F-01-02
+      - F-01-03
+      - F-02-01
+      - F-02-02
+      - F-03-01
+      - F-03-02
+      - F-03-03
+      - F-04-01
+      - F-04-02
+      - F-04-03
+      - F-04-04
+      - F-05-01
+      - F-05-02
+    rollout:
+      bu_ids: [BU-01]
+      training: "ops/pilot/sb-01/onboarding.md"
+
+  - name: v1
+    id: r-v1
+    objective: "Expand operational adoption and reduce manual effort with real integrations and richer reporting."
+    scope_feature_ids:
+      - F-06-01  # Real monitoring connector
+      - F-06-02  # Optional ticketing integration
+      - F-07-01  # SLA dashboards + trends
+      - F-07-02  # Templates + guided forms
+      - F-07-03  # Search/reporting improvements
+
+  - name: v1.1
+    id: r-v1-1
+    objective: "Scale repeatability and automation across BUs and categories."
+    scope_feature_ids:
+      - F-08-01  # Rules-based auto escalation templates
+      - F-08-02  # Action plan templates
+      - F-08-03  # Bulk rollout tooling
+      - F-08-04  # Cross-BU reporting
+

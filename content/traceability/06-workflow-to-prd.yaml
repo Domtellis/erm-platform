@@ -1,0 +1,79 @@
+schema_version: "1.0"
+links:
+  - link_id: "L-WF-PRD-0001"
+    workflow_id: "WF-APP-001"
+    prd_id: "PRD-001"
+    contribution: "primary"
+    confidence: 0.95
+    rationale: "Appetite authoring workflow is specified in PRD-001."
+  - link_id: "L-WF-PRD-0002"
+    workflow_id: "WF-APP-002"
+    prd_id: "PRD-001"
+    contribution: "primary"
+    confidence: 0.95
+    rationale: "Tolerance thresholds are part of appetite/criteria guardrails."
+  - link_id: "L-WF-PRD-0003"
+    workflow_id: "WF-APP-003"
+    prd_id: "PRD-001"
+    contribution: "supporting"
+    confidence: 0.80
+    rationale: "Waivers/exceptions are governed as part of criteria management."
+
+  - link_id: "L-WF-PRD-0004"
+    workflow_id: "WF-GOV-001"
+    prd_id: "PRD-002"
+    contribution: "primary"
+    confidence: 0.95
+    rationale: "Committee cadence/pack/decisions/actions are specified in PRD-002."
+
+  - link_id: "L-WF-PRD-0005"
+    workflow_id: "WF-ACT-001"
+    prd_id: "PRD-003"
+    contribution: "primary"
+    confidence: 0.95
+    rationale: "Actions and verified closure are core to PRD-003."
+  - link_id: "L-WF-PRD-0006"
+    workflow_id: "WF-CTL-001"
+    prd_id: "PRD-003"
+    contribution: "supporting"
+    confidence: 0.80
+    rationale: "Controls/testing are packaged alongside actions/evidence."
+
+  - link_id: "L-WF-PRD-0007"
+    workflow_id: "WF-MON-001"
+    prd_id: "PRD-004"
+    contribution: "primary"
+    confidence: 0.95
+    rationale: "KRI monitoring capability is specified in PRD-004."
+  - link_id: "L-WF-PRD-0008"
+    workflow_id: "WF-MON-002"
+    prd_id: "PRD-004"
+    contribution: "primary"
+    confidence: 0.95
+    rationale: "Breach triage and escalation are specified in PRD-004."
+
+  - link_id: "L-WF-PRD-0009"
+    workflow_id: "WF-AUD-001"
+    prd_id: "PRD-005"
+    contribution: "primary"
+    confidence: 0.95
+    rationale: "Evidence request intake/collection/packaging is specified in PRD-005."
+
+  - link_id: "L-WF-PRD-0010"
+    workflow_id: "WF-PLT-001"
+    prd_id: "PRD-006"
+    contribution: "primary"
+    confidence: 0.95
+    rationale: "Tenant provisioning is a platform foundation in PRD-006."
+  - link_id: "L-WF-PRD-0011"
+    workflow_id: "WF-PLT-002"
+    prd_id: "PRD-006"
+    contribution: "primary"
+    confidence: 0.90
+    rationale: "Access model and LoD views are specified in PRD-006."
+  - link_id: "L-WF-PRD-0012"
+    workflow_id: "WF-PLT-003"
+    prd_id: "PRD-006"
+    contribution: "supporting"
+    confidence: 0.85
+    rationale: "Everything-as-code change control is specified in PRD-006."

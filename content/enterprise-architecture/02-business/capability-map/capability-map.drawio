@@ -1,0 +1,427 @@
+graph TD
+
+%% L0
+L0["L0: AI-Enabled Enterprise Risk Management Platform"]
+
+%% ---------------------------
+%% L1-01 Risk Governance and Operating Model
+L1_01["L1-01: Risk Governance and Operating Model"]
+L0 --> L1_01
+
+L2_01_01["L2-01.01: Governance structures and decision rights"]
+L2_01_02["L2-01.02: ERM policy, standards, and methodology"]
+L2_01_03["L2-01.03: Taxonomy and enterprise structures"]
+L1_01 --> L2_01_01
+L1_01 --> L2_01_02
+L1_01 --> L2_01_03
+
+L3_01_01_01["L3: Committee and cadence management (agenda packs, actions, minutes, decision log)"]
+L3_01_01_02["L3: Escalation and authority matrix (thresholds, approvals, delegations)"]
+L3_01_01_03["L3: Three-lines alignment (role demarcation, handoffs, oversight views)"]
+L2_01_01 --> L3_01_01_01
+L2_01_01 --> L3_01_01_02
+L2_01_01 --> L3_01_01_03
+
+L3_01_02_01["L3: Policy library management (versioning, exceptions, attestations)"]
+L3_01_02_02["L3: Method configuration (risk scales, scoring logic, criteria definitions)"]
+L3_01_02_03["L3: ERM lifecycle definition (states, workflow, SLAs)"]
+L2_01_02 --> L3_01_02_01
+L2_01_02 --> L3_01_02_02
+L2_01_02 --> L3_01_02_03
+
+L3_01_03_01["L3: Risk taxonomy management (categories, sub-types, mapping rules)"]
+L3_01_03_02["L3: Organisational modelling (legal entities, BUs, regions, functions)"]
+L3_01_03_03["L3: Accountability modelling (risk owners, control owners, approvers)"]
+L2_01_03 --> L3_01_03_01
+L2_01_03 --> L3_01_03_02
+L2_01_03 --> L3_01_03_03
+
+%% ---------------------------
+%% L1-02 Risk Appetite, Risk Criteria, and Decision Guardrails
+L1_02["L1-02: Risk Appetite, Risk Criteria, and Decision Guardrails"]
+L0 --> L1_02
+
+L2_02_01["L2-02.01: Appetite and tolerance definition"]
+L2_02_02["L2-02.02: Risk criteria and evaluation rules"]
+L2_02_03["L2-02.03: Decision gating and approvals"]
+L1_02 --> L2_02_01
+L1_02 --> L2_02_02
+L1_02 --> L2_02_03
+
+L3_02_01_01["L3: Appetite statements by risk class (financial, cyber, safety, compliance, resilience)"]
+L3_02_01_02["L3: Thresholds and limits (tolerances, triggers, early warning bands)"]
+L3_02_01_03["L3: Conditional appetite rules (by geography, customer segment, product line)"]
+L2_02_01 --> L3_02_01_01
+L2_02_01 --> L3_02_01_02
+L2_02_01 --> L3_02_01_03
+
+L3_02_02_01["L3: Impact/likelihood scales (incl. velocity, persistence, detectability)"]
+L3_02_02_02["L3: Scoring model management (qualitative, semi-quant, quant)"]
+L3_02_02_03["L3: Acceptability rules (acceptable / treat / avoid / transfer)"]
+L2_02_02 --> L3_02_02_01
+L2_02_02 --> L3_02_02_02
+L2_02_02 --> L3_02_02_03
+
+L3_02_03_01["L3: Risk-based stage gates (investment, architecture, go-live, procurement)"]
+L3_02_03_02["L3: Exception handling (waivers, time-bound approvals, compensating controls)"]
+L3_02_03_03["L3: Risk acceptance management (sign-off, expiry, conditions, renewals)"]
+L2_02_03 --> L3_02_03_01
+L2_02_03 --> L3_02_03_02
+L2_02_03 --> L3_02_03_03
+
+%% ---------------------------
+%% L1-03 Risk Sensing and Context Intelligence
+L1_03["L1-03: Risk Sensing and Context Intelligence"]
+L0 --> L1_03
+
+L2_03_01["L2-03.01: External risk intelligence"]
+L2_03_02["L2-03.02: Internal signal capture"]
+L2_03_03["L2-03.03: AI-enabled signal processing"]
+L1_03 --> L2_03_01
+L1_03 --> L2_03_02
+L1_03 --> L2_03_03
+
+L3_03_01_01["L3: Horizon scanning (regulatory, geopolitical, macro, industry)"]
+L3_03_01_02["L3: Threat intelligence ingestion (cyber feeds, advisories)"]
+L3_03_01_03["L3: External signal triage (materiality tagging, routing)"]
+L2_03_01 --> L3_03_01_01
+L2_03_01 --> L3_03_01_02
+L2_03_01 --> L3_03_01_03
+
+L3_03_02_01["L3: Operational telemetry ingestion (availability, incidents, performance)"]
+L3_03_02_02["L3: Audit/assurance findings ingestion (issues, ratings, themes)"]
+L3_03_02_03["L3: Customer/complaint signals (voice-of-customer, service quality)"]
+L2_03_02 --> L3_03_02_01
+L2_03_02 --> L3_03_02_02
+L2_03_02 --> L3_03_02_03
+
+L3_03_03_01["L3: NLP classification and deduplication (theme extraction, clustering)"]
+L3_03_03_02["L3: Emerging risk detection (trend breaks, weak-signal surfacing)"]
+L3_03_03_03["L3: Context packs for assessments (auto-generated briefings with sources)"]
+L2_03_03 --> L3_03_03_01
+L2_03_03 --> L3_03_03_02
+L2_03_03 --> L3_03_03_03
+
+%% ---------------------------
+%% L1-04 Risk Identification and Portfolio Structuring
+L1_04["L1-04: Risk Identification and Portfolio Structuring"]
+L0 --> L1_04
+
+L2_04_01["L2-04.01: Risk intake and capture"]
+L2_04_02["L2-04.02: Dependency mapping"]
+L2_04_03["L2-04.03: Portfolio rationalisation"]
+L1_04 --> L2_04_01
+L1_04 --> L2_04_02
+L1_04 --> L2_04_03
+
+L3_04_01_01["L3: Multi-channel intake (forms, email, API, chat, ticketing)"]
+L3_04_01_02["L3: Structured risk statement builder (cause–event–impact)"]
+L3_04_01_03["L3: Ownership and accountability assignment (primary/secondary owners)"]
+L2_04_01 --> L3_04_01_01
+L2_04_01 --> L3_04_01_02
+L2_04_01 --> L3_04_01_03
+
+L3_04_02_01["L3: Link risks to objectives and KPIs (strategy alignment)"]
+L3_04_02_02["L3: Link to services/assets/processes (critical services, applications, sites)"]
+L3_04_02_03["L3: Link to third parties (suppliers, partners, outsourcers)"]
+L2_04_02 --> L3_04_02_01
+L2_04_02 --> L3_04_02_02
+L2_04_02 --> L3_04_02_03
+
+L3_04_03_01["L3: Duplicate detection (semantic similarity, consolidation workflow)"]
+L3_04_03_02["L3: Risk hierarchy (parent/child, systemic vs local)"]
+L3_04_03_03["L3: Thematic clustering (by driver, control family, business domain)"]
+L2_04_03 --> L3_04_03_01
+L2_04_03 --> L3_04_03_02
+L2_04_03 --> L3_04_03_03
+
+%% ---------------------------
+%% L1-05 Risk Assessment and Modelling
+L1_05["L1-05: Risk Assessment and Modelling"]
+L0 --> L1_05
+
+L2_05_01["L2-05.01: Risk analysis"]
+L2_05_02["L2-05.02: Quantification and scenario methods"]
+L2_05_03["L2-05.03: Assessment quality and challenge"]
+L2_05_04["L2-05.04: AI-enabled assessment acceleration"]
+L1_05 --> L2_05_01
+L1_05 --> L2_05_02
+L1_05 --> L2_05_03
+L1_05 --> L2_05_04
+
+L3_05_01_01["L3: Inherent risk assessment (before controls)"]
+L3_05_01_02["L3: Control effectiveness assessment (design vs operating)"]
+L3_05_01_03["L3: Residual risk calculation (modelled and explainable)"]
+L2_05_01 --> L3_05_01_01
+L2_05_01 --> L3_05_01_02
+L2_05_01 --> L3_05_01_03
+
+L3_05_02_01["L3: Scenario definition (stress tests, tail events, plausible severe)"]
+L3_05_02_02["L3: Loss modelling (ranges, distributions, Monte Carlo hooks where needed)"]
+L3_05_02_03["L3: Sensitivity/assumption management (assumption logs, dominance analysis)"]
+L2_05_02 --> L3_05_02_01
+L2_05_02 --> L3_05_02_02
+L2_05_02 --> L3_05_02_03
+
+L3_05_03_01["L3: Second-line review workflow (challenge, revise, approve)"]
+L3_05_03_02["L3: Evidence management (citations, attachments, data provenance)"]
+L3_05_03_03["L3: Assessment QA scoring (completeness, rationale quality, consistency)"]
+L2_05_03 --> L3_05_03_01
+L2_05_03 --> L3_05_03_02
+L2_05_03 --> L3_05_03_03
+
+L3_05_04_01["L3: Drafting assistance (risk narratives, drivers, impacts)"]
+L3_05_04_02["L3: Control suggestion and mapping (recommended control families)"]
+L3_05_04_03["L3: Explainable scoring rationales (why rating changed; what drove it)"]
+L2_05_04 --> L3_05_04_01
+L2_05_04 --> L3_05_04_02
+L2_05_04 --> L3_05_04_03
+
+%% ---------------------------
+%% L1-06 Risk Evaluation and Portfolio Optimisation
+L1_06["L1-06: Risk Evaluation and Portfolio Optimisation"]
+L0 --> L1_06
+
+L2_06_01["L2-06.01: Appetite/criteria evaluation"]
+L2_06_02["L2-06.02: Portfolio views and concentration"]
+L2_06_03["L2-06.03: Risk decisioning"]
+L1_06 --> L2_06_01
+L1_06 --> L2_06_02
+L1_06 --> L2_06_03
+
+L3_06_01_01["L3: Automated breach detection (against appetite/thresholds)"]
+L3_06_01_02["L3: Prioritisation logic (materiality, velocity, concentration, confidence)"]
+L3_06_01_03["L3: Escalation triggers (board/ExCo thresholds, critical service flags)"]
+L2_06_01 --> L3_06_01_01
+L2_06_01 --> L3_06_01_02
+L2_06_01 --> L3_06_01_03
+
+L3_06_02_01["L3: Heatmaps and distribution analytics (by BU, region, risk class)"]
+L3_06_02_02["L3: Concentration risk analysis (single points of failure, systemic clusters)"]
+L3_06_02_03["L3: Portfolio what-if (impact of treatments, funding scenarios)"]
+L2_06_02 --> L3_06_02_01
+L2_06_02 --> L3_06_02_02
+L2_06_02 --> L3_06_02_03
+
+L3_06_03_01["L3: Decision log and rationale (traceability to evidence)"]
+L3_06_03_02["L3: Funding alignment (link to initiatives, CAPEX/OPEX)"]
+L3_06_03_03["L3: Risk acceptance / transfer decisions (formalisation and controls)"]
+L2_06_03 --> L3_06_03_01
+L2_06_03 --> L3_06_03_02
+L2_06_03 --> L3_06_03_03
+
+%% ---------------------------
+%% L1-07 Risk Treatment and Control Design
+L1_07["L1-07: Risk Treatment and Control Design"]
+L0 --> L1_07
+
+L2_07_01["L2-07.01: Treatment planning"]
+L2_07_02["L2-07.02: Control library and design"]
+L2_07_03["L2-07.03: Treatment effectiveness management"]
+L2_07_04["L2-07.04: AI-enabled treatment optimisation"]
+L1_07 --> L2_07_01
+L1_07 --> L2_07_02
+L1_07 --> L2_07_03
+L1_07 --> L2_07_04
+
+L3_07_01_01["L3: Response option management (avoid/reduce/transfer/accept)"]
+L3_07_01_02["L3: Treatment backlog (epics/features/stories, prioritisation)"]
+L3_07_01_03["L3: Ownership, due dates, dependencies (delivery governance)"]
+L2_07_01 --> L3_07_01_01
+L2_07_01 --> L3_07_01_02
+L2_07_01 --> L3_07_01_03
+
+L3_07_02_01["L3: Control taxonomy (prevent/detect/correct; manual/automated)"]
+L3_07_02_02["L3: Control objectives and standards (expected evidence, frequency)"]
+L3_07_02_03["L3: Control-to-risk mapping (coverage, gaps, overlaps)"]
+L2_07_02 --> L3_07_02_01
+L2_07_02 --> L3_07_02_02
+L2_07_02 --> L3_07_02_03
+
+L3_07_03_01["L3: Post-treatment reassessment (residual risk delta)"]
+L3_07_03_02["L3: Compensating controls management (temporary mitigations)"]
+L3_07_03_03["L3: Acceptance conditions and expiry (renewal workflow)"]
+L2_07_03 --> L3_07_03_01
+L2_07_03 --> L3_07_03_02
+L2_07_03 --> L3_07_03_03
+
+L3_07_04_01["L3: Recommended treatments (based on patterns, similar risks, prior outcomes)"]
+L3_07_04_02["L3: Control gap inference (where failures cluster; missing control families)"]
+L3_07_04_03["L3: Action plan drafting (SMART actions, owners, milestones)"]
+L2_07_04 --> L3_07_04_01
+L2_07_04 --> L3_07_04_02
+L2_07_04 --> L3_07_04_03
+
+%% ---------------------------
+%% L1-08 Control Operation, Assurance, and Compliance
+L1_08["L1-08: Control Operation, Assurance, and Compliance"]
+L0 --> L1_08
+
+L2_08_01["L2-08.01: Control execution and evidence"]
+L2_08_02["L2-08.02: Control testing and monitoring"]
+L2_08_03["L2-08.03: Compliance and obligation management"]
+L2_08_04["L2-08.04: Issues, actions, and remediation"]
+L1_08 --> L2_08_01
+L1_08 --> L2_08_02
+L1_08 --> L2_08_03
+L1_08 --> L2_08_04
+
+L3_08_01_01["L3: Control execution scheduling (frequencies, calendars)"]
+L3_08_01_02["L3: Evidence capture automation (APIs, logs, snapshots)"]
+L3_08_01_03["L3: Evidence quality checks (completeness, freshness, tamper-evidence)"]
+L2_08_01 --> L3_08_01_01
+L2_08_01 --> L3_08_01_02
+L2_08_01 --> L3_08_01_03
+
+L3_08_02_01["L3: Test plans and sampling (walkthroughs, design tests, operating tests)"]
+L3_08_02_02["L3: Continuous controls monitoring (where telemetry supports it)"]
+L3_08_02_03["L3: Control performance analytics (failure trends, weak controls)"]
+L2_08_02 --> L3_08_02_01
+L2_08_02 --> L3_08_02_02
+L2_08_02 --> L3_08_02_03
+
+L3_08_03_01["L3: Obligations register (regs/standards/contractual commitments)"]
+L3_08_03_02["L3: Control-to-obligation mapping (coverage, attestations)"]
+L3_08_03_03["L3: Audit coordination (request management, PBC tracking)"]
+L2_08_03 --> L3_08_03_01
+L2_08_03 --> L3_08_03_02
+L2_08_03 --> L3_08_03_03
+
+L3_08_04_01["L3: Findings management (severity, root cause, ownership)"]
+L3_08_04_02["L3: Corrective action workflow (CAPA, validation of closure)"]
+L3_08_04_03["L3: Recurrence prevention (link issues to risks/controls, lessons learned)"]
+L2_08_04 --> L3_08_04_01
+L2_08_04 --> L3_08_04_02
+L2_08_04 --> L3_08_04_03
+
+%% ---------------------------
+%% L1-09 Risk Monitoring, KRIs, and Early Warning
+L1_09["L1-09: Risk Monitoring, KRIs, and Early Warning"]
+L0 --> L1_09
+
+L2_09_01["L2-09.01: KRI/KPI instrumentation"]
+L2_09_02["L2-09.02: Eventing and breach management"]
+L2_09_03["L2-09.03: AI-enabled anomaly detection"]
+L1_09 --> L2_09_01
+L1_09 --> L2_09_02
+L1_09 --> L2_09_03
+
+L3_09_01_01["L3: Indicator catalogue (definitions, owners, data sources)"]
+L3_09_01_02["L3: Threshold and banding (aligned to appetite)"]
+L3_09_01_03["L3: Data pipelines (batch/stream ingestion)"]
+L2_09_01 --> L3_09_01_01
+L2_09_01 --> L3_09_01_02
+L2_09_01 --> L3_09_01_03
+
+L3_09_02_01["L3: Alerts and routing (who is notified; escalation path)"]
+L3_09_02_02["L3: Breach triage workflows (classification, immediate actions)"]
+L3_09_02_03["L3: Risk rating recalibration (auto-suggested updates; human approval)"]
+L2_09_02 --> L3_09_02_01
+L2_09_02 --> L3_09_02_02
+L2_09_02 --> L3_09_02_03
+
+L3_09_03_01["L3: Leading indicator detection (trend breaks, drift, weak signals)"]
+L3_09_03_02["L3: Noise reduction (alert deduplication, suppression, correlation)"]
+L3_09_03_03["L3: Predictive risk forecasting (probable breaches, exposure trajectories)"]
+L2_09_03 --> L3_09_03_01
+L2_09_03 --> L3_09_03_02
+L2_09_03 --> L3_09_03_03
+
+%% ---------------------------
+%% L1-10 Reporting, Disclosure, and Decision Support
+L1_10["L1-10: Reporting, Disclosure, and Decision Support"]
+L0 --> L1_10
+
+L2_10_01["L2-10.01: Executive and board reporting"]
+L2_10_02["L2-10.02: Stakeholder reporting"]
+L2_10_03["L2-10.03: AI-assisted narrative and insights"]
+L1_10 --> L2_10_01
+L1_10 --> L2_10_02
+L1_10 --> L2_10_03
+
+L3_10_01_01["L3: Board risk pack generation (top risks, movements, hotspots)"]
+L3_10_01_02["L3: Thematic deep dives (systemic risks, concentrations, critical services)"]
+L3_10_01_03["L3: Decision-focused reporting (options, trade-offs, recommendations)"]
+L2_10_01 --> L3_10_01_01
+L2_10_01 --> L3_10_01_02
+L2_10_01 --> L3_10_01_03
+
+L3_10_02_01["L3: Regulator reporting packs (evidence-linked outputs)"]
+L3_10_02_02["L3: Customer assurance (questionnaires, control narratives)"]
+L3_10_02_03["L3: Internal management dashboards (role-based views)"]
+L2_10_02 --> L3_10_02_01
+L2_10_02 --> L3_10_02_02
+L2_10_02 --> L3_10_02_03
+
+L3_10_03_01["L3: Auto-summarisation with traceability (findings → narrative → evidence)"]
+L3_10_03_02["L3: Risk movement explanation (why changed; key drivers)"]
+L3_10_03_03["L3: Q&A copilot (ask “what changed since last quarter?” with citations)"]
+L2_10_03 --> L3_10_03_01
+L2_10_03 --> L3_10_03_02
+L2_10_03 --> L3_10_03_03
+
+%% ---------------------------
+%% L1-11 Incident, Loss Event, and Learning Loop
+L1_11["L1-11: Incident, Loss Event, and Learning Loop"]
+L0 --> L1_11
+
+L2_11_01["L2-11.01: Event capture and classification"]
+L2_11_02["L2-11.02: Investigation and root cause"]
+L2_11_03["L2-11.03: Learning and prevention"]
+L1_11 --> L2_11_01
+L1_11 --> L2_11_02
+L1_11 --> L2_11_03
+
+L3_11_01_01["L3: Incident/loss intake (integrations with ITSM/SOC/safety systems)"]
+L3_11_01_02["L3: Severity and impact modelling (service/customer/financial)"]
+L3_11_01_03["L3: Event-to-risk/control linkage (what failed; what was missing)"]
+L2_11_01 --> L3_11_01_01
+L2_11_01 --> L3_11_01_02
+L2_11_01 --> L3_11_01_03
+
+L3_11_02_01["L3: Root cause frameworks (5 whys, fishbone, contributing factors)"]
+L3_11_02_02["L3: Control failure analysis (design vs operating gaps)"]
+L3_11_02_03["L3: Accountability and follow-ups (actions, owners, deadlines)"]
+L2_11_02 --> L3_11_02_01
+L2_11_02 --> L3_11_02_02
+L2_11_02 --> L3_11_02_03
+
+L3_11_03_01["L3: Lessons learned library (searchable, reusable)"]
+L3_11_03_02["L3: Risk/control updates from events (feedback automation)"]
+L3_11_03_03["L3: Recurrence analytics (repeat patterns, hotspots)"]
+L2_11_03 --> L3_11_03_01
+L2_11_03 --> L3_11_03_02
+L2_11_03 --> L3_11_03_03
+
+%% ---------------------------
+%% L1-12 Risk Culture, Enablement, and Collaboration
+L1_12["L1-12: Risk Culture, Enablement, and Collaboration"]
+L0 --> L1_12
+
+L2_12_01["L2-12.01: Guidance and playbooks"]
+L2_12_02["L2-12.02: Training and certification"]
+L2_12_03["L2-12.03: Collaboration"]
+L1_12 --> L2_12_01
+L1_12 --> L2_12_02
+L1_12 --> L2_12_03
+
+L3_12_01_01["L3: Standard templates (risk statements, assessments, treatments)"]
+L3_12_01_02["L3: Role-based checklists (risk owners, control owners, project leads)"]
+L3_12_01_03["L3: Communities and clinics (peer review workflows)"]
+L2_12_01 --> L3_12_01_01
+L2_12_01 --> L3_12_01_02
+L2_12_01 --> L3_12_01_03
+
+L3_12_02_01["L3: Curriculum management (learning paths, tracking)"]
+L3_12_02_02["L3: Competency assessments (knowledge checks, role readiness)"]
+L3_12_02_03["L3: Adoption analytics (coverage, usage, quality scores)"]
+L2_12_02 --> L3_12_02_01
+L2_12_02 --> L3_12_02_02
+L2_12_02 --> L3_12_02_03
+
+L3_12_03_01["L3: Tasking and workflow (assignments, reminders, approvals)"]
+L3_12_03_02["L3: Discussion and commentary (contextual threads on risks/controls)"]
+L3_12_03_03["L3: Stakeholder consultation tracking (who was consulted, outcomes)"]
+L2_12_03 --> L3_12_03_01
+L2_12_03 --> L3_12_03_02
+L2_12_03 --> L3_12_03_03

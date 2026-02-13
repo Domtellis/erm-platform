@@ -1,0 +1,49 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  schemas  = ["monitoring"]
+}
+
+model BreachCase {
+  id              String       @id @default(uuid())
+  title           String
+  description     String?
+  site_id         String
+  metric_name     String
+  observed_value  Float
+  status          String       @default("open")
+  severity        String?
+  bu_id           String
+  created_at      DateTime     @default(now())
+  updated_at      DateTime     @updatedAt
+  evaluations     Evaluation[]
+
+  @@schema("monitoring")
+}
+
+model Evaluation {
+  id              String     @id @default(uuid())
+  breach_case_id  String
+  breach_case     BreachCase @relation(fields: [breach_case_id], references: [id])
+  result          String
+  criteria_id     String
+  evaluated_at    DateTime   @default(now())
+
+  @@schema("monitoring")
+}
+
+model Outbox {
+  id              String   @id @default(uuid())
+  type            String   // Event type (e.g. breach-detected)
+  payload         Json     // Event data
+  occurred_at     DateTime @default(now())
+  processed_at    DateTime?
+  trace_context   Json?    // Stores Trace ID & Span ID
+
+  @@schema("monitoring")
+}

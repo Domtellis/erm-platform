@@ -1,0 +1,62 @@
+openapi: 3.0.3
+info:
+  title: Decisioning & Approvals API
+  version: 1.0.0
+  description: API for managing breach response decisions and approvals.
+paths:
+  /decisions:
+    post:
+      summary: Submit a response decision
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [breach_case_id, decision_type, rationale, submitted_by]
+              properties:
+                breach_case_id: { type: string }
+                decision_type: { type: string, enum: [accept, mitigate, stop, waive] }
+                rationale: { type: string }
+                submitted_by: { type: string }
+      responses:
+        '201':
+          description: Decision recorded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  decision_id: { type: string }
+                  status: { type: string }
+  /decisions/{id}/approve:
+    post:
+      summary: Approve a decision
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [approver_user_id, approver_role]
+              properties:
+                approver_user_id: { type: string }
+                approver_role: { type: string, enum: [risk_lead, bu_risk_owner] }
+                comments: { type: string }
+      responses:
+        '200':
+          description: Decision approved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  approval_id: { type: string }
+                  status: { type: string }
+                  sod_check_passed: { type: boolean }

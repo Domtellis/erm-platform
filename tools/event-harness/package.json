@@ -1,0 +1,17 @@
+{
+    "name": "erm-event-harness",
+    "version": "1.0.0",
+    "scripts": {
+        "publish": "node scripts/publish.js",
+        "consume": "node scripts/consume.js"
+    },
+    "dependencies": {
+        "ajv": "^8.12.0",
+        "ajv-formats": "^2.1.1",
+        "axios": "^1.6.2",
+        "cloudevents": "^6.0.2",
+        "kafkajs": "^2.2.4",
+        "pg": "^8.18.0",
+        "uuid": "^9.0.1"
+    }
+}

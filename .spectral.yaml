@@ -1,0 +1,15 @@
+extends: ["spectral:oas", "spectral:asyncapi"]
+rules:
+  erm-contact-required:
+    description: All ERM APIs must have a contact email.
+    given: $.info
+    then:
+      field: contact
+      function: truthy
+  erm-v1-standard:
+    description: New contracts must be v1.
+    given: $.info.version
+    then:
+      function: pattern
+      functionOptions:
+        match: "^1\\."

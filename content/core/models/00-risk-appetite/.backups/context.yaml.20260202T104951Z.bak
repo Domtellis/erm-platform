@@ -1,0 +1,59 @@
+id: VS-00-risk-appetite
+name: "VS-00 \u2014 Risk Appetite, Criteria, and Decision Guardrails"
+short_description: Translate strategy into measurable tolerances and evaluation rules
+  to drive consistent decisions and escalations.
+owner:
+- Board/ExCo
+- Finance
+- Risk Function
+stakeholders:
+- Board/ExCo
+- Finance
+- Risk Function
+- Business Leaders
+- Portfolio/Change Governance
+- Procurement
+triggers:
+- Strategy refresh
+- market expansion
+- material incident
+- risk concentration concerns
+- regulatory change.
+inputs:
+- Strategy/OKRs
+- loss history
+- critical services
+- regulatory constraints
+- capital plans
+- risk taxonomy.
+entry_criteria: Risk classes agreed; impact/likelihood scales defined; baseline risk
+  posture available; sponsor for appetite sign-off.
+key_activities:
+- 1) Define appetite by risk class
+- 2) Convert to tolerances/thresholds
+- 3) Define risk criteria and scoring model (incl. velocity/vulnerability)
+- 4) Align to KPIs and resource allocation
+- 5) Define escalation and acceptance rules
+- 6) Embed into stage gates (investment, architecture, suppliers)
+- 7) Publish playbooks and decision templates
+- 8) Configure platform rules engine.
+decisions_and_gates:
+- D1 Appetite statement (Board)
+- D2 Criteria/scoring model version (Risk Committee)
+- D3 Gate adoption (ExCo/Change Governance)
+- D4 Exception/waiver process (Risk + Legal).
+outputs:
+- Appetite statement
+- scoring model configuration
+- escalation matrix
+- gate checklists
+- waiver workflows.
+exit_criteria: Appetite and criteria published; embedded into at least 3 critical
+  gates; breach workflow operational; first breach review executed.
+metrics: 'Flow: time to evaluate vs appetite; throughput of exceptions processed.<br>Performance:
+  % decisions using criteria; decision consistency index; stakeholder satisfaction.<br>Risk:
+  appetite breach rate; time to remediate; risk-adjusted performance indicators.'
+source_file: docs/value-architecture/value-streams/VS-00-risk-appetite.md
+last_updated: '2026-02-02'
+bounded_contexts: []
+dependencies: []

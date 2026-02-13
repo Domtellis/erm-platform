@@ -1,0 +1,10 @@
+config:
+  default: true
+  MD013: false   # line length (handled by readability + wrapping pragmatically)
+  MD033: false   # inline HTML allowed for advanced docs formatting if needed
+  MD041: true    # first line should be a top-level heading
+globs:
+  - "**/*.md"
+ignores:
+  - "node_modules/**"
+  - ".venv/**"

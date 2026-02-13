@@ -1,0 +1,66 @@
+name: "Governance & Policy (Appetite, Criteria, Guardrails)"
+id: "10-governance-policy"
+value_streams:
+  primary: ["VS-00"]
+owners:
+  business: ["Board/ExCo Sponsor", "Risk Committee Chair", "Risk Function Head"]
+  product: ["Product Owner - Governance"]
+  engineering: ["Domain Tech Lead - Governance Rules"]
+scope:
+  in:
+    - Risk appetite statements and policy cycles
+    - Appetite tolerances/thresholds (segmentable and effective-dated)
+    - Risk criteria/scoring model versions and governance
+    - Decision gates embedding appetite/criteria (investment/architecture/supplier/change)
+    - Escalation rules and routing for breaches/overrides
+    - Waiver/exception workflow including expiry/conditions and approvals
+    - Approval records and delegated authority enforcement (conceptual)
+  out:
+    - Creating/maintaining risk records and ownership (VS-02)
+    - Performing risk assessment calculations (VS-03)
+    - Monitoring pipeline implementation and alert detection (VS-07)
+    - Board pack production and external disclosures (VS-08)
+entities:
+  primary:
+    - RiskAppetiteStatement
+    - ToleranceThreshold
+    - RiskCriteriaModelVersion
+    - DecisionGate
+    - EscalationRule
+    - WaiverException
+    - Approval
+interfaces:
+  upstream:
+    - context: "Enterprise Strategy & OKRs"
+      contracts: ["Strategy/OKRs", "Critical Services", "Regulatory Constraints"]
+    - context: "Risk Taxonomy & Scales"
+      contracts: ["Risk Classes", "Impact/Likelihood Scales"]
+  downstream:
+    - context: "40-risk-assessment"
+      contracts: ["RiskCriteriaModelVersion", "ToleranceThreshold", "EscalationRule"]
+    - context: "80-monitoring-breaches"
+      contracts: ["EscalationRule", "ToleranceThreshold"]
+    - context: "30-risk-inventory"
+      contracts: ["DecisionGate", "WaiverException policy references"]
+governance:
+  decisions_and_gates:
+    - D1: "Appetite statement approval (Board)"
+    - D2: "Criteria/scoring model version approval (Risk Committee)"
+    - D3: "Gate adoption approval (ExCo/Change Governance)"
+    - D4: "Exception/waiver process approval (Risk + Legal)"
+model_invariants:
+  - "RiskAppetiteStatement defines 0..* ToleranceThreshold; each ToleranceThreshold belongs to exactly 1 RiskAppetiteStatement."
+  - "DecisionGate uses exactly 1 RiskCriteriaModelVersion at time of evaluation."
+  - "WaiverException is granted against exactly 1 DecisionGate; optional linkage to Risk is supported for traceability."
+  - "WaiverException must have 1..* Approval before it becomes effective."
+versioning_and_audit:
+  versioning_strategy:
+    - "RiskCriteriaModelVersion is immutable once approved; supersede with a new version."
+    - "ToleranceThreshold changes are effective-dated; avoid in-place edits."
+    - "DecisionGate policy changes are versioned; historical usage remains auditable."
+    - "WaiverException amendments are new records referencing the prior waiver."
+  audit_requirements:
+    - "All approvals capture who/when/authority basis; rule changes are traceable to approvals."
+files:
+  conceptual_model: "conceptual.mmd"
+  logical_er_model: "logical-er.mmd"
