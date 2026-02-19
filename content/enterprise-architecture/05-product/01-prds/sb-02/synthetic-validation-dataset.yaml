@@ -1,0 +1,825 @@
+# Synthetic Breach Validation Dataset — SB-02 AI Risk Assessment
+#
+# Purpose:  Ground-truth dataset for validating AI risk assessment accuracy.
+#           Each scenario has an expert-assigned Impact (1-5) and Likelihood (1-5)
+#           based on ISO 45001 risk matrix. AI must match these to pass validation.
+#
+# Scoring:  "Exact match" = AI Impact AND Likelihood both match expert values.
+#           "Close match" = AI within ±1 on both dimensions.
+#           Target: >70% exact match, >85% close match.
+#
+# Coverage: 25 scenarios × 5 severity levels (5 each: critical, high, medium, low, minimal)
+#           Covers 12 distinct metric types across BU-PACIFIC and BU-ATLANTIC.
+#
+# ISO 45001 Risk Matrix:
+#   Impact:     1=Negligible, 2=Minor, 3=Moderate, 4=Major, 5=Catastrophic
+#   Likelihood: 1=Rare, 2=Unlikely, 3=Possible, 4=Likely, 5=Almost Certain
+#   Risk Score: Impact × Likelihood  (1-25)
+#   Critical:   Score 20-25  (e.g. Impact 4-5 + Likelihood 4-5)
+#   High:       Score 12-19  (e.g. Impact 3-4 + Likelihood 3-4)
+#   Medium:     Score 6-11   (e.g. Impact 2-3 + Likelihood 2-3)
+#   Low:        Score 3-5    (e.g. Impact 1-2 + Likelihood 2-3)
+#   Minimal:    Score 1-2    (e.g. Impact 1 + Likelihood 1-2)
+
+scenarios:
+
+  # ============================================================
+  # CRITICAL SEVERITY (5 scenarios) — Risk Score 20-25
+  # ============================================================
+
+  - id: SYN-001
+    severity: critical
+    metric_name: wind_speed_knots
+    observed_value: 58.0
+    threshold: 35.0
+    site_id: PORT-TERM-04
+    bu_id: BU-PACIFIC
+    title: "Extreme Wind Event — Crane Operations Suspended"
+    description: >
+      Wind gusts recorded at 58 knots at Quay 4, well above the 35-knot operational
+      threshold for crane operations. All STS cranes have been halted. Two vessels
+      remain alongside with unsecured loads. Risk of crane collapse or load drop
+      onto vessel deck or personnel.
+    expert_assessment:
+      impact: 5
+      likelihood: 4
+      risk_score: 20
+      justification: >
+        Catastrophic impact: crane collapse or falling load at this wind speed can
+        cause fatalities and major structural damage (ISO 45001 Annex B — working
+        at height with mechanical equipment). Likelihood is 4 (Likely) as wind is
+        actively at 58 knots with no forecast improvement in next 2 hours.
+      iso_reference: "ISO 45001:2018 Clause 6.1.2 — Hazard identification (working at height, mechanical equipment)"
+      recommendations:
+        - Immediately evacuate all personnel from crane operating zones
+        - Secure all loose loads and equipment on quayside
+        - Do not resume operations until wind drops below 30 knots for 30 minutes
+        - Notify vessel masters to prepare for emergency departure if wind exceeds 65 knots
+
+  - id: SYN-002
+    severity: critical
+    metric_name: chemical_spill_litres
+    observed_value: 850.0
+    threshold: 50.0
+    site_id: PORT-BULK-01
+    bu_id: BU-PACIFIC
+    title: "Hazardous Chemical Spill — Bulk Terminal Berth 3"
+    description: >
+      Approximately 850 litres of sodium hydroxide (NaOH, pH 14) spilled from a
+      ruptured IBC during unloading at Berth 3. Spill has reached the storm drain.
+      Three workers in the immediate area reported eye and skin irritation. No
+      confirmed injuries yet. Environmental containment not yet deployed.
+    expert_assessment:
+      impact: 5
+      likelihood: 5
+      risk_score: 25
+      justification: >
+        Catastrophic impact: NaOH at this volume poses immediate chemical burn risk
+        to personnel, potential fatalities if inhaled in confined spaces, and
+        environmental contamination of harbour water (ISO 45001 Annex B — chemical
+        hazards). Likelihood is 5 (Almost Certain) — the spill has already occurred
+        and workers are already showing symptoms.
+      iso_reference: "ISO 45001:2018 Clause 6.1.2 — Chemical hazards; Clause 8.2 — Emergency preparedness"
+      recommendations:
+        - Immediately evacuate 50m exclusion zone
+        - Deploy HAZMAT team and chemical containment booms
+        - Arrange medical assessment for all three affected workers
+        - Notify environmental regulator within 1 hour (legal obligation)
+        - Isolate storm drain to prevent harbour contamination
+
+  - id: SYN-003
+    severity: critical
+    metric_name: worker_fatigue_index
+    observed_value: 9.8
+    threshold: 7.0
+    site_id: PORT-TERM-01
+    bu_id: BU-PACIFIC
+    title: "Critical Fatigue Index — Night Shift Crane Operators"
+    description: >
+      Fatigue monitoring system reports average fatigue index of 9.8 (scale 0-10)
+      for the 4 crane operators on the current night shift. Operators have been on
+      shift for 11 hours with only one 20-minute break. Two operators self-reported
+      microsleep episodes in the last hour. Crane operations are ongoing.
+    expert_assessment:
+      impact: 5
+      likelihood: 5
+      risk_score: 25
+      justification: >
+        Catastrophic impact: crane operator microsleep at this fatigue level creates
+        near-certain risk of load drop, crane collision, or personnel fatality
+        (ISO 45001 Annex B — human factors, fatigue). Likelihood is 5 (Almost
+        Certain) — microsleep episodes are already occurring and operations continue.
+      iso_reference: "ISO 45001:2018 Clause 6.1.2 — Human factors; Clause 8.1.3 — Management of change"
+      recommendations:
+        - Immediately suspend crane operations for all 4 affected operators
+        - Arrange relief operators or halt operations until rested crew available
+        - Conduct welfare check on all 4 operators
+        - Review shift scheduling to prevent recurrence
+        - Investigate why break schedule was not followed
+
+  - id: SYN-004
+    severity: critical
+    metric_name: fire_suppression_pressure_bar
+    observed_value: 0.2
+    threshold: 4.0
+    site_id: PORT-LOG-02
+    bu_id: BU-ATLANTIC
+    title: "Fire Suppression System Failure — Warehouse Complex"
+    description: >
+      Fire suppression system pressure has dropped to 0.2 bar (minimum operational
+      is 4.0 bar) across the main warehouse complex storing 2,400 TEU of mixed
+      cargo including Class 3 flammable liquids. System failure detected by automated
+      monitoring. Manual inspection confirms main pump failure. No fire currently
+      present but system is non-operational.
+    expert_assessment:
+      impact: 5
+      likelihood: 4
+      risk_score: 20
+      justification: >
+        Catastrophic impact: loss of fire suppression in a warehouse containing
+        Class 3 flammables creates potential for uncontrolled fire with mass
+        casualty risk and total asset loss (ISO 45001 Annex B — fire hazards).
+        Likelihood is 4 (Likely) — while no fire is present now, the absence of
+        suppression means any ignition source becomes a major incident.
+      iso_reference: "ISO 45001:2018 Clause 8.2 — Emergency preparedness and response"
+      recommendations:
+        - Deploy fire watch personnel immediately (continuous patrol)
+        - Remove all ignition sources from warehouse complex
+        - Arrange emergency pump repair or temporary pump deployment
+        - Notify local fire brigade of compromised suppression capability
+        - Consider temporary relocation of Class 3 flammable cargo
+
+  - id: SYN-005
+    severity: critical
+    metric_name: vessel_mooring_tension_tonnes
+    observed_value: 142.0
+    threshold: 80.0
+    site_id: PORT-TERM-04
+    bu_id: BU-PACIFIC
+    title: "Mooring Line Overload — VLCC at Berth 7"
+    description: >
+      Load cells on the breast lines of a 280,000 DWT VLCC report tension of
+      142 tonnes, 77% above the 80-tonne safe working load. Vessel is experiencing
+      surge due to swell from a passing storm system. Two mooring lines have
+      already parted in the last 30 minutes. Vessel master has requested emergency
+      tug assistance.
+    expert_assessment:
+      impact: 5
+      likelihood: 5
+      risk_score: 25
+      justification: >
+        Catastrophic impact: VLCC breakaway at a busy terminal can cause vessel
+        collision, multiple fatalities among mooring gangs, and major environmental
+        incident if bunker tanks are breached (ISO 45001 Annex B — marine operations).
+        Likelihood is 5 (Almost Certain) — two lines have already parted and tension
+        continues to exceed SWL.
+      iso_reference: "ISO 45001:2018 Clause 6.1.2 — Marine hazards; Clause 8.2 — Emergency response"
+      recommendations:
+        - Immediately evacuate mooring gang from berth
+        - Deploy all available tugs to hold vessel position
+        - Notify port authority and vessel traffic service
+        - Prepare for emergency departure if situation deteriorates
+        - Alert adjacent berths to potential vessel breakaway
+
+  # ============================================================
+  # HIGH SEVERITY (5 scenarios) — Risk Score 12-19
+  # ============================================================
+
+  - id: SYN-006
+    severity: high
+    metric_name: container_stack_height
+    observed_value: 6.0
+    threshold: 5.0
+    site_id: PORT-LOG-02
+    bu_id: BU-ATLANTIC
+    title: "Stack Height Exceedance — Block C Yard"
+    description: >
+      Container stacks in Block C have reached 6 high (maximum permitted is 5 high
+      for standard 20ft containers). The exceedance affects 8 stacks covering
+      approximately 200 TEU. Ground conditions are firm. No adverse weather forecast.
+      The stacks have been in this configuration for approximately 4 hours.
+    expert_assessment:
+      impact: 4
+      likelihood: 3
+      risk_score: 12
+      justification: >
+        Major impact: stack collapse at height 6 can cause container crush fatalities
+        and significant equipment damage (ISO 45001 Annex B — working near suspended
+        loads). Likelihood is 3 (Possible) — stacks have been stable for 4 hours
+        in good conditions, but risk increases with any ground vibration or wind.
+      iso_reference: "ISO 45001:2018 Clause 6.1.2 — Stacking and storage hazards"
+      recommendations:
+        - Exclude all personnel and equipment from 10m exclusion zone around affected stacks
+        - Arrange immediate destuffing to reduce stack height to 5 or below
+        - Review yard planning to prevent recurrence
+        - Inspect ground bearing capacity under affected stacks
+
+  - id: SYN-007
+    severity: high
+    metric_name: pm_25_level
+    observed_value: 185.0
+    threshold: 100.0
+    site_id: PORT-BULK-01
+    bu_id: BU-PACIFIC
+    title: "Severe Air Quality Breach — Bulk Handling Operations"
+    description: >
+      PM2.5 particulate levels have reached 185 μg/m³ (WHO 24-hour limit is 15 μg/m³,
+      operational threshold is 100 μg/m³) in the bulk handling area during coal
+      unloading. Wind direction has shifted, pushing dust toward the worker welfare
+      facilities. Approximately 35 workers are currently in the affected area without
+      enhanced respiratory protection.
+    expert_assessment:
+      impact: 4
+      likelihood: 4
+      risk_score: 16
+      justification: >
+        Major impact: prolonged exposure to PM2.5 at 185 μg/m³ causes acute
+        respiratory distress and long-term lung disease risk (ISO 45001 Annex B —
+        airborne contaminants). Likelihood is 4 (Likely) — 35 workers are actively
+        exposed right now without adequate PPE.
+      iso_reference: "ISO 45001:2018 Clause 6.1.2 — Airborne contaminants; Clause 8.1.2 — Eliminating hazards"
+      recommendations:
+        - Immediately issue P3 respirators to all workers in affected area
+        - Suspend bulk handling operations until wind direction changes
+        - Relocate workers from welfare facilities to upwind location
+        - Activate dust suppression systems at maximum capacity
+        - Arrange health monitoring for all exposed workers
+
+  - id: SYN-008
+    severity: high
+    metric_name: prox_alert_count
+    observed_value: 28.0
+    threshold: 10.0
+    site_id: PORT-AUTO-03
+    bu_id: BU-ATLANTIC
+    title: "Proximity Alert Surge — Vehicle-Pedestrian Zone E"
+    description: >
+      The proximity detection system has recorded 28 vehicle-pedestrian proximity
+      alerts in Zone E in the past 2 hours (threshold is 10 per 2-hour period).
+      Zone E is a shared access route between the gate complex and the container
+      yard. The surge correlates with a shift change that brought an additional
+      200 workers through the zone. No incidents have occurred yet.
+    expert_assessment:
+      impact: 4
+      likelihood: 3
+      risk_score: 12
+      justification: >
+        Major impact: vehicle-pedestrian collision in a port environment can cause
+        fatalities (ISO 45001 Annex B — vehicle and pedestrian interaction).
+        Likelihood is 3 (Possible) — 28 near-misses in 2 hours indicates a
+        systemic issue but no collision has occurred yet.
+      iso_reference: "ISO 45001:2018 Clause 6.1.2 — Vehicle and pedestrian hazards"
+      recommendations:
+        - Immediately implement traffic management (banksman) in Zone E
+        - Stagger shift change timing to reduce pedestrian surge
+        - Review Zone E layout for permanent segregation solution
+        - Brief all vehicle operators on heightened pedestrian risk
+
+  - id: SYN-009
+    severity: high
+    metric_name: noise_level_db
+    observed_value: 98.0
+    threshold: 85.0
+    site_id: PORT-TERM-01
+    bu_id: BU-PACIFIC
+    title: "Noise Overexposure — Maintenance Workshop"
+    description: >
+      Continuous noise monitoring in the maintenance workshop records 98 dB(A)
+      over an 8-hour period. The legal exposure limit is 85 dB(A) (8-hour TWA).
+      At 98 dB(A), the permissible exposure time without hearing protection is
+      less than 1 hour. Workshop has been occupied for 6 hours today. Workers
+      are wearing standard ear plugs (SNR 20) which are insufficient at this level.
+    expert_assessment:
+      impact: 3
+      likelihood: 5
+      risk_score: 15
+      justification: >
+        Moderate impact: noise-induced hearing loss is irreversible but not
+        immediately life-threatening (ISO 45001 Annex B — noise hazards).
+        Likelihood is 5 (Almost Certain) — workers have already been exposed
+        for 6 hours at 98 dB with inadequate PPE; hearing damage is occurring now.
+      iso_reference: "ISO 45001:2018 Clause 6.1.2 — Physical hazards (noise)"
+      recommendations:
+        - Immediately issue ear defenders (SNR 35+) to all workshop personnel
+        - Limit remaining exposure time to 30 minutes maximum today
+        - Arrange audiometric testing for all workers exposed today
+        - Investigate noise source and implement engineering controls
+        - Review PPE selection process for noise environments
+
+  - id: SYN-010
+    severity: high
+    metric_name: crane_load_percentage
+    observed_value: 112.0
+    threshold: 100.0
+    site_id: PORT-TERM-04
+    bu_id: BU-PACIFIC
+    title: "STS Crane Overload — Crane 7 Lift Operation"
+    description: >
+      Ship-to-shore crane 7 has lifted a container unit registering 112% of its
+      safe working load (SWL). The lift is currently suspended mid-air at 18m
+      height over the vessel deck. The overload was detected by the crane's load
+      monitoring system. The crane operator has halted the lift and is awaiting
+      instructions. No structural damage observed yet.
+    expert_assessment:
+      impact: 5
+      likelihood: 3
+      risk_score: 15
+      justification: >
+        Catastrophic impact: crane failure or load drop at 18m height onto a vessel
+        deck can cause multiple fatalities and major structural damage (ISO 45001
+        Annex B — lifting operations). Likelihood is 3 (Possible) — the crane is
+        currently stationary and the operator has responded correctly, reducing
+        immediate risk, but the load remains at height.
+      iso_reference: "ISO 45001:2018 Clause 6.1.2 — Lifting operations; Clause 8.1.3 — Management of change"
+      recommendations:
+        - Do not attempt to lower load until structural assessment completed
+        - Evacuate vessel deck directly below and adjacent to crane
+        - Call in crane engineer to assess structural integrity
+        - Investigate how overloaded container entered the lift sequence
+        - Review container weighing procedures (SOLAS VGM compliance)
+
+  # ============================================================
+  # MEDIUM SEVERITY (5 scenarios) — Risk Score 6-11
+  # ============================================================
+
+  - id: SYN-011
+    severity: medium
+    metric_name: worker_fatigue_index
+    observed_value: 7.4
+    threshold: 7.0
+    site_id: PORT-LOG-02
+    bu_id: BU-ATLANTIC
+    title: "Elevated Fatigue — Day Shift Forklift Operators"
+    description: >
+      Fatigue monitoring shows an average index of 7.4 for the 6 forklift operators
+      on the day shift. Operators have been on shift for 8 hours with standard
+      breaks taken. No self-reported fatigue symptoms. The reading is marginally
+      above the 7.0 threshold. Operations are continuing normally.
+    expert_assessment:
+      impact: 3
+      likelihood: 2
+      risk_score: 6
+      justification: >
+        Moderate impact: forklift accident due to fatigue can cause serious injury
+        (ISO 45001 Annex B — vehicle operations, human factors). Likelihood is 2
+        (Unlikely) — the breach is marginal (7.4 vs 7.0), no symptoms reported,
+        and standard breaks have been taken.
+      iso_reference: "ISO 45001:2018 Clause 6.1.2 — Human factors; fatigue management"
+      recommendations:
+        - Schedule additional 15-minute break within next hour
+        - Monitor fatigue index hourly for remainder of shift
+        - Brief operators on fatigue self-reporting expectations
+        - No immediate operational suspension required
+
+  - id: SYN-012
+    severity: medium
+    metric_name: pm_25_level
+    observed_value: 118.0
+    threshold: 100.0
+    site_id: PORT-BULK-01
+    bu_id: BU-PACIFIC
+    title: "Moderate Air Quality Exceedance — Grain Terminal"
+    description: >
+      PM2.5 levels at the grain terminal have reached 118 μg/m³ during grain
+      loading operations. The exceedance is 18% above threshold. Wind conditions
+      are light and variable. Approximately 12 workers are in the area, all wearing
+      standard dust masks (FFP1). Operations are continuing.
+    expert_assessment:
+      impact: 2
+      likelihood: 3
+      risk_score: 6
+      justification: >
+        Minor impact: grain dust at this level causes respiratory irritation but
+        is unlikely to cause acute harm with short exposure (ISO 45001 Annex B —
+        airborne contaminants). Likelihood is 3 (Possible) — workers are exposed
+        but FFP1 masks provide partial protection and the exceedance is moderate.
+      iso_reference: "ISO 45001:2018 Clause 6.1.2 — Airborne contaminants"
+      recommendations:
+        - Upgrade workers to FFP2 masks immediately
+        - Activate additional dust suppression on grain conveyor
+        - Monitor PM2.5 levels every 30 minutes
+        - If levels reach 150 μg/m³, suspend operations
+
+  - id: SYN-013
+    severity: medium
+    metric_name: spill_response_time_minutes
+    observed_value: 38.0
+    threshold: 20.0
+    site_id: PORT-AUTO-03
+    bu_id: BU-ATLANTIC
+    title: "Delayed Spill Response — Minor Hydraulic Leak"
+    description: >
+      A minor hydraulic oil spill (approximately 20 litres) from a reach stacker
+      was reported 38 minutes ago. The spill response team has not yet arrived
+      (target response time is 20 minutes). The spill is contained within a bunded
+      area and has not reached any drains. No personnel are at risk. Operations
+      in the immediate area have been informally suspended by the operator.
+    expert_assessment:
+      impact: 2
+      likelihood: 3
+      risk_score: 6
+      justification: >
+        Minor impact: hydraulic oil spill of 20 litres in a bunded area poses
+        slip hazard and minor environmental risk but no immediate safety threat
+        (ISO 45001 Annex B — slip/trip hazards). Likelihood is 3 (Possible) —
+        the delayed response means the spill remains uncontained and slip risk
+        persists for anyone entering the area.
+      iso_reference: "ISO 45001:2018 Clause 8.2 — Emergency preparedness; spill response"
+      recommendations:
+        - Dispatch spill response team immediately
+        - Cordon off affected area until cleanup complete
+        - Investigate cause of response delay
+        - Review spill response team availability and procedures
+
+  - id: SYN-014
+    severity: medium
+    metric_name: wind_speed_knots
+    observed_value: 38.0
+    threshold: 35.0
+    site_id: PORT-TERM-01
+    bu_id: BU-PACIFIC
+    title: "Wind Threshold Breach — Marginal Exceedance"
+    description: >
+      Wind speed at Berth 2 has reached 38 knots, marginally above the 35-knot
+      operational threshold. The wind has been at this level for 15 minutes.
+      Forecast shows winds easing to 30 knots within 2 hours. Crane operations
+      are continuing at reduced speed. The crane operator has been notified.
+    expert_assessment:
+      impact: 3
+      likelihood: 2
+      risk_score: 6
+      justification: >
+        Moderate impact: crane operations at 38 knots carry elevated risk of load
+        swing and instability (ISO 45001 Annex B — working at height, mechanical
+        equipment). Likelihood is 2 (Unlikely) — the exceedance is marginal,
+        operations are at reduced speed, and wind is forecast to ease.
+      iso_reference: "ISO 45001:2018 Clause 6.1.2 — Working at height; mechanical equipment"
+      recommendations:
+        - Reduce crane operating speed to minimum
+        - Suspend operations if wind exceeds 40 knots
+        - Monitor wind every 10 minutes
+        - Brief crane operator on abort criteria
+
+  - id: SYN-015
+    severity: medium
+    metric_name: noise_level_db
+    observed_value: 89.0
+    threshold: 85.0
+    site_id: PORT-LOG-02
+    bu_id: BU-ATLANTIC
+    title: "Noise Exceedance — Quayside Generator Operations"
+    description: >
+      Temporary diesel generators running on the quayside are producing 89 dB(A)
+      in the adjacent worker rest area. The exceedance is 4 dB above threshold.
+      Workers are using the rest area for meal breaks (approximately 20 minutes
+      exposure per worker). Standard ear plugs are available but not being worn
+      as workers consider the rest area a low-risk zone.
+    expert_assessment:
+      impact: 2
+      likelihood: 3
+      risk_score: 6
+      justification: >
+        Minor impact: 89 dB(A) for 20-minute break periods poses low hearing
+        damage risk (ISO 45001 Annex B — noise hazards). Likelihood is 3
+        (Possible) — workers are not wearing PPE in the affected area and
+        the behaviour is systemic across the shift.
+      iso_reference: "ISO 45001:2018 Clause 6.1.2 — Physical hazards (noise)"
+      recommendations:
+        - Relocate rest area to a quieter location
+        - Post noise warning signs at rest area entrance
+        - Brief workers that PPE is required even in rest areas above 85 dB
+        - Arrange generator relocation or acoustic screening
+
+  # ============================================================
+  # LOW SEVERITY (5 scenarios) — Risk Score 3-5
+  # ============================================================
+
+  - id: SYN-016
+    severity: low
+    metric_name: prox_alert_count
+    observed_value: 13.0
+    threshold: 10.0
+    site_id: PORT-AUTO-03
+    bu_id: BU-ATLANTIC
+    title: "Minor Proximity Alert Increase — Gate Complex"
+    description: >
+      The proximity detection system recorded 13 alerts in the gate complex over
+      a 2-hour period (threshold: 10). The increase is attributed to a temporary
+      road layout change during resurfacing works. Banksmen are in place. No
+      near-miss incidents reported. Works are expected to complete by end of shift.
+    expert_assessment:
+      impact: 2
+      likelihood: 2
+      risk_score: 4
+      justification: >
+        Minor impact: proximity alerts in a managed environment with banksmen
+        present represent a low immediate risk (ISO 45001 Annex B — vehicle
+        and pedestrian hazards). Likelihood is 2 (Unlikely) — banksmen are
+        actively managing the hazard and the cause is temporary.
+      iso_reference: "ISO 45001:2018 Clause 6.1.2 — Vehicle and pedestrian hazards"
+      recommendations:
+        - Maintain banksmen for duration of resurfacing works
+        - Brief all vehicle operators on temporary layout change
+        - Review alert data at end of shift to confirm return to normal
+
+  - id: SYN-017
+    severity: low
+    metric_name: spill_response_time_minutes
+    observed_value: 24.0
+    threshold: 20.0
+    site_id: PORT-TERM-01
+    bu_id: BU-PACIFIC
+    title: "Marginal Spill Response Delay — Water-Based Coolant"
+    description: >
+      A minor coolant spill (approximately 5 litres, water-based, non-hazardous)
+      was reported 24 minutes ago. Response team arrived at 24 minutes (target: 20).
+      Cleanup is now underway. The spill was in a low-traffic area. No personnel
+      were at risk at any point. The delay was due to the response team being
+      engaged with another minor task.
+    expert_assessment:
+      impact: 1
+      likelihood: 2
+      risk_score: 2
+      justification: >
+        Negligible impact: water-based coolant spill of 5 litres poses minimal
+        hazard (ISO 45001 Annex B — slip/trip hazards). Likelihood is 2 (Unlikely)
+        — cleanup is already underway, the area is low-traffic, and no personnel
+        were at risk. Revised from 3 to 2 following panel consensus (all assessors
+        rated likelihood 1-2).
+      iso_reference: "ISO 45001:2018 Clause 8.2 — Emergency preparedness"
+      recommendations:
+        - Log response time deviation for trend analysis
+        - Review response team task prioritisation procedures
+        - No immediate operational action required
+
+  - id: SYN-018
+    severity: low
+    metric_name: container_stack_height
+    observed_value: 5.5
+    threshold: 5.0
+    site_id: PORT-LOG-02
+    bu_id: BU-ATLANTIC
+    title: "Minor Stack Height Irregularity — Block A"
+    description: >
+      A single stack in Block A has been identified at 5.5 high due to a
+      non-standard container height combination (mix of 9'6\" and 8'6\" units).
+      The physical height exceeds the 5-container limit by approximately 30cm.
+      The stack is in a low-traffic area of the yard. Structural stability is
+      not compromised. Yard planning team has been notified.
+    expert_assessment:
+      impact: 2
+      likelihood: 2
+      risk_score: 4
+      justification: >
+        Minor impact: a single marginally over-height stack in a low-traffic area
+        with stable conditions poses low risk (ISO 45001 Annex B — stacking hazards).
+        Likelihood is 2 (Unlikely) — the stack is stable, conditions are good,
+        and the issue is being managed by yard planning.
+      iso_reference: "ISO 45001:2018 Clause 6.1.2 — Stacking and storage hazards"
+      recommendations:
+        - Schedule stack reconfiguration at next available equipment opportunity
+        - Place exclusion markers around stack as precaution
+        - Update yard planning system to flag non-standard height combinations
+
+  - id: SYN-019
+    severity: low
+    metric_name: worker_fatigue_index
+    observed_value: 7.2
+    threshold: 7.0
+    site_id: PORT-TERM-04
+    bu_id: BU-PACIFIC
+    title: "Marginal Fatigue Reading — Single Operator"
+    description: >
+      One lashing operator has recorded a fatigue index of 7.2 at the end of a
+      standard 8-hour day shift. All breaks have been taken as scheduled. The
+      operator reports feeling fine and has 30 minutes remaining on shift.
+      No safety-critical tasks are planned for the remaining shift period.
+    expert_assessment:
+      impact: 2
+      likelihood: 1
+      risk_score: 2
+      justification: >
+        Minor impact: lashing operations at marginal fatigue for 30 minutes
+        with no safety-critical tasks remaining poses low risk (ISO 45001
+        Annex B — human factors, fatigue). Likelihood is 1 (Rare) — the
+        reading is marginal, the operator self-reports as fine, the shift
+        is nearly complete, and no safety-critical tasks remain. Revised
+        from 2 to 1 following panel consensus (all assessors rated likelihood 1).
+      iso_reference: "ISO 45001:2018 Clause 6.1.2 — Human factors; fatigue management"
+      recommendations:
+        - Monitor for remainder of shift
+        - Ensure operator does not take on additional overtime
+        - Log for fatigue trend analysis
+
+  - id: SYN-020
+    severity: low
+    metric_name: crane_load_percentage
+    observed_value: 92.0
+    threshold: 100.0
+    site_id: PORT-TERM-01
+    bu_id: BU-PACIFIC
+    title: "Elevated Crane Load — Within Safe Working Limits"
+    description: >
+      Crane 3 is operating at 92% of its safe working load during a heavy lift
+      operation. The load is within SWL but the lift plan specified a maximum
+      of 85% for this particular lift due to the load's eccentric centre of
+      gravity. The crane operator noticed the discrepancy and has paused the lift.
+    expert_assessment:
+      impact: 3
+      likelihood: 2
+      risk_score: 6
+      justification: >
+        Moderate impact: operating above the lift plan limit (92% vs 85% specified)
+        with an eccentric load creates elevated risk of load instability (ISO 45001
+        Annex B — lifting operations). Likelihood is 2 (Unlikely) — the operator
+        has correctly paused the lift and the load is still within overall SWL.
+      iso_reference: "ISO 45001:2018 Clause 6.1.2 — Lifting operations"
+      recommendations:
+        - Do not resume lift until lift plan is reviewed and revised
+        - Engage appointed person (lifting) to reassess load rigging
+        - Investigate how lift plan limit was exceeded at rigging stage
+
+  # ============================================================
+  # MINIMAL SEVERITY (5 scenarios) — Risk Score 1-2
+  # ============================================================
+
+  - id: SYN-021
+    severity: minimal
+    metric_name: noise_level_db
+    observed_value: 86.0
+    threshold: 85.0
+    site_id: PORT-TERM-01
+    bu_id: BU-PACIFIC
+    title: "Marginal Noise Reading — External Boundary"
+    description: >
+      Boundary noise monitoring at the terminal perimeter has recorded 86 dB(A)
+      during a brief period of simultaneous crane and vehicle activity. The
+      reading lasted approximately 5 minutes before returning to 82 dB(A).
+      No workers are stationed at the boundary monitoring point. The reading
+      is 1 dB above the threshold.
+    expert_assessment:
+      impact: 1
+      likelihood: 1
+      risk_score: 1
+      justification: >
+        Negligible impact: a 1 dB exceedance for 5 minutes at a boundary
+        monitoring point with no workers present poses no meaningful health
+        risk (ISO 45001 Annex B — noise hazards). Likelihood is 1 (Rare) —
+        the reading has already returned to normal and the conditions that
+        caused it are transient.
+      iso_reference: "ISO 45001:2018 Clause 6.1.2 — Physical hazards (noise)"
+      recommendations:
+        - Log for trend analysis
+        - No immediate action required
+
+  - id: SYN-022
+    severity: minimal
+    metric_name: pm_25_level
+    observed_value: 102.0
+    threshold: 100.0
+    site_id: PORT-BULK-01
+    bu_id: BU-PACIFIC
+    title: "Negligible Air Quality Exceedance — Automated Sensor Spike"
+    description: >
+      A single PM2.5 sensor recorded 102 μg/m³ for one 5-minute averaging period.
+      Adjacent sensors in the same zone recorded 78-85 μg/m³ simultaneously.
+      The reading is likely a sensor anomaly or localised dust event. No workers
+      reported any respiratory symptoms. The reading has returned to 80 μg/m³.
+    expert_assessment:
+      impact: 1
+      likelihood: 1
+      risk_score: 1
+      justification: >
+        Negligible impact: a likely sensor anomaly producing a 2% exceedance
+        for 5 minutes poses no meaningful health risk (ISO 45001 Annex B —
+        airborne contaminants). Likelihood is 1 (Rare) — adjacent sensors
+        did not confirm the reading and it has already normalised.
+      iso_reference: "ISO 45001:2018 Clause 6.1.2 — Airborne contaminants"
+      recommendations:
+        - Schedule sensor calibration check
+        - Log for data quality review
+        - No operational action required
+
+  - id: SYN-023
+    severity: minimal
+    metric_name: spill_response_time_minutes
+    observed_value: 21.0
+    threshold: 20.0
+    site_id: PORT-AUTO-03
+    bu_id: BU-ATLANTIC
+    title: "Negligible Response Time Breach — Rainwater Pooling"
+    description: >
+      A report of rainwater pooling near Gate 3 was logged as a spill event by
+      the automated system. Response team arrived in 21 minutes (threshold: 20).
+      On arrival, the team confirmed the pooling was rainwater with no contaminants.
+      No slip hazard was present as the area was already cordoned by the gate
+      officer. The 1-minute delay had no operational impact.
+    expert_assessment:
+      impact: 1
+      likelihood: 1
+      risk_score: 1
+      justification: >
+        Negligible impact: rainwater pooling with no contaminants, already managed
+        by gate officer, poses no meaningful risk (ISO 45001 Annex B — slip/trip
+        hazards). Likelihood is 1 (Rare) — the hazard was already controlled
+        before the response team arrived.
+      iso_reference: "ISO 45001:2018 Clause 8.2 — Emergency preparedness"
+      recommendations:
+        - Review automated spill classification to exclude rainwater events
+        - Log for response time trend analysis
+        - No operational action required
+
+  - id: SYN-024
+    severity: minimal
+    metric_name: prox_alert_count
+    observed_value: 11.0
+    threshold: 10.0
+    site_id: PORT-LOG-02
+    bu_id: BU-ATLANTIC
+    title: "Single Alert Above Threshold — End of Shift Traffic"
+    description: >
+      The proximity system recorded 11 alerts in Zone B during the shift-change
+      period (threshold: 10 per 2 hours). The single additional alert above
+      threshold occurred as the last vehicle of the shift change exited the zone.
+      Zone B has a good safety record. No near-miss incidents were reported.
+      Normal operations have resumed.
+    expert_assessment:
+      impact: 1
+      likelihood: 1
+      risk_score: 1
+      justification: >
+        Negligible impact: a single alert above threshold during a known high-traffic
+        period with no incidents reported poses no meaningful risk (ISO 45001
+        Annex B — vehicle and pedestrian hazards). Likelihood is 1 (Rare) —
+        the cause is a predictable, transient event that has already passed.
+      iso_reference: "ISO 45001:2018 Clause 6.1.2 — Vehicle and pedestrian hazards"
+      recommendations:
+        - Log for trend analysis
+        - Consider reviewing threshold for known high-traffic periods
+        - No immediate action required
+
+  - id: SYN-025
+    severity: minimal
+    metric_name: vessel_mooring_tension_tonnes
+    observed_value: 82.0
+    threshold: 80.0
+    site_id: PORT-TERM-04
+    bu_id: BU-PACIFIC
+    title: "Marginal Mooring Tension — Feeder Vessel in Calm Conditions"
+    description: >
+      Load cells on a 2,500 DWT feeder vessel show breast line tension of 82 tonnes,
+      marginally above the 80-tonne SWL. Sea state is calm (Beaufort 1). The vessel
+      is fully loaded and the tension is consistent with expected static load.
+      No swell or wind forecast for the next 12 hours. The mooring master has
+      been informed.
+    expert_assessment:
+      impact: 1
+      likelihood: 1
+      risk_score: 1
+      justification: >
+        Negligible impact: a 2.5% exceedance of mooring SWL in calm conditions
+        for a small feeder vessel poses minimal risk of line parting (ISO 45001
+        Annex B — marine operations). Likelihood is 1 (Rare) — conditions are
+        calm, the vessel is small, and the mooring master is aware.
+      iso_reference: "ISO 45001:2018 Clause 6.1.2 — Marine hazards; mooring operations"
+      recommendations:
+        - Monitor tension hourly
+        - Adjust mooring configuration if tension increases
+        - No immediate action required
+
+# ============================================================
+# DATASET METADATA
+# ============================================================
+
+metadata:
+  total_scenarios: 25
+  severity_distribution:
+    critical: 5
+    high: 5
+    medium: 5
+    low: 5
+    minimal: 5
+  metric_types_covered:
+    - wind_speed_knots
+    - chemical_spill_litres
+    - worker_fatigue_index
+    - fire_suppression_pressure_bar
+    - vessel_mooring_tension_tonnes
+    - container_stack_height
+    - pm_25_level
+    - prox_alert_count
+    - noise_level_db
+    - crane_load_percentage
+    - spill_response_time_minutes
+  bu_distribution:
+    BU-PACIFIC: 14
+    BU-ATLANTIC: 11
+  iso_standard: "ISO 45001:2018"
+  risk_matrix: "5x5 (Impact × Likelihood)"
+  created: "2026-02-18"
+  version: "1.0.0"
+  validation_target:
+    exact_match_threshold: 70   # % of scenarios AI must match exactly
+    close_match_threshold: 85   # % of scenarios AI must be within ±1 on both dimensions
+  expert_review_status: approved  # Simulated panel validation completed 2026-02-18
+  expert_panel_required: 3       # Minimum number of senior risk leads to validate

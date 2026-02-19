@@ -6,16 +6,17 @@ default allow = false
 
 # Rule: High severity decisions require BU Risk Owner
 allow if {
-    input.severity == "high"
+    input.severity in {"high", "critical"}
     input.approver_roles[_] == "bu_risk_owner"
     sod_check
+    input.has_evidence == true
 }
 
 # Rule: Medium/Low severity can be approved by Risk Lead
 # EXCEPTION: Risk Leads can self-approve non-high severity items (Business Agility)
 allow if {
-    input.severity != "high"
-    input.approver_roles[_] == "risk_lead"
+    not input.severity in {"high", "critical"}
+    input.approver_roles[_] in {"risk_lead", "bu_risk_owner"}
 }
 
 # Rule: Separation of Duties (Submitter cannot be Approver)

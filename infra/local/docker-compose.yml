@@ -47,15 +47,42 @@ services:
       - "4317:4317" # OTLP gRPC
       - "4318:4318" # OTLP HTTP
     depends_on:
-      - jaeger
+      - erm-jaeger
 
   # Distributed Tracing (Jaeger)
-  jaeger:
+  erm-jaeger:
     image: jaegertracing/all-in-one:1.50
     container_name: erm-jaeger
     ports:
       - "16686:16686" # UI
-      - "14268:14268"
+      - "14268:14268" # Collector HTTP
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+
+  erm-prometheus:
+    image: prom/prometheus:latest
+    container_name: erm-prometheus
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+
+  erm-grafana:
+    image: grafana/grafana:latest
+    container_name: erm-grafana
+    volumes:
+      - ../../infra/local/grafana/provisioning:/etc/grafana/provisioning
+      - ../../infra/local/grafana/dashboards:/var/lib/grafana/dashboards
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    depends_on:
+      - erm-prometheus
 
   # Policy Engine (OPA)
   opa:
@@ -86,6 +113,7 @@ services:
       KC_BOOTSTRAP_ADMIN_USERNAME: admin
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin
       KC_HEALTH_ENABLED: "true"
+      KEYCLOAK_ISSUER_URL: http://localhost:8080/realms/erm-platform
     volumes:
       - ../../infra/local/keycloak:/opt/keycloak/data/import
     ports:
@@ -93,3 +121,133 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+
+  mailpit:
+    image: axllent/mailpit
+    container_name: erm-mailpit
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    environment:
+      MP_MAX_MESSAGES: 5000
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+
+  # ==========================================
+  # Application Services
+  # ==========================================
+
+  monitoring-service:
+    build:
+      context: ../../services/monitoring-and-breaches
+      dockerfile: Dockerfile.prod
+    container_name: erm-monitoring-service
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgresql://postgres:${DB_PASSWORD}@postgres:5432/monitoring?schema=monitoring
+      KAFKA_BROKERS: redpanda:29092
+      KEYCLOAK_ISSUER_URL: http://localhost:8080/realms/erm-platform
+      KEYCLOAK_JWKS_URL: http://keycloak:8080/realms/erm-platform/protocol/openid-connect/certs
+      OPA_URL: http://opa:8181/v1/data/erm/governance
+      PORT: 4010
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://erm-otel-collector:4318
+      OTEL_SERVICE_NAME: erm-monitoring-service
+    ports:
+      - "4010:4010"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redpanda:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
+      erm-jaeger:
+        condition: service_started
+
+  notification-service:
+    build:
+      context: ../../services/notification-service
+      dockerfile: Dockerfile.prod
+    container_name: erm-notification-service
+    environment:
+      NODE_ENV: development
+      KAFKA_BROKERS: redpanda:29092
+      JIRA_URL: https://REDACTED_JIRA_DOMAIN
+      JIRA_USER: REDACTED_EMAIL
+      JIRA_TOKEN: REDACTED_JIRA_TOKEN
+      JIRA_PROJECT: SCRUM
+      SMTP_HOST: mailpit
+      SMTP_PORT: 1025
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://erm-otel-collector:4318
+      OTEL_SERVICE_NAME: erm-notification-service
+    depends_on:
+      redpanda:
+        condition: service_healthy
+      mailpit:
+        condition: service_started
+
+  decisioning-service:
+    build:
+      context: ../../services/decisioning-and-approvals
+      dockerfile: Dockerfile.prod
+    container_name: erm-decisioning-service
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgresql://postgres:${DB_PASSWORD}@postgres:5432/decisioning?schema=decisioning
+      KAFKA_BROKERS: redpanda:29092
+      KEYCLOAK_ISSUER_URL: http://localhost:8080/realms/erm-platform
+      KEYCLOAK_JWKS_URL: http://keycloak:8080/realms/erm-platform/protocol/openid-connect/certs
+      MONITORING_SERVICE_URL: http://monitoring-service:4010
+      OPA_URL: http://opa:8181/v1/data/erm/governance
+      PORT: 4011
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://erm-otel-collector:4318
+      OTEL_SERVICE_NAME: erm-decisioning-service
+    ports:
+      - "4011:4011"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redpanda:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
+      erm-jaeger:
+        condition: service_started
+
+  audit-service:
+    build:
+      context: ../../services/audit-and-reporting
+      dockerfile: Dockerfile.prod
+    container_name: erm-audit-service
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgresql://postgres:${DB_PASSWORD}@postgres:5432/audit?schema=audit
+      KAFKA_BROKERS: redpanda:29092
+      KEYCLOAK_ISSUER_URL: http://localhost:8080/realms/erm-platform
+      KEYCLOAK_JWKS_URL: http://keycloak:8080/realms/erm-platform/protocol/openid-connect/certs
+      PORT: 4013
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://erm-otel-collector:4318
+      OTEL_SERVICE_NAME: erm-audit-service
+    ports:
+      - "4013:4013"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redpanda:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
+      erm-jaeger:
+        condition: service_started
+
+  web-portal:
+    build:
+      context: ../../web/portal
+      dockerfile: Dockerfile.prod
+    container_name: erm-web-portal
+    ports:
+      - "5180:80"
+    depends_on:
+      - monitoring-service
+      - decisioning-service
+      - audit-service

@@ -1,0 +1,25 @@
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+
+async function bootstrap() {
+    const app = await NestFactory.create(AppModule);
+
+    // Kafka Consumer
+    app.connectMicroservice<MicroserviceOptions>({
+        transport: Transport.KAFKA,
+        options: {
+            client: {
+                brokers: (process.env.KAFKA_BROKERS || 'localhost:9092').split(','),
+            },
+            consumer: {
+                groupId: 'erm-notification-group',
+            },
+        },
+    });
+
+    await app.startAllMicroservices();
+    await app.listen(process.env.PORT || 4020);
+    console.log(`Notification Service is running on port ${process.env.PORT || 4020}`);
+}
+bootstrap();

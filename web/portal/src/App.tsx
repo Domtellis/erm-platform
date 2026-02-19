@@ -5,14 +5,16 @@ import { Layout } from './components/layout/Layout';
 import { MonitoringPage } from './pages/MonitoringPage';
 import { DecisioningPage } from './pages/DecisioningPage';
 import { AuditPage } from './pages/AuditPage';
+import { ReportsPage } from './pages/ReportsPage';
+
+import { getBreaches, getMetrics } from './api/monitoring';
+
+// ...
 
 function Dashboard() {
   const { data: breachCases, isLoading: isLoadingBreaches } = useQuery<any[]>({
     queryKey: ['dashboard-breaches'],
-    queryFn: async () => {
-      const response = await axios.get('http://localhost:4010/breaches');
-      return response.data;
-    },
+    queryFn: () => getBreaches(),
     refetchInterval: 5000,
   });
 
@@ -22,6 +24,12 @@ function Dashboard() {
       const response = await axios.get('http://localhost:4011/decisions');
       return response.data;
     },
+    refetchInterval: 5000,
+  });
+
+  const { data: metrics, isLoading: isLoadingMetrics } = useQuery({
+    queryKey: ['dashboard-metrics'],
+    queryFn: () => getMetrics(),
     refetchInterval: 5000,
   });
 
@@ -50,8 +58,8 @@ function Dashboard() {
         </div>
         <div className="card p-6">
           <h3 className="text-sm font-medium text-slate-500">Appetite Compliance</h3>
-          <p className="mt-2 text-3xl font-bold text-crm-success">
-            {activeBreaches > 0 ? '85%' : '100%'}
+          <p className={`mt-2 text-3xl font-bold ${isLoadingMetrics ? '' : (metrics?.appetite_compliance_score || 0) < 90 ? 'text-crm-danger' : 'text-crm-success'}`}>
+            {isLoadingMetrics ? '...' : `${metrics?.appetite_compliance_score || 100}%`}
           </p>
         </div>
       </div>
@@ -67,6 +75,7 @@ function App() {
         <Route path="monitoring" element={<MonitoringPage />} />
         <Route path="decisioning" element={<DecisioningPage />} />
         <Route path="audit" element={<AuditPage />} />
+        <Route path="reports" element={<ReportsPage />} />
       </Route>
     </Routes>
   );

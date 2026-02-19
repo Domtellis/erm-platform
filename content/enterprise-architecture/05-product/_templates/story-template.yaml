@@ -1,0 +1,15 @@
+stories:
+  - id: US-[PRODUCT-ID]-001
+    feature_id: F-[PRODUCT-ID]-001
+    title: [Short story title]
+    story: |
+      As a [persona/role]
+      I want to [action]
+      So that [benefit/value]
+    acceptance_criteria:
+      - Given [context/precondition]
+      - When [action taken]
+      - Then [expected outcome]
+    effort: [story points, e.g., 1, 2, 3, 5, 8]
+    priority: P0  # P0 (critical) | P1 (important) | P2 (nice-to-have)
+    dependencies: []  # List of story IDs that must complete first

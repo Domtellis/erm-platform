@@ -1,0 +1,100 @@
+# Operations Runbook: Appetite Breach Response (SB-01)
+
+**Version:** 1.0 (MVP)  
+**Date:** 2026-02-16  
+**Owner:** Enterprise Risk Operations  
+
+---
+
+## 1. Overview
+This runbook defines the Standard Operating Procedures (SOPs) for managing **Appetite Breaches** within the ERM Platform. It covers the full lifecycle from detection to closure, including compliance requirements for evidence and approvals.
+
+## 2. Roles & Responsibilities
+
+| Role | Key Responsibilities | System Access Checks |
+| :--- | :--- | :--- |
+| **Site Manager** | • Detect & Submit Breaches<br>• Initial Triage<br>• Execute Remediation Plans | Must see valid site metrics dashboard. |
+| **Risk Lead** | • Review Assessments<br>• Approve Low/Medium Breaches<br>• Verify Evidence Quality | Must have `risk_lead` role in IDP. |
+| **BU Risk Owner** | • **Approve High/Critical Breaches**<br>• Accept Residual Risk<br>• Final Sign-off | Must have `bu_risk_owner` role in IDP. |
+
+---
+
+## 3. Standard Operating Procedures (SOPs)
+
+### SOP-01: Monitoring & Triage
+**Trigger:** New breach notification (Email/Dashboard).
+
+1.  **Log In**: Navigate to the ERM Portal.
+2.  **View Dashboard**: Check the **"Active Breaches"** widget.
+3.  **Check SLA**: Note the **Triage Timer**.
+    *   Green: > 1 Hour remaining.
+    *   Amber: < 1 Hour remaining.
+    *   Red: Overdue (Escalation required).
+
+### SOP-02: Risk Assessment
+**Trigger:** Breach detected but impact uncertain.
+
+1.  Navigate to **Decisioning & Approvals**.
+2.  Select the Breach Case.
+3.  Click **Assess Risk**.
+4.  Input **Likelihood** and **Impact** scores (1-5).
+    *   *Note: This generates the Inherent Risk Rating.*
+5.  **Submit**. The Risk Level badge will update automatically.
+
+### SOP-03: Decision & Evidence (Compulsory)
+**Trigger:** Operations team has proposed a path forward.
+
+1.  Click **Review Case**.
+2.  **Select Decision**:
+    *   **Mitigate**: Action will be taken to reduce risk (e.g., Process Change).
+    *   **Accept Risk**: No further action; risk is within tolerance.
+    *   **Stop Activity**: Immediate cessation of operations (Breach of Appetite).
+3.  **Rationale**: Document *why* this decision was made.
+4.  **Attach Evidence**:
+    *   **Requirement**: For **High/Critical** severity, you **MUST** provide a link to evidence (e.g., SharePoint, OneDrive, Service Desk Ticket).
+    *   *System Behaviour*: The system will **block** approval if this field is empty for High/Critical Severity cases.
+
+### SOP-04: Approval (The Governance Gate)
+**Trigger:** Decision submitted for sign-off.
+
+1.  **Identify Approver**:
+    *   **Low/Medium**: Assign to **Risk Lead**.
+    *   **High/Critical**: Assign to **BU Risk Owner**.
+2.  **Execute Approval**:
+    *   The designated approver logs in.
+    *   Reviews Rationale and Evidence.
+    *   Clicks **Approve**.
+3.  **Verification**:
+    *   System validates User Role vs. Breach Severity (OPA Policy).
+    *   If valid: Status changes to `decision_approved`.
+    *   If invalid: "Governance Policy Violation" error is displayed.
+
+### SOP-05: Case Closure
+**Trigger:** Decision approved and remediation planned/completd.
+
+1.  Navigate to **Decisioning**.
+2.  Locate cases with status **Decision Approved**.
+    *   *Tip: Use the 'Active' tab.*
+3.  Click **Close Case**.
+4.  **Confirm**.
+5.  **Verify**: Switch to the **Closed** tab to see the historical record.
+
+---
+
+## 4. Troubleshooting & FAQ
+
+### Q: Why can't I approve this High Severity breach?
+**A:** Check two things:
+1.  **Role**: Are you logged in as a **BU Risk Owner**? (Risk Leads cannot approve High severity).
+2.  **Evidence**: Did you provide an Evidence Link? (Mandatory for High severity).
+
+### Q: I don't see the "Close Case" button.
+**A:** The button only appears **after** the decision has been approved. If the status is "Pending", you must complete the approval workflow first.
+
+### Q: Where is the audit log?
+**A:** Open any case (Active or Closed) and scroll to the bottom. The **Audit Trail** shows every action, timestamp, and user, providing a tamper-evident record for compliance.
+
+---
+
+## 5. Support & Escalation
+For system issues (e.g., login failure, dashboard errors), submit a ticket to **Platform Engineering** via Jira Project `ERM-OPS`.

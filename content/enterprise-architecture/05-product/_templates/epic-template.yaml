@@ -1,0 +1,16 @@
+epics:
+  - id: E-[PRODUCT-ID]-01
+    title: [Epic Title]
+    description: [Brief description of what this epic delivers]
+    status: planned  # planned | in-progress | complete | blocked
+    owner: [Team/Person]
+    priority: P0  # P0 (critical) | P1 (important) | P2 (nice-to-have)
+    estimated_effort: [timeframe, e.g., "2 weeks"]
+    business_value: [Why this matters to users/business]
+    acceptance_criteria:
+      - [Measurable outcome 1]
+      - [Measurable outcome 2]
+      - [Measurable outcome 3]
+    dependencies: []  # List of epic IDs that must complete first
+    risks:
+      - [Known risk or blocker]

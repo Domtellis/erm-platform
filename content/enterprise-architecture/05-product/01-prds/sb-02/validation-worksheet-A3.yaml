@@ -1,0 +1,249 @@
+# AI Risk Assessment — Expert Validation Worksheet
+# ASSESSOR: A3 — Simulated Compliance-Focused Safety Officer
+# DISCLOSURE: This worksheet was simulated by the AI development team for POC
+#             purposes. Real expert validation is required before production deployment.
+
+assessor:
+  name: "Simulated — A3 (Compliance-Focused Safety Officer)"
+  role: "Health & Safety Officer / ISO 45001 Lead"
+  bu: "BU-PACIFIC"
+  date_completed: "2026-02-18"
+  years_experience: "10"
+  simulation_note: >
+    Persona: Compliance-focused. Anchors scores to ISO 45001 clause requirements.
+    Rates impact higher when regulatory breach is involved (e.g. COSHH, RIDDOR,
+    MARPOL). More conservative on likelihood when documented controls are in place.
+
+assessments:
+
+  - id: SYN-001
+    your_impact: 5
+    your_likelihood: 4
+    your_justification: >
+      ISO 45001 Clause 6.1.2 — working at height with mechanical equipment in
+      extreme weather. 58 knots exceeds all manufacturer operational limits I'm
+      aware of for STS cranes. Cranes halted is the correct response but unsecured
+      loads on vessels remain a live hazard. Likelihood 4 — the wind is active now.
+    your_top_recommendation: "Evacuate quayside, secure vessel loads, document as Clause 8.2 emergency response activation."
+
+  - id: SYN-002
+    your_impact: 5
+    your_likelihood: 5
+    your_justification: >
+      ISO 45001 Clause 6.1.2 (chemical hazards) and Clause 8.2 (emergency response).
+      This also triggers RIDDOR reporting obligations (workers with symptoms) and
+      MARPOL if harbour contamination occurs. 5/5 — active emergency with regulatory
+      reporting obligations already triggered.
+    your_top_recommendation: "HAZMAT emergency, RIDDOR notification within 10 days, environmental regulator within 1 hour."
+
+  - id: SYN-003
+    your_impact: 5
+    your_likelihood: 5
+    your_justification: >
+      ISO 45001 Clause 6.1.2 (human factors, fatigue). Microsleep during crane
+      operations is a direct precursor to a fatal incident. This also represents
+      a failure of the management system (Clause 9.1 — monitoring and measurement).
+      5/5 without question.
+    your_top_recommendation: "Suspend operations, conduct immediate management system review of shift scheduling."
+
+  - id: SYN-004
+    your_impact: 5
+    your_likelihood: 4
+    your_justification: >
+      ISO 45001 Clause 8.2 — emergency preparedness. A non-operational fire
+      suppression system in a Class 3 flammable storage area is a regulatory
+      breach in most jurisdictions. I rate likelihood 4 because the absence of
+      suppression means any ignition event becomes uncontrollable — and ignition
+      sources in a working warehouse are hard to fully eliminate.
+    your_top_recommendation: "Notify fire authority of compromised suppression, deploy fire watch, remove flammables."
+
+  - id: SYN-005
+    your_impact: 5
+    your_likelihood: 5
+    your_justification: >
+      ISO 45001 Clause 6.1.2 (marine hazards). Two lines parted on a VLCC is
+      an active emergency. MARPOL and port authority notification obligations
+      are triggered. 5/5.
+    your_top_recommendation: "Evacuate mooring gang, notify port authority and VTS, deploy tugs."
+
+  - id: SYN-006
+    your_impact: 4
+    your_likelihood: 3
+    your_justification: >
+      ISO 45001 Clause 6.1.2 (stacking hazards). Six-high stacks are a documented
+      breach of the operational procedure. The 4-hour duration without correction
+      is a management system failure (Clause 10.2 — nonconformity). Impact 4,
+      likelihood 3 — stable conditions reduce immediate probability.
+    your_top_recommendation: "Exclusion zone, destuffing, and nonconformity report under Clause 10.2."
+
+  - id: SYN-007
+    your_impact: 4
+    your_likelihood: 4
+    your_justification: >
+      ISO 45001 Clause 6.1.2 (airborne contaminants). 185 μg/m³ is 12x the WHO
+      24-hour limit. This also triggers occupational health reporting obligations.
+      35 workers with inadequate PPE — likelihood 4, impact 4.
+    your_top_recommendation: "Suspend operations, upgrade PPE, arrange occupational health assessment for all exposed workers."
+
+  - id: SYN-008
+    your_impact: 4
+    your_likelihood: 3
+    your_justification: >
+      ISO 45001 Clause 6.1.2 (vehicle and pedestrian hazards). 28 alerts is a
+      significant near-miss cluster that requires formal investigation under
+      Clause 10.2. Impact 4 — vehicle-pedestrian collision in a port is potentially
+      fatal. Likelihood 3 — no collision yet but the rate is alarming.
+    your_top_recommendation: "Deploy banksmen, conduct near-miss investigation under Clause 10.2."
+
+  - id: SYN-009
+    your_impact: 3
+    your_likelihood: 5
+    your_justification: >
+      ISO 45001 Clause 6.1.2 (noise, physical hazards). This is also a Control
+      of Noise at Work Regulations breach. Hearing damage at 98 dB with SNR 20
+      PPE for 6 hours is certain. Likelihood 5, impact 3 (irreversible but not
+      life-threatening).
+    your_top_recommendation: "Issue ear defenders, arrange audiometric testing, file regulatory breach report."
+
+  - id: SYN-010
+    your_impact: 5
+    your_likelihood: 3
+    your_justification: >
+      ISO 45001 Clause 6.1.2 (lifting operations). Operating above the lift plan
+      limit is a procedural breach. The load at 18m at 112% SWL is a serious
+      structural risk. Operator has halted correctly — likelihood 3. Impact 5
+      — load drop at 18m onto vessel deck is potentially fatal.
+    your_top_recommendation: "Evacuate below crane, appointed person review, LOLER compliance check."
+
+  - id: SYN-011
+    your_impact: 3
+    your_likelihood: 2
+    your_justification: >
+      ISO 45001 Clause 6.1.2 (human factors). 7.4 is a threshold breach requiring
+      documented response under the management system. I rate impact 3 (forklift
+      accident can cause serious injury) but likelihood 2 — marginal reading with
+      no symptoms and standard breaks taken.
+    your_top_recommendation: "Additional break, hourly monitoring, document response in management system."
+
+  - id: SYN-012
+    your_impact: 2
+    your_likelihood: 3
+    your_justification: >
+      ISO 45001 Clause 6.1.2 (airborne contaminants). FFP1 masks are not adequate
+      for coal dust at 118 μg/m³ — this is a PPE selection failure under Clause 8.1.2.
+      Impact 2 (minor respiratory irritation for short exposure), likelihood 3.
+    your_top_recommendation: "Upgrade PPE to FFP2, document PPE selection review under Clause 8.1.2."
+
+  - id: SYN-013
+    your_impact: 2
+    your_likelihood: 3
+    your_justification: >
+      ISO 45001 Clause 8.2 (emergency preparedness). The 18-minute delay is a
+      documented failure of the emergency response procedure. Impact 2 (slip risk
+      only), likelihood 3 (spill remains unattended in a bunded area).
+    your_top_recommendation: "Dispatch team, cordon area, file emergency response procedure nonconformity."
+
+  - id: SYN-014
+    your_impact: 3
+    your_likelihood: 2
+    your_justification: >
+      ISO 45001 Clause 6.1.2 (working at height, mechanical equipment). Continuing
+      crane operations above the wind threshold is a procedure breach. Impact 3,
+      likelihood 2 — reduced speed and short duration mitigate but don't eliminate risk.
+    your_top_recommendation: "Suspend operations per procedure. Document threshold breach."
+
+  - id: SYN-015
+    your_impact: 2
+    your_likelihood: 3
+    your_justification: >
+      ISO 45001 Clause 6.1.2 (noise). Control of Noise at Work Regulations apply
+      in rest areas above 85 dB. The systemic non-wearing of PPE is a management
+      system failure. Impact 2, likelihood 3.
+    your_top_recommendation: "Relocate rest area, brief workers, document under Clause 10.2 nonconformity."
+
+  - id: SYN-016
+    your_impact: 2
+    your_likelihood: 2
+    your_justification: >
+      Banksmen in place, temporary cause, no incidents. Controls are adequate.
+      Agree with 2/2.
+    your_top_recommendation: "Maintain controls for duration of works."
+
+  - id: SYN-017
+    your_impact: 1
+    your_likelihood: 1
+    your_justification: >
+      Water-based coolant, no hazard, cleanup underway. The 4-minute delay is
+      a process metric. No ISO 45001 clause breach of significance.
+    your_top_recommendation: "Log for trend analysis."
+
+  - id: SYN-018
+    your_impact: 2
+    your_likelihood: 2
+    your_justification: >
+      Single stack, marginal height, low-traffic, stable. Yard planning aware.
+      Minor procedural breach, low risk.
+    your_top_recommendation: "Schedule reconfiguration, document under yard planning nonconformity log."
+
+  - id: SYN-019
+    your_impact: 2
+    your_likelihood: 1
+    your_justification: >
+      7.2 with 30 minutes remaining, no safety-critical tasks. I rate impact 2
+      (lashing operations carry some injury risk) but likelihood 1 — conditions
+      for an incident are not present.
+    your_top_recommendation: "Log for fatigue trend analysis. No action required."
+
+  - id: SYN-020
+    your_impact: 4
+    your_likelihood: 2
+    your_justification: >
+      LOLER compliance issue — operating above the lift plan limit is a regulatory
+      breach regardless of whether overall SWL is exceeded. Impact 4 (eccentric
+      load at height can cause serious structural failure). Likelihood 2 — operator
+      has paused correctly.
+    your_top_recommendation: "LOLER compliance review, appointed person sign-off before resuming."
+
+  - id: SYN-021
+    your_impact: 1
+    your_likelihood: 1
+    your_justification: "Boundary monitor, no workers, transient. No clause breach of significance."
+    your_top_recommendation: "Log for trend analysis."
+
+  - id: SYN-022
+    your_impact: 1
+    your_likelihood: 1
+    your_justification: "Sensor anomaly. No workers affected. Schedule calibration."
+    your_top_recommendation: "Sensor calibration."
+
+  - id: SYN-023
+    your_impact: 1
+    your_likelihood: 1
+    your_justification: "Rainwater, no hazard, already managed. System classification error."
+    your_top_recommendation: "Review automated classification."
+
+  - id: SYN-024
+    your_impact: 1
+    your_likelihood: 1
+    your_justification: "One alert above threshold, transient, already resolved. No action."
+    your_top_recommendation: "Log for trend analysis."
+
+  - id: SYN-025
+    your_impact: 1
+    your_likelihood: 1
+    your_justification: "Marginal reading, calm conditions, mooring master aware. Within normal variance."
+    your_top_recommendation: "Monitor hourly."
+
+feedback:
+  scenarios_too_easy: "SYN-002, SYN-003, SYN-005 — clear emergencies with no ambiguity"
+  scenarios_too_ambiguous: >
+    SYN-004 — the likelihood score depends heavily on what ignition sources are
+    present in the warehouse; the scenario doesn't specify.
+    SYN-017 — I question whether this belongs in the dataset at all; it's below
+    any meaningful risk threshold.
+  missing_metric_types: "PPE compliance rate, permit-to-work overdue count, confined space entry monitoring"
+  general_comments: >
+    The ISO 45001 clause references in the scenarios are accurate and well-chosen.
+    I would recommend adding regulatory breach scenarios (e.g. RIDDOR-reportable
+    near-misses) to the production dataset. The AI should be tested on its ability
+    to identify regulatory reporting obligations, not just risk scores.

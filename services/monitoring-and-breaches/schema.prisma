@@ -1,6 +1,7 @@
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["multiSchema"]
+  binaryTargets   = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
@@ -21,7 +22,13 @@ model BreachCase {
   bu_id           String
   created_at      DateTime     @default(now())
   updated_at      DateTime     @updatedAt
-  evaluations     Evaluation[]
+  triage_due_at        DateTime?
+  triage_completed_at  DateTime?
+  decision_due_at      DateTime?
+  decision_approved_at DateTime?
+  closure_due_at       DateTime?
+  closed_at            DateTime?
+  evaluations          Evaluation[]
 
   @@schema("monitoring")
 }

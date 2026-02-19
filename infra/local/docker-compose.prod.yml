@@ -1,0 +1,214 @@
+services:
+  # ==========================================
+  # Infrastructure (Backing Services)
+  # ==========================================
+
+  # Event Bus
+  redpanda:
+    image: docker.redpanda.com/redpandadata/redpanda:v23.2.19
+    container_name: erm-redpanda
+    command:
+      - redpanda start
+      - --overprovisioned
+      - --smp 1
+      - --memory 1G
+      - --reserve-memory 0M
+      - --node-id 0
+      - --check=false
+      - --kafka-addr PLAINTEXT://0.0.0.0:29092,OUTSIDE://0.0.0.0:9092
+      - --advertise-kafka-addr PLAINTEXT://redpanda:29092,OUTSIDE://localhost:9092
+    ports:
+      - "9092:9092"
+    healthcheck:
+      test: [ "CMD-SHELL", "rpk cluster info" ]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+
+  # Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: erm-postgres
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "5434:5432"
+    volumes:
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Observability
+  otel-collector:
+    image: otel/opentelemetry-collector:0.88.0
+    container_name: erm-otel-collector
+    volumes:
+      - ../../observability/otel/collector-config.yaml:/etc/otel-collector-config.yaml
+    command: [ "--config=/etc/otel-collector-config.yaml" ]
+    ports:
+      - "4317:4317"
+      - "4318:4318"
+    depends_on:
+      - jaeger
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.50
+    container_name: erm-jaeger
+    ports:
+      - "16686:16686"
+      - "14268:14268"
+
+  # Policy Engine
+  opa:
+    image: openpolicyagent/opa:latest
+    container_name: erm-opa
+    volumes:
+      - ../../policy/opa:/policy
+    command:
+      - "run"
+      - "--server"
+      - "--addr"
+      - ":8181"
+      - "/policy"
+    ports:
+      - "8181:8181"
+
+  # Identity
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0.1
+    container_name: erm-keycloak
+    command: start-dev --import-realm
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
+      KC_DB_USERNAME: postgres
+      KC_DB_PASSWORD: password
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      KC_HEALTH_ENABLED: "true"
+    volumes:
+      - ../../infra/local/keycloak:/opt/keycloak/data/import
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  mailpit:
+    image: axllent/mailpit
+    container_name: erm-mailpit
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    environment:
+      MP_MAX_MESSAGES: 5000
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+
+  # ==========================================
+  # Application Services
+  # ==========================================
+
+  monitoring-service:
+    build:
+      context: ../../services/monitoring-and-breaches
+      dockerfile: Dockerfile.prod
+    container_name: erm-monitoring-service
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://postgres:${DB_PASSWORD}@postgres:5432/monitoring?schema=monitoring
+      KAFKA_BROKERS: redpanda:29092
+      KEYCLOAK_ISSUER_URL: http://localhost:8080/realms/erm-platform
+      KEYCLOAK_JWKS_URL: http://keycloak:8080/realms/erm-platform/protocol/openid-connect/certs
+      OPA_URL: http://opa:8181/v1/data/erm/governance
+      PORT: 4010
+    ports:
+      - "4010:4010"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redpanda:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
+
+  notification-service:
+    build:
+      context: ../../services/notification-service
+      dockerfile: Dockerfile.prod
+    container_name: erm-notification-service
+    environment:
+      NODE_ENV: production
+      KAFKA_BROKERS: redpanda:29092
+      JIRA_URL: https://REDACTED_JIRA_DOMAIN
+      JIRA_USER: REDACTED_EMAIL
+      JIRA_TOKEN: REDACTED_JIRA_TOKEN
+      JIRA_PROJECT: SCRUM
+      SMTP_HOST: mailpit
+      SMTP_PORT: 1025
+    depends_on:
+      redpanda:
+        condition: service_healthy
+      mailpit:
+        condition: service_started
+
+  decisioning-service:
+    build:
+      context: ../../services/decisioning-and-approvals
+      dockerfile: Dockerfile.prod
+    container_name: erm-decisioning-service
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://postgres:${DB_PASSWORD}@postgres:5432/decisioning?schema=decisioning
+      KAFKA_BROKERS: redpanda:29092
+      KEYCLOAK_ISSUER_URL: http://localhost:8080/realms/erm-platform
+      KEYCLOAK_JWKS_URL: http://keycloak:8080/realms/erm-platform/protocol/openid-connect/certs
+      MONITORING_SERVICE_URL: http://monitoring-service:4010
+      OPA_URL: http://opa:8181/v1/data/erm/governance
+      PORT: 4011
+    ports:
+      - "4011:4011"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redpanda:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
+
+  audit-service:
+    build:
+      context: ../../services/audit-and-reporting
+      dockerfile: Dockerfile.prod
+    container_name: erm-audit-service
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://postgres:${DB_PASSWORD}@postgres:5432/audit?schema=audit
+      KAFKA_BROKERS: redpanda:29092
+      KEYCLOAK_ISSUER_URL: http://localhost:8080/realms/erm-platform
+      KEYCLOAK_JWKS_URL: http://keycloak:8080/realms/erm-platform/protocol/openid-connect/certs
+      PORT: 4013
+    ports:
+      - "4013:4013"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redpanda:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
+
+  web-portal:
+    build:
+      context: ../../web/portal
+      dockerfile: Dockerfile.prod
+    container_name: erm-web-portal
+    ports:
+      - "5180:80"
+    depends_on:
+      - monitoring-service
+      - decisioning-service
+      - audit-service

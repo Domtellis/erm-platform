@@ -1,0 +1,74 @@
+import { resourceFromAttributes } from '@opentelemetry/resources';
+import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
+import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
+import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
+import { NodeSDK } from '@opentelemetry/sdk-node';
+import { PeriodicExportingMetricReader } from '@opentelemetry/sdk-metrics';
+import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-http';
+import { metrics } from '@opentelemetry/api';
+
+const sdk = new NodeSDK({
+    resource: resourceFromAttributes({
+        [SemanticResourceAttributes.SERVICE_NAME]: 'erm-ai-risk-service',
+    }),
+    traceExporter: new OTLPTraceExporter({}),
+    instrumentations: [getNodeAutoInstrumentations()],
+    metricReader: new PeriodicExportingMetricReader({
+        exporter: new OTLPMetricExporter({}),
+        exportIntervalMillis: 10000, // Export every 10s
+    }),
+});
+
+sdk.start();
+
+// ─── Custom AI Business Metrics ───────────────────────────────────────────────
+// Exported so GeminiClient and AiService can record against them.
+
+const meter = metrics.getMeter('erm-ai-risk-service', '1.0.0');
+
+// Gemini API call latency — histogram with standard buckets (ms)
+export const geminiCallDuration = meter.createHistogram('ai.gemini.call.duration', {
+    description: 'Gemini API call latency in milliseconds',
+    unit: 'ms',
+    advice: {
+        explicitBucketBoundaries: [100, 250, 500, 1000, 2000, 3000, 5000, 10000],
+    },
+});
+
+// Gemini API errors by type
+export const geminiErrorCount = meter.createCounter('ai.gemini.error.count', {
+    description: 'Number of Gemini API errors by type (timeout, parse_error, api_error)',
+});
+
+// Gemini retry attempts
+export const geminiRetryCount = meter.createCounter('ai.gemini.retry.count', {
+    description: 'Number of Gemini API retry attempts',
+});
+
+// Total assessments generated
+export const assessmentTotal = meter.createCounter('ai.assessment.total', {
+    description: 'Total AI risk assessments generated',
+});
+
+// Human feedback counters
+export const assessmentAccepted = meter.createCounter('ai.assessment.accepted', {
+    description: 'AI assessments accepted by human reviewer',
+});
+
+export const assessmentModified = meter.createCounter('ai.assessment.modified', {
+    description: 'AI assessments modified by human reviewer',
+});
+
+export const assessmentRejected = meter.createCounter('ai.assessment.rejected', {
+    description: 'AI assessments rejected by human reviewer',
+});
+
+// Pending backlog (up-down counter)
+export const assessmentPending = meter.createUpDownCounter('ai.assessment.pending', {
+    description: 'Current number of AI assessments awaiting human review',
+});
+
+// Kafka events published
+export const kafkaPublishedCount = meter.createCounter('ai.kafka.published.count', {
+    description: 'Number of events published to Kafka by the AI service',
+});

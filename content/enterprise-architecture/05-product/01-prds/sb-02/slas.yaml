@@ -1,0 +1,274 @@
+# SB-02: AI-Assisted Risk Assessment - Service Level Agreements
+
+**Product:** SB-02 AI-Assisted Risk Assessment  
+**Owner:**  VP Product + AI Oversight Lead  
+**Effective Date:** [POC Start Date]  
+**Review Cycle:** Quarterly  
+**Last Updated:** 2026-02-17
+
+---
+
+## SLA Tiers
+
+### POC Phase (Month 1-4 - BU-01 Only)
+
+**Availability SLA:** 95% uptime during business hours (8am-6pm local time)
+
+- **Measurement Window:** Business hours only
+- **Downtime Budget:** 22 hours/month
+- **Rationale:** POC allows flexibility for fixes, learning
+
+**Latency SLA:** p95 end-to-end latency <10 seconds
+
+- **Metric:** Time from breach triage → AI suggestion visible in UI
+- **Target:** 95% of requests complete within 10 seconds
+
+**Accuracy SLA:** >65% (relaxed for POC)
+
+- **Measurement:** Monthly validation against expert assessments
+
+### Production Phase (Post-POC - All BUs)
+
+**Availability SLA:** 99.5% uptime 24/7
+
+- **Downtime Budget:** 3.6 hours/month
+- **Measurement:** Uptime of `erm-ai-risk-service` container
+
+**Latency SLA:** p95 <5 seconds end-to-end
+
+- **Tighter than POC:** Users expect fast production service
+
+**Accuracy SLA:** >70% sustained
+
+- **Measurement:** Rolling 30-day accuracy vs. human expert
+
+---
+
+## Availability SLA Details
+
+### Uptime Calculation
+
+```
+Uptime % = (Total Time - Downtime) / Total Time × 100
+
+Exclusions (Don't count as downtime):
+- Scheduled maintenance (announced 48 hours in advance, max 2 hours/month)
+- Google Gemini API outage (external dependency)
+- User browser issues
+- Manual assessment mode (user chooses not to use AI)
+```
+
+### Downtime Severity
+
+| Severity | Definition | Response Time | Resolution Target |
+|----------|------------|---------------|-------------------|
+| **Critical** | AI service completely down | Immediate notification | <1 hour |
+| **High** | >50% of requests failing | <15 minutes | <2 hours |
+| **Medium** | Degraded performance (p95 > 10s) | <1 hour | <4 hours |
+| **Low** | Isolated errors (<5% requests) | <4 hours | Next business day |
+
+### SLA Credits (Production Only)
+
+If uptime falls below SLA:
+
+| Uptime Achieved | Credit |
+|-----------------|--------|
+| 99.0% - 99.49% | 10% monthly service credit |
+| 98.0% - 98.99% | 25% monthly service credit |
+| <98.0% | 50% monthly service credit |
+
+**Note:** "Service credit" = discount on next month's costs (primarily time saved, since API cost is minimal)
+
+---
+
+## Latency SLA Details
+
+### Measurement Points
+
+**End-to-End Latency:** Breach triage event → AI suggestion card rendered in UI
+
+**Components:**
+1. **Event Detection:** <500ms (breach triaged → AI service notified)
+2. **Data Enrichment:** <1s (AI service fetches similar breaches from DB)
+3. **Gemini API Call:** <2s (p95)
+4. **Response Processing:** <500ms (parse JSON, validate, store)
+5. **Frontend Update:** <1s (WebSocket push → UI render)
+
+**Total Budget:** 5 seconds (p95)
+
+### Latency Tiers
+
+| Percentile | POC Target | Production Target |
+|------------|------------|-------------------|
+| p50 (median) | <3s | <2s |
+| p90 | <7s | <4s |
+| p95 | <10s | <5s |
+| p99 | <15s | <10s |
+
+### Timeout Handling
+
+- **Gemini API Timeout:** 10 seconds hard cutoff
+- **User Experience:** If AI takes >10s, show "AI is taking longer than usual, you can proceed with manual assessment"
+- **Fallback:** Always allow manual assessment (AI is optional)
+
+---
+
+## Accuracy SLA Details
+
+### Accuracy Definition
+
+**Exact Match:** AI's (Impact, Likelihood) exactly matches expert's final assessment
+
+**Calculation:**
+```
+Accuracy = Exact Matches / Total Cases Assessed × 100
+```
+
+**Measurement:**
+- **POC:** Monthly validation set (50+ cases, blind expert review)
+- **Production:** Rolling 30-day window, all disagreement-tracked cases
+
+### Accuracy Tiers
+
+| Accuracy Range | Status | Action |
+|----------------|--------|--------|
+| ≥70% | ✅ Meets SLA | No action |
+| 65-69% | ⚠️ Warning | AI Oversight Lead investigates within 7 days |
+| 60-64% | 🚨 Breach | Prompt review required, bi-weekly accuracy checks |
+| <60% | ❌ Critical | Suspend AI pending root cause analysis |
+
+### Partial Credit (Optional Metric)
+
+**"Close Enough" Accuracy:** AI within ±1 point on both dimensions
+
+- **Example:** AI says (Impact=3, Likelihood=4), Expert says (3, 5) → Counts as "close"
+- **Target:** >85% close enough (not part of SLA, but tracked)
+
+---
+
+## Bias SLA
+
+### Zero Tolerance for Critical Bias
+
+**SLA:** 0 critical bias incidents per quarter
+
+**Critical Bias Definition:**
+- AI under-assesses High/Critical breach as Low/Medium
+- Systematic bias (>10 cases) in safety-critical scenarios
+
+**Consequence:**  If critical bias detected → Immediate suspension of AI pending fix
+
+### Medium Bias Incidents
+
+**SLA:** <3 medium bias incidents per quarter
+
+**Medium Bias Definition:**
+- Isolated misassessment (not systematic)
+- Systematic bias in non-safety-critical scenarios
+
+**Consequence:** Corrective action within 7 days, logged in AI Governance Log
+
+---
+
+## Support SLA
+
+### User Support (Risk Leads)
+
+| Issue Type | Response Time | Resolution Target |
+|------------|---------------|-------------------|
+| **Can't see AI suggestion** | <1 hour | <4 hours |
+| **AI seems wrong** | <4 hours | Log as disagreement, review in weekly analysis |
+| **Training question** | <24 hours | Provide documentation link or schedule training |
+
+### AI Oversight Lead Support
+
+| Issue Type | Response Time | Resolution Target |
+|------------|---------------|-------------------|
+| **Bias alert triggered** | <1 hour | Investigate per runbook |
+| **Prompt update request** | <24 hours | Test and deploy within 7 days |
+| **New model version** | <48 hours | Validate and approve within 14 days |
+
+---
+
+## Maintenance Windows
+
+**Scheduled Maintenance:**
+- **Frequency:** Monthly (first Sunday, 2am-4am local time)
+- **Duration:** Max 2 hours
+- **Notification:** 48 hours advance notice via email
+- **Impact:** AI suggestions unavailable, manual assessment still works
+
+**Emergency Maintenance:**
+- **Approval:** CTO or AI Oversight Lead
+- **Notification:** Immediate (via Slack + email)
+- **Duration:** As short as possible, status updates every 30 minutes
+
+---
+
+## Monitoring & Alerting
+
+### Real-Time Alerts
+
+| Alert | Threshold | Notification Channel | Responsible |
+|-------|-----------|----------------------|-------------|
+| **AI Service Down** | Uptime = 0 for 5 min | PagerDuty | On-call Engineer |
+| **High Latency** | p95 > 10s for 15 min | Slack #ai-alerts | AI Oversight Lead |
+| **High Error Rate** | >10% API errors | Slack #ai-alerts | On-call Engineer |
+| **Low Acceptance** | <50% for 7 days | Email to AI Oversight Lead | AI Oversight Lead |
+| **Bias Alert** | Counterfactual test fails | Slack #ai-alerts + Email to CRO | AI Oversight Lead |
+
+### SLA Reporting
+
+**Weekly:** SLA compliance dashboard emailed to AI Oversight Lead + Product Owner  
+**Monthly:** SLA review meeting with VP Product, CRO, AI Oversight Lead  
+**Quarterly:** Executive SLA scorecard (uptime, latency, accuracy, bias incidents)
+
+---
+
+## SLA Exceptions
+
+**Not Covered by SLA:**
+
+1. **External Dependencies:**
+   - Google Gemini API outage (not under our control)
+   - Internet connectivity issues
+   - User browser/network problems
+
+2. **User Actions:**
+   - Risk Lead chooses manual assessment (not AI failure)
+   - User modifies AI suggestion (expected behavior, not "failure")
+
+3. **Force Majeure:**
+   - Natural disasters, war, pandemics
+   - Government-mandated service shutdowns
+
+4. **Security Incidents:**
+   - Downtime due to active security threat mitigation
+
+---
+
+## SLA Review & Updates
+
+**Quarterly Review:**
+- Analyze actual performance vs. SLA targets
+- Adjust targets if consistently exceeding (e.g., 99.9% uptime achieved → raise SLA)
+- Adjust if consistently missing (realistic expectations)
+
+**Annual Renegotiation:**
+- Production SLA locked for 12 months
+- After 12 months, VP Product + CRO can renegotiate
+
+---
+
+## Acceptance
+
+**POC SLA Approval:**
+
+- [ ] VP Product: _________________________ Date: _______
+- [ ] AI Oversight Lead: __________________ Date: _______
+
+**Production SLA Approval:**
+
+- [ ] VP Product: _________________________ Date: _______
+- [ ] Chief Risk Officer: _________________ Date: _______
+- [ ] CTO: ________________________________ Date: _______

@@ -1,0 +1,4 @@
+CREATE DATABASE keycloak;
+CREATE DATABASE monitoring;
+CREATE DATABASE decisioning;
+CREATE DATABASE audit;

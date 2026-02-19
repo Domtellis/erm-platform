@@ -12,6 +12,7 @@ const navigation = [
     { name: 'Monitoring', href: '/monitoring', icon: AlertCircle },
     { name: 'Decisioning', href: '/decisioning', icon: ShieldCheck },
     { name: 'Audit Logs', href: '/audit', icon: ClipboardList },
+    { name: 'Reports', href: '/reports', icon: LayoutDashboard }, // using LayoutDashboard as placeholder or maybe ChartBar if available
 ];
 
 export function Sidebar() {

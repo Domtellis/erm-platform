@@ -2,21 +2,21 @@ import { IsString, IsNotEmpty, IsEnum, IsOptional } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateBreachSubmissionDto {
-    @ApiProperty({ example: 'SITE-ALPHA-01' })
+    @ApiProperty({ example: 'PORT-TERM-04' })
     @IsString()
     @IsNotEmpty()
     site_id: string;
 
-    @ApiProperty({ example: 'Pressure' })
+    @ApiProperty({ example: 'wind_speed_knots' })
     @IsString()
     @IsNotEmpty()
     metric_name: string;
 
-    @ApiProperty({ example: 1200.50 })
+    @ApiProperty({ example: 48.5 })
     @IsNotEmpty()
     observed_value: number;
 
-    @ApiProperty({ example: 'Elevated Safety Incident', required: false })
+    @ApiProperty({ example: 'High Wind Gusts at Quay 4', required: false })
     @IsString()
     @IsOptional()
     title?: string;
@@ -26,12 +26,12 @@ export class CreateBreachSubmissionDto {
     @IsNotEmpty()
     category: string;
 
-    @ApiProperty({ example: 'BU-NORTH-01' })
+    @ApiProperty({ example: 'BU-PACIFIC' })
     @IsString()
     @IsNotEmpty()
     bu_id: string;
 
-    @ApiProperty({ example: 'high', required: false })
+    @ApiProperty({ example: 'critical', required: false })
     @IsString()
     @IsOptional()
     severity?: string;

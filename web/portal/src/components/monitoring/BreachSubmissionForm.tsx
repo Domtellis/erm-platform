@@ -18,7 +18,7 @@ export function BreachSubmissionForm({ onSuccess }: { onSuccess: () => void }) {
             bu_id: 'BU-NORTH-01',
             category: 'safety',
             severity: 'medium',
-            metric_name: 'sensor_pressure_psi'
+            metric_name: 'wind_speed_knots'
         }
     });
 
@@ -67,8 +67,12 @@ export function BreachSubmissionForm({ onSuccess }: { onSuccess: () => void }) {
                         {...register('metric_name', { required: 'Metric is required' })}
                         className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-crm-accent focus:outline-none focus:ring-1 focus:ring-crm-accent"
                     >
-                        <option value="sensor_pressure_psi">Sensor Pressure (PSI)</option>
-                        <option value="temp_celsius">Temperature (Celsius)</option>
+                        <option value="wind_speed_knots">Wind Speed (Knots)</option>
+                        <option value="container_stack_height">Container Stack Height (Tier)</option>
+                        <option value="pm_25_level">Air Quality (PM 2.5)</option>
+                        <option value="prox_alert_count">Proximity Alerts (Collision)</option>
+                        <option value="worker_fatigue_index">Fatigue Index</option>
+                        <option value="hazmat_sensor_ppm">Hazmat Sensor (PPM)</option>
                     </select>
                 </div>
                 <div>
@@ -80,6 +84,7 @@ export function BreachSubmissionForm({ onSuccess }: { onSuccess: () => void }) {
                         <option value="low">Low</option>
                         <option value="medium">Medium</option>
                         <option value="high">High</option>
+                        <option value="critical">Critical</option>
                     </select>
                 </div>
             </div>

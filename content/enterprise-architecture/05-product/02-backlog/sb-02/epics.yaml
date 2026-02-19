@@ -1,0 +1,131 @@
+epics:
+  - id: E-SB02-01
+    title: Synthetic Data & Validation Foundation
+    description: Generate 20-30 synthetic breach scenarios from ISO 45001 standards and validate with expert panel to enable zero-shot AI assessment
+    status: planned
+    owner: AI Oversight Lead
+    priority: P0
+    estimated_effort: 2 weeks
+    business_value: Enable AI to work without historical training data; establish baseline accuracy
+    acceptance_criteria:
+      - 25+ synthetic examples generated covering all severity levels and metric types
+      - 65%+ expert agreement on AI assessments vs. synthetic ground truth
+      - All examples validated by 3+ senior risk leads
+      - Synthetic data loaded into AI service validation set
+    dependencies: []
+    risks:
+      - Synthetic data may not represent real breach patterns accurately
+
+  - id: E-SB02-02
+    title: AI Risk Service Development
+    description: Build microservice that integrates with Gemini API to generate risk assessment suggestions with bias monitoring
+    status: planned
+    owner: Engineering
+    priority: P0
+    estimated_effort: 3 weeks
+    business_value: Core AI capability for automated risk suggestions
+    acceptance_criteria:
+      - AI service deployed and passing health checks
+      - Gemini API integration functional with <2s p95 latency
+      - Prompt template supports zero-anchoring (no initial severity)
+      - Model version and API calls logged for audit trail
+      - Disagreement tracking schema deployed
+    dependencies: [E-SB02-01]
+    risks:
+      - Gemini API rate limits or availability issues
+      - Prompt engineering harder than expected
+
+  - id: E-SB02-03
+    title: Frontend AI Suggestion Interface
+    description: Add AI suggestion card to Decisioning page with Accept/Modify/Reject UI
+    status: planned
+    owner: Engineering
+    priority: P0
+    estimated_effort: 1 week
+    business_value: Enable Risk Leads to interact with AI suggestions in intuitive workflow
+    acceptance_criteria:
+      - AI suggestion card displays: Impact, Likelihood, Justification, Recommendations, Confidence
+      - Accept button creates Risk Assessment with 1 click
+      - Modify allows editing values before saving
+      - Reject dismisses AI and allows manual assessment
+      - High/Critical breaches show "Requires careful review" warning
+    dependencies: [E-SB02-02]
+    risks:
+      - UX complexity (too much information overwhelms users)
+
+  - id: E-SB02-04
+    title: Bias Mitigation Framework
+    description: Implement automated counterfactual testing, disagreement tracking, and monthly bias audit procedures
+    status: planned
+    owner: AI Oversight Lead + Engineering
+    priority: P0
+    estimated_effort: 2 weeks
+    business_value: Ensure AI fairness and safety; regulatory compliance
+    acceptance_criteria:
+      - Monthly automated bias tests (severity anchoring, geographic, temporal) configured as cron jobs
+      - Disagreement tracking captures every AI vs. human difference
+      - Bias incident runbook documented and communicated
+      - Grafana dashboard shows acceptance rate, disagreement patterns, bias alerts
+    dependencies: [E-SB02-02]
+    risks:
+      - Too many false positive bias alerts
+      - Bias tests themselves may have bugs
+
+  - id: E-SB02-05
+    title: Governance & Compliance Readiness
+    description: Complete all governance approvals, legal reviews, and compliance documentation for POC deployment
+    status: in-progress
+    owner: Product + Legal + CRO
+    priority: P0
+    estimated_effort: 2 weeks (parallel with dev)
+    business_value: Ensure regulatory compliance and risk mitigation before deployment
+    acceptance_criteria:
+      - AI Governance Policy approved by CRO
+      - Data Processing Agreement executed with Google
+      - ISO 45001 auditor informed
+      - All ADRs (0008, 0009, 0010) approved
+      - Deployment checklist 100% complete
+      - Risk Lead training materials created
+    dependencies: []
+    risks:
+      - Legal approval delays
+      - ISO auditor raises concerns
+
+  - id: E-SB02-06
+    title: POC Deployment & Monitoring
+    description: Deploy AI to BU-01 for 3-month pilot with continuous monitoring and weekly reviews
+    status: planned
+    owner: AI Oversight Lead + Product Owner
+    priority: P1
+    estimated_effort: 12 weeks (3-month POC)
+    business_value: Validate AI effectiveness in real-world operations before full rollout
+    acceptance_criteria:
+      - AI deployed to BU-01 production environment
+      - Weekly disagreement analysis completed
+      - Monthly bias audits completed and passed
+      - 3 months of operation with >60% acceptance rate
+      - Zero critical bias incidents
+      - User satisfaction survey >4.0/5.0
+    dependencies: [E-SB02-02, E-SB02-03, E-SB02-04, E-SB02-05]
+    risks:
+      - Low user adoption (<60%)
+      - Unforeseen bias patterns emerge
+
+  - id: E-SB02-07
+    title: Production Rollout (Post-POC)
+    description: Expand AI to all BUs after successful POC validation
+    status: planned
+    owner: Product Owner + Engineering
+    priority: P1
+    estimated_effort: 2 weeks
+    business_value: Scale AI benefits across entire organization
+    acceptance_criteria:
+      - CRO approval for production deployment
+      - AI enabled for all BUs
+      - Production SLAs (99.5% uptime, <5s latency) met
+      - Monitoring and alerting configured for all BUs
+      - Cross-BU bias testing passed
+    dependencies: [E-SB02-06]
+    risks:
+      - Cross-BU differences cause new bias patterns
+      - Infrastructure scaling issues

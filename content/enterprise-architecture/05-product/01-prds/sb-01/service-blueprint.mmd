@@ -1,35 +1,35 @@
 flowchart LR
 
-%% SB-01 Service Blueprint (Safety)
+%% SB-01 Service Blueprint -Safety
 %% Layers represented as lanes: Frontstage, Backstage, Systems, Data, Controls
 
-subgraph Frontstage["Frontstage (People)"]
-  IL1["Incident Lead\nCreate/Receive Safety breach"]
-  IL2["Incident Lead\nTriage: severity, location, initial impact"]
-  RL1["Risk Lead\nValidate vs Appetite/Threshold"]
-  BU1["BU Risk Owner\nApprove High severity decision"]
-  IL3["Incident Lead\nExecute action plan + capture completion evidence"]
-  RL2["Risk Lead\nClose case + export audit pack"]
+subgraph Frontstage["Frontstage - People"]
+  IL1["Incident Lead\n - Create/Receive Safety breach"]
+  IL2["Incident Lead\n - Triage: severity, location, initial impact"]
+  RL1["Risk Lead\n - Validate vs Appetite/Threshold"]
+  BU1["BU Risk Owner\n - Approve High severity decision"]
+  IL3["Incident Lead\n - Execute action plan + capture completion evidence"]
+  RL2["Risk Lead\n - Close case + export audit pack"]
 end
 
-subgraph Backstage["Backstage (Platform behaviours)"]
-  P1["Auto-assign case ID + initial state=Detected"]
+subgraph Backstage["Backstage - Platform behaviours"]
+  P1["Auto-assign case ID + initial state = Detected"]
   P2["Compute SLA timers + notify stakeholders"]
-  P3["Threshold evaluation engine\n(compare measurement vs threshold)"]
-  P4["Auto-escalation rules\n(severity/threshold/delegation)"]
-  P5["Approval workflow\n(SoD enforced)"]
-  P6["Audit event emission\n(append-only timeline)"]
-  P7["Evidence policy checks\n(block transitions if missing)"]
-  P8["Audit pack generator\n(PDF/ZIP export)"]
+  P3["Threshold evaluation engine\n - compare measurement vs threshold"]
+  P4["Auto-escalation rules\n - severity/threshold/delegation"]
+  P5["Approval workflow\n - SoD enforced "]
+  P6["Audit event emission\n - append-only timeline"]
+  P7["Evidence policy checks\n - block transitions if missing"]
+  P8["Audit pack generator\n -PDF/ZIP export"]
 end
 
 subgraph Systems["Systems / Integrations"]
   S1["Manual UI"]
-  S2["Monitoring Stub Webhook\n(breach-detected)"]
-  S3["Microsoft Teams\nNotifications"]
-  S4["Identity Provider\n(AAD/Okta)"]
-  S5["Evidence Store\n(object storage)"]
-  S6["Audit Log Store\n(append-only)"]
+  S2["Monitoring Stub Webhook\n - breach-detected"]
+  S3["Microsoft Teams\n - Notifications"]
+  S4["Identity Provider\n - AAD/Okta"]
+  S5["Evidence Store\n - object storage"]
+  S6["Audit Log Store\n - append-only"]
 end
 
 subgraph Data["Data / Entities"]
@@ -44,7 +44,7 @@ subgraph Data["Data / Entities"]
 end
 
 subgraph Controls["Controls / Governance"]
-  C1["SoD: creator ≠ approver\nHigh severity approver=BU Risk Owner"]
+  C1["SoD: creator ≠ approver\n - High severity approver=BU Risk Owner"] 
   C2["Evidence bundle required by severity"]
   C3["Immutable audit trail for key actions"]
   C4["Retention policy for Safety records"]

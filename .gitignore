@@ -26,8 +26,12 @@ yarn-error.log*
 .env.development.local
 .env.test.local
 .env.production.local
+.env.ai
 
 # IDE
 .vscode/
 .idea/
 *.swp
+
+# Model Selection Platform (Local State)
+tools/.last_sync

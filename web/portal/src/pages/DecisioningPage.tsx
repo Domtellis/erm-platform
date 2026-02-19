@@ -4,6 +4,9 @@ import axios from 'axios';
 import { ShieldCheck, ArrowRight, Gavel } from 'lucide-react';
 import { Modal } from '../components/common/Modal';
 import { DecisionReviewCard } from '../components/decisioning/DecisionReviewCard';
+import { ClosureCard } from '../components/decisioning/ClosureCard';
+import { SLABadge } from '../components/common/SLABadge';
+import { SLACountdown } from '../components/common/SLACountdown';
 
 interface BreachCase {
     id: string;
@@ -12,6 +15,13 @@ interface BreachCase {
     observed_value: number;
     severity: string;
     status: string;
+    metrics?: any;
+    triage_due_at?: string;
+    decision_due_at?: string;
+    closure_due_at?: string;
+    triage_completed_at?: string;
+    decision_approved_at?: string;
+    closed_at?: string;
 }
 
 export function DecisioningPage() {
@@ -25,32 +35,60 @@ export function DecisioningPage() {
         },
     });
 
-    const pendingCases = cases?.filter(c => c.status === 'open') || [];
+    const [activeTab, setActiveTab] = useState<'active' | 'closed'>('active');
+
+    const activeCases = cases?.filter(c => ['open', 'triaged', 'decision_approved'].includes(c.status)) || [];
+    const closedCases = cases?.filter(c => c.status === 'closed') || [];
+
+    const displayedCases = activeTab === 'active' ? activeCases : closedCases;
 
     return (
         <div className="space-y-6 animate-fade-in">
-            <div>
-                <h1 className="text-3xl font-bold text-slate-900">Decisioning & Approvals</h1>
-                <p className="mt-2 text-slate-500">Review appetite breaches and record governance decisions.</p>
+            <div className="flex justify-between items-end">
+                <div>
+                    <h1 className="text-3xl font-bold text-slate-900">Decisioning & Approvals</h1>
+                    <p className="mt-2 text-slate-500">Review appetite breaches and record governance decisions.</p>
+                </div>
+                <div className="flex space-x-1 bg-slate-100 p-1 rounded-lg">
+                    <button
+                        onClick={() => setActiveTab('active')}
+                        className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${activeTab === 'active' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                    >
+                        Active ({activeCases.length})
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('closed')}
+                        className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${activeTab === 'closed' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                    >
+                        Closed ({closedCases.length})
+                    </button>
+                </div>
             </div>
 
             <div className="grid grid-cols-1 gap-4">
                 {isLoading ? (
                     <div className="text-center py-12 text-slate-400">Loading cases...</div>
-                ) : pendingCases.length === 0 ? (
+                ) : displayedCases.length === 0 ? (
                     <div className="card border-dashed border-2 p-12 text-center">
                         <ShieldCheck className="mx-auto h-12 w-12 text-slate-300" />
-                        <p className="mt-4 text-slate-500">No pending breaches require decisioning.</p>
+                        <p className="mt-4 text-slate-500">
+                            {activeTab === 'active' ? 'No pending breaches require decisioning.' : 'No closed cases found.'}
+                        </p>
                     </div>
                 ) : (
-                    pendingCases.map((item) => (
+                    displayedCases.map((item) => (
                         <div key={item.id} className="card p-6 flex items-center justify-between group hover:border-crm-accent transition-colors">
                             <div className="flex items-center space-x-4">
-                                <div className={`rounded-lg p-3 ${item.severity === 'high' ? 'bg-red-50 text-red-600' : 'bg-amber-50 text-amber-600'}`}>
+                                <div className={`rounded-lg p-3 ${item.status === 'closed' ? 'bg-slate-100 text-slate-500' :
+                                    item.severity === 'high' ? 'bg-red-50 text-red-600' : 'bg-amber-50 text-amber-600'
+                                    }`}>
                                     <Gavel className="h-6 w-6" />
                                 </div>
                                 <div>
-                                    <h3 className="text-sm font-semibold text-slate-900">{item.site_id} - {item.metric_name}</h3>
+                                    <div className="flex items-center space-x-2">
+                                        <h3 className="text-sm font-semibold text-slate-900">{item.site_id} - {item.metric_name}</h3>
+                                        {item.status === 'closed' && <span className="badge badge-outline">Closed</span>}
+                                    </div>
                                     <p className="text-xs text-slate-400">Breach ID: {item.id.slice(0, 12)}</p>
                                 </div>
                             </div>
@@ -60,13 +98,41 @@ export function DecisioningPage() {
                                     <span className="block text-xs uppercase font-bold text-slate-400 tracking-wider">Observed</span>
                                     <span className="text-sm font-mono font-medium text-slate-900">{item.observed_value}</span>
                                 </div>
-                                <button
-                                    onClick={() => setSelectedCase(item)}
-                                    className="btn btn-secondary flex items-center group-hover:bg-crm-accent group-hover:text-white group-hover:border-crm-accent transition-all"
-                                >
-                                    Review Case
-                                    <ArrowRight className="ml-2 h-4 w-4" />
-                                </button>
+
+                                <div className="flex flex-col items-end space-y-1 min-w-[120px]">
+                                    {(() => {
+                                        const getSLA = () => {
+                                            switch (item.status) {
+                                                case 'open': return { label: 'Triage', due: item.triage_due_at, completed: null };
+                                                case 'triaged': return { label: 'Triage', due: item.triage_due_at, completed: item.triage_completed_at };
+                                                case 'decision_submitted': return { label: 'Decision', due: item.decision_due_at, completed: null };
+                                                case 'decision_approved': return { label: 'Decision', due: item.decision_due_at, completed: item.decision_approved_at };
+                                                case 'in_progress': return { label: 'Closure', due: item.closure_due_at, completed: null };
+                                                case 'closed': return { label: 'Closure', due: item.closure_due_at, completed: item.closed_at };
+                                                default: return null;
+                                            }
+                                        };
+                                        const sla = getSLA();
+                                        if (sla && sla.due) {
+                                            return sla.completed ? (
+                                                <SLABadge label={sla.label} dueAt={sla.due} completedAt={sla.completed} />
+                                            ) : (
+                                                <SLACountdown label={sla.label} dueDate={sla.due} />
+                                            );
+                                        }
+                                        return null;
+                                    })()}
+                                </div>
+
+                                {item.status !== 'closed' && (
+                                    <button
+                                        onClick={() => setSelectedCase(item)}
+                                        className="btn btn-secondary flex items-center group-hover:bg-crm-accent group-hover:text-white group-hover:border-crm-accent transition-all"
+                                    >
+                                        {item.status === 'decision_approved' ? 'Close Case' : 'Review Case'}
+                                        <ArrowRight className="ml-2 h-4 w-4" />
+                                    </button>
+                                )}
                             </div>
                         </div>
                     ))
@@ -76,13 +142,20 @@ export function DecisioningPage() {
             <Modal
                 isOpen={!!selectedCase}
                 onClose={() => setSelectedCase(null)}
-                title="Record Governance Decision"
+                title={selectedCase?.status === 'decision_approved' ? "Close Breach Case" : "Record Governance Decision"}
             >
                 {selectedCase && (
-                    <DecisionReviewCard
-                        caseData={selectedCase}
-                        onClose={() => setSelectedCase(null)}
-                    />
+                    selectedCase.status === 'decision_approved' ? (
+                        <ClosureCard
+                            caseData={selectedCase}
+                            onClose={() => setSelectedCase(null)}
+                        />
+                    ) : (
+                        <DecisionReviewCard
+                            caseData={selectedCase}
+                            onClose={() => setSelectedCase(null)}
+                        />
+                    )
                 )}
             </Modal>
         </div>

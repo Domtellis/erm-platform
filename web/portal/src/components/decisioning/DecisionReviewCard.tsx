@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 import axios from 'axios';
 import { Check, X, Shield, User } from 'lucide-react';
 
@@ -29,12 +30,13 @@ export function DecisionReviewCard({ caseData, onClose }: DecisionCardProps) {
 
     // 1. First Mutation: Record Decision
     const recordDecisionMutation = useMutation({
-        mutationFn: async (decisionType: string) => {
+        mutationFn: async ({ type, evidence }: { type: string, evidence: string[] }) => {
             const decisionResponse = await axios.post('http://localhost:4011/decisions', {
                 breach_case_id: caseData.id,
-                decision_type: decisionType,
+                decision_type: type,
                 rationale: `Manual decision recorded via Portal by ${userId}.`,
                 submitted_by: userId,
+                evidence_urls: evidence
             });
             return decisionResponse.data;
         },
@@ -79,9 +81,21 @@ export function DecisionReviewCard({ caseData, onClose }: DecisionCardProps) {
     const isApproved = decision?.status === 'approved';
     const isMitigated = decision?.decision_type === 'mitigate';
 
+    const [evidenceUrl, setEvidenceUrl] = useState('');
+    const [evidenceList, setEvidenceList] = useState<string[]>([]);
+
+    const addEvidence = () => {
+        if (evidenceUrl) {
+            setEvidenceList([...evidenceList, evidenceUrl]);
+            setEvidenceUrl('');
+        }
+    };
+
     const handleAction = async (type: string) => {
         try {
-            const decision = await recordDecisionMutation.mutateAsync(type);
+            const decision = await recordDecisionMutation.mutateAsync({ type, evidence: evidenceList });
+            // Small delay to ensure DB consistency before approval check
+            await new Promise(resolve => setTimeout(resolve, 500));
             await approveMutation.mutateAsync(decision.id);
         } catch (error: any) {
             alert(error.response?.data?.message || 'Policy Violation: Approval denied by OPA.');
@@ -100,13 +114,15 @@ export function DecisionReviewCard({ caseData, onClose }: DecisionCardProps) {
                         <div>
                             <h4 className="text-sm font-semibold text-green-900">Decision Approved</h4>
                             <p className="text-xs text-green-700">
-                                Action: {isMitigated ? 'Mitigation' : 'Operation Stopped'}
+                                Action: {decision.decision_type === 'accept_risk' ? 'Risk Accepted' : isMitigated ? 'Mitigation' : 'Operation Stopped'}
                             </p>
                         </div>
                     </div>
                     <div className="text-right">
                         <span className="text-xs text-green-600 block">Approved by</span>
-                        <span className="text-sm font-medium text-green-900">{decision.approver_user_id}</span>
+                        <span className="text-sm font-medium text-green-900">
+                            {decision.approvals?.[0]?.approver_user_id === '01fcdac1-3d09-447a-9909-805b721963f1' ? 'BU Risk Owner' : (decision.approvals?.[0]?.approver_role || 'Risk Owner')}
+                        </span>
                     </div>
                 </div>
 
@@ -174,7 +190,31 @@ export function DecisionReviewCard({ caseData, onClose }: DecisionCardProps) {
                     <Shield className="mr-2 h-4 w-4 text-crm-accent" />
                     Governance Actions
                 </h4>
-                <div className="grid grid-cols-2 gap-3">
+
+                {/* Evidence Section */}
+                <div className="bg-slate-50 p-3 rounded border border-slate-200 mb-4">
+                    <label className="block text-xs font-semibold text-slate-500 mb-2">EVIDENCE (Required for High Severity)</label>
+                    <div className="flex space-x-2 mb-2">
+                        <input
+                            type="text"
+                            className="flex-1 rounded-md border-slate-300 border p-2 text-sm text-slate-900 bg-white focus:border-crm-accent focus:ring-crm-accent"
+                            placeholder="https://sharepoint..."
+                            value={evidenceUrl}
+                            onChange={(e) => setEvidenceUrl(e.target.value)}
+                        />
+                        <button type="button" onClick={addEvidence} className="btn btn-secondary text-xs">Add</button>
+                    </div>
+                    <ul className="space-y-1">
+                        {evidenceList.map((url, i) => (
+                            <li key={i} className="text-xs text-slate-600 flex items-center">
+                                <Check className="h-3 w-3 mr-1 text-green-500" />
+                                {url}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+
+                <div className="grid grid-cols-3 gap-3">
                     <button
                         onClick={() => handleAction('mitigate')}
                         disabled={recordDecisionMutation.isPending || approveMutation.isPending}
@@ -182,6 +222,14 @@ export function DecisionReviewCard({ caseData, onClose }: DecisionCardProps) {
                     >
                         <Check className="h-6 w-6" />
                         <span>Mitigation</span>
+                    </button>
+                    <button
+                        onClick={() => handleAction('accept_risk')}
+                        disabled={recordDecisionMutation.isPending || approveMutation.isPending}
+                        className="btn border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100 flex flex-col items-center py-4 space-y-2"
+                    >
+                        <Shield className="h-6 w-6" />
+                        <span>Accept Risk</span>
                     </button>
                     <button
                         onClick={() => handleAction('stop')}

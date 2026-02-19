@@ -1,0 +1,474 @@
+# AI Risk Assessment — Expert Validation Worksheet
+# Version: 1.0 | Date: 2026-02-18 | Standard: ISO 45001:2018
+#
+# INSTRUCTIONS FOR RISK LEADS
+# ============================
+# 1. Read each scenario carefully — treat it as a real breach you are assessing
+# 2. Assign Impact and Likelihood scores using the ISO 45001 5x5 risk matrix below
+# 3. Write a brief justification (1-2 sentences) for your scores
+# 4. Do NOT discuss your scores with other Risk Leads until all worksheets are submitted
+# 5. Complete all 25 scenarios — estimated time: 45-60 minutes
+# 6. Return completed worksheet to: [AI Oversight Lead email]
+# 7. Deadline: [Insert date — recommend 5 business days]
+#
+# RISK MATRIX (ISO 45001:2018)
+# ============================
+# Impact:
+#   1 = Negligible  (No injury, no environmental impact)
+#   2 = Minor       (First aid injury, minor environmental impact)
+#   3 = Moderate    (Medical treatment injury, localised environmental impact)
+#   4 = Major       (Serious injury / hospitalisation, significant environmental impact)
+#   5 = Catastrophic (Fatality / multiple serious injuries, major environmental incident)
+#
+# Likelihood:
+#   1 = Rare          (May occur only in exceptional circumstances)
+#   2 = Unlikely      (Could occur but not expected)
+#   3 = Possible      (Might occur at some time)
+#   4 = Likely        (Will probably occur in most circumstances)
+#   5 = Almost Certain (Expected to occur in most circumstances / already occurring)
+#
+# Risk Score = Impact × Likelihood (1-25)
+#
+# ASSESSOR DETAILS (please complete before starting)
+# ===================================================
+assessor:
+  name: ""               # Your full name
+  role: ""               # e.g. Senior Risk Lead, BU Risk Manager
+  bu: ""                 # e.g. BU-PACIFIC, BU-ATLANTIC
+  date_completed: ""     # YYYY-MM-DD
+  years_experience: ""   # Years in port/terminal safety role
+
+# ===================================================
+# SCENARIOS — Complete all 25
+# ===================================================
+# For each scenario, fill in:
+#   your_impact:      [1-5]
+#   your_likelihood:  [1-5]
+#   your_justification: "Brief reason for your scores"
+#   your_top_recommendation: "Most important immediate action"
+# ===================================================
+
+assessments:
+
+  # --- SCENARIO 1 ---
+  - id: SYN-001
+    metric_name: wind_speed_knots
+    observed_value: 58.0
+    threshold: 35.0
+    title: "Extreme Wind Event — Crane Operations Suspended"
+    scenario: >
+      Wind gusts recorded at 58 knots at Quay 4, well above the 35-knot operational
+      threshold for crane operations. All STS cranes have been halted. Two vessels
+      remain alongside with unsecured loads. Risk of crane collapse or load drop
+      onto vessel deck or personnel.
+    your_impact: null          # Replace null with your score (1-5)
+    your_likelihood: null      # Replace null with your score (1-5)
+    your_justification: ""
+    your_top_recommendation: ""
+
+  # --- SCENARIO 2 ---
+  - id: SYN-002
+    metric_name: chemical_spill_litres
+    observed_value: 850.0
+    threshold: 50.0
+    title: "Hazardous Chemical Spill — Bulk Terminal Berth 3"
+    scenario: >
+      Approximately 850 litres of sodium hydroxide (NaOH, pH 14) spilled from a
+      ruptured IBC during unloading at Berth 3. Spill has reached the storm drain.
+      Three workers in the immediate area reported eye and skin irritation. No
+      confirmed injuries yet. Environmental containment not yet deployed.
+    your_impact: null
+    your_likelihood: null
+    your_justification: ""
+    your_top_recommendation: ""
+
+  # --- SCENARIO 3 ---
+  - id: SYN-003
+    metric_name: worker_fatigue_index
+    observed_value: 9.8
+    threshold: 7.0
+    title: "Critical Fatigue Index — Night Shift Crane Operators"
+    scenario: >
+      Fatigue monitoring system reports average fatigue index of 9.8 (scale 0-10)
+      for the 4 crane operators on the current night shift. Operators have been on
+      shift for 11 hours with only one 20-minute break. Two operators self-reported
+      microsleep episodes in the last hour. Crane operations are ongoing.
+    your_impact: null
+    your_likelihood: null
+    your_justification: ""
+    your_top_recommendation: ""
+
+  # --- SCENARIO 4 ---
+  - id: SYN-004
+    metric_name: fire_suppression_pressure_bar
+    observed_value: 0.2
+    threshold: 4.0
+    title: "Fire Suppression System Failure — Warehouse Complex"
+    scenario: >
+      Fire suppression system pressure has dropped to 0.2 bar (minimum operational
+      is 4.0 bar) across the main warehouse complex storing 2,400 TEU of mixed
+      cargo including Class 3 flammable liquids. System failure detected by automated
+      monitoring. Manual inspection confirms main pump failure. No fire currently
+      present but system is non-operational.
+    your_impact: null
+    your_likelihood: null
+    your_justification: ""
+    your_top_recommendation: ""
+
+  # --- SCENARIO 5 ---
+  - id: SYN-005
+    metric_name: vessel_mooring_tension_tonnes
+    observed_value: 142.0
+    threshold: 80.0
+    title: "Mooring Line Overload — VLCC at Berth 7"
+    scenario: >
+      Load cells on the breast lines of a 280,000 DWT VLCC report tension of
+      142 tonnes, 77% above the 80-tonne safe working load. Vessel is experiencing
+      surge due to swell from a passing storm system. Two mooring lines have
+      already parted in the last 30 minutes. Vessel master has requested emergency
+      tug assistance.
+    your_impact: null
+    your_likelihood: null
+    your_justification: ""
+    your_top_recommendation: ""
+
+  # --- SCENARIO 6 ---
+  - id: SYN-006
+    metric_name: container_stack_height
+    observed_value: 6.0
+    threshold: 5.0
+    title: "Stack Height Exceedance — Block C Yard"
+    scenario: >
+      Container stacks in Block C have reached 6 high (maximum permitted is 5 high
+      for standard 20ft containers). The exceedance affects 8 stacks covering
+      approximately 200 TEU. Ground conditions are firm. No adverse weather forecast.
+      The stacks have been in this configuration for approximately 4 hours.
+    your_impact: null
+    your_likelihood: null
+    your_justification: ""
+    your_top_recommendation: ""
+
+  # --- SCENARIO 7 ---
+  - id: SYN-007
+    metric_name: pm_25_level
+    observed_value: 185.0
+    threshold: 100.0
+    title: "Severe Air Quality Breach — Bulk Handling Operations"
+    scenario: >
+      PM2.5 particulate levels have reached 185 μg/m³ (operational threshold is
+      100 μg/m³) in the bulk handling area during coal unloading. Wind direction
+      has shifted, pushing dust toward the worker welfare facilities. Approximately
+      35 workers are currently in the affected area without enhanced respiratory
+      protection.
+    your_impact: null
+    your_likelihood: null
+    your_justification: ""
+    your_top_recommendation: ""
+
+  # --- SCENARIO 8 ---
+  - id: SYN-008
+    metric_name: prox_alert_count
+    observed_value: 28.0
+    threshold: 10.0
+    title: "Proximity Alert Surge — Vehicle-Pedestrian Zone E"
+    scenario: >
+      The proximity detection system has recorded 28 vehicle-pedestrian proximity
+      alerts in Zone E in the past 2 hours (threshold is 10 per 2-hour period).
+      Zone E is a shared access route between the gate complex and the container
+      yard. The surge correlates with a shift change that brought an additional
+      200 workers through the zone. No incidents have occurred yet.
+    your_impact: null
+    your_likelihood: null
+    your_justification: ""
+    your_top_recommendation: ""
+
+  # --- SCENARIO 9 ---
+  - id: SYN-009
+    metric_name: noise_level_db
+    observed_value: 98.0
+    threshold: 85.0
+    title: "Noise Overexposure — Maintenance Workshop"
+    scenario: >
+      Continuous noise monitoring in the maintenance workshop records 98 dB(A)
+      over an 8-hour period. The legal exposure limit is 85 dB(A) (8-hour TWA).
+      At 98 dB(A), the permissible exposure time without hearing protection is
+      less than 1 hour. Workshop has been occupied for 6 hours today. Workers
+      are wearing standard ear plugs (SNR 20) which are insufficient at this level.
+    your_impact: null
+    your_likelihood: null
+    your_justification: ""
+    your_top_recommendation: ""
+
+  # --- SCENARIO 10 ---
+  - id: SYN-010
+    metric_name: crane_load_percentage
+    observed_value: 112.0
+    threshold: 100.0
+    title: "STS Crane Overload — Crane 7 Lift Operation"
+    scenario: >
+      Ship-to-shore crane 7 has lifted a container unit registering 112% of its
+      safe working load (SWL). The lift is currently suspended mid-air at 18m
+      height over the vessel deck. The overload was detected by the crane's load
+      monitoring system. The crane operator has halted the lift and is awaiting
+      instructions. No structural damage observed yet.
+    your_impact: null
+    your_likelihood: null
+    your_justification: ""
+    your_top_recommendation: ""
+
+  # --- SCENARIO 11 ---
+  - id: SYN-011
+    metric_name: worker_fatigue_index
+    observed_value: 7.4
+    threshold: 7.0
+    title: "Elevated Fatigue — Day Shift Forklift Operators"
+    scenario: >
+      Fatigue monitoring shows an average index of 7.4 for the 6 forklift operators
+      on the day shift. Operators have been on shift for 8 hours with standard
+      breaks taken. No self-reported fatigue symptoms. The reading is marginally
+      above the 7.0 threshold. Operations are continuing normally.
+    your_impact: null
+    your_likelihood: null
+    your_justification: ""
+    your_top_recommendation: ""
+
+  # --- SCENARIO 12 ---
+  - id: SYN-012
+    metric_name: pm_25_level
+    observed_value: 118.0
+    threshold: 100.0
+    title: "Moderate Air Quality Exceedance — Grain Terminal"
+    scenario: >
+      PM2.5 levels at the grain terminal have reached 118 μg/m³ during grain
+      loading operations. The exceedance is 18% above threshold. Wind conditions
+      are light and variable. Approximately 12 workers are in the area, all wearing
+      standard dust masks (FFP1). Operations are continuing.
+    your_impact: null
+    your_likelihood: null
+    your_justification: ""
+    your_top_recommendation: ""
+
+  # --- SCENARIO 13 ---
+  - id: SYN-013
+    metric_name: spill_response_time_minutes
+    observed_value: 38.0
+    threshold: 20.0
+    title: "Delayed Spill Response — Minor Hydraulic Leak"
+    scenario: >
+      A minor hydraulic oil spill (approximately 20 litres) from a reach stacker
+      was reported 38 minutes ago. The spill response team has not yet arrived
+      (target response time is 20 minutes). The spill is contained within a bunded
+      area and has not reached any drains. No personnel are at risk. Operations
+      in the immediate area have been informally suspended by the operator.
+    your_impact: null
+    your_likelihood: null
+    your_justification: ""
+    your_top_recommendation: ""
+
+  # --- SCENARIO 14 ---
+  - id: SYN-014
+    metric_name: wind_speed_knots
+    observed_value: 38.0
+    threshold: 35.0
+    title: "Wind Threshold Breach — Marginal Exceedance"
+    scenario: >
+      Wind speed at Berth 2 has reached 38 knots, marginally above the 35-knot
+      operational threshold. The wind has been at this level for 15 minutes.
+      Forecast shows winds easing to 30 knots within 2 hours. Crane operations
+      are continuing at reduced speed. The crane operator has been notified.
+    your_impact: null
+    your_likelihood: null
+    your_justification: ""
+    your_top_recommendation: ""
+
+  # --- SCENARIO 15 ---
+  - id: SYN-015
+    metric_name: noise_level_db
+    observed_value: 89.0
+    threshold: 85.0
+    title: "Noise Exceedance — Quayside Generator Operations"
+    scenario: >
+      Temporary diesel generators running on the quayside are producing 89 dB(A)
+      in the adjacent worker rest area. Workers are using the rest area for meal
+      breaks (approximately 20 minutes exposure per worker). Standard ear plugs
+      are available but not being worn as workers consider the rest area a low-risk
+      zone.
+    your_impact: null
+    your_likelihood: null
+    your_justification: ""
+    your_top_recommendation: ""
+
+  # --- SCENARIO 16 ---
+  - id: SYN-016
+    metric_name: prox_alert_count
+    observed_value: 13.0
+    threshold: 10.0
+    title: "Minor Proximity Alert Increase — Gate Complex"
+    scenario: >
+      The proximity detection system recorded 13 alerts in the gate complex over
+      a 2-hour period (threshold: 10). The increase is attributed to a temporary
+      road layout change during resurfacing works. Banksmen are in place. No
+      near-miss incidents reported. Works are expected to complete by end of shift.
+    your_impact: null
+    your_likelihood: null
+    your_justification: ""
+    your_top_recommendation: ""
+
+  # --- SCENARIO 17 ---
+  - id: SYN-017
+    metric_name: spill_response_time_minutes
+    observed_value: 24.0
+    threshold: 20.0
+    title: "Marginal Spill Response Delay — Water-Based Coolant"
+    scenario: >
+      A minor coolant spill (approximately 5 litres, water-based, non-hazardous)
+      was reported 24 minutes ago. Response team arrived at 24 minutes (target: 20).
+      Cleanup is now underway. The spill was in a low-traffic area. No personnel
+      were at risk at any point. The delay was due to the response team being
+      engaged with another minor task.
+    your_impact: null
+    your_likelihood: null
+    your_justification: ""
+    your_top_recommendation: ""
+
+  # --- SCENARIO 18 ---
+  - id: SYN-018
+    metric_name: container_stack_height
+    observed_value: 5.5
+    threshold: 5.0
+    title: "Minor Stack Height Irregularity — Block A"
+    scenario: >
+      A single stack in Block A has been identified at 5.5 high due to a
+      non-standard container height combination (mix of 9'6" and 8'6" units).
+      The physical height exceeds the 5-container limit by approximately 30cm.
+      The stack is in a low-traffic area of the yard. Structural stability is
+      not compromised. Yard planning team has been notified.
+    your_impact: null
+    your_likelihood: null
+    your_justification: ""
+    your_top_recommendation: ""
+
+  # --- SCENARIO 19 ---
+  - id: SYN-019
+    metric_name: worker_fatigue_index
+    observed_value: 7.2
+    threshold: 7.0
+    title: "Marginal Fatigue Reading — Single Operator"
+    scenario: >
+      One lashing operator has recorded a fatigue index of 7.2 at the end of a
+      standard 8-hour day shift. All breaks have been taken as scheduled. The
+      operator reports feeling fine and has 30 minutes remaining on shift.
+      No safety-critical tasks are planned for the remaining shift period.
+    your_impact: null
+    your_likelihood: null
+    your_justification: ""
+    your_top_recommendation: ""
+
+  # --- SCENARIO 20 ---
+  - id: SYN-020
+    metric_name: crane_load_percentage
+    observed_value: 92.0
+    threshold: 100.0
+    title: "Elevated Crane Load — Within Safe Working Limits"
+    scenario: >
+      Crane 3 is operating at 92% of its safe working load during a heavy lift
+      operation. The load is within SWL but the lift plan specified a maximum
+      of 85% for this particular lift due to the load's eccentric centre of
+      gravity. The crane operator noticed the discrepancy and has paused the lift.
+    your_impact: null
+    your_likelihood: null
+    your_justification: ""
+    your_top_recommendation: ""
+
+  # --- SCENARIO 21 ---
+  - id: SYN-021
+    metric_name: noise_level_db
+    observed_value: 86.0
+    threshold: 85.0
+    title: "Marginal Noise Reading — External Boundary"
+    scenario: >
+      Boundary noise monitoring at the terminal perimeter has recorded 86 dB(A)
+      during a brief period of simultaneous crane and vehicle activity. The
+      reading lasted approximately 5 minutes before returning to 82 dB(A).
+      No workers are stationed at the boundary monitoring point. The reading
+      is 1 dB above the threshold.
+    your_impact: null
+    your_likelihood: null
+    your_justification: ""
+    your_top_recommendation: ""
+
+  # --- SCENARIO 22 ---
+  - id: SYN-022
+    metric_name: pm_25_level
+    observed_value: 102.0
+    threshold: 100.0
+    title: "Negligible Air Quality Exceedance — Automated Sensor Spike"
+    scenario: >
+      A single PM2.5 sensor recorded 102 μg/m³ for one 5-minute averaging period.
+      Adjacent sensors in the same zone recorded 78-85 μg/m³ simultaneously.
+      The reading is likely a sensor anomaly or localised dust event. No workers
+      reported any respiratory symptoms. The reading has returned to 80 μg/m³.
+    your_impact: null
+    your_likelihood: null
+    your_justification: ""
+    your_top_recommendation: ""
+
+  # --- SCENARIO 23 ---
+  - id: SYN-023
+    metric_name: spill_response_time_minutes
+    observed_value: 21.0
+    threshold: 20.0
+    title: "Negligible Response Time Breach — Rainwater Pooling"
+    scenario: >
+      A report of rainwater pooling near Gate 3 was logged as a spill event by
+      the automated system. Response team arrived in 21 minutes (threshold: 20).
+      On arrival, the team confirmed the pooling was rainwater with no contaminants.
+      No slip hazard was present as the area was already cordoned by the gate
+      officer. The 1-minute delay had no operational impact.
+    your_impact: null
+    your_likelihood: null
+    your_justification: ""
+    your_top_recommendation: ""
+
+  # --- SCENARIO 24 ---
+  - id: SYN-024
+    metric_name: prox_alert_count
+    observed_value: 11.0
+    threshold: 10.0
+    title: "Single Alert Above Threshold — End of Shift Traffic"
+    scenario: >
+      The proximity system recorded 11 alerts in Zone B during the shift-change
+      period (threshold: 10 per 2 hours). The single additional alert above
+      threshold occurred as the last vehicle of the shift change exited the zone.
+      Zone B has a good safety record. No near-miss incidents were reported.
+      Normal operations have resumed.
+    your_impact: null
+    your_likelihood: null
+    your_justification: ""
+    your_top_recommendation: ""
+
+  # --- SCENARIO 25 ---
+  - id: SYN-025
+    metric_name: vessel_mooring_tension_tonnes
+    observed_value: 82.0
+    threshold: 80.0
+    title: "Marginal Mooring Tension — Feeder Vessel in Calm Conditions"
+    scenario: >
+      Load cells on a 2,500 DWT feeder vessel show breast line tension of 82 tonnes,
+      marginally above the 80-tonne SWL. Sea state is calm (Beaufort 1). The vessel
+      is fully loaded and the tension is consistent with expected static load.
+      No swell or wind forecast for the next 12 hours. The mooring master has
+      been informed.
+    your_impact: null
+    your_likelihood: null
+    your_justification: ""
+    your_top_recommendation: ""
+
+# ===================================================
+# OVERALL FEEDBACK (optional but valuable)
+# ===================================================
+feedback:
+  scenarios_too_easy: ""      # List any scenario IDs you found unrealistically clear-cut
+  scenarios_too_ambiguous: "" # List any scenario IDs that needed more information
+  missing_metric_types: ""    # Any metric types you'd expect to see that are missing
+  general_comments: ""        # Any other feedback for the AI team

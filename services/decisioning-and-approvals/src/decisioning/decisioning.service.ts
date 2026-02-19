@@ -4,6 +4,7 @@ import { CreateDecisionDto } from './dto/create-decision.dto';
 import { ApproveDecisionDto } from './dto/approve-decision.dto';
 import axios from 'axios';
 import { ConfigService } from '@nestjs/config';
+import axiosRetry from 'axios-retry';
 
 @Injectable()
 export class DecisioningService {
@@ -15,10 +16,30 @@ export class DecisioningService {
         private configService: ConfigService,
     ) {
         this.opaUrl = this.configService.get<string>('OPA_URL', 'http://127.0.0.1:8181/v1/data/erm/governance');
+
+        // Configure global retry for axios
+        axiosRetry(axios, {
+            retries: 3,
+            retryDelay: axiosRetry.exponentialDelay, // 1s, 2s, 4s...
+            retryCondition: (error) => {
+                // Retry on Network Error or 5xx status
+                return axiosRetry.isNetworkOrIdempotentRequestError(error) ||
+                    (error.response?.status >= 500 && error.response?.status <= 599);
+            },
+            onRetry: (retryCount, error, requestConfig) => {
+                this.logger.warn(`Retrying request (Attempt ${retryCount}): ${error.message} to ${requestConfig.url}`);
+            }
+        });
     }
 
     async createDecision(dto: CreateDecisionDto) {
         this.logger.log(`Recording decision for case: ${dto.breach_case_id}`);
+        // Prepare evidence data
+        const evidenceData = dto.evidence_urls?.map(url => ({
+            url,
+            uploaded_by: dto.submitted_by
+        })) || [];
+
         return this.prisma.decision.create({
             data: {
                 breach_case_id: dto.breach_case_id,
@@ -26,13 +47,18 @@ export class DecisioningService {
                 rationale: dto.rationale,
                 submitted_by: dto.submitted_by,
                 status: 'pending',
+                evidence: {
+                    create: evidenceData
+                }
             },
+            include: { evidence: true }
         });
     }
 
     async approveDecision(id: string, dto: ApproveDecisionDto, user: any, authHeader: string) {
         const decision = await this.prisma.decision.findUnique({
             where: { id },
+            include: { evidence: true }
         });
 
         if (!decision) throw new NotFoundException('Decision not found');
@@ -40,9 +66,8 @@ export class DecisioningService {
         // Fetch Breach details to get Severity
         let severity = 'high'; // Default fail-safe
         try {
-            // Using internal docker networking or localhost depending on environment
-            // For local dev, we use localhost:4010
-            const breachParam = await axios.get(`http://localhost:4010/breaches/${decision.breach_case_id}`, {
+            const monitoringUrl = this.configService.get<string>('MONITORING_SERVICE_URL');
+            const breachParam = await axios.get(`${monitoringUrl}/breaches/${decision.breach_case_id}`, {
                 headers: { Authorization: authHeader }
             });
             severity = breachParam.data?.severity || 'high';
@@ -52,17 +77,19 @@ export class DecisioningService {
             // If we can't fetch severity, we default to HIGH for safety
         }
 
-        this.logger.log(`Performing OPA check: ${this.opaUrl}`);
-
         // Call OPA for Approval Authorization
         try {
+            const opaInput = {
+                severity: severity,
+                submitted_by: decision.submitted_by,
+                approver_user_id: user?.userId || dto.approver_user_id, // Prefer token ID
+                approver_roles: user?.roles || [], // Use token roles
+                has_evidence: decision.evidence && decision.evidence.length > 0
+            };
+            this.logger.log(`OPA Input: ${JSON.stringify(opaInput)}`);
+
             const opaResponse = await axios.post(this.opaUrl, {
-                input: {
-                    severity: severity,
-                    submitted_by: decision.submitted_by,
-                    approver_user_id: user?.userId || dto.approver_user_id, // Prefer token ID
-                    approver_roles: user?.roles || [], // Use token roles
-                },
+                input: opaInput,
             });
 
             this.logger.log(`OPA Response: ${JSON.stringify(opaResponse.data)}`);
@@ -111,6 +138,7 @@ export class DecisioningService {
                         type: 'erm.decisioning.decision-approved.v1',
                         payload: {
                             decision_id: id,
+                            breach_case_id: decision.breach_case_id,
                             approver_user_id: persistenceUserId,
                             approver_role: effectiveRole,
                             approved_at: approval.approved_at,
@@ -135,7 +163,7 @@ export class DecisioningService {
         const where = breachCaseId ? { breach_case_id: breachCaseId } : {};
         return this.prisma.decision.findMany({
             where,
-            include: { approvals: true },
+            include: { approvals: true, evidence: true },
             orderBy: { created_at: 'desc' },
         });
     }

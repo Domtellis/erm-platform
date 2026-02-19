@@ -1,0 +1,253 @@
+# AI Risk Assessment — Expert Validation Worksheet
+# ASSESSOR: A1 — Simulated Conservative Risk Lead
+# DISCLOSURE: This worksheet was simulated by the AI development team for POC
+#             purposes. Real expert validation is required before production deployment.
+
+assessor:
+  name: "Simulated — A1 (Conservative Risk Lead)"
+  role: "Senior Risk Lead"
+  bu: "BU-PACIFIC"
+  date_completed: "2026-02-18"
+  years_experience: "18"
+  simulation_note: >
+    Persona: Conservative. Rates likelihood at worst-case plausible scenario.
+    Anchors impact to potential for fatality even if not yet realised.
+    Prefers to over-control and justify downgrade later.
+
+assessments:
+
+  - id: SYN-001
+    your_impact: 5
+    your_likelihood: 5
+    your_justification: >
+      58 knots is well into storm-force territory. With unsecured loads on two vessels
+      alongside, the probability of a load shift or crane structural event is very high.
+      I rate likelihood 5 — at this wind speed, something will give.
+    your_top_recommendation: "Evacuate all quayside personnel immediately and secure vessels for emergency departure."
+
+  - id: SYN-002
+    your_impact: 5
+    your_likelihood: 5
+    your_justification: >
+      850 litres of NaOH at pH 14 with workers already symptomatic and spill in the
+      storm drain. This is a live chemical emergency. Impact is catastrophic — potential
+      fatalities from chemical burns and harbour contamination. Likelihood is certain —
+      it's already happening.
+    your_top_recommendation: "Declare HAZMAT emergency, evacuate 50m zone, deploy containment booms on storm drain."
+
+  - id: SYN-003
+    your_impact: 5
+    your_likelihood: 5
+    your_justification: >
+      Microsleep episodes are already occurring. At fatigue index 9.8 with crane
+      operations ongoing, a fatal incident is almost certain without immediate
+      intervention. This is the highest risk scenario I can imagine in port operations.
+    your_top_recommendation: "Suspend all crane operations immediately. No exceptions."
+
+  - id: SYN-004
+    your_impact: 5
+    your_likelihood: 4
+    your_justification: >
+      Class 3 flammables in a warehouse with no suppression is a pre-disaster state.
+      Impact is catastrophic if ignition occurs. I rate likelihood 4 not 5 because
+      there is no current ignition source identified — but that can change instantly.
+    your_top_recommendation: "Deploy continuous fire watch and remove all flammable cargo from the warehouse immediately."
+
+  - id: SYN-005
+    your_impact: 5
+    your_likelihood: 5
+    your_justification: >
+      Two lines already parted on a VLCC. This is an active breakaway in progress.
+      The consequences — vessel collision, mooring gang fatalities, bunker spill —
+      are catastrophic and the situation is deteriorating in real time.
+    your_top_recommendation: "Evacuate mooring gang, deploy all tugs, notify VTS for emergency vessel management."
+
+  - id: SYN-006
+    your_impact: 4
+    your_likelihood: 3
+    your_justification: >
+      Six-high stacks with 200 TEU affected is a significant hazard. Ground conditions
+      are firm and weather is good, which reduces likelihood, but any ground vibration
+      from passing equipment could trigger a collapse. Impact is major — container
+      crush is potentially fatal.
+    your_top_recommendation: "Establish 10m exclusion zone and arrange immediate destuffing."
+
+  - id: SYN-007
+    your_impact: 4
+    your_likelihood: 5
+    your_justification: >
+      185 μg/m³ with 35 workers actively exposed and inadequate PPE. Harm is
+      occurring right now — I rate likelihood 5. Acute respiratory distress is
+      a major impact, and prolonged exposure at this level can cause lasting damage.
+    your_top_recommendation: "Suspend bulk handling operations and issue P3 respirators immediately."
+
+  - id: SYN-008
+    your_impact: 4
+    your_likelihood: 4
+    your_justification: >
+      28 alerts in 2 hours is nearly 3x the threshold. A vehicle-pedestrian collision
+      in a port environment is potentially fatal. With 200 extra workers in the zone,
+      the likelihood of an actual collision is high without immediate intervention.
+    your_top_recommendation: "Deploy banksmen immediately and implement traffic hold until pedestrian flow reduces."
+
+  - id: SYN-009
+    your_impact: 3
+    your_likelihood: 5
+    your_justification: >
+      Hearing damage at 98 dB with inadequate PPE over 6 hours is essentially certain.
+      Impact is moderate — irreversible hearing loss is serious but not life-threatening.
+      Likelihood is 5 because the damage is already accumulating.
+    your_top_recommendation: "Issue ear defenders immediately and limit remaining exposure to 30 minutes maximum."
+
+  - id: SYN-010
+    your_impact: 5
+    your_likelihood: 4
+    your_justification: >
+      112% SWL with load suspended at 18m. Even though the operator has halted,
+      the load remains at height and the crane structure may already be stressed.
+      I rate likelihood 4 — the risk of structural failure is real until the load
+      is safely lowered by a qualified engineer.
+    your_top_recommendation: "Evacuate vessel deck below crane and call crane engineer before any movement."
+
+  - id: SYN-011
+    your_impact: 3
+    your_likelihood: 3
+    your_justification: >
+      7.4 is only marginally above threshold but forklift operations carry significant
+      injury potential. I rate impact 3 (moderate — forklift accident can cause serious
+      injury) and likelihood 3 — marginal fatigue increases accident probability
+      meaningfully even without symptoms.
+    your_top_recommendation: "Schedule additional break immediately and increase monitoring frequency."
+
+  - id: SYN-012
+    your_impact: 3
+    your_likelihood: 3
+    your_justification: >
+      118 μg/m³ is 18% above threshold with FFP1 masks only. I rate impact 3 —
+      grain dust at this level can cause occupational asthma with repeated exposure.
+      Likelihood 3 — workers are exposed but FFP1 provides partial protection.
+    your_top_recommendation: "Upgrade to FFP2 masks and activate additional dust suppression."
+
+  - id: SYN-013
+    your_impact: 2
+    your_likelihood: 3
+    your_justification: >
+      20 litres of hydraulic oil in a bunded area is a minor spill. The 18-minute
+      delay is a process failure but the hazard is contained. Impact is minor —
+      slip risk only. Likelihood 3 because the spill remains unattended and
+      someone could enter the area.
+    your_top_recommendation: "Dispatch response team immediately and cordon the area."
+
+  - id: SYN-014
+    your_impact: 4
+    your_likelihood: 2
+    your_justification: >
+      I rate impact higher than some might — 38 knots with crane operations continuing
+      (even at reduced speed) carries real risk of load swing and crane instability.
+      However likelihood is 2 because the exceedance is marginal and wind is forecast
+      to ease. The operator has been notified.
+    your_top_recommendation: "Suspend crane operations until wind drops below 35 knots."
+
+  - id: SYN-015
+    your_impact: 2
+    your_likelihood: 3
+    your_justification: >
+      89 dB for 20-minute breaks is a real but limited exposure. Impact is minor —
+      short-duration exposure at this level is unlikely to cause lasting damage.
+      Likelihood 3 because the behaviour (not wearing PPE in rest area) is systemic.
+    your_top_recommendation: "Relocate rest area or post mandatory PPE signs at entrance."
+
+  - id: SYN-016
+    your_impact: 2
+    your_likelihood: 2
+    your_justification: >
+      13 alerts with banksmen in place during a known temporary layout change.
+      The hazard is actively managed. Impact minor, likelihood unlikely given controls.
+    your_top_recommendation: "Maintain banksmen for duration of works and brief vehicle operators."
+
+  - id: SYN-017
+    your_impact: 1
+    your_likelihood: 2
+    your_justification: >
+      5 litres of water-based coolant is negligible. The 4-minute delay is a
+      process issue. No real hazard exists. I rate likelihood 2 — someone could
+      slip, but it's unlikely given the low-traffic area.
+    your_top_recommendation: "Log for trend analysis and review response team prioritisation."
+
+  - id: SYN-018
+    your_impact: 2
+    your_likelihood: 2
+    your_justification: >
+      A single stack 30cm over height in a low-traffic area with stable conditions.
+      Minor impact — unlikely to collapse without additional stressor. Yard planning
+      is already aware.
+    your_top_recommendation: "Schedule reconfiguration and place exclusion markers as precaution."
+
+  - id: SYN-019
+    your_impact: 2
+    your_likelihood: 1
+    your_justification: >
+      7.2 with 30 minutes remaining, no safety-critical tasks, operator self-reports
+      as fine. I rate likelihood 1 — the conditions for an incident are not present.
+      Minor impact if something did occur during lashing.
+    your_top_recommendation: "Monitor for remainder of shift. No immediate action required."
+
+  - id: SYN-020
+    your_impact: 4
+    your_likelihood: 2
+    your_justification: >
+      Operating above the lift plan limit with an eccentric load is a genuine concern —
+      the lift plan limit exists for a reason. Impact is major if the load becomes
+      unstable at height. However the operator has correctly paused, reducing likelihood
+      to 2.
+    your_top_recommendation: "Do not resume until appointed person reviews and revises the lift plan."
+
+  - id: SYN-021
+    your_impact: 1
+    your_likelihood: 1
+    your_justification: >
+      1 dB above threshold for 5 minutes at a boundary point with no workers.
+      Negligible in every dimension.
+    your_top_recommendation: "Log for trend analysis. No action required."
+
+  - id: SYN-022
+    your_impact: 1
+    your_likelihood: 1
+    your_justification: >
+      Likely sensor anomaly — adjacent sensors don't confirm. Reading has normalised.
+      No workers affected.
+    your_top_recommendation: "Schedule sensor calibration. No operational action."
+
+  - id: SYN-023
+    your_impact: 1
+    your_likelihood: 1
+    your_justification: >
+      Rainwater, no contaminants, already cordoned by gate officer. The automated
+      system mis-classified this. No hazard exists.
+    your_top_recommendation: "Review automated spill classification to exclude rainwater events."
+
+  - id: SYN-024
+    your_impact: 1
+    your_likelihood: 1
+    your_justification: >
+      One alert above threshold during a known high-traffic period with no incidents.
+      Transient and already resolved.
+    your_top_recommendation: "Log for trend analysis. Consider threshold review for shift-change periods."
+
+  - id: SYN-025
+    your_impact: 1
+    your_likelihood: 1
+    your_justification: >
+      2.5% above SWL on a small feeder vessel in Beaufort 1 conditions. The mooring
+      master is aware. This is within the normal variance of static load calculations.
+    your_top_recommendation: "Monitor hourly. No immediate action required."
+
+feedback:
+  scenarios_too_easy: "SYN-002, SYN-003, SYN-005 — these are clear-cut emergencies"
+  scenarios_too_ambiguous: "SYN-020 — the distinction between 92% actual vs 85% plan limit needs more context on the eccentric load type"
+  missing_metric_types: "Confined space entry monitoring, radiation dose (for any nuclear cargo), working at height fall arrest system status"
+  general_comments: >
+    Overall the scenarios are well-constructed and span the severity range well.
+    The minimal scenarios (SYN-021 to SYN-025) are appropriately trivial.
+    I would suggest adding 2-3 scenarios involving simultaneous compound hazards
+    (e.g. high wind + fatigue + crane overload) for the production dataset.

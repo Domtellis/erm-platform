@@ -1,0 +1,348 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/decisions": {
+      "post": {
+        "operationId": "DecisioningController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDecisionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Submit a response decision",
+        "tags": [
+          "Decisioning & Approvals"
+        ]
+      },
+      "get": {
+        "operationId": "DecisioningController_findAll",
+        "parameters": [
+          {
+            "name": "breach_case_id",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "List all decisions",
+        "tags": [
+          "Decisioning & Approvals"
+        ]
+      }
+    },
+    "/decisions/{id}/approve": {
+      "post": {
+        "operationId": "DecisioningController_approve",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApproveDecisionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Approve a response decision",
+        "tags": [
+          "Decisioning & Approvals"
+        ]
+      }
+    },
+    "/assessments": {
+      "post": {
+        "operationId": "RiskController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRiskAssessmentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Assessment created successfully"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Create a new Risk Assessment",
+        "tags": [
+          "risk-assessments"
+        ]
+      },
+      "get": {
+        "operationId": "RiskController_findAll",
+        "parameters": [
+          {
+            "name": "breach_case_id",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "List assessments",
+        "tags": [
+          "risk-assessments"
+        ]
+      }
+    },
+    "/remediations": {
+      "post": {
+        "operationId": "RemediationController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRemediationPlanDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Plan created successfully"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Create a Remediation Plan",
+        "tags": [
+          "remediation-plans"
+        ]
+      },
+      "get": {
+        "operationId": "RemediationController_findAll",
+        "parameters": [
+          {
+            "name": "risk_assessment_id",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "List remediation plans",
+        "tags": [
+          "remediation-plans"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Decisioning & Approvals API",
+    "description": "The ERM Decisioning & Approvals domain service API",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "schemas": {
+      "CreateDecisionDto": {
+        "type": "object",
+        "properties": {
+          "breach_case_id": {
+            "type": "string",
+            "example": "BC-2026-001"
+          },
+          "decision_type": {
+            "type": "string",
+            "example": "mitigate",
+            "enum": [
+              "accept",
+              "accept_risk",
+              "mitigate",
+              "stop",
+              "waive"
+            ]
+          },
+          "rationale": {
+            "type": "string",
+            "example": "Safety protocols activated."
+          },
+          "submitted_by": {
+            "type": "string",
+            "example": "USER-99"
+          },
+          "evidence_urls": {
+            "example": [
+              "http://example.com/evidence"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "breach_case_id",
+          "decision_type",
+          "rationale",
+          "submitted_by"
+        ]
+      },
+      "ApproveDecisionDto": {
+        "type": "object",
+        "properties": {
+          "approver_user_id": {
+            "type": "string",
+            "example": "APPROVER-01"
+          },
+          "approver_role": {
+            "type": "string",
+            "example": "bu_risk_owner"
+          },
+          "comments": {
+            "type": "string",
+            "example": "Approved after site review."
+          }
+        }
+      },
+      "CreateRiskAssessmentDto": {
+        "type": "object",
+        "properties": {
+          "breach_case_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "impact_score": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "likelihood_score": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "submitted_by": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "breach_case_id",
+          "title",
+          "impact_score",
+          "likelihood_score",
+          "submitted_by"
+        ]
+      },
+      "CreateRemediationPlanDto": {
+        "type": "object",
+        "properties": {
+          "risk_assessment_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "assigned_to": {
+            "type": "string"
+          },
+          "due_date": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "risk_assessment_id",
+          "title",
+          "description",
+          "assigned_to",
+          "due_date"
+        ]
+      }
+    }
+  }
+}

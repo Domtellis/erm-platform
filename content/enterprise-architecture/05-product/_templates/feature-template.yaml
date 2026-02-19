@@ -1,0 +1,13 @@
+features:
+  - id: F-[PRODUCT-ID]-001
+    epic_id: E-[PRODUCT-ID]-01
+    name: [Feature Name]
+    description: [What this feature does and why it's needed]
+    priority: P0  # P0 (critical) | P1 (important) | P2 (nice-to-have)
+    effort: S  # S (1-3 days) | M (3-5 days) | L (1-2 weeks) | XL (2+ weeks)
+    owner: [Team/Person responsible]
+    acceptance_criteria:
+      - [Testable criterion 1]
+      - [Testable criterion 2]
+    technical_notes: [Implementation details, constraints, or considerations]
+    dependencies: []  # List of feature IDs that must complete first

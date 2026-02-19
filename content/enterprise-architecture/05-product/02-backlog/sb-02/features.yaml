@@ -1,0 +1,260 @@
+features:
+  # ================================================
+  # E-SB02-01: Synthetic Data & Validation
+  # ================================================
+  - id: F-SB02-001
+    epic_id: E-SB02-01
+    name: Synthetic Data Generation Tool
+    description: Python script to generate breach scenarios from ISO 45001 risk matrix
+    priority: P0
+    effort: M (3-5 days)
+    owner: AI Oversight Lead
+    acceptance_criteria:
+      - Script generates 25 breach scenarios (5 per severity level)
+      - Each scenario includes: metric name, observed value, threshold, severity, description
+      - Output format: JSON compatible with AI service validation set
+    technical_notes: Use ISO 45001 Annex B risk examples as templates
+
+  - id: F-SB02-002
+    epic_id: E-SB02-01
+    name: Expert Validation Panel
+    description: Conduct expert review session with 3+ senior risk leads to validate synthetic data
+    priority: P0
+    effort: S (2 days)
+    owner: Product Owner
+    acceptance_criteria:
+      - 3+ risk leads assess all 25 synthetic cases independently
+      - Agreement threshold: >65% exact match on (Impact, Likelihood)
+      - Disagreements documented and resolved
+    technical_notes: Use blind assessment (no inter-assessor communication during review)
+
+  # ================================================
+  # E-SB02-02: AI Risk Service Development
+  # ================================================
+  - id: F-SB02-003
+    epic_id: E-SB02-02
+    name: AI Service Scaffold
+    description: Create NestJS microservice with health checks, config, telemetry
+    priority: P0
+    effort: S (2 days)
+    owner: Backend Team
+    acceptance_criteria:
+      - Service starts and responds to /health endpoint
+      - Environment variables loaded from .env.ai
+      - OpenTelemetry tracing configured
+      - Dockerfile and docker-compose integration
+    technical_notes: Use erm-decisioning as template for structure
+
+  - id: F-SB02-004
+    epic_id: E-SB02-02
+    name: Gemini API Client
+    description: Integrate with Google Gemini API for zero-shot risk assessment
+    priority: P0
+    effort: M (4 days)
+    owner: Backend Team
+    acceptance_criteria:
+      - GeminiClient class with sendPrompt() method
+      - JSON schema enforcement for structured output
+      - Timeout handling (10s max)
+      - Retry logic (3 attempts with exponential backoff)
+      - API key from secure vault (not hardcoded)
+    technical_notes: Use @google/generative-ai NPM package
+
+  - id: F-SB02-005
+    epic_id: E-SB02-02
+    name: Zero-Shot Prompt Template
+    description: Build Handlebars prompt template embedding ISO 45001 risk matrix
+    priority: P0
+    effort: M (3-5 days)
+    owner: AI Oversight Lead + Backend Team
+    acceptance_criteria:
+      - Prompt includes ISO 45001 5x5 risk matrix
+      - Does NOT include initial severity (zero-anchoring)
+      - Requires AI to cite standards in justification
+      - Enforces JSON output schema
+      - Template versioned (v1.0.0)
+    technical_notes: Iterate on prompt with validation set until >65% accuracy
+
+  - id: F-SB02-006
+    epic_id: E-SB02-02
+    name: Data Enrichment Service
+    description: FetchSimilar breaches from DB to provide context to AI
+    priority: P1
+    effort: M (3 days)
+    owner: Backend Team
+    acceptance_criteria:
+      - Query finds 3-5 breaches with same metric_name
+      - Returns: impact, likelihood, justification from historical assessments
+      - Limits query to last 90 days (fresh data)
+    technical_notes: SQL query with metric_name match, ORDER BY created_at DESC LIMIT 5
+
+  - id: F-SB02-007
+    epic_id: E-SB02-02
+    name: Assessment Suggestion Schema
+    description: Add AssessmentSuggestion table to Prisma schema
+    priority: P0
+    effort: S (1 day)
+    owner: Backend Team
+    acceptance_criteria:
+      - Table includes: breach_id, ai_impact, ai_likelihood, justification, recommendations, confidence, model_version, prompt_version
+      - Migration tested locally and staging
+    technical_notes: FK to BreachCase table
+
+  # ================================================
+  # E-SB02-03: Frontend AI Suggestion Interface
+  # ================================================
+  - id: F-SB02-008
+    epic_id: E-SB02-03
+    name: AI Suggestion Card Component
+    description: React component displaying AI assessment with Accept/Modify/Reject actions
+    priority: P0
+    effort: M (3 days)
+    owner: Frontend Team
+    acceptance_criteria:
+      - Card shows: impact (1-5), likelihood (1-5), justification, recommendations, confidence (color-coded)
+      - Three buttons: Accept (green), Modify (yellow), Reject (red)
+      - High/Critical breaches show warning banner
+      - Responsive design (mobile-friendly)
+    technical_notes: Use existing SLABadge component as design reference
+
+  - id: F-SB02-009
+    epic_id: E-SB02-03
+    name: AI Assessment Acceptance Flow
+    description: Handle user clicking "Accept" to create Risk Assessment from AI suggestion
+    priority: P0
+    effort: S (2 days)
+    owner: Frontend + Backend Team
+    acceptance_criteria:
+      - Accept button calls POST /ai/assessments/:id/accept
+      - Creates RiskAssessment record with ai_suggestion_id FK
+      - Logs acceptance event for feedback tracking
+      - Redirects to assessment detail page
+    technical_notes: Reuse existing createAssessment mutation
+
+  - id: F -SB02-010
+    epic_id: E-SB02-03
+    name: Modify AI Suggestion Flow
+    description: Allow Risk Lead to edit AI values before saving
+    priority: P0
+    effort: M (3 days)
+    owner: Frontend Team
+    acceptance_criteria:
+      - Modify button opens inline editor (impact, likelihood sliders)
+      - Optional text field: "Why did you modify this?"
+      - Save creates RiskAssessment with modified values + logs disagreement
+    technical_notes: Track both AI original values and human final values
+
+  # ================================================
+  # E-SB02-04: Bias Mitigation Framework
+  # ================================================
+  - id: F-SB02-011
+    epic_id: E-SB02-04
+    name: Counterfactual Test Automation
+    description: Cron job that runs monthly bias tests (anchoring, geographic, temporal)
+    priority: P0
+    effort: L (5 days)
+    owner: Backend Team
+    acceptance_criteria:
+      - Cron runs first Monday of each month
+      - Tests 10 random breach cases with variations
+      - Pass/fail logged to database
+      - Slack alert if any test fails
+    technical_notes: Use node-cron, store test results in BiasTestResult table
+
+  - id: F-SB02-012
+    epic_id: E-SB02-04
+    name: Disagreement Tracking
+    description: Log every AI vs. human divergence for analysis
+    priority: P0
+    effort: M (3 days)
+    owner: Backend Team
+    acceptance_criteria:
+      - AssessmentDisagreement table captures: ai_impact, human_impact, delta, modification_reason
+      - Webhook/event triggers on RiskAssessment creation (if from AI)
+      - Weekly report generated automatically
+    technical_notes: Use Prisma middleware to intercept creates
+
+  - id: F-SB02-013
+    epic_id: E-SB02-04
+    name: Bias Monitoring Dashboard
+    description: Grafana dashboard for AI performance and bias metrics
+    priority: P1
+    effort: M (3 days)
+    owner: Ops Team
+    acceptance_criteria:
+      - Panels: acceptance rate, modification rate, rejection rate, accuracy (rolling 7-day)
+      - Bias alert count (monthly counterfactual tests)
+      - API latency (p50, p95, p99)
+    technical_notes: Use Prometheus metrics from AI service
+
+  # ================================================
+  # E-SB02-05: Governance & Compliance
+  # ================================================
+  - id: F-SB02-014
+    epic_id: E-SB02-05
+    name: Risk Lead Training Materials
+    description: User guide and video tutorial for AI risk assessment feature
+    priority: P1
+    effort: M (4 days)
+    owner: Product Owner + UX
+    acceptance_criteria:
+      - User guide: when to trust, when to be skeptical, how to provide feedback
+      - 10-minute video walkthrough
+      - Quiz (5 questions) to validate understanding
+    technical_notes: Record video using Loom, host on internal wiki
+
+  - id: F-SB02-015
+    epic_id: E-SB02-05
+    name: ISO 45001 Auditor Notification
+    description: Formal letter to ISO auditor explaining AI usage
+    priority: P0
+    effort: S (1 day)
+    owner: CRO + Compliance Team
+    acceptance_criteria:
+      - Letter drafted and approved by CRO
+      - Explicitly states: AI is decision support, not safety control
+      - Sent to auditor 30 days before POC deployment
+    technical_notes: Reference ADR-0008 and AI Governance Policy
+
+  # ================================================
+  # E-SB02-06: POC Deployment & Monitoring
+  # ================================================
+  - id: F-SB02-016
+    epic_id: E-SB02-06
+    name: POC Deployment to BU-01
+    description: Deploy AI service and frontend to BU-01 production environment
+    priority: P0
+    effort: S (2 days)
+    owner: Ops Team
+    acceptance_criteria:
+      - AI service deployed via docker-compose
+      - Environment variables configured (.env.ai with Gemini API key)
+      - Health checks passing
+      - BU-01 users can see AI suggestions
+    technical_notes: Use blue-green deployment for zero downtime
+
+  - id: F-SB02-017
+    epic_id: E-SB02-06
+    name: Weekly Disagreement Analysis
+    description: AI Oversight Lead reviews all disagreements weekly
+    priority: P1
+    effort: S (recurring, 2 hours/week)
+    owner: AI Oversight Lead
+    acceptance_criteria:
+      - Export disagreement data from database
+      - Identify patterns (e.g., "AI underestimates chemical spills")
+      - Propose prompt updates if systematic bias detected
+    technical_notes: Use Metabase or export to CSV for analysis
+
+  - id: F-SB02-018
+    epic_id: E-SB02-06
+    name: User Satisfaction Survey
+    description: Quarterly survey to Risk Leads on AI helpfulness
+    priority: P2
+    effort: S (1 day setup)
+    owner: Product Owner
+    acceptance_criteria:
+      - Survey distributed via email
+      - Questions: How helpful? (1-5), Would you recommend? (Yes/No), Open feedback
+      - >70% response rate
+    technical_notes: Use Google Forms or internal survey tool

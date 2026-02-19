@@ -1,0 +1,62 @@
+{
+    "version": "1.0.0",
+    "last_updated": "2026-02-19T11:22:00Z",
+    "models": [
+        {
+            "id": "gemini-3-flash",
+            "name": "Gemini 3 Flash",
+            "tier": "Standard",
+            "cost_rank": 1,
+            "description": "Fast, low-quota usage for routine tasks, style updates, and boilerplate."
+        },
+        {
+            "id": "gemini-3-pro-low",
+            "name": "Gemini 3 Pro (Low)",
+            "tier": "Enhanced",
+            "cost_rank": 2,
+            "description": "Balanced for standard feature development and single-service refactoring."
+        },
+        {
+            "id": "gemini-3-pro-high",
+            "name": "Gemini 3 Pro (High)",
+            "tier": "Advanced",
+            "cost_rank": 3,
+            "description": "High context window for architectural reviews and multi-service planning."
+        },
+        {
+            "id": "claude-sonnet-4-5",
+            "name": "Claude Sonnet 4.5",
+            "tier": "Premium",
+            "cost_rank": 4,
+            "description": "High accuracy for complex coding tasks without explicit deep reasoning."
+        },
+        {
+            "id": "claude-sonnet-4-5-thinking",
+            "name": "Claude Sonnet 4.5 (Thinking)",
+            "tier": "Critical",
+            "cost_rank": 5,
+            "description": "For debugging complex bugs that require clear step-by-step logic."
+        },
+        {
+            "id": "claude-sonnet-4-6-thinking",
+            "name": "Claude Sonnet 4.6 (Thinking)",
+            "tier": "Critical+",
+            "cost_rank": 6,
+            "description": "Next-gen reasoning for the most difficult logical puzzles and security audits."
+        },
+        {
+            "id": "claude-opus-4-5-thinking",
+            "name": "Claude Opus 4.5 (Thinking)",
+            "tier": "Elite",
+            "cost_rank": 7,
+            "description": "Maximum reasoning capability. Use only for project-critical architectural breakthroughs."
+        },
+        {
+            "id": "gpt-oss-120b-medium",
+            "name": "GPT-OSS 120B (Medium)",
+            "tier": "Research",
+            "cost_rank": 2,
+            "description": "Strong for open-ended research and documentation exploration."
+        }
+    ]
+}

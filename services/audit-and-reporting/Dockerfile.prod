@@ -1,0 +1,44 @@
+# Stage 1: Builder
+FROM node:20-alpine AS builder
+
+WORKDIR /usr/src/app
+
+# Install dependencies
+COPY package*.json ./
+COPY schema.prisma ./
+
+# Install all dependencies
+RUN npm ci
+
+# Generate Prisma Client
+RUN npx prisma generate
+
+# Copy source code
+COPY . .
+
+# Build the application
+RUN npx nest build
+
+# Prune dev dependencies
+RUN npm prune --production
+
+# Stage 2: Production
+FROM node:20-alpine AS production
+
+WORKDIR /usr/src/app
+
+RUN apk add --no-cache openssl
+
+
+# Copy assets
+COPY --from=builder /usr/src/app/node_modules ./node_modules
+COPY --from=builder /usr/src/app/dist ./dist
+COPY --from=builder /usr/src/app/package*.json ./
+COPY --from=builder /usr/src/app/schema.prisma ./
+
+ENV NODE_ENV=production
+
+# Audit Service uses 4013
+EXPOSE 4013
+
+CMD ["node", "dist/main"]

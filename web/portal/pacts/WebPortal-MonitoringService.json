@@ -1,0 +1,78 @@
+{
+  "consumer": {
+    "name": "WebPortal"
+  },
+  "interactions": [
+    {
+      "description": "a request for all breaches",
+      "providerStates": [
+        {
+          "name": "Has breaches"
+        }
+      ],
+      "request": {
+        "headers": {
+          "Authorization": "Bearer mock-token"
+        },
+        "matchingRules": {
+          "header": {
+            "Authorization": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          }
+        },
+        "method": "GET",
+        "path": "/breaches"
+      },
+      "response": {
+        "body": [
+          {
+            "created_at": "2023-01-01T00:00:00.000Z",
+            "id": "breach-123",
+            "metric_name": "temperature",
+            "observed_value": 25.5,
+            "severity": "high",
+            "site_id": "site-001",
+            "status": "open"
+          }
+        ],
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      }
+    }
+  ],
+  "metadata": {
+    "pact-js": {
+      "version": "16.2.0"
+    },
+    "pactRust": {
+      "ffi": "0.4.28",
+      "models": "1.3.5"
+    },
+    "pactSpecification": {
+      "version": "3.0.0"
+    }
+  },
+  "provider": {
+    "name": "MonitoringService"
+  }
+}

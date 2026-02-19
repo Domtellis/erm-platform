@@ -1,0 +1,1 @@
+TRUNCATE TABLE audit."AuditEvent" CASCADE;

@@ -1,0 +1,40 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
+  binaryTargets   = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  schemas  = ["ai_risk"]
+}
+
+model AssessmentSuggestion {
+  id               String   @id @default(uuid())
+  breach_case_id   String   @unique
+  model_version    String   // e.g. "gemini-2.0-flash"
+  prompt_version   String   // e.g. "v1.0"
+  impact           Int      // 1-5 (ISO 45001 scale)
+  likelihood       Int      // 1-5 (ISO 45001 scale)
+  risk_score       Int      // impact × likelihood
+  justification    String
+  recommendations  String[] // Array of action strings
+  latency_ms       Int      // Gemini API call duration for SLA monitoring
+  status           String   @default("pending") // pending | accepted | modified | rejected
+  human_feedback   String?  // Captured when status = modified
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+
+  @@schema("ai_risk")
+}
+
+model Outbox {
+  id           String    @id @default(uuid())
+  type         String    // Event type e.g. erm.risk.assessment-created.v1
+  payload      Json      // Event data
+  occurred_at  DateTime  @default(now())
+  processed_at DateTime?
+
+  @@schema("ai_risk")
+}

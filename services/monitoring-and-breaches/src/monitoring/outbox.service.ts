@@ -49,7 +49,7 @@ export class OutboxService implements OnModuleInit, OnModuleDestroy {
                 const headers = event.trace_context ? (event.trace_context as any) : {};
 
                 await this.producer.send({
-                    topic: 'erm-audit-events',
+                    topic: event.type,
                     messages: [
                         {
                             value: JSON.stringify({

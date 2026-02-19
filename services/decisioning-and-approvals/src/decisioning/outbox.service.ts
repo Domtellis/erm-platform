@@ -46,7 +46,7 @@ export class OutboxService implements OnModuleInit, OnModuleDestroy {
         for (const event of pendingEvents) {
             try {
                 await this.producer.send({
-                    topic: 'erm-audit-events',
+                    topic: event.type,
                     messages: [
                         {
                             value: JSON.stringify({

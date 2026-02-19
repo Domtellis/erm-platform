@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsEnum } from 'class-validator';
+import { IsString, IsNotEmpty, IsEnum, IsOptional, IsArray } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateDecisionDto {
@@ -7,8 +7,8 @@ export class CreateDecisionDto {
     @IsNotEmpty()
     breach_case_id: string;
 
-    @ApiProperty({ example: 'mitigate', enum: ['accept', 'mitigate', 'stop', 'waive'] })
-    @IsEnum(['accept', 'mitigate', 'stop', 'waive'])
+    @ApiProperty({ example: 'mitigate', enum: ['accept', 'accept_risk', 'mitigate', 'stop', 'waive'] })
+    @IsEnum(['accept', 'accept_risk', 'mitigate', 'stop', 'waive'])
     decision_type: string;
 
     @ApiProperty({ example: 'Safety protocols activated.' })
@@ -20,4 +20,8 @@ export class CreateDecisionDto {
     @IsString()
     @IsNotEmpty()
     submitted_by: string;
+
+    @ApiProperty({ example: ['http://example.com/evidence'], required: false })
+    @IsOptional()
+    evidence_urls?: string[];
 }

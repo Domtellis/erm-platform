@@ -1,11 +1,11 @@
 id: sb-01
 name: Appetite breach response
-version: 0.1.1
+version: 0.1.2
 
 context:
   bu: BU-01
   breach_category: safety
-  notification_channel: teams
+  notification_channel: email_jira # UPDATED: Replaces Teams
 
 value_streams: [VS-07, VS-00, VS-08]
 
@@ -22,10 +22,10 @@ in_scope:
   features_in_scope:   # NEW: delivery planning unit between epics and stories
     - F-01-01  # Case intake (manual + stub)
     - F-01-02  # Workflow state machine + timeline
-    - F-01-03  # Triage + SLA timers + Teams notify
+    - F-01-03  # Triage + SLA timers + Email/Jira notify (Replaces Teams)
     - F-02-01  # Appetite/threshold selection
     - F-02-02  # Threshold evaluation + severity mapping
-    - F-03-01  # Escalation rules + Teams notification
+    - F-03-01  # Escalation rules + Email notification
     - F-03-02  # Decision submission
     - F-03-03  # Approvals + SoD (High -> BU Risk Owner)
     - F-04-01  # Evidence capture + indexing
@@ -33,7 +33,7 @@ in_scope:
     - F-04-03  # Action plan management
     - F-04-04  # Closure + post-action notes
     - F-05-01  # Audit events pipeline (append-only)
-    - F-05-02  # Audit pack export
+    # - F-05-02  # Audit pack export (DEFERRED)
 
   minimum_controls_day1:
     - segregation_of_duties
@@ -48,15 +48,16 @@ out_of_scope:
   - full_policy_library_management
   - advanced_analytics_heatmaps
   - full_ticketing_integration
+  - audit_pack_export_pdf # Moved from in_scope
 
 assumptions:
   - "BU-01 pilot has named champions for Incident Lead, Risk Lead, BU Risk Owner."
-  - "Teams webhook/connector is permitted by IT policy for notifications."
+  - "SMTP/Jira integration verified as valid replacement for Teams."
   - "Identity provider available or mocked with role mapping for pilot."
 
 dependencies:
   - identity_and_access_model
   - evidence_store
   - audit_log_store
-  - notification_service_teams
+  - notification_service_email
   - appetite_and_threshold_reference_data

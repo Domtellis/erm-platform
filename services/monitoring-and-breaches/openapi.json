@@ -1,0 +1,185 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/breaches/manual-submission": {
+      "post": {
+        "operationId": "MonitoringController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBreachSubmissionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Manually submit a breach signal/case",
+        "tags": [
+          "Monitoring & Breaches"
+        ]
+      }
+    },
+    "/breaches/metrics": {
+      "get": {
+        "operationId": "MonitoringController_getMetrics",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get current breach metrics and compliance",
+        "tags": [
+          "Monitoring & Breaches"
+        ]
+      }
+    },
+    "/breaches": {
+      "get": {
+        "operationId": "MonitoringController_findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "List all breach cases",
+        "tags": [
+          "Monitoring & Breaches"
+        ]
+      }
+    },
+    "/breaches/{id}": {
+      "get": {
+        "operationId": "MonitoringController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get details for a specific breach case",
+        "tags": [
+          "Monitoring & Breaches"
+        ]
+      }
+    },
+    "/breaches/{id}/close": {
+      "post": {
+        "operationId": "MonitoringController_close",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Close a breach case",
+        "tags": [
+          "Monitoring & Breaches"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Monitoring & Breaches API",
+    "description": "The ERM Monitoring & Breaches domain service API",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "schemas": {
+      "CreateBreachSubmissionDto": {
+        "type": "object",
+        "properties": {
+          "site_id": {
+            "type": "string",
+            "example": "PORT-TERM-04"
+          },
+          "metric_name": {
+            "type": "string",
+            "example": "wind_speed_knots"
+          },
+          "observed_value": {
+            "type": "number",
+            "example": 48.5
+          },
+          "title": {
+            "type": "string",
+            "example": "High Wind Gusts at Quay 4"
+          },
+          "category": {
+            "type": "string",
+            "example": "safety"
+          },
+          "bu_id": {
+            "type": "string",
+            "example": "BU-PACIFIC"
+          },
+          "severity": {
+            "type": "string",
+            "example": "critical"
+          }
+        },
+        "required": [
+          "site_id",
+          "metric_name",
+          "observed_value",
+          "category",
+          "bu_id"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,169 @@
+# Decision Authority Matrix
+
+**Purpose:** Define who has authority to make decisions across the ERM Platform  
+**Owner:** Chief Risk Officer  
+**Last Updated:** 2026-02-17
+
+---
+
+## AI/ML Decision Authorities
+
+### Strategic & Governance
+
+| Decision | Authority | Can Delegate? | Requires | Notes |
+|----------|-----------|---------------|----------|-------|
+| **Approve AI Governance Policy** | Chief Risk Officer | No | CISO + Legal review | Initial and annual renewal |
+| **Deploy AI to POC** | VP Product + VP Risk | No | Deployment checklist completion | Pre-production testing |
+| **Deploy AI to Production** | Chief Risk Officer + CISO | No | POC success metrics + checklist | Final gate before production |
+| **Update AI Governance Policy** | Chief Risk Officer | No | Stakeholder review | Quarterly or ad-hoc |
+| **Appoint AI Oversight Lead** | Chief Risk Officer | No | - | New role for AI management |
+| **Suspend AI Service (Emergency)** | AI Oversight Lead OR CRO | No | - | Bias incident response |
+
+###Model & Prompt Management
+
+| Decision | Authority | Can Delegate? | Requires | Notes |
+|----------|-----------|---------------|----------|-------|
+| **Select AI Model** | VP Product + CTO + CRO | No | ADR approval | Initial model selection |
+| **Change AI Model Version** | AI Oversight Lead | Yes (to Product Owner) | Validation testing | Minor version updates |
+| **Change AI Provider** | CTO + CRO | No | New ADR, security review | Major change (e.g., Gemini → GPT) |
+| **Update Prompt Template (Minor)** | AI Oversight Lead | Yes () | Testing on validation set | Wording, formatting |
+| **Update Prompt Template (Major)** | Chief Risk Officer | No | Bias testing, CRO approval | Risk matrix changes, logic changes |
+| **Add Synthetic Training Data** | AI Oversight Lead | Yes | Expert review | Expanding validation set |
+
+### Operational Decisions
+
+| Decision | Authority | Can Delegate? | Requires | Notes |
+|----------|-----------|---------------|----------|-------|
+| **Accept AI Risk Assessment** | Risk Lead | Never | - | Individual assessor authority |
+| **Reject AI Risk Assessment** | Risk Lead | Never | - | Always allowed, no justification needed |
+| **Override AI Assessment** | Any Risk Lead | Never | - | Human always has final say |
+| **Configure AI Service** | AI Oversight Lead | Yes (to Ops Team) | - | Technical configuration |
+| **API Key Rotation** | CISO | Yes (to Ops Team) | 90-day cycle | Security requirement |
+| **Disable AI for Breach Type** | AI Oversight Lead OR CRO | Yes (emergency) | - | If bias detected for specific scenario |
+
+### Compliance & Audit
+
+| Decision | Authority | Can Delegate? | Requires | Notes |
+|----------|-----------|---------------|----------|-------|
+| **Approve Data Sent to External API** | Chief Risk Officer + CISO | No | Privacy Impact Assessment | Before POC |
+| **Execute Data Processing Agreement** | Legal Counsel | No | CISO input | With Google/AI provider |
+| **Classify Bias Incident Severity** | AI Oversight Lead | Yes (to CRO for Critical) | Incident classification matrix | Per runbook |
+| **Approve AI for New Jurisdiction** | CISO + Legal | No | Regulatory review | Different data residency rules |
+| **Define AI Success Metrics** | VP Product + CRO | No | - | KPIs for AI performance |
+
+---
+
+## Risk Assessment Decision Authorities
+
+### Breach Management
+
+| Decision | Authority | Can Delegate? | Requires | Notes |
+|----------|-----------|---------------|----------|-------|
+| **Create Breach Record** | System (automated) OR Operations Manager | Yes | Metric threshold exceeded | Triggered by monitoring |
+| **Triage Breach** | Operations Manager | Yes (to Duty Manager) | Breach exists | Initial review |
+| **Assign Risk Assessment** | Operations Manager | Yes (to Duty Manager) | Triaged breach | Assign to Risk Lead |
+| **Complete Risk Assessment** | Risk Lead (certified) | No | Competency certification | Can use AI suggestion but not required |
+| **Approve High/Critical Risk Assessment** | Chief Risk Officer OR Delegate | Yes (to Senior Risk Lead) | Risk Lead assessment complete | Approval workflow |
+
+### Remediation & Closure
+
+| Decision | Authority | Can Delegate? | Requires| Notes |
+|----------|-----------|---------------|----------|-------|
+| **Approve Remediation Plan** | Risk Lead | No | Risk assessment complete | Creates plan |
+| **Approve High/Critical Remediation** | Chief Risk Officer | Yes (to VP Risk) | Risk Lead proposal | Budget approval |
+| **Implement Remediation** | Site Manager | No | Approved plan | Local execution |
+| **Close Breach** | Risk Lead | No | Remediation verified | Final closure |
+
+---
+
+## System & Infrastructure
+
+| Decision | Authority | Can Delegate? | Requires | Notes |
+|----------|-----------|---------------|----------|-------|
+| **Deploy New Microservice** | CTO | Yes (to VP Engineering) | Architecture review | Infrastructure changes |
+| **Modify Database Schema** | CTO | Yes (to Tech Lead) | Migration testing | Backwards compatibility |
+| **Change API Contract** | VP Product + VP Engineering | No | Consumer notification | Breaking changes |
+| **Deploy to Production** | VP Engineering | Yes (to Release Manager) | Testing complete | Standard deployments |
+| **Emergency Hotfix** | CTO OR VP Engineering | Yes (emergency only) | Post-deploy review required | Critical bugs |
+
+---
+
+## Product & Features
+
+| Decision | Authority | Can Delegate? | Requires | Notes |
+|----------|-----------|---------------|----------|-------|
+| **Approve New Strategic Bet** | CEO + CFO | No | Business case, ROI analysis | Major initiatives like SB-02 |
+| **Approve PRD** | VP Product | Yes (to Product Owner) | Stakeholder review | Feature-level PRDs |
+| **Prioritize Backlog** | Product Owner | No | Stakeholder input | Sprint planning |
+| **Define MVP Scope** | VP Product + CTO | No | Feasibility assessment | Minimum viable product |
+| **Sunset Feature** | VP Product | No | User impact analysis | Deprecation plan |
+
+---
+
+## Data & Privacy
+
+| Decision | Authority | Can Delegate? | Requires | Notes |
+|----------|-----------|---------------|----------|-------|
+| **Define Data Classification** | CISO | No | Legal + Privacy Officer | Confidential, PII, etc. |
+| **Approve External Data Sharing** | CISO + Legal | No | DPA, privacy review | API integrations |
+| **Grant Database Access** | CISO | Yes (to DBA) | Least privilege principle | User permissions |
+| **Execute Data Processing Agreement** | Legal Counsel | No | - | GDPR compliance |
+| **Delete User Data (GDPR Request)** | Privacy Officer OR CISO | Yes (to operations) | User verification | Right to erasure |
+
+---
+
+## Delegation Rules
+
+### When Delegation is Permitted
+
+1. **Explicit Delegation:** Authority holder explicitly delegates to named individual
+2. **Documented:** Delegation recorded in writing (email, system record)
+3. **Time-Bound:** Delegation for finite period (e.g., "while I'm on vacation")
+4. **Accountable:** Original authority holder remains accountable for outcomes
+
+### Non-Delegable Decisions
+
+Decisions marked "Cannot Delegate" can NEVER be delegated, even in emergencies. These are reserved for specific roles due to:
+- Legal accountability
+- Fiduciary responsibility
+- Safety-critical nature
+- Regulatory compliance
+
+### Emergency Override
+
+In life-threatening emergencies, ANY decision can be made by on-scene incident commander, with immediate notification to proper authority and post-incident review.
+
+---
+
+## Role Definitions
+
+| Role | Primary Responsibility |
+|------|------------------------|
+| **Chief Risk Officer (CRO)** | Overall risk governance, AI policy oversight |
+| **CISO** | Information security, data privacy, vendor risk |
+| **CEO** | Strategic direction, ultimate accountability |
+| **CFO** | Financial approval, budget authority |
+| **CTO** | Technology strategy, architecture decisions |
+| **VP Product** | Product roadmap, feature prioritization |
+| **VP Engineering** | Engineering delivery, technical execution |
+| **VP Risk** | Day-to-day risk operations |
+| **AI Oversight Lead** | **[NEW]** AI model management, bias monitoring, prompt engineering |
+| **Product Owner** | Specific product backlog and delivery |
+| **Risk Lead** | Individual risk assessments (certified role) |
+| **Operations Manager** | Day-to-day breach management |
+| **Legal Counsel** | Contract review, regulatory compliance |
+| **Privacy Officer** | GDPR compliance, data subject rights |
+
+---
+
+## Version History
+
+| Version | Date | Changes | Approved By |
+|---------|------|---------|-------------|
+| 1.0.0 | 2026-02-17 | Initial version with AI authorities | DRAFT |
+
+---
+
+## Approval
+
+**Chief Risk Officer:** _________________________ Date: _______

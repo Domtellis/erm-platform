@@ -1,0 +1,83 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/audit": {
+      "get": {
+        "operationId": "AuditController_getEvents",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Audit & Reporting"
+        ]
+      }
+    },
+    "/reports/trends": {
+      "get": {
+        "operationId": "ReportingController_getTrends",
+        "parameters": [
+          {
+            "name": "days",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get risk trend analysis (Breaches over time)",
+        "tags": [
+          "Reporting & Analytics"
+        ]
+      }
+    },
+    "/reports/burndown": {
+      "get": {
+        "operationId": "ReportingController_getBurndown",
+        "parameters": [
+          {
+            "name": "days",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get total open risk over time (Burndown)",
+        "tags": [
+          "Reporting & Analytics"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Audit & Reporting API",
+    "description": "The ERM Audit & Reporting domain service API",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "schemas": {}
+  }
+}

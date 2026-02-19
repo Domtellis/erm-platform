@@ -1,0 +1,237 @@
+# AI Risk Assessment — Expert Validation Worksheet
+# ASSESSOR: A2 — Simulated Pragmatic Operations Manager
+# DISCLOSURE: This worksheet was simulated by the AI development team for POC
+#             purposes. Real expert validation is required before production deployment.
+
+assessor:
+  name: "Simulated — A2 (Pragmatic Operations Manager)"
+  role: "Operations Manager / Risk Lead"
+  bu: "BU-ATLANTIC"
+  date_completed: "2026-02-18"
+  years_experience: "12"
+  simulation_note: >
+    Persona: Pragmatic. Weighs existing controls heavily when scoring likelihood.
+    Rates impact at most probable outcome rather than worst-case.
+    Operationally experienced — distinguishes between theoretical and actual risk.
+
+assessments:
+
+  - id: SYN-001
+    your_impact: 5
+    your_likelihood: 4
+    your_justification: >
+      58 knots is extreme and cranes are already halted — the operator has responded
+      correctly. Impact remains catastrophic given unsecured loads on two vessels.
+      Likelihood 4 not 5 because cranes are stopped; the immediate risk is load
+      shift on vessels, not crane collapse.
+    your_top_recommendation: "Secure all loose deck cargo on both vessels and maintain crane halt until wind drops below 30 knots."
+
+  - id: SYN-002
+    your_impact: 5
+    your_likelihood: 5
+    your_justification: >
+      Active chemical emergency with workers already symptomatic and spill in drain.
+      No ambiguity here — this is a 5/5 scenario. The harm is occurring.
+    your_top_recommendation: "HAZMAT emergency declaration, 50m evacuation, storm drain isolation."
+
+  - id: SYN-003
+    your_impact: 5
+    your_likelihood: 5
+    your_justification: >
+      Microsleep during crane operations is an active emergency. Fatality is almost
+      certain without immediate suspension. Agree fully with 5/5.
+    your_top_recommendation: "Suspend crane operations immediately. Arrange relief crew."
+
+  - id: SYN-004
+    your_impact: 5
+    your_likelihood: 3
+    your_justification: >
+      I rate likelihood lower than some colleagues might. No fire is present and
+      no ignition source has been identified. The risk is real but not imminent —
+      fire watch can be deployed while repairs are arranged. Impact remains
+      catastrophic if ignition does occur.
+    your_top_recommendation: "Deploy fire watch, remove Class 3 flammables, arrange emergency pump repair."
+
+  - id: SYN-005
+    your_impact: 5
+    your_likelihood: 5
+    your_justification: >
+      Two lines parted, 142 tonnes on remaining lines, VLCC in active surge.
+      This is a breakaway in progress. 5/5 — no question.
+    your_top_recommendation: "Evacuate mooring gang, all tugs to vessel, VTS notification."
+
+  - id: SYN-006
+    your_impact: 4
+    your_likelihood: 2
+    your_justification: >
+      Six-high stacks are a real hazard but the stacks have been stable for 4 hours
+      in good conditions. The risk is real but not imminent. I rate likelihood 2 —
+      collapse requires an additional trigger (vibration, wind) that isn't present.
+      Impact remains major — container crush can be fatal.
+    your_top_recommendation: "Exclusion zone and schedule destuffing at next opportunity — not emergency priority."
+
+  - id: SYN-007
+    your_impact: 4
+    your_likelihood: 4
+    your_justification: >
+      185 μg/m³ with 35 workers exposed and inadequate PPE. Agree with 4/4.
+      The harm is active and the scale (35 workers) makes this a high-priority response.
+    your_top_recommendation: "Suspend operations, issue P3 respirators, relocate workers upwind."
+
+  - id: SYN-008
+    your_impact: 3
+    your_likelihood: 3
+    your_justification: >
+      28 alerts is high but the shift change is a known transient event. I rate
+      impact 3 not 4 — proximity alerts don't always indicate near-misses; the
+      system is sensitive. Likelihood 3 — the surge is real but temporary.
+    your_top_recommendation: "Deploy banksmen for remainder of shift change period."
+
+  - id: SYN-009
+    your_impact: 3
+    your_likelihood: 5
+    your_justification: >
+      Agree with 3/5. Hearing damage is occurring but it's not life-threatening.
+      The likelihood is 5 — inadequate PPE at 98 dB for 6 hours means damage
+      is already accumulating.
+    your_top_recommendation: "Issue ear defenders immediately and arrange audiometric testing."
+
+  - id: SYN-010
+    your_impact: 5
+    your_likelihood: 3
+    your_justification: >
+      Load at 18m at 112% SWL is serious. However the operator has halted correctly
+      and the crane is stationary. Likelihood 3 — the immediate risk is managed
+      but the load must be lowered carefully. Impact remains catastrophic.
+    your_top_recommendation: "Evacuate below crane, call crane engineer, do not move load without structural assessment."
+
+  - id: SYN-011
+    your_impact: 2
+    your_likelihood: 2
+    your_justification: >
+      7.4 is marginal. Forklift operators with standard breaks taken and no symptoms
+      — this is a monitoring situation, not an operational intervention. Impact 2
+      (minor injury possible), likelihood 2 (unlikely given marginal reading).
+    your_top_recommendation: "Schedule additional break and monitor hourly."
+
+  - id: SYN-012
+    your_impact: 2
+    your_likelihood: 3
+    your_justification: >
+      118 μg/m³ with FFP1 masks. The masks provide partial protection so actual
+      exposure is lower than the ambient reading suggests. Impact 2 — grain dust
+      irritation is minor for short exposure. Likelihood 3 — workers are exposed.
+    your_top_recommendation: "Upgrade to FFP2 masks and activate dust suppression."
+
+  - id: SYN-013
+    your_impact: 2
+    your_likelihood: 2
+    your_justification: >
+      Bunded area, no drain reached, operations informally suspended. The delay is
+      a process issue but the hazard is well-controlled. Likelihood 2 — the area
+      is effectively isolated.
+    your_top_recommendation: "Dispatch response team and log delay for process review."
+
+  - id: SYN-014
+    your_impact: 3
+    your_likelihood: 2
+    your_justification: >
+      38 knots with reduced speed operations and operator notified. The marginal
+      exceedance with a 2-hour easing forecast makes this a monitoring situation.
+      Impact 3 — load swing risk is real. Likelihood 2 — reduced speed operations
+      significantly reduce the probability of an incident.
+    your_top_recommendation: "Monitor every 10 minutes. Suspend if wind exceeds 40 knots."
+
+  - id: SYN-015
+    your_impact: 2
+    your_likelihood: 3
+    your_justification: >
+      89 dB for 20-minute breaks is a real but limited exposure. Agree with 2/3.
+      The systemic behaviour (not wearing PPE) is the main concern.
+    your_top_recommendation: "Relocate rest area and brief workers on PPE requirements."
+
+  - id: SYN-016
+    your_impact: 2
+    your_likelihood: 2
+    your_justification: >
+      Banksmen in place, temporary cause identified, no incidents. Well-managed.
+      Agree with 2/2.
+    your_top_recommendation: "Maintain banksmen and brief vehicle operators on layout change."
+
+  - id: SYN-017
+    your_impact: 1
+    your_likelihood: 2
+    your_justification: >
+      5 litres of water-based coolant, low-traffic area, cleanup underway.
+      Negligible hazard. The 4-minute delay is a process metric issue only.
+    your_top_recommendation: "Log for trend analysis. No operational action."
+
+  - id: SYN-018
+    your_impact: 2
+    your_likelihood: 2
+    your_justification: >
+      Single stack, 30cm over height, low-traffic, stable. Agree with 2/2.
+      Yard planning is managing it.
+    your_top_recommendation: "Schedule reconfiguration at next opportunity."
+
+  - id: SYN-019
+    your_impact: 1
+    your_likelihood: 1
+    your_justification: >
+      7.2 with 30 minutes left, no safety-critical tasks, operator self-reports fine.
+      I see no meaningful risk here. This is a data point for trend analysis, not
+      an operational concern.
+    your_top_recommendation: "Log for trend analysis. No action required."
+
+  - id: SYN-020
+    your_impact: 3
+    your_likelihood: 2
+    your_justification: >
+      The operator has paused correctly. The load is within overall SWL (92%) —
+      the issue is the lift plan limit (85%) which was set conservatively for the
+      eccentric load. Impact 3 — instability risk is real but manageable. Likelihood
+      2 — the load is stationary and the situation is controlled.
+    your_top_recommendation: "Review lift plan with appointed person before resuming."
+
+  - id: SYN-021
+    your_impact: 1
+    your_likelihood: 1
+    your_justification: "Boundary monitor, no workers, 5 minutes, already normalised. No action needed."
+    your_top_recommendation: "Log for trend analysis."
+
+  - id: SYN-022
+    your_impact: 1
+    your_likelihood: 1
+    your_justification: "Sensor anomaly — adjacent sensors don't confirm. No workers affected."
+    your_top_recommendation: "Schedule sensor calibration."
+
+  - id: SYN-023
+    your_impact: 1
+    your_likelihood: 1
+    your_justification: "Rainwater, no contaminants, already managed by gate officer. System mis-classification."
+    your_top_recommendation: "Review automated classification rules."
+
+  - id: SYN-024
+    your_impact: 1
+    your_likelihood: 1
+    your_justification: "One alert above threshold during known high-traffic period. Already resolved."
+    your_top_recommendation: "Log for trend analysis."
+
+  - id: SYN-025
+    your_impact: 1
+    your_likelihood: 1
+    your_justification: "2.5% above SWL, calm conditions, mooring master aware. Within normal variance."
+    your_top_recommendation: "Monitor hourly."
+
+feedback:
+  scenarios_too_easy: "SYN-002, SYN-003, SYN-005 — unambiguous emergencies"
+  scenarios_too_ambiguous: >
+    SYN-008 — proximity alert counts vary significantly by system sensitivity;
+    would benefit from context on historical baseline for this zone.
+    SYN-020 — need to know more about the eccentric load type to be confident.
+  missing_metric_types: "Gangway angle/load, confined space gas monitoring, fall arrest system status"
+  general_comments: >
+    Good spread of scenarios. The minimal scenarios are appropriately trivial and
+    I think the AI should score these correctly without difficulty. The medium
+    scenarios are where I expect the most AI variability — context matters a lot
+    at that level. Recommend testing AI on compound scenarios in the next iteration.

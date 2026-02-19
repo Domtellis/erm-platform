@@ -1,6 +1,7 @@
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["multiSchema"]
+  binaryTargets   = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
@@ -18,6 +19,7 @@ model Decision {
   submitted_by    String
   created_at      DateTime   @default(now())
   approvals       Approval[]
+  evidence        Evidence[]
 
   @@schema("decisioning")
 }
@@ -41,6 +43,49 @@ model Outbox {
   payload         Json
   occurred_at     DateTime @default(now())
   processed_at    DateTime?
+
+  @@schema("decisioning")
+}
+
+model RiskAssessment {
+  id              String   @id @default(uuid())
+  breach_case_id  String   // Link to Monitoring Breach
+  title           String
+  summary         String?
+  impact_score    Int      // 1-5
+  likelihood_score Int     // 1-5
+  risk_level      String   // Low, Medium, High, Critical
+  assessed_by     String   // User ID
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  remediations    RemediationPlan[]
+  @@schema("decisioning")
+}
+
+model RemediationPlan {
+  id                String   @id @default(uuid())
+  risk_assessment_id String
+  risk_assessment   RiskAssessment @relation(fields: [risk_assessment_id], references: [id])
+  title             String
+  description       String
+  assigned_to       String   // User ID
+  due_date          DateTime
+  status            String   // open, in_progress, completed
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+
+  @@schema("decisioning")
+}
+
+model Evidence {
+  id            String   @id @default(uuid())
+  decision_id   String
+  decision      Decision @relation(fields: [decision_id], references: [id])
+  url           String
+  description   String?
+  uploaded_by   String
+  uploaded_at   DateTime @default(now())
 
   @@schema("decisioning")
 }

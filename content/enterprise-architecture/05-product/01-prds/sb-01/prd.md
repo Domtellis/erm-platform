@@ -32,7 +32,7 @@ Safety breaches are handled across email, chats, and spreadsheets, leading to:
 | Business Unit | BU-01 |
 | Category | Safety |
 | Intake | Manual case creation + monitoring event stub |
-| Notifications | Microsoft Teams |
+| Notifications | Email + Jira (Teams replaced) |
 | High Severity Approval | BU Risk Owner |
 
 ### 1.4 Personas
