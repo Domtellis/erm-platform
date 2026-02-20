@@ -1,4 +1,4 @@
-import { resourceFromAttributes } from '@opentelemetry/resources';
+import { Resource } from '@opentelemetry/resources';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
 import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
@@ -8,7 +8,7 @@ import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-http';
 import { metrics } from '@opentelemetry/api';
 
 const sdk = new NodeSDK({
-    resource: resourceFromAttributes({
+    resource: new Resource({
         [SemanticResourceAttributes.SERVICE_NAME]: 'erm-ai-risk-service',
     }),
     traceExporter: new OTLPTraceExporter({}),
@@ -19,11 +19,14 @@ const sdk = new NodeSDK({
     }),
 });
 
+// IMPORTANT: Metrics API must be initialized BEFORE calling start() if using the metrics API inside the same module
+// However, sdk.start() registers the global meter provider.
 sdk.start();
 
-// ─── Custom AI Business Metrics ───────────────────────────────────────────────
-// Exported so GeminiClient and AiService can record against them.
+console.log('OTel SDK started for erm-ai-risk-service');
 
+// ─── Custom AI Business Metrics ───────────────────────────────────────────────
+// Get meter AFTER sdk.start() to ensure it uses the registered global provider.
 const meter = metrics.getMeter('erm-ai-risk-service', '1.0.0');
 
 // Gemini API call latency — histogram with standard buckets (ms)

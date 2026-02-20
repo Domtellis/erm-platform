@@ -1,5 +1,5 @@
 ---
-description: Select the most efficient Gemini/Claude model from the 8-model catalog.
+description: Select the most efficient Gemini/Claude model from the 10-model catalog.
 ---
 
 1. Start by understanding the user's task or explicitly checking for registry updates.

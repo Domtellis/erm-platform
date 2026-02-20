@@ -240,6 +240,35 @@ services:
       erm-jaeger:
         condition: service_started
 
+  ai-risk-service:
+    build:
+      context: ../../services/erm-ai-risk-service
+      dockerfile: Dockerfile.prod
+    container_name: erm-ai-risk-service
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgresql://postgres:${DB_PASSWORD}@postgres:5432/ai_risk?schema=ai_risk
+      KAFKA_BROKERS: redpanda:29092
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      GEMINI_MODEL: gemini-2.0-flash
+      GEMINI_API_URL: https://generativelanguage.googleapis.com/v1beta/models
+      KEYCLOAK_ISSUER_URL: http://localhost:8080/realms/erm-platform
+      KEYCLOAK_JWKS_URL: http://keycloak:8080/realms/erm-platform/protocol/openid-connect/certs
+      PORT: 4014
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://erm-otel-collector:4318
+      OTEL_SERVICE_NAME: erm-ai-risk-service
+    ports:
+      - "4014:4014"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redpanda:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
+      erm-jaeger:
+        condition: service_started
+
   web-portal:
     build:
       context: ../../web/portal

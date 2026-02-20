@@ -76,7 +76,7 @@
             },
             "gridPos": {
                 "h": 4,
-                "w": 4,
+                "w": 3,
                 "x": 0,
                 "y": 1
             },
@@ -106,7 +106,7 @@
                         "type": "prometheus",
                         "uid": "P1809F7CD0C75ACF3"
                     },
-                    "expr": "count(http_client_duration_milliseconds_bucket{exported_job=\"erm-monitoring-service\"}) > 0",
+                    "expr": "count(http_client_duration_milliseconds_count{exported_job=\"erm-monitoring-service\"}) > 0 or count(http_client_duration_milliseconds_count{job=\"erm-monitoring-service\"}) > 0",
                     "format": "time_series",
                     "instant": true,
                     "legendFormat": "🟢 RUNNING",
@@ -158,8 +158,8 @@
             },
             "gridPos": {
                 "h": 4,
-                "w": 4,
-                "x": 4,
+                "w": 3,
+                "x": 3,
                 "y": 1
             },
             "id": 3,
@@ -188,7 +188,7 @@
                         "type": "prometheus",
                         "uid": "P1809F7CD0C75ACF3"
                     },
-                    "expr": "count(http_client_duration_milliseconds_bucket{exported_job=\"erm-decisioning-service\"}) > 0",
+                    "expr": "count(http_client_duration_milliseconds_count{exported_job=\"erm-decisioning-service\"}) > 0 or count(http_client_duration_milliseconds_count{job=\"erm-decisioning-service\"}) > 0",
                     "instant": true,
                     "legendFormat": "🟢 RUNNING",
                     "refId": "A"
@@ -239,8 +239,8 @@
             },
             "gridPos": {
                 "h": 4,
-                "w": 4,
-                "x": 8,
+                "w": 3,
+                "x": 6,
                 "y": 1
             },
             "id": 4,
@@ -269,7 +269,7 @@
                         "type": "prometheus",
                         "uid": "P1809F7CD0C75ACF3"
                     },
-                    "expr": "count(http_client_duration_milliseconds_bucket{exported_job=\"erm-audit-service\"}) > 0",
+                    "expr": "count(http_client_duration_milliseconds_count{exported_job=\"erm-audit-service\"}) > 0 or count(http_client_duration_milliseconds_count{job=\"erm-audit-service\"}) > 0",
                     "instant": true,
                     "legendFormat": "🟢 RUNNING",
                     "refId": "A"
@@ -320,8 +320,8 @@
             },
             "gridPos": {
                 "h": 4,
-                "w": 4,
-                "x": 12,
+                "w": 3,
+                "x": 9,
                 "y": 1
             },
             "id": 14,
@@ -350,7 +350,7 @@
                         "type": "prometheus",
                         "uid": "P1809F7CD0C75ACF3"
                     },
-                    "expr": "count(http_client_duration_milliseconds_bucket{exported_job=\"erm-notification-service\"}) > 0",
+                    "expr": "count(http_client_duration_milliseconds_count{exported_job=\"erm-notification-service\"}) > 0 or count(http_client_duration_milliseconds_count{job=\"erm-notification-service\"}) > 0",
                     "instant": true,
                     "legendFormat": "🟢 RUNNING",
                     "refId": "A"
@@ -401,8 +401,8 @@
             },
             "gridPos": {
                 "h": 4,
-                "w": 4,
-                "x": 16,
+                "w": 3,
+                "x": 12,
                 "y": 1
             },
             "id": 15,
@@ -431,7 +431,7 @@
                         "type": "prometheus",
                         "uid": "P1809F7CD0C75ACF3"
                     },
-                    "expr": "count(http_client_duration_milliseconds_bucket{exported_job=\"web-portal\"}) > 0",
+                    "expr": "count(http_client_duration_milliseconds_count{exported_job=\"web-portal\"}) > 0 or count(http_client_duration_milliseconds_count{job=\"web-portal\"}) > 0",
                     "instant": true,
                     "legendFormat": "🟢 RUNNING",
                     "refId": "A"
@@ -486,8 +486,8 @@
             },
             "gridPos": {
                 "h": 4,
-                "w": 4,
-                "x": 20,
+                "w": 3,
+                "x": 15,
                 "y": 1
             },
             "id": 5,
@@ -523,6 +523,87 @@
                 }
             ],
             "title": "Observability Collector",
+            "type": "stat"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "P1809F7CD0C75ACF3"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "mappings": [
+                        {
+                            "options": {
+                                "match": "null",
+                                "result": {
+                                    "color": "red",
+                                    "index": 0,
+                                    "text": "🔴 DOWN"
+                                }
+                            },
+                            "type": "special"
+                        }
+                    ],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "red",
+                                "value": null
+                            },
+                            {
+                                "color": "green",
+                                "value": 1
+                            }
+                        ]
+                    },
+                    "unit": "none"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 4,
+                "w": 3,
+                "x": 18,
+                "y": 1
+            },
+            "id": 17,
+            "options": {
+                "colorMode": "background",
+                "graphMode": "none",
+                "justifyMode": "center",
+                "orientation": "auto",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "text": {
+                    "valueSize": 28
+                },
+                "textMode": "value_and_name",
+                "wideLayout": true
+            },
+            "pluginVersion": "10.4.0",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "P1809F7CD0C75ACF3"
+                    },
+                    "expr": "count(http_client_duration_milliseconds_count{exported_job=\"erm-ai-risk-service\"}) > 0 or count(http_client_duration_milliseconds_count{job=\"erm-ai-risk-service\"}) > 0",
+                    "instant": true,
+                    "legendFormat": "🟢 RUNNING",
+                    "refId": "A"
+                }
+            ],
+            "title": "AI Risk Service",
             "type": "stat"
         },
         {

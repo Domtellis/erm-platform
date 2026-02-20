@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useAuth } from 'react-oidc-context';
 import axios from 'axios';
 import { ShieldCheck, ArrowRight, Gavel } from 'lucide-react';
 import { Modal } from '../components/common/Modal';
@@ -7,6 +8,8 @@ import { DecisionReviewCard } from '../components/decisioning/DecisionReviewCard
 import { ClosureCard } from '../components/decisioning/ClosureCard';
 import { SLABadge } from '../components/common/SLABadge';
 import { SLACountdown } from '../components/common/SLACountdown';
+import { getAiSuggestion } from '../api/ai';
+import { AISuggestionCard } from '../components/ai/AISuggestionCard';
 
 interface BreachCase {
     id: string;
@@ -25,7 +28,14 @@ interface BreachCase {
 }
 
 export function DecisioningPage() {
+    const auth = useAuth();
     const [selectedCase, setSelectedCase] = useState<BreachCase | null>(null);
+
+    const { data: aiSuggestion, isLoading: isAiLoading } = useQuery({
+        queryKey: ['ai-suggestion', selectedCase?.id],
+        queryFn: () => getAiSuggestion(selectedCase!.id, auth.user?.access_token || ''),
+        enabled: !!selectedCase && !!auth.user?.access_token,
+    });
 
     const { data: cases, isLoading } = useQuery<BreachCase[]>({
         queryKey: ['breaches'],
@@ -151,10 +161,29 @@ export function DecisioningPage() {
                             onClose={() => setSelectedCase(null)}
                         />
                     ) : (
-                        <DecisionReviewCard
-                            caseData={selectedCase}
-                            onClose={() => setSelectedCase(null)}
-                        />
+                        <div className="space-y-6">
+                            {/* AI Suggestion Section */}
+                            {aiSuggestion && (
+                                <AISuggestionCard
+                                    suggestion={aiSuggestion}
+                                    breachCaseId={selectedCase.id}
+                                />
+                            )}
+                            {isAiLoading && !aiSuggestion && (
+                                <div className="p-4 rounded-xl border border-slate-100 bg-slate-50 animate-pulse flex items-center space-x-3">
+                                    <div className="h-10 w-10 bg-slate-200 rounded-full"></div>
+                                    <div className="flex-1 space-y-2">
+                                        <div className="h-3 bg-slate-200 rounded w-1/4"></div>
+                                        <div className="h-3 bg-slate-200 rounded w-3/4"></div>
+                                    </div>
+                                </div>
+                            )}
+
+                            <DecisionReviewCard
+                                caseData={selectedCase}
+                                onClose={() => setSelectedCase(null)}
+                            />
+                        </div>
                     )
                 )}
             </Modal>

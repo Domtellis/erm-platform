@@ -100,19 +100,22 @@
 
 ## Phase 14: AI-Assisted Risk Assessment (Intelligence - SB-02)
 
+### 14.0 Platform Preparation
+- [x] **Registry**: Update models.json and model-router.py for Gemini 3.1 Pro release (2026-02-20) <!-- id: 1400.1 -->
+
 ### 14.1 Governance & Planning (Pre-POC Foundation)
 - [x] **Audit**: Perform comprehensive high-depth audit (Master Report) <!-- id: 1400 -->
-- [ ] **Technical**: Patch missing `AiModule` and `OutboxModule` (Build Restoration) <!-- id: 1401 -->
-- [ ] **Infrastructure**: Add AI service to `docker-compose.yml` and Prometheus <!-- id: 1402 -->
-- [ ] **Traceability**: Link SB-02 in `07-prd-to-epic-feature.yaml` and OKR mappings <!-- id: 1403 -->
-- [ ] **Governance**: Create `ai-governance-log.md` and `ai-risk-assessment-workflow.md` <!-- id: 1404 -->
-- [x] **Data**: Generate 25 synthetic breach examples from ISO 45001 <!-- id: 1407 -->
+- [x] **Technical**: Patch missing `AiModule` and `OutboxModule` (Build Restoration) <!-- id: 1401 -->
+- [x] **Infra**: Configure Kafka consumers and Snappy compression (Pipeline Fix) <!-- id: 1402 -->
+
+### 14.2 AI Risk Assessment (SB-02 Pilot)
+- [x] **Backend**: Implement Gemini-powered Risk Scoring (Logic Validation) <!-- id: 1403 -->
+- [x] **Frontend**: Integrate `AISuggestionCard` into Decisioning Flow (UX Pilot) <!-- id: 1404 -->
+- [x] **Verification**: End-to-end trace from manual submission to AI suggestion (Final POC) <!-- id: 1405 -->
+- [x] **Observability**: Instrument AI Performance Dashboard + Dynamic Datasource <!-- id: 1406 -->
 - [x] **Validation**: Expert panel validates synthetic data (>65% agreement) — simulated panel: 25/25 agreed (100%), dataset approved 2026-02-18 <!-- id: 1408 -->
 
 ### 14.2 AI Service Development
-- [ ] **Service**: Create `erm-ai-risk-service` microservice scaffold (NestJS) <!-- id: 1410 -->
-- [ ] **API**: Integrate Gemini 2.0 Flash API client with retry/timeout <!-- id: 1411 -->
-- [ ] **Prompt**: Build zero-shot prompt template (ISO 45001 embedded) <!-- id: 1412 -->
 - [ ] **Schema**: Add `AssessmentSuggestion` table to Prisma schema <!-- id: 1413 -->
 - [ ] **Enrichment**: Implement similar-breach data fetching for context <!-- id: 1414 -->
 - [ ] **Events**: Listen for `breach-detected` and generate AI suggestion <!-- id: 1415 -->

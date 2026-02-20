@@ -1,4 +1,8 @@
 import './instrumentation';
+import { CompressionTypes, CompressionCodecs } from 'kafkajs';
+import { SnappyCodec } from 'kafkajs-snappy';
+
+CompressionCodecs[CompressionTypes.Snappy] = SnappyCodec;
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';

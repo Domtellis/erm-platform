@@ -145,3 +145,15 @@ links:
         name: "CI validation (schema + referential integrity)"
       - feature_id: "FEAT-EAC-03"
         name: "Import/apply changes with audit trail"
+
+  - link_id: "L-PRD-EF-0013"
+    prd_id: "SB-02"
+    epic_id: "EP-AI-01"
+    epic_name: "AI-Assisted Governance"
+    features:
+      - feature_id: "FEAT-AI-01"
+        name: "ISO 45001 Automated Risk Scoring"
+      - feature_id: "FEAT-AI-02"
+        name: "Human-in-the-Loop Feedback & Calibration"
+      - feature_id: "FEAT-AI-03"
+        name: "AI Performance & Drift Monitoring Dashboard"

@@ -10,7 +10,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             ignoreExpiration: false,
-            issuer: configService.get<string>('KEYCLOAK_ISSUER_URL'),
+            // issuer: configService.get<string>('KEYCLOAK_ISSUER_URL'),
             algorithms: ['RS256'],
             secretOrKeyProvider: passportJwtSecret({
                 cache: true,
@@ -22,6 +22,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     }
 
     async validate(payload: any) {
+        console.log('Validating JWT payload:', JSON.stringify(payload));
         return {
             userId: payload.sub,
             username: payload.preferred_username,

@@ -40,11 +40,11 @@ export class AiService {
     async handleBreachDetected(payload: BreachDetectedPayload): Promise<void> {
         const { breach_case_id, bu_id, severity, title, metric_name, observed_value, threshold, site_id } = payload;
 
-        this.logger.log(`Processing breach ${breach_case_id} for AI assessment`);
+        this.logger.log(`Processing breach ${breach_case_id} for AI assessment | Type: ${typeof breach_case_id}`);
 
         // Skip if we already have an assessment for this breach (idempotency)
         const existing = await this.prisma.assessmentSuggestion.findUnique({
-            where: { breach_case_id },
+            where: { breach_case_id: String(breach_case_id) },
         });
         if (existing) {
             this.logger.warn(`Assessment already exists for breach ${breach_case_id} — skipping`);
