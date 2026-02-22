@@ -4,27 +4,53 @@
   "title": "ERM Workflow Specification",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "workflow_id", "entity", "description", "value_stream_alignment"],
+  "required": [
+    "schema_version",
+    "workflow_id",
+    "entity",
+    "description",
+    "value_stream_alignment"
+  ],
   "properties": {
-    "schema_version": { "type": "string", "pattern": "^\\d+\\.\\d+$" },
-    "workflow_id": { "type": "string", "pattern": "^wf-[a-z0-9-]+$" },
-    "entity": { "type": "string", "minLength": 1 },
-    "description": { "type": "string", "minLength": 1 },
+    "schema_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+$"
+    },
+    "workflow_id": {
+      "type": "string",
+      "pattern": "^wf-[a-z0-9-]+$"
+    },
+    "entity": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
     "value_stream_alignment": {
       "type": "array",
       "minItems": 1,
-      "items": { "type": "string", "pattern": "^VS-\\d{2}$" }
+      "items": {
+        "type": "string",
+        "pattern": "^VS-\\d{2}$"
+      }
     },
     "sub_entities": {
       "type": "array",
-      "items": { "type": "string", "minLength": 1 }
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
     },
     "states": {
       "oneOf": [
         {
           "type": "array",
           "minItems": 1,
-          "items": { "$ref": "#/$defs/state_node" }
+          "items": {
+            "$ref": "#/$defs/state_node"
+          }
         },
         {
           "type": "object",
@@ -32,7 +58,9 @@
           "additionalProperties": {
             "type": "array",
             "minItems": 1,
-            "items": { "$ref": "#/$defs/state_node" }
+            "items": {
+              "$ref": "#/$defs/state_node"
+            }
           }
         }
       ]
@@ -43,15 +71,21 @@
     },
     "commands": {
       "type": "array",
-      "items": { "$ref": "#/$defs/command" }
+      "items": {
+        "$ref": "#/$defs/command"
+      }
     },
     "events": {
       "type": "array",
-      "items": { "$ref": "#/$defs/event" }
+      "items": {
+        "$ref": "#/$defs/event"
+      }
     },
     "transitions": {
       "type": "array",
-      "items": { "$ref": "#/$defs/transition" }
+      "items": {
+        "$ref": "#/$defs/transition"
+      }
     },
     "segregation_of_duties": {
       "type": "object",
@@ -59,85 +93,162 @@
       "properties": {
         "rules": {
           "type": "array",
-          "items": { "$ref": "#/$defs/sod_rule" }
+          "items": {
+            "$ref": "#/$defs/sod_rule"
+          }
         }
       }
     },
-    "audit_logging": { "$ref": "#/$defs/audit_logging" }
+    "audit_logging": {
+      "$ref": "#/$defs/audit_logging"
+    }
   },
   "$defs": {
     "state_node": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["state", "type"],
+      "required": [
+        "state",
+        "type"
+      ],
       "properties": {
-        "state": { "type": "string", "minLength": 1 },
-        "type": { "type": "string", "enum": ["initial", "normal", "terminal"] }
+        "state": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "initial",
+            "normal",
+            "terminal"
+          ]
+        }
       }
     },
     "command": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["command", "actor_roles", "produces_events"],
+      "required": [
+        "command",
+        "actor_roles",
+        "produces_events"
+      ],
       "properties": {
-        "command": { "type": "string", "minLength": 1 },
+        "command": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
         "actor_roles": {
           "type": "array",
           "minItems": 1,
-          "items": { "type": "string", "minLength": 1 }
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
         },
         "preconditions": {
           "type": "array",
-          "items": { "type": "string", "minLength": 1 }
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
         },
         "produces_events": {
           "type": "array",
           "minItems": 1,
-          "items": { "type": "string", "minLength": 1 }
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
         }
       }
     },
     "event": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["event", "audit"],
+      "required": [
+        "event",
+        "audit"
+      ],
       "properties": {
-        "event": { "type": "string", "minLength": 1 },
-        "audit": { "type": "boolean" }
+        "event": {
+          "type": "string",
+          "minLength": 1
+        },
+        "audit": {
+          "type": "boolean"
+        }
       }
     },
     "transition": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["from", "on", "to"],
+      "required": [
+        "from",
+        "on",
+        "to"
+      ],
       "properties": {
-        "from": { "type": "string", "minLength": 1 },
-        "on": { "type": "string", "minLength": 1 },
-        "to": { "type": "string", "minLength": 1 }
+        "from": {
+          "type": "string",
+          "minLength": 1
+        },
+        "on": {
+          "type": "string",
+          "minLength": 1
+        },
+        "to": {
+          "type": "string",
+          "minLength": 1
+        }
       }
     },
     "sod_rule": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["rule_id", "description"],
+      "required": [
+        "rule_id",
+        "description"
+      ],
       "properties": {
-        "rule_id": { "type": "string", "pattern": "^sod-\\d{3}$" },
-        "description": { "type": "string", "minLength": 1 },
+        "rule_id": {
+          "type": "string",
+          "pattern": "^sod-\\d{3}$"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
         "enforced_on_commands": {
           "type": "array",
-          "items": { "type": "string", "minLength": 1 }
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
         }
       }
     },
     "audit_logging": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["required"],
+      "required": [
+        "required"
+      ],
       "properties": {
-        "required": { "type": "boolean" },
+        "required": {
+          "type": "boolean"
+        },
         "include_fields": {
           "type": "array",
-          "items": { "type": "string", "minLength": 1 }
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
         }
       }
     }

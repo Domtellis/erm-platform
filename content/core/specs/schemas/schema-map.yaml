@@ -7,5 +7,9 @@ mappings:
 
   - schema: "content/core/specs/schemas/workflow-spec.schema.json"
     files:
-      - "content/enterprise-architecture/03-experience/workflows/*.yaml"
-      - "content/enterprise-architecture/03-experience/workflows/*.yml"
+      - "content/enterprise-architecture/03-experience/workflows/wf-*.yaml"
+      - "content/enterprise-architecture/03-experience/workflows/wf-*.yml"
+
+  - schema: "content/core/specs/schemas/workflow-catalogue.schema.json"
+    files:
+      - "content/enterprise-architecture/03-experience/workflows/workflows.yaml"
