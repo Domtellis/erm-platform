@@ -28,7 +28,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          npm ci
+          npm install
           make install
 
       - name: Monorepo Audit (Lint + Build + Test)
