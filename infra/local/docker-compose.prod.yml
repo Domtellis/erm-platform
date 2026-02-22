@@ -143,9 +143,7 @@ services:
   # ==========================================
 
   monitoring-service:
-    build:
-      context: ../../services/monitoring-and-breaches
-      dockerfile: Dockerfile.prod
+    image: ghcr.io/domtellis/erm-monitoring-and-breaches:latest
     container_name: erm-monitoring-service
     environment:
       NODE_ENV: production
@@ -166,9 +164,7 @@ services:
         condition: service_started
 
   notification-service:
-    build:
-      context: ../../services/notification-service
-      dockerfile: Dockerfile.prod
+    image: ghcr.io/domtellis/erm-notification-service:latest
     container_name: erm-notification-service
     environment:
       NODE_ENV: production
@@ -186,9 +182,7 @@ services:
         condition: service_started
 
   decisioning-service:
-    build:
-      context: ../../services/decisioning-and-approvals
-      dockerfile: Dockerfile.prod
+    image: ghcr.io/domtellis/erm-decisioning-and-approvals:latest
     container_name: erm-decisioning-service
     environment:
       NODE_ENV: production
@@ -210,9 +204,7 @@ services:
         condition: service_started
 
   audit-service:
-    build:
-      context: ../../services/audit-and-reporting
-      dockerfile: Dockerfile.prod
+    image: ghcr.io/domtellis/erm-audit-and-reporting:latest
     container_name: erm-audit-service
     environment:
       NODE_ENV: production
@@ -232,9 +224,7 @@ services:
         condition: service_started
 
   web-portal:
-    build:
-      context: ../../web/portal
-      dockerfile: Dockerfile.prod
+    image: ghcr.io/domtellis/erm-portal:latest
     container_name: erm-web-portal
     ports:
       - "5180:80"
