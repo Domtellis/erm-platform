@@ -53,8 +53,8 @@ def main() -> int:
     all_errors: List[str] = []
 
     for f in md_files:
-        # Skip dependency and internal agent directories
-        if any(p in f.parts for p in ("node_modules", ".venv", "dist", "build", ".agent", ".gemini")):
+        # Skip dependency, internal agent, and template directories
+        if any(p in f.parts for p in ("node_modules", ".venv", "dist", "build", ".agent", ".gemini", "_templates", "archive")):
             continue
         all_errors.extend(check_file(f))
 

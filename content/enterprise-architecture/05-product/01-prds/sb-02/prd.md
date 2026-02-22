@@ -54,7 +54,7 @@ Provide AI-powered risk assessment suggestions to Risk Leads, reducing assessmen
 
 ## 2. User Journey
 
-See: [AI Risk Assessment Workflow](../../content/enterprise-architecture/03-experience/workflows/ai-risk-assessment-workflow.md)
+See: [AI Risk Assessment Workflow](../../../03-experience/workflows/wf-risk-assessment.yaml)
 
 ### 2.1 Key User Flows
 
@@ -239,14 +239,14 @@ What we're explicitly NOT doing (to avoid scope creep):
 
 ### 10.1 Related Documents
 
-- **Governance:** [AI Governance Policy](../../content/governance/policies/ai-governance-policy.md)
+- **Governance:** [AI Governance Policy](../../../../governance/policies/ai-governance-policy.md)
 - **Technical Decisions:**
-  - [ADR-0008: AI Model Selection](../../docs/adrs/0008-ai-model-selection.md)
-  - [ADR-0009: Bias Mitigation](../../docs/adrs/0009-ai-bias-mitigation-strategy.md)
-  - [ADR-0010: Data Privacy](../../docs/adrs/0010-ai-data-privacy.md)
-- **Deployment:** [AI Deployment Checklist](../../content/governance/approvals/ai-deployment-checklist.md)
-- **Operations:** [Bias Incident Response Runbook](../../docs/runbooks/ai-bias-incident-response.md)
-- **Backlog:** [SB-02 Epics](../02-backlog/sb-02/epics.yaml)
+  - [ADR-0008: AI Model Selection](../../../../../docs/adrs/0008-ai-model-selection.md)
+  - [ADR-0009: Bias Mitigation](../../../../../docs/adrs/0009-ai-bias-mitigation-strategy.md)
+  - [ADR-0010: Data Privacy](../../../../../docs/adrs/0010-ai-data-privacy.md)
+- **Deployment:** [AI Deployment Checklist](../../../../governance/approvals/ai-deployment-checklist.md)
+- **Operations:** [Bias Incident Response Runbook](../../../../../docs/runbooks/ai-bias-incident-response.md)
+- **Backlog:** [SB-02 Epics](../../../02-backlog/sb-02/epics.yaml)
 
 ### 10.2 Stakeholder Sign-Off
 

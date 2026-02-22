@@ -13,7 +13,7 @@
 - [ ] **Model Selection ADR** (ADR-0008) approved
 - [ ] **Bias Mitigation Strategy ADR** (ADR-0009) approved  
 - [ ] **Data Privacy ADR** (ADR-0010) approved
-- [ ] **Authority matrix** updated with AI decision rights
+- [ ] **Authority matrix** updated with AI decision rights (../governance-authority-matrix.yaml)
 - [ ] **Roles defined:** AI Oversight Lead assigned
 
 **Evidence:** Policy approval signatures, ADR approval records
@@ -203,8 +203,8 @@ I certify that all items in this checklist have been completed and evidence is a
 ## Related Documents
 
 - [AI Governance Policy](../policies/ai-governance-policy.md)
-- [ADR-0008: AI Model Selection](../../docs/adrs/0008-ai-model-selection.md)
-- [ADR-0009: Bias Mitigation](../../docs/adrs/0009-ai-bias-mitigation-strategy.md)
-- [ADR-0010: Data Privacy](../../docs/adrs/0010-ai-data-privacy.md)
-- [Authority Matrix](../authority-matrix.yaml)
-- [SB-02 PRD](../enterprise-architecture/05-product/01-prds/sb-02/prd.md)
+- [ADR-0008: AI Model Selection](../../../docs/adrs/0008-ai-model-selection.md)
+- [ADR-0009: Bias Mitigation](../../../docs/adrs/0009-ai-bias-mitigation-strategy.md)
+- [ADR-0010: Data Privacy](../../../docs/adrs/0010-ai-data-privacy.md)
+- [Authority Matrix](../governance-authority-matrix.yaml)
+- [SB-02 PRD](../../enterprise-architecture/05-product/01-prds/sb-02/prd.md)
