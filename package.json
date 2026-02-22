@@ -3,10 +3,10 @@
     "private": true,
     "description": "Enterprise Risk Management Platform Monorepo Root",
     "scripts": {
-        "build": "turbo run build",
-        "test": "turbo run test",
-        "lint": "turbo run lint",
-        "clean": "turbo run clean"
+        "build": "npx turbo run build",
+        "test": "npx turbo run test",
+        "lint": "npx turbo run lint",
+        "clean": "npx turbo run clean"
     },
     "workspaces": [
         "services/*",
