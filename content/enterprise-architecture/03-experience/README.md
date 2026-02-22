@@ -38,4 +38,5 @@ make generate-index
 - [wf-risk-assessment.yaml](workflows/wf-risk-assessment.yaml)
 - [wf-risk.yaml](workflows/wf-risk.yaml)
 - [wf-treatment-plan.yaml](workflows/wf-treatment-plan.yaml)
+- [workflows.yaml](workflows/workflows.yaml)
 
