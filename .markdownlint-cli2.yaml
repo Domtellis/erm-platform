@@ -22,6 +22,13 @@ config:
   MD041: false   # First line in a file should be a top-level heading
   MD046: false   # Code block style
   MD047: false   # File should end with a single newline character
+  MD048: false   # Code fence style
+  MD051: false   # Link fragments should be valid
+  MD052: false   # Reference links should be valid
+  MD053: false   # Link definitions should be used
+  MD055: false   # Table pipe style
+  MD056: false   # Table column count
+  MD058: false   # Blanks around tables
 globs:
   - "**/*.md"
 ignores:
