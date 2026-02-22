@@ -4,12 +4,12 @@
   "description": "",
   "main": "audit-sink.js",
   "scripts": {
-    "start": "npx --no-install nest start",
-    "start:dev": "npx --no-install nest start --watch",
-    "start:debug": "npx --no-install nest start --watch --debug",
+    "start": "nest start",
+    "start:dev": "nest start --watch",
+    "start:debug": "nest start --watch --debug",
     "start:prod": "node dist/main",
-    "build": "npx --no-install nest build",
-    "doc:generate": "npx --no-install ts-node src/generate-openapi.ts",
+    "build": "nest build",
+    "doc:generate": "ts-node src/generate-openapi.ts",
     "test": "echo \"Error: no test specified\" && exit 0"
   },
   "keywords": [],

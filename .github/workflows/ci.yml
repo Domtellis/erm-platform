@@ -30,6 +30,7 @@ jobs:
       - name: Install dependencies
         run: |
           npm install -g npm@latest
+          npm install -g @nestjs/cli turbo
           npm ci
           make install
 
