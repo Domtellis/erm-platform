@@ -132,6 +132,9 @@ jobs:
           script: |
             cd ~/erm-platform
             
+            # Sync Server Firewall with OCI Cloud Rules
+            sudo iptables -I INPUT 6 -m state --state NEW -p tcp --match multiport --dports 5180,3000,8080,16686,8025 -j ACCEPT && sudo netfilter-persistent save
+            
             # Login to GHCR on the server
             echo ${{ secrets.GITHUB_TOKEN }} | sudo docker login ghcr.io -u ${{ github.actor }} --password-stdin
             

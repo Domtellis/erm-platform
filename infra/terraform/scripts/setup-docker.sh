@@ -14,7 +14,7 @@ apt-get update
 apt-get upgrade -y
 
 # 2. Install essential tools
-apt-get install -y apt-transport-https ca-certificates curl software-properties-common git jq make
+apt-get install -y apt-transport-https ca-certificates curl software-properties-common git jq make netfilter-persistent iptables-persistent
 
 # 3. Install Docker
 curl -fsSL https://get.docker.com -o get-docker.sh
@@ -36,5 +36,9 @@ cat <<EOF > /etc/docker/daemon.json
 }
 EOF
 systemctl restart docker
+
+# 6. Global Networking Sync (Allow Application Ports)
+iptables -I INPUT 6 -m state --state NEW -p tcp --match multiport --dports 5180,3000,8080,16686,8025 -j ACCEPT
+netfilter-persistent save
 
 echo "✅ Environment Ready! Docker $(docker --version) and Docker Compose installed."
