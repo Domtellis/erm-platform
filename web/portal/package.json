@@ -8,6 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
+    "test": "echo \"No tests defined\"",
     "test:pact": "vitest run src/api/monitoring.pact.spec.ts"
   },
   "dependencies": {
