@@ -107,6 +107,46 @@ resource "oci_core_security_list" "erm_sl" {
       max = 3000
     }
   }
+
+  # Ingress: Web Portal
+  ingress_security_rules {
+    protocol = "6"
+    source   = "0.0.0.0/0"
+    tcp_options {
+      min = 5180
+      max = 5180
+    }
+  }
+
+  # Ingress: Keycloak IAM
+  ingress_security_rules {
+    protocol = "6"
+    source   = "0.0.0.0/0"
+    tcp_options {
+      min = 8080
+      max = 8080
+    }
+  }
+
+  # Ingress: Jaeger UI
+  ingress_security_rules {
+    protocol = "6"
+    source   = "0.0.0.0/0"
+    tcp_options {
+      min = 16686
+      max = 16686
+    }
+  }
+
+  # Ingress: Mailpit UI
+  ingress_security_rules {
+    protocol = "6"
+    source   = "0.0.0.0/0"
+    tcp_options {
+      min = 8025
+      max = 8025
+    }
+  }
 }
 
 # 3. Compute (The "Always Free" ARM Instance)
