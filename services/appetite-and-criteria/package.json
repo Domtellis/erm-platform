@@ -4,10 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nest start",
-    "start:dev": "nest start --watch",
-    "start:debug": "nest start --watch --debug",
+    "start": "npx nest start",
+    "start:dev": "npx nest start --watch",
+    "start:debug": "npx nest start --watch --debug",
     "start:prod": "node dist/main",
+    "build": "npx nest build",
     "test": "echo \"Error: no test specified\" && exit 0"
   },
   "keywords": [],
