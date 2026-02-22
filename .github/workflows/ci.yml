@@ -30,8 +30,8 @@ jobs:
       - name: Install dependencies
         run: |
           npm install -g npm@latest
-          npm install -g @nestjs/cli turbo
-          npm ci
+          npm ci --include=dev
+          echo "$(pwd)/node_modules/.bin" >> $GITHUB_PATH
           make install
 
       - name: Monorepo Audit (Lint + Build + Test)
