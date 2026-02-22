@@ -4,7 +4,7 @@ product: ai-enabled-erm-platform
 releases:
   - name: MVP
     id: r-mvp
-    objective: "Run SB-01 end-to-end for BU-01 Safety breaches with governance-grade auditability."
+    objective: "Run SB-01 end-to-end for BU-01 Safety breaches with AI-assisted triage and governance-grade auditability."
     scope_feature_ids:
       - F-01-01
       - F-01-02
@@ -19,7 +19,8 @@ releases:
       - F-04-03
       - F-04-04
       - F-05-01
-      - F-05-02
+      - F-06-01 # NEW: AI Triage
+      - F-06-02 # NEW: Calibration Feedback
     rollout:
       bu_ids: [BU-01]
       training: "ops/pilot/sb-01/onboarding.md"

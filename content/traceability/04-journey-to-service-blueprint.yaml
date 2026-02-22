@@ -36,3 +36,10 @@ links:
     contribution: "primary"
     confidence: 0.95
     rationale: "Admin journey is realised by tenant/access/everything-as-code blueprint."
+
+  - link_id: "L-JRN-BP-0007"
+    journey_id: "JRN-004"
+    blueprint_id: "BP-007"
+    contribution: "primary"
+    confidence: 0.95
+    rationale: "Breach response is enhanced by the AI-assisted assessment blueprint (BP-007)."

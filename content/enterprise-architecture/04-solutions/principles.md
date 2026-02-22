@@ -19,3 +19,6 @@ Every control action (creation, update, approval, deletion) must emit a correspo
 
 ## 6. Security as Code
 Access control policies (RBAC/ABAC) and Separation of Duties (SoD) rules should be defined as version-controlled artifacts and enforced by the platform middleware.
+
+## 7. Human-Centric Intelligence
+AI models (Gemini 2.0) are used to augment and accelerate risk professionals, not replace them. Every automated suggestion must have a clear path to human override, and all overrides must be captured for system calibration and auditability.

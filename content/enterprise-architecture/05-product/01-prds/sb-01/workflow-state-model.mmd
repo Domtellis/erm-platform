@@ -1,7 +1,7 @@
 stateDiagram-v2
   [*] --> Detected: case_created / breach_signal_received
-
-  Detected --> Triaged: triage_completed
+  Detected --> AI_Enrichment: emit BREACH_CASE_CREATED
+  AI_Enrichment --> Triaged: ai_suggestion_created / triage_completed
   Triaged --> ValidatedAgainstAppetite: appetite_selected + threshold_evaluated
 
   ValidatedAgainstAppetite --> Escalated: escalation_required

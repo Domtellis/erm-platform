@@ -51,11 +51,12 @@ See: [Service Blueprint](../../../03-experience/service-blueprints/sb-01-appetit
 | Step | Frontstage | Backstage | Key Events |
 | :--- | :--- | :--- | :--- |
 | 1 | Alert received | Ingestion validates freshness | `BREACH_CASE_CREATED` |
-| 2 | Operator triages | Correlation enriches context | `CASE_TRIAGED` |
-| 3 | Breach confirmed | Workflow routes case | `BREACH_CONFIRMED` |
-| 4 | Mitigations launched | SLA timers; action tracking | `ACTION_CREATED` |
-| 5 | Escalate if High | Route to BU Risk Owner | `ESCALATION_TRIGGERED` |
-| 6 | Close with evidence | Post-review tasks | `CASE_CLOSED` |
+| 2 | AI Enrichment | Gemini 2.0 generates suggestions | `AI_SUGGESTION_CREATED` |
+| 3 | Operator triages | Correlation enriches context; Reviews AI | `CASE_TRIAGED` |
+| 4 | Breach confirmed | Workflow routes case | `BREACH_CONFIRMED` |
+| 5 | Mitigations launched | SLA timers; action tracking | `ACTION_CREATED` |
+| 6 | Escalate if High | Route to BU Risk Owner | `ESCALATION_TRIGGERED` |
+| 7 | Close with evidence | Calibration feedback sent to AI | `CASE_CLOSED` |
 
 ---
 
@@ -71,6 +72,7 @@ See: [Service Blueprint](../../../03-experience/service-blueprints/sb-01-appetit
 | E-03 | Escalation, decisioning, approvals, SoD |
 | E-04 | Evidence, actions, closure |
 | E-05 | Auditability and export |
+| E-06 | AI-Assisted Intelligence & Calibration |
 
 ### 3.2 Features
 → See: [features.yaml](../../02-backlog/sb-01/features.yaml)
@@ -154,7 +156,6 @@ Key events: `BREACH_CASE_CREATED`, `CASE_TRIAGED`, `DECISION_APPROVED`, `CASE_CL
 
 → See: [non-goals.md](./non-goals.md)
 
-- ML-based recommendations
 - Enterprise-wide taxonomy migration
 - Full policy library management
 - Complex quantitative risk models

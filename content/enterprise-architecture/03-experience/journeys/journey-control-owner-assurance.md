@@ -4,7 +4,7 @@ journey_id: journey-control-owner-assurance
 persona_id: per-004
 primary_value_streams: [VS-05, VS-06]
 secondary_value_streams: [VS-03, VS-07, VS-08]
-last_updated: 2026-02-03
+last_updated: 2026-02-21
 ---
 
 # Journey Map — Control Owner / Control Assurance Lead
@@ -21,8 +21,8 @@ last_updated: 2026-02-03
 | 2 | VS-06 | Execute controls; capture evidence with provenance | Calm | Evidence in email/SharePoint | Automated ingestion + provenance |
 | 3 | VS-06 | Test controls (design + operating); record results | Alert | Sampling is manual | Test plan and results structured |
 | 4 | VS-06 | Open/manage issues; assign severity + SLA; remediate | Pressured | Closure not verified | Independent closure validation |
-| 5 | VS-06 → VS-08 | Run attestations; generate audit/customer packs | Accountable | Audit pack becomes a scramble | One-click pack with lineage |
-| 6 | VS-03 / VS-07 | Feed control health into assessments and indicator thresholds | Useful | Poor linkage to risks | Control-to-risk links maintained |
+| 5 | VS-06 → VS-08 | Run attestations; generate audit/customer packs | Confident | Pack-production lag | **AI-Assisted** pack generation with lineage |
+| 6 | VS-03 / VS-07 | Feed control health into assessments and indicator thresholds | Useful | Weak control-to-risk links | **AI-Assisted** mapping of control health to risks |
 
 ## Moments that matter
 - Evidence provenance is automatic and reusable (VS-06).

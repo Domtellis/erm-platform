@@ -64,3 +64,9 @@ links:
     contribution: "supporting"
     confidence: 0.70
     rationale: "Design partner success depends on secure, operable platform foundations."
+  - link_id: "L-OKR-VS-0011"
+    okr_id: "OKR-Y1-H"
+    vs_id: "VS-04"
+    contribution: "primary"
+    confidence: 0.95
+    rationale: "AI Intelligence primarily enhances the Monitoring & Response value stream through automated triage."

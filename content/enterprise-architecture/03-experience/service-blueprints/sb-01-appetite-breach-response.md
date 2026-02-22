@@ -26,11 +26,11 @@ last_updated: 2026-02-03
 | Step | Frontstage (user-visible) | Backstage (system/ops) | Systems | Data objects | Handoffs |
 |------|---------------------------|------------------------|---------|--------------|----------|
 | 1 | Alert received; operator opens alert | Ingestion validates freshness and integrity | ingestion, monitoring | alert, indicator_definition | system → incident_monitoring_lead |
-| 2 | Operator triages and correlates | Correlation groups signals; enriches with links | correlation, cmdb/service-map | alert, service_asset_link | incident_monitoring_lead → bu_risk_owner |
+| 2 | Operator triaged; **AI suggests score** | AI Risk Service enriches with Gemini; Correlation groups signals | ingestion, **erm-ai-risk-service** | alert, **AssessmentSuggestion** | system → incident_monitoring_lead |
 | 3 | Breach confirmed; breach case created | Workflow engine routes case and starts SLAs | workflow, notification | breach_case, escalation_rule | bu_risk_owner → enterprise_risk_lead |
 | 4 | Mitigation actions launched | SLA timers; action tracking; reminders | workflow, task mgmt | mitigation_action | bu_risk_owner → action_owners |
 | 5 | Escalate if beyond tolerance | Route to delegated authority / ExCo / Board | workflow, approvals | approval, waiver_exception (if needed) | enterprise_risk_lead → exco/board |
-| 6 | Verify mitigation and close | Post-review tasks; recurrence analysis prompt | analytics, reporting | evidence_item, breach_log | system → reporting |
+| 6 | Verify mitigation; **Provide Feedback** | Post-review tasks; **AI Feedback Capture** | analytics, reporting | evidence_item, **human_feedback_log** | system → reporting |
 
 ## Failure points and controls
 - False positives flood → control: correlation + tuning loop + false alert metric.

@@ -14,6 +14,16 @@ slas:
     start_event: BREACH_CASE_CREATED
     stop_event: CASE_TRIAGED
 
+  - id: sla-ai-suggest
+    name: AI Suggestion SLA
+    applies_to_severity: [high, medium, low]
+    target_seconds:
+      high: 15
+      medium: 30
+      low: 60
+    start_event: BREACH_CASE_CREATED
+    stop_event: AI_SUGGESTION_CREATED
+
   - id: sla-decision
     name: Decision SLA
     applies_to_severity: [high, medium, low]

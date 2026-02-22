@@ -50,6 +50,7 @@ model_invariants:
   - "RiskAssessment may quantify via 0..* ScenarioExposure."
   - "RiskAssessment may use 0..* EvidenceItem and record 0..* Assumption."
   - "Approvals (0..*) can be attached to RiskAssessment for auditability."
+  - "RiskAssessment is informed by 0..* AssessmentSuggestion; Suggestion is calibrated by 1 HumanFeedback."
 versioning_and_audit:
   versioning_strategy:
     - "RiskAssessment is immutable once approved; corrections are superseding assessments."

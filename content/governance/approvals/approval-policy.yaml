@@ -33,6 +33,6 @@ approval_policies:
       - "evidence_policy_passed_for_severity"
       - "sod_rules_passed"
     notifications:
-      - role: teams_channel
-        required: true
-        target: "BU-01-Safety-Risk"
+      - role: notification_service
+        channel: email_jira
+        target: "Safety-Risk-Leads"

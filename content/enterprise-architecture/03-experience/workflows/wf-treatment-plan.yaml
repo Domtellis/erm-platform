@@ -41,9 +41,10 @@ commands:
     preconditions: ["state == in_delivery", "validations.minimum_for_verification"]
     produces_events: ["treatment_submitted_for_verification"]
   - command: "verify_completion"
-    actor_roles: ["enterprise_risk_lead","second_line_assurance"]
+    actor_roles: ["enterprise_risk_lead","second_line_assurance","system"]
+    description: "Verify completion using **AI-assisted evidence comparison** vs target residuals."
     preconditions: ["state == verified"]
-    produces_events: ["treatment_verified"]
+    produces_events: ["treatment_verified", "ai_verification_completed"]
   - command: "reassess_residual"
     actor_roles: ["bu_risk_owner"]
     preconditions: ["state == verified"]
@@ -63,6 +64,7 @@ events:
   - { event: "treatment_delivery_started", audit: true }
   - { event: "treatment_submitted_for_verification", audit: true }
   - { event: "treatment_verified", audit: true }
+  - { event: "ai_verification_completed", audit: true }
   - { event: "treatment_residual_reassessed", audit: true }
   - { event: "treatment_accepted", audit: true }
   - { event: "treatment_closed", audit: true }
@@ -86,6 +88,7 @@ audit_logging:
   required: true
   include_fields:
     - "entity_id"
+    - "ai_verification_delta"
     - "funding_approval_ref"
     - "verification_evidence_set_hash"
     - "acceptance_conditions_ref"

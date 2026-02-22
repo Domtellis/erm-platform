@@ -473,7 +473,7 @@ function renderEscalationScreen() {
                 </div>
                 <div class="form-group"><label class="form-label">Escalation Reason</label><p>Computed severity is <strong>High</strong> based on threshold evaluation (85 > 70).</p></div>
                 <div class="form-group"><label class="form-label">Escalated To</label><div class="flex items-center gap-3"><div class="avatar">MC</div><div><div class="font-semibold">Michael Chen</div><div class="text-muted text-sm">BU Risk Owner</div></div></div></div>
-                <div class="form-group"><label class="form-label">Notification</label><p class="text-muted">📱 Teams notification sent to BU-01-Safety-Risk channel</p></div>
+                <div class="form-group"><label class="form-label">Notification</label><p class="text-muted">📱 Notification Service (Email/Jira) notification sent to BU-01-Safety-Risk channel</p></div>
             </div>
             <div class="card-footer"><button class="btn btn-secondary" onclick="navigateTo('case-detail')">View Case</button><button class="btn btn-primary" onclick="navigateTo('decision-submit')">Submit Decision →</button></div>
         </div>

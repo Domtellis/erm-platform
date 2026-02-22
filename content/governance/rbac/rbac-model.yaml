@@ -1,0 +1,34 @@
+version: 0.1.0
+scope:
+  technical_provider: OPA (Open Policy Agent)
+
+roles:
+  - id: risk_lead
+    capabilities:
+      - breach.view
+      - assessment.create
+      - ai_suggestion.interact
+      - remediation.propose
+  
+  - id: bu_risk_owner
+    capabilities:
+      - assessment.approve
+      - policy.override
+      - rbac.view
+
+  - id: ai_oversight_lead
+    capabilities:
+      - ai.config_update
+      - prompt.modify
+      - bias_test.execute
+      - model.version_approve
+
+permissions_mapping:
+  # OPA-style logic mapping
+  - cap: assessment.approve
+    allow_to: [bu_risk_owner, cro_legal]
+    condition: "sod_rules.passed"
+
+  - cap: prompt.modify
+    allow_to: [ai_oversight_lead]
+    condition: "mfa_verified"

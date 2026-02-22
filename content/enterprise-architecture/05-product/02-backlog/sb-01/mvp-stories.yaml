@@ -47,3 +47,10 @@ mvp:
           story_ids: [S-14]
         - id: F-05-02
           story_ids: [S-15]
+
+    - id: E-06
+      features:
+        - id: F-06-01
+          story_ids: [S-16]
+        - id: F-06-02
+          story_ids: [S-17]

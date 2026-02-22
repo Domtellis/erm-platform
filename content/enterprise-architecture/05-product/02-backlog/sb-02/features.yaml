@@ -47,14 +47,15 @@ features:
 
   - id: F-SB02-004
     epic_id: E-SB02-02
-    name: Gemini API Client
-    description: Integrate with Google Gemini API for zero-shot risk assessment
+    name: Gemini 2.0 API Client
+    description: Integrate with Google Gemini 2.0 API for zero-shot risk assessment
     priority: P0
     effort: M (4 days)
     owner: Backend Team
     acceptance_criteria:
       - GeminiClient class with sendPrompt() method
       - JSON schema enforcement for structured output
+      - Captures `ai_context_hash` and `ai_prompt_ref` for every call
       - Timeout handling (10s max)
       - Retry logic (3 attempts with exponential backoff)
       - API key from secure vault (not hardcoded)
@@ -73,7 +74,7 @@ features:
       - Requires AI to cite standards in justification
       - Enforces JSON output schema
       - Template versioned (v1.0.0)
-    technical_notes: Iterate on prompt with validation set until >65% accuracy
+    technical_notes: Iterate on prompt with validation set until >65% accuracy using Gemini 2.0. Successful generation emits `ai.suggestion-created`.
 
   - id: F-SB02-006
     epic_id: E-SB02-02
@@ -128,6 +129,7 @@ features:
       - Accept button calls POST /ai/assessments/:id/accept
       - Creates RiskAssessment record with ai_suggestion_id FK
       - Logs acceptance event for feedback tracking
+      - Emits `ai.calibration-feedback-captured` CloudEvent
       - Redirects to assessment detail page
     technical_notes: Reuse existing createAssessment mutation
 
@@ -158,7 +160,7 @@ features:
       - Cron runs first Monday of each month
       - Tests 10 random breach cases with variations
       - Pass/fail logged to database
-      - Slack alert if any test fails
+      - Notification Service alert (Email/Jira) if any test fails
     technical_notes: Use node-cron, store test results in BiasTestResult table
 
   - id: F-SB02-012

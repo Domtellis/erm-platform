@@ -58,6 +58,18 @@ events:
     description: "Action item completed."
     payload:
       required: [breach_case_id, action_item_id]
+  - type: AI_SUGGESTION_CREATED
+    description: "AI suggestion generated for triage/assessment."
+    payload:
+      required: [breach_case_id, suggestion_id, model_version, suggested_severity]
+  - type: AI_NARRATIVE_SYNTHESISED
+    description: "AI summary generated for reporting/disclosure."
+    payload:
+      required: [breach_case_id, narrative_text, model_version]
+  - type: AI_CALIBRATION_FEEDBACK_CAPTURED
+    description: "Human feedback recorded for AI calibration loop."
+    payload:
+      required: [suggestion_id, action, reviewer_user_id]
   - type: CASE_CLOSED
     description: "Case closed after evidence policy check."
     payload:

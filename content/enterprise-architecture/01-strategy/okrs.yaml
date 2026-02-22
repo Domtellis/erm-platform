@@ -127,3 +127,19 @@ okrs:
         metric: "% target users active monthly (risk/control owners)"
         baseline: null
         target: 0.60
+  - okr_id: "OKR-Y1-H"
+    objective: "Scale intelligence with Human-in-the-Loop AI (Pilot SB-02)"
+    north_star_alignment: "Direct (reduces bias + triage cycle time)"
+    key_results:
+      - kr_id: "OKR-Y1-H-KR1"
+        metric: "AI Triage Cycle Time (seconds) vs. Manual (minutes)"
+        baseline: "15 min"
+        target_seconds: 15
+      - kr_id: "OKR-Y1-H-KR2"
+        metric: "% AI Suggestions accepted/modified without rejection"
+        baseline: null
+        target: 0.90
+      - kr_id: "OKR-Y1-H-KR3"
+        metric: "Disagreement rate for high-severity breaches (target coverage)"
+        baseline: null
+        target: 1.00

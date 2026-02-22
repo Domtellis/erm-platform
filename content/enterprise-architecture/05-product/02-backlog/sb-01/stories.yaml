@@ -145,3 +145,23 @@ stories:
     acceptance:
       - "Audit pack includes: case summary, evaluation, decision, approvals, evidence index, action history, audit timeline"
       - "Emits AUDIT_PACK_EXPORTED"
+
+  - id: S-16
+    epic_id: E-06
+    feature_id: F-06-01
+    title: "Generate AI triage suggestion via Gemini 2.0"
+    primary_actor: system
+    acceptance:
+      - "AI consumes BREACH_CASE_CREATED event"
+      - "Generates score, rationale, and mapping to regulations"
+      - "Emits AI_SUGGESTION_CREATED event"
+
+  - id: S-17
+    epic_id: E-06
+    feature_id: F-06-02
+    title: "Capture human override as calibration feedback"
+    primary_actor: risk_lead
+    acceptance:
+      - "Captures 'Accept | Modify | Reject' action"
+      - "Captures rationale for override"
+      - "Emits AI_CALIBRATION_FEEDBACK_CAPTURED event"

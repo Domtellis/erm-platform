@@ -4,7 +4,7 @@ journey_id: journey-board-exco
 persona_id: per-001
 primary_value_streams: [VS-00, VS-04, VS-08]
 secondary_value_streams: [VS-07, VS-09]
-last_updated: 2026-02-03
+last_updated: 2026-02-21
 ---
 
 # Journey Map — Board / ExCo Member
@@ -18,14 +18,14 @@ last_updated: 2026-02-03
 | # | Stage | Value stream | What the user is trying to do | Emotions | Pain points | Success criteria |
 |---|-------|--------------|--------------------------------|----------|-------------|------------------|
 | 1 | Set guardrails | VS-00 | Approve appetite statement, tolerances, escalation rules, and criteria model version | Cautious | Ambiguous thresholds; policy vs reality mismatch | Appetite + criteria version approved and published |
-| 2 | Sense context | VS-01 | Review emerging risk watchlist and “what changed” summary | Curious | Too much noise; weak signal confidence | Clear “why it matters” narrative + confidence |
+| 2 | Sense context | VS-01 | Review emerging risk watchlist and **AI-generated** “what changed” summary | Curious | Information overload | Clear **AI-Synthesised** narrative + confidence |
 | 3 | Validate portfolio | VS-02 → VS-03 | Confirm material risks are owned, assessed, and evidence-backed | Demanding | Missing ownership; inconsistent scoring | High coverage of material risks; evidence minimums met |
 | 4 | Decide priorities | VS-04 | Approve top risk set and funded treatment direction | Decisive | Trade-offs unclear; no quantified ranges | Options framed, trade-offs explicit, decision ask crisp |
-| 5 | Approve pack + record | VS-08 | Sign off board pack; ensure decision ledger and actions are captured | Accountable | “One version of truth” disputes | Pack signed off, decisions and actions traceable |
+| 5 | Approve pack + record | VS-08 | Sign off board pack; ensure decision ledger and actions are captured | **Confident** | Narrative drafting lag | **AI-Drafted** rationales with evidence traceability |
 | 6 | Handle escalations | VS-07 / VS-09 | Act on appetite breaches or material incidents | High urgency | Late escalation; unclear authority | Breach workflow triggers correct routing + SLAs |
 
 ## Moments that matter (adoption)
-- Board pack “diff view”: what changed since last pack, with decision asks pre-filled (VS-08).
+- Board pack **AI-Assisted narrative**: what changed since last pack, with decision asks auto-summarised (VS-08).
 - Appetite breach experience: breach → escalation → mitigations → record is audit-ready (VS-07).
 - Gate outcome is unambiguous: within appetite / waiver required (VS-00).
 

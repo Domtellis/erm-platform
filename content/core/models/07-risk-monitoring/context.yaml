@@ -24,6 +24,7 @@ entities:
     - DataFeed
     - Alert
     - BreachCase
+    - AssessmentSuggestion
     - MitigationAction
   referenced:
     - Risk

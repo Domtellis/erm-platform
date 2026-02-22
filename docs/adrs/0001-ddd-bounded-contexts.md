@@ -35,7 +35,7 @@ We adopted Domain-Driven Design (DDD) to partition the ERM platform into the fol
 ## Consequences
 
 ### Positive
-*   **Decoupled Development**: Teams can work on different contexts with minimal side effects.
+*   **Decoupled Development**: Notification Service (Email/Jira) can work on different contexts with minimal side effects.
 *   **Clear Ownership**: Data and business logic have a single home.
 *   **Scalability**: Individual contexts can be refactored or swapped (e.g., moving from a monolith to microservices) more easily.
 

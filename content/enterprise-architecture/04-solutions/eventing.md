@@ -24,10 +24,21 @@ All events must follow this structure:
 }
 ```
 
-## Naming Conventions
-- **Type**: `erm.<domain>.<event-name>.<version>`
-- **Source**: `/<domain>/<service-name>`
+## Key Events
 
-## Versioning Rules
-- **Minor/Patch (Additive)**: New optional fields. Consumer must be resilient.
-- **Major (Breaking)**: Field removals or type changes. Requires a new type (v2).
+- **Type**: `erm.monitoring.breach-detected.v1`
+  - **Subject**: `BC-2026-XXXXXXX`
+  - **Payload**: Breach metadata for enrichment.
+- **Type**: `erm.ai.suggestion-created.v1`
+  - **Subject**: `AS-2026-XXXXXXX`
+  - **Source**: `/ai/erm-ai-risk-service`
+  - **Payload**: Model version, suggestion score, rationale, and context.
+- **Type**: `erm.ai.narrative-generated.v1`
+  - **Subject**: `AN-2026-XXXXXXX`
+  - **Payload**: AI-synthesised insights for disclosure packs.
+- **Type**: `erm.calibration.feedback-captured.v1`
+  - **Subject**: `FB-2026-XXXXXXX`
+  - **Payload**: Human override rationale and calibration delta for model tuning.
+
+## Event Envelope
+...

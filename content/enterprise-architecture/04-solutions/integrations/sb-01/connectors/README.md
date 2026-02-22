@@ -15,6 +15,13 @@
 - Triggers:
   - ESCALATION_TRIGGERED (High severity)
   - APPROVAL_REQUESTED (Decision awaiting BU Risk Owner)
+  - AI_SUGGESTION_CREATED (Notify Risk Lead of new AI insights)
+
+## AI Service Connector: erm-ai-risk-service
+- Type: Event-driven (Kafka) + Synchronous Feedback API.
+- Consumption: Listens for `BREACH_CASE_CREATED`.
+- Production: Emits `AI_SUGGESTION_CREATED` (via Gemini 2.0).
+- Feedback: Receives `AI_CALIBRATION_FEEDBACK_CAPTURED` endpoint.
 
 ## Production hardening checklist
 - Authentication/authorisation for inbound endpoint

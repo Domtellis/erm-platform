@@ -71,7 +71,7 @@ This runbook defines procedures for responding to AI bias incidents - situations
 
 2. **Notify Stakeholders:**
    - CRO (immediate phone call)
-   - CISO (email + Slack)
+   - CISO (email + Notification Service (Email/Jira))
    - All Risk Leads (email: "AI suggestions temporarily paused")
    - AI Oversight Lead (if not the discoverer)
 

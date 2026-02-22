@@ -72,3 +72,13 @@ features:
     epic_id: E-05
     name: "Audit pack export"
     outcome: "One-click export contains the full governance narrative and references."
+
+  - id: F-06-01
+    epic_id: E-06
+    name: "AI-Assisted Triage & Scoring"
+    outcome: "AI service provides triage suggestions and risk scores within 15 seconds."
+
+  - id: F-06-02
+    epic_id: E-06
+    name: "Human-in-the-Loop Calibration"
+    outcome: "System captures human overrides as calibration feedback to tune AI models."

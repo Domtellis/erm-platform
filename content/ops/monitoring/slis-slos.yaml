@@ -1,0 +1,36 @@
+version: 0.1.0
+service: erm-platform-global
+
+slis:
+  - id: sli-ai-inference-latency
+    name: "AI Raw Inference Latency"
+    metric: "ai_inference_duration_seconds"
+    description: "Time taken for Gemini 2.0 to return a structured risk suggestion."
+    target_p95: 2.0s
+    target_p99: 5.0s
+
+  - id: sli-triage-resolution-time
+    name: "End-to-End Triage Velocity"
+    metric: "breach_triage_duration_seconds"
+    description: "Time from breach detection to 'Triaged' state (includes AI processing)."
+    target_avg: 15s
+    target_p95: 60s
+
+  - id: sli-notification-delivery
+    name: "Critical Alert Delivery Latency"
+    metric: "notification_delivery_seconds"
+    description: "Time from escalation trigger to successful Email/Jira dispatch."
+    target_p95: 5s
+
+slos:
+  - id: slo-ai-availability
+    name: "AI Suggestion Availability"
+    sli_ref: sli-ai-inference-latency
+    objective: 99.5%
+    period: 30d
+
+  - id: slo-triage-compliance
+    name: "Triage SLA Compliance"
+    sli_ref: sli-triage-resolution-time
+    objective: 95% of breaches triaged within 60s
+    period: 7d

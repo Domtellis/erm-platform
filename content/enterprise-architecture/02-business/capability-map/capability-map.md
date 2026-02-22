@@ -216,6 +216,7 @@
 #### L2-11.03. Learning and prevention
 - **L3:** Lessons learned library (searchable, reusable)
 - **L3:** Risk/control updates from events (feedback automation)
+- **L3:** Human-in-the-loop AI model calibration (feedback loops)
 - **L3:** Recurrence analytics (repeat patterns, hotspots)
 
 ---

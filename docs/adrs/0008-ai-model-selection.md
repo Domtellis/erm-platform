@@ -22,7 +22,7 @@ We evaluated multiple AI model options across three categories:
 
 ## Decision
 
-Use **Gemini 2.0 Flash Thinking Experimental** via Google AI API for zero-shot risk assessment.
+Use **Gemini 2.0 Flash** via Google AI API for zero-shot risk assessment.
 
 **Technical Specification:**
 - **Provider:** Google (Vertex AI or AI Studio API)
@@ -33,7 +33,7 @@ Use **Gemini 2.0 Flash Thinking Experimental** via Google AI API for zero-shot r
 
 ## Rationale
 
-### Why Gemini 2.0 Flash Thinking?
+### Why Gemini 2.0 Flash?
 
 1. **Zero-Shot Excellence:** Pre-trained on vast safety/risk management corpus, understands ISO 45001 without fine-tuning
 2. **Reasoning Transparency:** "Thinking" mode shows step-by-step logic before final answer (critical for bias detection)

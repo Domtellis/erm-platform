@@ -157,11 +157,11 @@ Track every AI vs. human disagreement:
 ### 6.1 Version Tracking
 
 Every AI assessment must record:
-- Model provider (e.g., "Gemini")
-- Model version (e.g., "gemini-2.0-flash-exp-20260217")
+- Model provider (e.g., "Google Gemini")
+- Model version (e.g., "gemini-2.0-pro-exp" or "gemini-2.0-flash")
 - Prompt template version (e.g., "v1.3.2")
-- Confidence score
-- Timestamp
+- Tracking: `ai_context_hash` and `ai_prompt_ref`
+- Audit Event: Emits `AI_SUGGESTION_CREATED`
 
 ### 6.2 Model Updates
 
@@ -354,10 +354,9 @@ Risk Leads who use AI must still meet competency requirements:
 
 ### Appendix B: Related Documents
 
-- [ADR-0008: AI Model Selection](../../docs/adrs/0008-ai-model-selection.md)
-- [ADR-0009: Bias Mitigation Strategy](../../docs/adrs/0009-ai-bias-mitigation-strategy.md)
-- [AI Risk Assessment User Guide](../../docs/guides/ai-risk-assessment-user-guide.md)
-- [SB-02 PRD](../enterprise-architecture/05-product/01-prds/sb-02/prd.md)
+- [ADR-0003: AI Reasoning Engine](../../enterprise-architecture/04-solutions/decisions/adr-0003-ai-reasoning-engine.md)
+- [ADR-0005: Model Calibration](../../enterprise-architecture/04-solutions/decisions/adr-0005-model-calibration.md)
+- [SB-02 PRD](../../enterprise-architecture/05-product/01-prds/sb-02/prd.md)
 
 ---
 

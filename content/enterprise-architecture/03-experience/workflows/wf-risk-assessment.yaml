@@ -5,6 +5,7 @@ description: "Versioned assessment lifecycle with evidence, assumptions, challen
 value_stream_alignment: ["VS-03","VS-04"]
 states:
   - { state: "planned", type: "initial" }
+  - { state: "ai_suggested", type: "normal" }
   - { state: "in_progress", type: "normal" }
   - { state: "challenged", type: "normal" }
   - { state: "approved", type: "normal" }
@@ -22,6 +23,7 @@ validations:
   minimum_for_approval:
     - "method_tier"
     - "evidence_minimums_met == true"
+    - "ai_suggestion_reviewed == true"
     - "override_rationale_present_if_override == true"
 
 commands:
@@ -64,6 +66,8 @@ events:
 
 transitions:
   - { from: "planned", "on": "assessment_started", to: "in_progress" }
+  - { from: "planned", "on": "ai_suggestion_created", to: "ai_suggested" }
+  - { from: "ai_suggested", "on": "assessment_started", to: "in_progress" }
   - { from: "in_progress", "on": "assessment_submitted_for_challenge", to: "challenged" }
   - { from: "challenged", "on": "assessment_rework_requested", to: "in_progress" }
   - { from: "challenged", "on": "assessment_approved", to: "approved" }
@@ -82,6 +86,7 @@ audit_logging:
     - "entity_id"
     - "assessment_version"
     - "criteria_model_version"
+    - "ai_suggestion_ref"
     - "evidence_set_hash"
     - "override_flag"
     - "override_rationale_ref"

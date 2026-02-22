@@ -1,0 +1,26 @@
+version: 0.1.0
+
+gates:
+  - id: gate-code-quality
+    name: "Code Coverage & Linting"
+    applies_to: [services, docs]
+    requirement: "Coverage > 80%; Zero critical lint errors"
+    status: enforced
+
+  - id: gate-ai-accuracy
+    name: "AI Suggestion Agreement Rate"
+    applies_to: [sb-02, ai-risk-service]
+    requirement: "Expert/AI agreement > 85% on validation set"
+    status: enforced
+
+  - id: gate-audit-traceability
+    name: "Audit Event Completeness"
+    applies_to: [sb-01, sb-02]
+    requirement: "100% of defined control events in catalogue are emitted"
+    status: monitor
+
+  - id: gate-security-baseline
+    name: "SAST/DAST Scan"
+    applies_to: [all]
+    requirement: "Zero 'Critical' or 'High' security findings"
+    status: block

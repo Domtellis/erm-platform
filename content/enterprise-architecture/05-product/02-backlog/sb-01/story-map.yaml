@@ -4,6 +4,7 @@ category: safety
 
 backbone_steps:
   - Detected
+  - AI_Enrichment # NEW
   - Triaged
   - ValidatedAgainstAppetite
   - Escalated
@@ -18,10 +19,14 @@ feature_mapping_by_step:
     - F-01-01
     - F-01-02
     - F-05-01
+  AI_Enrichment: # NEW
+    - F-06-01
+    - F-05-01
   Triaged:
     - F-01-03
     - F-01-02
     - F-05-01
+    - F-06-02 # Capture feedback
   ValidatedAgainstAppetite:
     - F-02-01
     - F-02-02
@@ -50,7 +55,7 @@ feature_mapping_by_step:
 
 slices:
   - name: walking_skeleton_mvp
-    description: "End-to-end, governance-grade SB-01 in BU-01."
+    description: "End-to-end, governance-grade SB-01 in BU-01 with AI triage."
     feature_ids:
       - F-01-01
       - F-01-02
@@ -66,6 +71,8 @@ slices:
       - F-04-04
       - F-05-01
       - F-05-02
+      - F-06-01 # MOVED TO MVP
+      - F-06-02 # MOVED TO MVP
 
   - name: usability_hardening
     description: "Reduce friction and improve data quality."
@@ -76,6 +83,4 @@ slices:
   - name: v1_integrations_reporting
     description: "Swap stubs for real connectors; improve reporting."
     feature_ids:
-      - F-06-01
-      - F-06-02
       - F-07-01

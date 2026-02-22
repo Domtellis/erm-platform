@@ -7,6 +7,8 @@ funnel:
   steps:
     - name: case_created
       event: BREACH_CASE_CREATED
+    - name: ai_suggestion_created
+      event: AI_SUGGESTION_CREATED
     - name: triaged
       event: CASE_TRIAGED
     - name: evaluated
@@ -19,6 +21,9 @@ funnel:
       event: CASE_CLOSED
 
 kpis:
+  - name: time_to_ai_suggestion
+    start_event: BREACH_CASE_CREATED
+    end_event: AI_SUGGESTION_CREATED
   - name: time_to_triage
     start_event: BREACH_CASE_CREATED
     end_event: CASE_TRIAGED

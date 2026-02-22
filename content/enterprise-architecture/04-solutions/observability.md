@@ -28,3 +28,11 @@ All logs must be structured (JSON) and include:
 - `span_id`
 - `tenant_id`
 - `message`
+
+## 3. AI Inference & Decision Traceability
+
+For every AI-generated suggestion, the following metadata must be attached to the trace and the audit event:
+- `ai_model_version`: The specific version of Gemini used (e.g., `gemini-2.0-flash`).
+- `ai_prompt_ref`: A versioned reference to the prompt template.
+- `ai_confidence_score`: The probability score returned by the model.
+- `ai_context_hash`: A hash of the data inputs sent to the model to verify data provenance during audits.

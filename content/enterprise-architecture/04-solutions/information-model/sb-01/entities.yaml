@@ -33,6 +33,33 @@ entities:
       - { name: received_at, type: datetime, required: true }
       - { name: payload_ref, type: string, required: false, description: "Pointer to raw event payload storage." }
       - { name: breach_case_id, type: string, required: true }
+      - { name: payload_ref, type: string, required: false, description: "Pointer to raw event payload storage." }
+
+  - name: AssessmentSuggestion
+    description: "AI-generated risk assessment suggestion (zero-shot via Gemini)."
+    keys: [suggestion_id]
+    fields:
+      - { name: suggestion_id, type: string, required: true }
+      - { name: breach_case_id, type: string, required: true }
+      - { name: model_version, type: string, required: true, example: "gemini-2.0-flash" }
+      - { name: suggested_severity, type: enum, required: true, values: [low, medium, high] }
+      - { name: suggested_impact, type: number, required: true }
+      - { name: suggested_likelihood, type: number, required: true }
+      - { name: rationale, type: text, required: true }
+      - { name: confidence_score, type: number, required: true }
+      - { name: generated_at, type: datetime, required: true }
+
+  - name: HumanFeedbackLog
+    description: "Capture of human review of AI suggestions for calibration loops."
+    keys: [feedback_id]
+    fields:
+      - { name: feedback_id, type: string, required: true }
+      - { name: suggestion_id, type: string, required: true }
+      - { name: reviewer_user_id, type: string, required: true }
+      - { name: action, type: enum, required: true, values: [accepted, modified, rejected] }
+      - { name: override_rationale, type: text, required: false }
+      - { name: delta_fields, type: object, required: false }
+      - { name: recorded_at, type: datetime, required: true }
 
   - name: AppetiteStatementVersion
     description: "Versioned appetite statement used for evaluation (governance controlled)."

@@ -10,8 +10,11 @@ This document outlines the specific measurable requirements that the architectur
 - **Audit Latency**: Audit events must be persisted within 200ms of the domain event commit.
 - **Evidence Integrity**: All evidence items must have a SHA-256 hash recorded at time of upload.
 
-## Performance
-- **UI Responsiveness**: Key dashboard metrics (e.g., Breach Counts) should update within 2 seconds of a state change event.
+## Intelligence & AI Oversight
+- **AI Latency**: 95% of AI suggestions must be delivered within 15 seconds of the `breach-detected` event.
+- **Hallucination Oversight**: 100% of high/critical breaches must require manual "Accept" or "Modify" before the case can proceed.
+- **Feedback Integrity**: Disagreement between AI and human must be recorded for 100% of cases to enable monthly bias audits.
 
 ## Scalability
 - **Tenant Growth**: Architecture must support 100+ business units without degradation in individual tenant performance.
+- **AI Throughput**: Service must handle concurrent bursts of 50+ breaches without increasing latency P95 beyond 20s.

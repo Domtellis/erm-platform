@@ -30,3 +30,10 @@ outbound:
     template:
       title: "[SB-01] Safety breach requires attention"
       body: "Case {{breach_case_id}} is {{status}} (severity={{severity}}). Action: {{action_required}}"
+
+  ai_feedback_loop:
+    trigger_events:
+      - AI_CALIBRATION_FEEDBACK_CAPTURED
+    target:
+      service: "erm-ai-risk-service"
+      endpoint: "/calibration/ingest"

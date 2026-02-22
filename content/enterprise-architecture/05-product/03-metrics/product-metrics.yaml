@@ -1,0 +1,26 @@
+schema_version: "1.0"
+
+metrics:
+  - id: NSM-001
+    name: "Verified Risk Actions Closed On-Time"
+    type: leading
+    target: 0.80
+    owner_group: "Product & Operations"
+
+  - id: AI-001
+    name: "AI Suggestion Accuracy (Agreement Rate)"
+    type: health
+    definition: "% of AI suggestions accepted by human lead without major modification"
+    target: 0.85
+
+  - id: AI-002
+    name: "AI Triage Latency (p95)"
+    type: performance
+    definition: "Lead time from breach detection to AI suggestion availability"
+    target_seconds: 15
+
+  - id: GOV-001
+    name: "Evidence Completeness Rate"
+    type: quality
+    definition: "% of closed cases meeting severity-based evidence policy"
+    target: 0.95

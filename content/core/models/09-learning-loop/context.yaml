@@ -21,6 +21,8 @@ entities:
     - RCA
     - CAPAPlan
     - LessonLearned
+    - AssessmentSuggestion
+    - HumanFeedback
   referenced:
     - TreatmentAction
     - Risk

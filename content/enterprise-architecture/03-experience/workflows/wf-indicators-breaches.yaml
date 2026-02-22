@@ -14,6 +14,7 @@ states:
 
   alert:
     - { state: "new", type: "initial" }
+    - { state: "ai_enriched", type: "normal" }
     - { state: "triaged", type: "normal" }
     - { state: "confirmed", type: "normal" }
     - { state: "false_positive", type: "terminal" }
@@ -46,7 +47,7 @@ commands:
     produces_events: ["indicator_live"]
   - command: "triage_alert"
     actor_roles: ["incident_monitoring_lead"]
-    preconditions: ["alert.state == new", "validations.triage_minimums"]
+    preconditions: ["alert.state in [new, ai_enriched]", "validations.triage_minimums"]
     produces_events: ["alert_triaged"]
   - command: "confirm_breach"
     actor_roles: ["incident_monitoring_lead","bu_risk_owner"]
@@ -76,6 +77,7 @@ commands:
 events:
   - { event: "indicator_approved", audit: true }
   - { event: "indicator_live", audit: true }
+  - { event: "ai_suggestion_created", audit: true }
   - { event: "alert_triaged", audit: true }
   - { event: "breach_confirmed", audit: true }
   - { event: "breach_case_opened", audit: true }
@@ -89,6 +91,7 @@ audit_logging:
   include_fields:
     - "indicator_id"
     - "alert_id"
+    - "ai_suggestion_id"
     - "breach_case_id"
     - "freshness_status"
     - "routing_path"

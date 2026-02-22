@@ -15,6 +15,11 @@ last_updated: 2026-02-03
 - Second line assurance (per-004)
 - Internal Audit (implicit)
 - Compliance/Data Owner (per-006) for external artefacts
+| Step | Frontstage (user-visible) | Backstage (system/ops) | Systems | Data objects | Handoffs |
+|------|---------------------------|------------------------|---------|--------------|----------|
+| 1 | Audit request received | System identifies linked risks, controls, and events | reporting, audit | audit_request | external → compliance |
+| 2 | Compliance lead triggers pack generation | **AI-Assisted Pack Synthesis** (Gemini generates summaries with citations) | **erm-ai-risk-service**, reporting | audit_pack, traceability_graph | compliance → auditor |
+| 3 | Auditor reviews pack with lineage | Tamper-evident verification of evidence provenance | evidence_vault, analytics | integrity_hash, provenance_record | auditor → exco |
 
 ## Controls and evidence
 - Evidence provenance minimums are mandatory (source, collector, timestamp, integrity hash, retention class).

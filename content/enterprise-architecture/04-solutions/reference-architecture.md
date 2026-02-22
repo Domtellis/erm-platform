@@ -2,7 +2,7 @@
 
 This document provides the high-level architecture container view for the ERM platform, illustrating the interaction between domain services and platform capabilities.
 
-## Container Diagram
+## 1. Container Diagram (Runtime Topology)
 
 ```mermaid
 flowchart TB
@@ -15,6 +15,7 @@ flowchart TB
     EP[Evidence & Provenance Service]
     AM[Action Management Service]
     AR[Audit & Reporting Service]
+    AI[AI Risk Service - Gemini 2.0]
   end
 
   APIGW --> MB
@@ -39,11 +40,14 @@ flowchart TB
   EP --> BUS
   AC --> BUS
   AM --> BUS
+  AI --- BUS
+  AI -.-> GEM[Google Gemini API]
 
   AR --> AUDITSTORE
   MB --> AUDITSTORE
   DA --> AUDITSTORE
   EP --> AUDITSTORE
+  AI --> AUDITSTORE
 
   EP --> STORE
   APIGW --> POL
@@ -52,6 +56,55 @@ flowchart TB
   MB --> OBS
   DA --> OBS
   EP --> OBS
+  AI --> OBS
+```
+
+## 2. Logical Information Model
+
+This diagram illustrates the core entity relationships, emphasizing the link between breach detection, AI suggestions, and human-in-the-loop calibration.
+
+```mermaid
+erDiagram
+    BreachCase ||--o{ BreachSignal : triggered_by
+    BreachCase ||--o| AssessmentSuggestion : enriched_by
+    AssessmentSuggestion ||--o| HumanFeedbackLog : calibrated_by
+    BreachCase ||--o{ ActionItem : requires
+    ActionItem ||--o{ EvidenceItem : verified_by
+    
+    BreachCase {
+        string breach_case_id PK
+        enum status
+        enum severity
+        datetime created_at
+    }
+
+    AssessmentSuggestion {
+        string suggestion_id PK
+        string model_version
+        string suggested_severity
+        decimal confidence_score
+        text rationale
+    }
+
+    HumanFeedbackLog {
+        string feedback_id PK
+        string reviewer_id
+        enum action "Accepted | Modified | Rejected"
+        text override_rationale
+    }
+
+    ActionItem {
+        string action_item_id PK
+        enum status
+        date due_date
+    }
+
+    EvidenceItem {
+        string evidence_id PK
+        enum type
+        string uri
+        string integrity_hash
+    }
 ```
 
 ## Architectural Components

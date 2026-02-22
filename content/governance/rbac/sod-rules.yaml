@@ -29,6 +29,15 @@ rules:
       disallow_sole_approver_role: risk_lead
     severity: block
 
+  - id: sod-004
+    name: "AI Oversight Lead cannot approve own model version changes"
+    applies_when:
+      - decision.type == "MODEL_CHANGE"
+    constraint:
+      disallow_if:
+        approver_user_id_equals: decision.author_id
+    severity: block
+
 notes:
   - "SoD checks must be evaluated before decision status can move to approved."
   - "SoD outcomes must be written into the audit event DECISION_APPROVED payload."

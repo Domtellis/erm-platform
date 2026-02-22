@@ -10,6 +10,7 @@ Own appetite statements, versions, thresholds, and severity mapping logic.
 ## Key Invariants
 - Only one "Active" version per appetite category at a time.
 - Threshold changes require a new AppetiteStatementVersion.
+- **AI Anomaly Triggers**: Feed into criteria reviews based on state-change patterns.
 
 ## Outbound Events
 - `APPETITE_VERSION_PUBLISHED`

@@ -38,6 +38,27 @@ links:
     confidence: 0.75
     rationale: "Three-lines alignment shapes roles and oversight views."
 
+  - link_id: "L-CAP-JRN-0016"
+    capability_id: "CAP-AI-01"
+    journey_id: "JRN-004"
+    contribution: "primary"
+    confidence: 0.95
+    rationale: "Automated scoring accelerates the Incident Lead's triage journey."
+
+  - link_id: "L-CAP-JRN-0017"
+    capability_id: "CAP-AI-02"
+    journey_id: "JRN-004"
+    contribution: "primary"
+    confidence: 0.90
+    rationale: "Calibration feedback is a mandatory step in the risk assessment journey."
+
+  - link_id: "L-CAP-JRN-0018"
+    capability_id: "CAP-AI-03"
+    journey_id: "JRN-002"
+    contribution: "primary"
+    confidence: 0.95
+    rationale: "Bias monitoring provides evidence for the AI Oversight Lead journey."
+
   - link_id: "L-CAP-JRN-0007"
     capability_id: "CAP-RTC-01"
     journey_id: "JRN-003"

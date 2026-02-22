@@ -28,8 +28,9 @@ Safety breaches are often handled across email, chats, and spreadsheets, leading
 - Business Unit: **BU-01**
 - Category: **Safety**
 - Breach intake: **manual case creation + monitoring event stub**
-- Notifications: **Microsoft Teams**
+- Notifications: **Email + Jira (Teams replaced)**
 - High severity approval: **BU Risk Owner**
+- Intelligence: **AI-assisted risk scoring and narrative synthesis (Gemini 2.0)**
 
 ## In-scope personas
 - Incident Lead (operator)

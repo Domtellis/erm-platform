@@ -1,86 +1,85 @@
 ---
 doc_type: sprint_brief
-lighthouse: sb-01
-sprint: ux-validation
-version: 0.1.0
-last_updated: 2026-02-07
+lighthouse: sb-02
+sprint: intelligent-erm-validation
+version: 1.0.0
+last_updated: 2026-02-21
 ---
 
-# Sprint Brief — SB-01 UX Validation
+# Sprint Brief — Intelligent ERM UX Validation
 
 ## Sprint Goal
 
-Validate the SB-01 Appetite Breach Response workflow UX before heavy build by testing:
-1. Critical path completion (happy path)
-2. Governance gate clarity (SoD, approvals, evidence)
-3. Navigation and IA comprehension
-4. Form usability with realistic data
+Validate the **AI-Assisted Triage & Fairness** workflow to ensure the "Intelligent ERM" platform meets ISO 42001 and EU AI Act trust requirements by testing:
+1. **AI Trust & Transparency**: Do Risk Leads understand and trust the "AI Thinking" reasoning drawer?
+2. **Human-in-the-Loop Efficiency**: Does AI suggestion reduce triage time without introducing automation bias?
+3. **Calibration & Bias Oversight**: Can the AI Oversight Lead effectively identify and correct model hallucinations?
 
 ## Scope
 
 ### In Scope
-- **Lighthouse**: SB-01 (Safety breach response)
-- **BU**: BU-01 (pilot)
-- **Personas**: Incident Lead, Risk Lead, BU Risk Owner
-- **Fidelity**: Mid-fidelity clickable prototype
+- **Lighthouse**: SB-02 (Intelligent breach response)
+- **Features**: AI Suggestion Engine, Reasoning Drawer, AI Oversight Hub.
+- **Personas**: Incident Lead, Risk Lead, **AI Oversight Lead (New)**.
+- **Fidelity**: Mid-fidelity prototype with dynamic "Gemini Thinking" states.
 
 ### Out of Scope
-- Real backend or data persistence
-- Multi-BU scenarios
-- Admin/config workflows
-- Mobile responsiveness (desktop-first)
+- Prompt engineering backend logic.
+- Real-time model retraining.
+- Mobile responsiveness.
 
 ---
 
 ## Critical Paths to Validate
 
-### Spine (Happy Path)
+### The Intelligent Path (Happy Path)
 ```
-Breaches List → Open Case → Triage → Evaluate vs Threshold 
-→ Escalate → Decision Ask → Approval → Action Plan → Close → Audit Pack
+Notification → Review AI Suggestion → Expand Reasoning (ISO 45001 check) 
+→ Confirm/Override → Calibration Feedback → AI Oversight Review → Trend Analysis
 ```
 
-### Failure Modes
-1. **Evaluate without rationale** → Blocked with clear guidance
-2. **Approve High severity without required evidence** → Blocked with checklist
+### Failure Modes & Edge Cases
+1. **Model Hallucination**: AI provides incorrect reasoning/citation → User overrides and provides feedback.
+2. **Low Confidence**: AI flags a case as "Ambiguous" → User handles manual triage from scratch.
 
 ---
 
-## Success Measures
+## Success Measures (AI Intelligence)
 
-| Measure | Method | Target |
-|:--------|:-------|:-------|
-| Task completion | Success / Partial / Fail | ≥80% Success |
-| Critical errors | Count per session | 0 blockers |
-| Time on task | Rough timing | Triage <2 min, Approval <3 min |
-| Confidence rating | 1-7 scale post-task | ≥5 average |
+| Measure | Target | Method |
+| :--- | :--- | :--- |
+| **Agreement Rate** | ≥ 85% | % of AI suggestions accepted without modification |
+| **Trust Score** | ≥ 6/7 | Confidence rating in the "View Reasoning" drawer |
+| **Triage Velocity** | < 15 Sec | End-to-end time from notification to triaged status |
+| **Citation Accuracy** | 100% | Human validation of ISO 45001 clauses cited by AI |
 
 ---
 
 ## Finding Severity
 
 | Severity | Definition | Action |
-|:---------|:-----------|:-------|
-| **P0** | Blocks task completion or introduces governance risk | Must fix before build |
-| **P1** | Major confusion or slowdown | Fix in MVP |
-| **P2** | Minor polish | Backlog for v1+ |
+| :--- | :--- | :--- |
+| **CRITICAL** | AI logic induces dangerous safety under-assessment | Immediate model/prompt suspension |
+| **HIGH** | Major confusion regarding AI reasoning or lack of trust | Mandatory redesign of transparency layer |
+| **MEDIUM** | Minor layout or terminology friction | Backlog for v2 |
 
 ---
 
 ## Timeline
 
 | Phase | Duration | Deliverables |
-|:------|:---------|:-------------|
-| Prototype build | 2-3 days | Clickable HTML prototype |
-| Usability sessions | 2-3 days | 5-8 sessions recorded |
-| Synthesis | ½ day | Findings + iterations log |
+| :--- | :--- | :--- |
+| **AI Prototype Build** | 2 Days | Clickable prototype with gemini-2.0-flash disclosure logic |
+| **Validation Sessions** | 3 Days | 8 sessions (Risk Leads + AI Oversight Leads) |
+| **Bias/Trust Synthesis** | 1 Day | Intelligence Audit Report for CRO |
 
 ---
 
 ## Team
 
 | Role | Responsibility |
-|:-----|:---------------|
-| Product | Define scope, prioritise findings |
-| UX | Build prototype, run sessions, synthesise |
-| Engineering | Review technical feasibility of iterations |
+| :--- | :--- |
+| **Product** | Define AI risk thresholds and success bars |
+| **UX/AI Design** | Build "Explainable AI" components and prototypes |
+| **AI Oversight Lead** | Define bias testing scenarios |
+| **Engineering** | Validate feasibility of the "Reasoning Drawer" logic |

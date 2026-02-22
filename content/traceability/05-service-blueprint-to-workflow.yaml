@@ -77,3 +77,10 @@ links:
     contribution: "supporting"
     confidence: 0.85
     rationale: "Everything-as-code operationalises controlled change management."
+
+  - link_id: "L-BP-WF-0013"
+    blueprint_id: "BP-007"
+    workflow_id: "WF-AI-001"
+    contribution: "primary"
+    confidence: 0.95
+    rationale: "AI-assisted assessment blueprint requires the AI triage assistant workflow."

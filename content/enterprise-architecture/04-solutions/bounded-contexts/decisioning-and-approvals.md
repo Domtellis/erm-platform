@@ -9,6 +9,7 @@ Own decisions, approval workflow, authority checks, and Separation of Duties (So
 
 ## Key Invariants
 - **Separation of Duties (SoD)**: The Submitter of a decision cannot be the Approver.
+- **AI-Suggestion Review**: Decisions based on `AssessmentSuggestion` must record an explicit "Accepted/Overridden" flag with a mandatory rationale for overrides.
 - All approvals must be linked to a valid Authority Matrix entry.
 
 ## Outbound Events

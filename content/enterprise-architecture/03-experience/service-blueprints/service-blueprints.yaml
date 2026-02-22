@@ -11,7 +11,7 @@ blueprints:
     intent: "Ensure actions close on-time with required evidence and approvals (verified closure)."
   - blueprint_id: "BP-004"
     name: "KRI Monitoring & Breach Management"
-    intent: "Detect threshold breaches, triage, escalate via authority matrix, and create actions."
+    intent: "Detect threshold breaches, **AI-enrich triage with Gemini**, escalate via authority matrix, and create actions."
   - blueprint_id: "BP-005"
     name: "Audit Evidence Request Fulfilment"
     intent: "Respond to audit requests quickly with validated evidence packaging and traceable logs."

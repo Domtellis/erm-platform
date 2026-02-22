@@ -69,7 +69,6 @@ links:
     contribution: "primary"
     confidence: 0.95
     rationale: "Breach workflow converts signals into decisions and actions."
-
   - link_id: "L-VS-CAP-0012"
     vs_id: "VS-05"
     capability_id: "CAP-EVD-01"
@@ -106,3 +105,21 @@ links:
     contribution: "supporting"
     confidence: 0.85
     rationale: "Everything-as-code enables governance + repeatability + CI."
+  - link_id: "L-VS-CAP-0018"
+    vs_id: "VS-04"
+    capability_id: "CAP-AI-01"
+    contribution: "primary"
+    confidence: 0.95
+    rationale: "Automated risk scoring is a core monitoring enhancement for safety breaches."
+  - link_id: "L-VS-CAP-0019"
+    vs_id: "VS-04"
+    capability_id: "CAP-AI-02"
+    contribution: "primary"
+    confidence: 0.90
+    rationale: "Human-in-the-loop calibration ensures AI accuracy and governance compliance."
+  - link_id: "L-VS-CAP-0020"
+    vs_id: "VS-04"
+    capability_id: "CAP-AI-03"
+    contribution: "supporting"
+    confidence: 0.85
+    rationale: "Bias monitoring provides the necessary oversight for AI-driven decisions."

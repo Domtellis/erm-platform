@@ -18,3 +18,6 @@ prds:
   - prd_id: "PRD-006"
     name: "Platform Foundations: Multi-tenant, LoD Views, Audit Log, Everything-as-Code"
     doc_path: "docs/prd/PRD-006-platform-foundations-eac.md"
+  - prd_id: "PRD-007"
+    name: "AI-Assisted Risk Assessment & Model Calibration"
+    doc_path: "content/enterprise-architecture/05-product/01-prds/sb-02/prd.md"

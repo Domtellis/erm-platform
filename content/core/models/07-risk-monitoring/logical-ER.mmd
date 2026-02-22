@@ -12,9 +12,7 @@ erDiagram
 
   IndicatorDefinition ||--o{ Alert : triggers
   Alert ||--o| BreachCase : mayOpen
-
-  EscalationRule ||--o{ BreachCase : routes
-  BreachCase ||--o{ MitigationAction : contains
+  BreachCase ||--o| AssessmentSuggestion : informedBy
 
   IndicatorDefinition {
     string IndicatorDefinitionId PK
@@ -95,6 +93,16 @@ erDiagram
     datetime closedAt
     string status
     string ownerRole
+  }
+
+  AssessmentSuggestion {
+    string AssessmentSuggestionId PK
+    string BreachCaseId FK
+    string modelName
+    string suggestedSeverity
+    string rationale
+    decimal confidenceScore
+    datetime generatedAt
   }
 
   EscalationRule {

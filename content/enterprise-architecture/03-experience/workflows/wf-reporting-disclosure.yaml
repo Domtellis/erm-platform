@@ -23,7 +23,7 @@ commands:
   - command: "compile_board_pack"
     actor_roles: ["risk_reporting_owner","system"]
     preconditions: ["board_pack.state == draft"]
-    produces_events: ["board_pack_compiled"]
+    produces_events: ["board_pack_compiled", "ai_narrative_generated"]
   - command: "certify_data"
     actor_roles: ["data_owner"]
     preconditions: ["board_pack.state == compiled", "one_version_of_truth_checks_passed == true", "lineage_complete == true"]
@@ -53,6 +53,7 @@ commands:
 
 events:
   - { event: "board_pack_compiled", audit: true }
+  - { event: "ai_narrative_generated", audit: true }
   - { event: "board_pack_certified", audit: true }
   - { event: "board_pack_signed_off", audit: true }
   - { event: "board_pack_published", audit: true }
@@ -65,6 +66,7 @@ audit_logging:
   required: true
   include_fields:
     - "board_pack_id"
+    - "ai_summary_id"
     - "certification_checks"
     - "lineage_report_ref"
     - "decision_ledger_ids"

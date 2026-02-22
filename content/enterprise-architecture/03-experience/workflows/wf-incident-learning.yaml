@@ -11,6 +11,7 @@ states:
     - { state: "contained", type: "normal" }
     - { state: "rca_in_progress", type: "normal" }
     - { state: "capa_in_progress", type: "normal" }
+    - { state: "ai_calibration_pending", type: "normal" }
     - { state: "closed_verified", type: "terminal" }
 
 commands:
@@ -38,6 +39,10 @@ commands:
   - command: "verify_capa_effectiveness"
     actor_roles: ["independent_reviewer"]
     produces_events: ["capa_effectiveness_verified"]
+  - command: "calibrate_ai_model"
+    actor_roles: ["enterprise_risk_lead"]
+    preconditions: ["incident.state == capa_in_progress"]
+    produces_events: ["ai_feedback_published"]
   - command: "trigger_updates"
     actor_roles: ["system"]
     produces_events:
@@ -54,6 +59,7 @@ events:
   - { event: "capa_created", audit: true }
   - { event: "capa_funded", audit: true }
   - { event: "capa_effectiveness_verified", audit: true }
+  - { event: "ai_feedback_published", audit: true }
   - { event: "risk_reassessment_requested", audit: true }
   - { event: "indicator_tuning_requested", audit: true }
   - { event: "control_change_requested", audit: true }
@@ -68,3 +74,4 @@ audit_logging:
     - "verification_evidence_set_hash"
     - "linked_risk_ids"
     - "linked_control_ids"
+    - "ai_calibration_delta"

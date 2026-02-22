@@ -32,3 +32,13 @@ Audit pack must include at minimum:
 - Action plan (actions and completion evidence)
 - Audit event timeline
 - Export emits `AUDIT_PACK_EXPORTED`
+
+## F-06-01 AI-Assisted Triage & Scoring
+- AI suggestion must be generated and visible within **15 seconds** of case creation (p50).
+- Suggestion must include impact, likelihood, justification, and regulatory references.
+- High severity cases must display a clear "Review Required" warning.
+
+## F-06-02 Human-in-the-Loop Calibration
+- Acceptance or modification of AI suggestions must emit `AI_CALIBRATION_FEEDBACK_CAPTURED`.
+- Modification rationale is **mandatory** for all severity changes.
+- Disagreement tracking must capture delta between AI suggestion and human decision.

@@ -106,5 +106,5 @@ For each task, record:
 
 ## 5. Logistics
 - **Platform**: Local HTML prototype (screen share or hosted link)
-- **Recording**: Teams/Zoom recording (with permission)
+- **Recording**: Notification Service (Email/Jira)/Zoom recording (with permission)
 - **Observer**: One silent observer to take notes

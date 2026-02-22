@@ -47,6 +47,7 @@ commands:
     produces_events: ["risk_archived"]
   - command: "flag_for_reassessment"
     actor_roles: ["enterprise_risk_lead","incident_monitoring_lead","system"]
+    description: "Triggered by human review or **AI-detected state-change anomalies**."
     preconditions: ["state == active"]
     produces_events: ["risk_reassessment_requested"]
   - command: "escalate_risk"
@@ -99,5 +100,6 @@ audit_logging:
     - "actor_role"
     - "before_state"
     - "after_state"
+    - "ai_anomaly_score"
     - "criteria_model_version"
     - "rationale_ref"

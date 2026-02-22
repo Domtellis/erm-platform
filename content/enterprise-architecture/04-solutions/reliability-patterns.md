@@ -17,3 +17,10 @@ This document details the patterns used to ensure the high availability and resi
 
 ## 4. Tenant Gating
 - Performance degradation in one tenant (e.g., massive event bursts) must not impact the processing of events for other tenants. Rate limiting should be applied at the tenant/BU level.
+
+## 5. AI Service Fallbacks & Graceful Degradation
+
+If the AI Risk Service or the underlying Gemini API is unavailable:
+- **Fallback to Manual-Only**: The UI must degrade gracefully, removing "AI Suggestions" and reverting to a standard manual triage workflow.
+- **Circuit Breaking**: The platform must not block the main record lifecycle (e.g., Breach Case creation) if the AI enrichment step fails.
+- **Retrospective Enforcement**: Once the AI service is back online, it may retrospectively enrich open cases to clear the backlog, provided the human triage step has not already been completed.

@@ -76,4 +76,18 @@ links:
     prd_id: "PRD-006"
     contribution: "supporting"
     confidence: 0.85
-    rationale: "Everything-as-code change control is specified in PRD-006."
+    rationale: "Everything-as-code operationalises controlled change management."
+
+  - link_id: "L-WF-PRD-0013"
+    workflow_id: "WF-MON-002"
+    prd_id: "SB-02"
+    contribution: "supporting"
+    confidence: 0.90
+    rationale: "Breach response is the primary integration point for AI risk assessment."
+
+  - link_id: "L-WF-PRD-0014"
+    workflow_id: "WF-AI-001"
+    prd_id: "SB-02"
+    contribution: "primary"
+    confidence: 0.95
+    rationale: "AI Triage Assistant is a core capability defined in the SB-02 PRD."

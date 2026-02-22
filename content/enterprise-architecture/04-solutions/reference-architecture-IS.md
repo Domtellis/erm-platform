@@ -23,6 +23,7 @@ flowchart TB
     WF[Workflow / Orchestration -Process Manager]
     ACT[Action Management]
     APP[Approvals & Waivers]
+    AI[AI Risk Service - Gemini 2.0]
     EVID[Evidence & Provenance]
     REP[Reporting & Analytics - Read Models]
   end
@@ -62,6 +63,9 @@ flowchart TB
   COR --> OUT
   COR --> BUS
   BUS --> CASE
+  BUS --> AI
+  AI -.-> GEM[Google Gemini API]
+  AI --> OUT
   CASE --> CASEDB
   CASE --> WF
 
@@ -136,8 +140,9 @@ This adds the **minimum modern control-plane and correctness** for an audit-grad
 
 **Step 3 — Breach confirmed; breach case created; workflow starts SLAs**
 - **Breach Case Service**: SoR for breach_case lifecycle
+- **AI Risk Service**: Generates zero-shot assessment suggestions (Gemini 2.0)
 - **Workflow/Orchestration**: SoR for process state (routing, timers, escalations, “pending links” states)
-- Emits: breach_confirmed, breach_case_opened, sla_timer_started
+- Emits: breach_confirmed, breach_case_opened, ai_suggestion_created, sla_timer_started
 
 **Step 4 — Mitigation actions launched; reminders**
 - **Action Management**: SoR for mitigation_action

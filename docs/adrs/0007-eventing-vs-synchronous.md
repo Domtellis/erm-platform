@@ -29,7 +29,7 @@ We will maintain an immutable "Event Log" (F-05-01). This serves as the single s
 ### Positive
 *   **Resilience**: A failure in the Notification service doesn't stop a user from submitting a decision.
 *   **Auditability**: The event stream *is* the audit trail. We can reconstruct the state of a case at any point in time.
-*   **Extensibility**: Adding new features (e.g., a "Slack Integration") just means adding a new event subscriber.
+*   **Extensibility**: Adding new features (e.g., a "Notification Service (Email/Jira) Integration") just means adding a new event subscriber.
 
 ### Negative
 *   **Complexity**: Developers must handle eventual consistency (the UI might not see the "updated" status for a few milliseconds).

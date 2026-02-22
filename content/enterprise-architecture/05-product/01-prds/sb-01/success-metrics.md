@@ -20,6 +20,14 @@ leading_indicators:
     name: in_tool_completion_rate
     definition: "Percentage of cases that reach Closed without using off-platform approvals."
     target: 0.85
+  - id: m7
+    name: ai_suggestion_latency_seconds_p95
+    definition: "Seconds from breach created to AI suggestion available (p95)."
+    target: 15
+  - id: m8
+    name: ai_human_agreement_rate
+    definition: "Percentage of AI suggestions accepted or only slightly modified by human leads."
+    target: 0.85
 
 lagging_indicators:
   - id: m5

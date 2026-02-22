@@ -51,7 +51,7 @@ curl http://localhost:[port]/metrics
 ## Monitoring & Alerts
 
 **Grafana Dashboard:** [Link or name]  
-**Alert Channels:** [Slack, PagerDuty, Email]
+**Alert Channels:** [Notification Service (Email/Jira), PagerDuty, Email]
 
 ### Key Metrics
 - `[metric_name]`: [Description, normal range]

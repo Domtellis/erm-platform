@@ -5,6 +5,8 @@ Aggregates all domain events for governance audit trails, dashboard metrics, and
 
 ## Owned Entities (System of Record)
 - **AuditEvent**: The append-only log of all control events in the system.
+- **HumanFeedbackLog**: Record of user feedback on AI suggestions (for calibration).
+- **ReportNarrative**: **AI-synthesised** summaries for board/exco disclosure.
 
 ## Key Invariants
 - Audit records are immutable and append-only.
@@ -12,6 +14,7 @@ Aggregates all domain events for governance audit trails, dashboard metrics, and
 
 ## Synchronous APIs
 - `GET /audit/case/{id}/timeline`: Returns a full history for a case.
+- `POST /audit/generate-ai-narrative`: Summarises case history for disclosure.
 - `POST /audit/export`: Triggers generation of a board-ready audit pack.
 
 ## Coupling & Dependencies

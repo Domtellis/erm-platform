@@ -17,15 +17,15 @@ Participants can:
 - export an audit pack
 
 ## Session plan
-1. Context (10 min): Why SB-01, what changes from current practice
-2. Live walkthrough (25 min): End-to-end run through a sample High severity case
-3. Roles + responsibilities (10 min): Who does what, when
-4. Evidence policy (10 min): What is required for High vs Medium/Low
-5. Approvals + SoD (10 min): Why creator cannot approve; High requires BU Risk Owner
-6. Q&A + next steps (10–15 min)
+1. Context (10 min): Why SB-01/SB-02, what changes from manual practice
+2. Live walkthrough (25 min): End-to-end run through a High severity case including **AI Triage Suggestion Review**.
+3. Roles + responsibilities (10 min): Human-in-the-loop vs AI Automation.
+4. **High-Integrity Evidence** (10 min): Requirements for "Evidence Bundles" (Sensor + Witness + RCA).
+5. Approvals + SoD (10 min): Why creator cannot approve; AI Oversight Lead delegation rules.
+6. **Bias & Feedback Loop** (10 min): How to provide feedback on AI hallucinations.
+7. Q&A + next steps (10–15 min)
 
 ## Pilot rules of engagement
 - All BU-01 Safety breaches in scope must be recorded in-tool (no parallel spreadsheets)
 - Decisions must be recorded and approved in-tool
 - Evidence must be attached before closing
-- Weekly review uses the tool as the single source of truth

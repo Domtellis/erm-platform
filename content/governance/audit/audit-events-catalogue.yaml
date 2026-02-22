@@ -30,3 +30,12 @@ catalog:
   - event_type: AUDIT_PACK_EXPORTED
     is_control_event: false
     must_log_fields: [export_format]
+  - event_type: AI_SUGGESTION_CREATED
+    is_control_event: true
+    must_log_fields: [model_version, prompt_ref, ai_context_hash, suggested_severity]
+  - event_type: AI_CALIBRATION_FEEDBACK_CAPTURED
+    is_control_event: true
+    must_log_fields: [actor_user_id, modification_delta, rationale, is_override]
+  - event_type: BIAS_TEST_EXECUTED
+    is_control_event: true
+    must_log_fields: [test_id, test_type, result, failure_summary]

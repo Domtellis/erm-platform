@@ -661,6 +661,10 @@ taxonomy:
               scope: ["feedback automation"]
             - id: "ERM-L3-11.03.03"
               level: "L3"
+              name: "AI Feedback Capture & Model Calibration"
+              scope: ["human-in-the-loop", "prompt-tuning", "accuracy-metrics"]
+            - id: "ERM-L3-11.03.04"
+              level: "L3"
               name: "Recurrence analytics"
               scope: ["repeat patterns", "hotspots"]
 

@@ -4,12 +4,15 @@
 - Manual: Incident Lead creates a case and sets initial details.
 - Signal: Monitoring stub webhook creates/links the case.
 
-## 2. Triage (Incident Lead)
+## 2. Triage & AI Assistance (Incident Lead)
 Required:
 - severity (Low/Medium/High)
 - location
 - short impact summary
 Action:
+- **Review AI Suggestion**: Check automated risk suggestion (if generated).
+- **Validate Rationale**: Ensure AI reasoning aligns with metrics.
+- **Provide Feedback**: Accept/Modify AI suggestion; providing rationale for overrides.
 - move state to Triaged
 
 ## 3. Validate against appetite (Risk Lead)
@@ -20,9 +23,9 @@ Required:
 Action:
 - evaluation performed; escalation may be triggered automatically
 
-## 4. Escalation (System + Teams)
+## 4. Escalation (System + Notification Service)
 If severity is High or threshold evaluation indicates High:
-- Teams notification is sent to `BU-01-Safety-Risk`
+- **Notification Service** alert (Email/Jira) is sent to `Safety-Risk-Leads`
 - case moves to Escalated (or decision gate becomes mandatory)
 
 ## 5. Decision + approval

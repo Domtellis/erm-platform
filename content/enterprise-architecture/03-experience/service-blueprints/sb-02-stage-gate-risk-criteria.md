@@ -22,7 +22,7 @@ last_updated: 2026-02-03
 |------|------------|-----------|---------|--------------|----------|
 | 1 | Gate initiated; scope selected (service/supplier) | Context prefetch (emerging risks, incidents, control health) | integrations, analytics | context_pack, incident_summary | portfolio → system |
 | 2 | Risk pre-check shows within appetite / breach / waiver | Criteria model applied (versioned) | criteria_engine | risk_criteria_model_version | system |
-| 3 | Risk owner completes/updates assessment | Evidence and assumptions enforced | workflow, evidence_vault | risk_assessment, evidence_item | bu_risk_owner → risk_lead |
+| 3 | Risk owner **validates AI-drafted** assessment | **AI-Assisted Assessment Drafting** (Gemini maps controls to evidence) | workflow, **erm-ai-risk-service**, evidence_vault | risk_assessment, evidence_item | bu_risk_owner → risk_lead |
 | 4 | Control owner confirms control requirements | Control design checks | control_library | control, control_objective | control_owner → assurance |
 | 5 | Decision recorded (proceed/conditions/stop/waiver) | Approval routing by thresholds | approvals | approval, decision_ledger_entry | risk_lead → governance/exco |
 

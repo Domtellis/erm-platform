@@ -132,7 +132,7 @@
 - [ ] **Tests**: Implement automated counterfactual tests (monthly cron) <!-- id: 1430 -->
 - [ ] **Tracking**: Add `AssessmentDisagreement` table and tracking logic <!-- id: 1431 -->
 - [ ] **Dashboard**: Create Grafana dashboard for AI metrics <!-- id: 1432 -->
-- [ ] **Alerts**: Configure Slack alerts for bias detection <!-- id: 1433 -->
+- [ ] **Alerts**: Configure Notification Service (Email/Jira) alerts for bias detection <!-- id: 1433 -->
 - [ ] **Runbooks**: Distribute bias incident response runbook to team <!-- id: 1434 -->
 
 ### 14.5 POC Deployment & Operation

@@ -26,3 +26,6 @@ Every request and event must carry a `correlation_id` in its headers/metadata to
 
 ### 4. Dead Letter Queues (DLQ)
 Failed processing must be retried with exponential backoff before being moved to a DLQ for manual inspection/reprocessing.
+
+### 5. AI Feedback Loop Pattern
+To support model calibration, all human overrides of AI suggestions must be captured as a `calibration_feedback` event. This event must link to both the original `suggestion_id` and the final `decision_id` to establish a supervised learning pair for future model tuning.

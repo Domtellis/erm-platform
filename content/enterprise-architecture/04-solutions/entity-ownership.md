@@ -14,6 +14,8 @@ This matrix defines the authoritative System of Record (SoR) for each business e
 | **EvidenceItem** | Evidence & Provenance | read, reference | Evidence context only |
 | **EvidencePolicyResult** | Evidence & Provenance | subscribe | Evidence context only |
 | **ActionItem** | Action Management | read | Action Management only |
+| **AssessmentSuggestion** | AI Risk Service | read, audit | AI Risk Service only |
+| **HumanFeedbackLog** | Audit & Reporting | subscribe, query | Audit & Reporting only |
 | **AuditEvent** | Audit & Reporting | query | Audit context only |
 
 ## Ownership Rules

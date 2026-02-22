@@ -48,6 +48,10 @@ This document defines the authoritative full-stack technology solution for the E
   - Code: ESLint / Prettier
   - Contracts: [Spectral](https://stoplight.io/open-source/spectral)
 - **DevOps**: GitHub Actions + Docker Compose (Local) / Kubernetes (Prod).
+- **AI/LLM**:
+  - **Provider**: Google Gemini API (**2.0 Flash**/Pro)
+  - **Pattern**: Prompt Engineering & Few-Shot Learning (No fine-tuning in Base Phase)
+  - **Safety**: Semantic Filter & Hate/Harassment thresholds enabled.
 
 ## 🧩 Component Interaction Diagram
 ```mermaid
@@ -60,10 +64,13 @@ graph TD
     MB --> BUS[Redpanda Event Bus]
     DA --> BUS
     AC --> BUS
+    AI[AI Risk Service] --- BUS
+    AI -.-> GEM[Google Gemini API]
     
     MB --- DB[PostgreSQL]
     DA --- DB[PostgreSQL]
     AC --- DB[PostgreSQL]
+    AI --- DB[PostgreSQL]
     
     MB -.-> OPA[OPA Policy Engine]
     DA -.-> OPA[OPA Policy Engine]
@@ -74,4 +81,5 @@ graph TD
     
     AllServices --> OTel[OTel Collector]
     OTel --> Jaeger[Tracing]
+    OTel --> Prom[Prometheus/Grafana]
 ```

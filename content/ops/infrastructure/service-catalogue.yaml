@@ -1,0 +1,32 @@
+version: 0.1.0
+
+services:
+  - name: erm-monitoring-and-breaches
+    tier: 1
+    description: "Breach detection and lifecycle management."
+    dependencies: [db-postgresql, erm-notification-service]
+
+  - name: erm-appetite-and-criteria
+    tier: 1
+    description: "Threshold evaluation and appetite mapping."
+    dependencies: [db-postgresql]
+
+  - name: erm-decisioning-and-approvals
+    tier: 1
+    description: "Human-in-the-loop decision capture and SoD enforcement."
+    dependencies: [db-postgresql, erm-notification-service]
+
+  - name: erm-ai-risk-service
+    tier: 2
+    description: "AI reasoning engine (Gemini 2.0 integration)."
+    dependencies: [google-vertex-ai, redis-cache]
+
+  - name: erm-notification-service
+    tier: 1
+    description: "Global delivery for Email/Jira alerts."
+    dependencies: [smtp-relay, jira-api]
+
+  - name: erm-audit-and-reporting
+    tier: 2
+    description: "Immutable event store and audit pack generation."
+    dependencies: [db-postgresql, s3-bucket]

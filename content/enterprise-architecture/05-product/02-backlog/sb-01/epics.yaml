@@ -27,3 +27,8 @@ epics:
     name: "Auditability and export"
     intent: "Provide immutable audit timeline and exportable audit pack for governance."
     feature_ids: [F-05-01, F-05-02]
+
+  - id: E-06
+    name: "AI-Assisted Intelligence & Calibration"
+    intent: "Leverage Gemini 2.0 for risk scoring and maintain model accuracy via human feedback loops."
+    feature_ids: [F-06-01, F-06-02]

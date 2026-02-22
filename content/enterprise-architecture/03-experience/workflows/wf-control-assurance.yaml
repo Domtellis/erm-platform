@@ -45,8 +45,9 @@ commands:
     produces_events: ["control_executed"]
   - command: "validate_evidence"
     actor_roles: ["second_line_assurance","system"]
+    description: "Validate evidence via **erm-ai-risk-service** (Gemini mapping to objectives)."
     preconditions: ["control_execution.state == executed", "validations.evidence_provenance_minimums"]
-    produces_events: ["evidence_validated"]
+    produces_events: ["evidence_validated", "ai_validation_completed"]
   - command: "request_control_exception"
     actor_roles: ["control_owner"]
     preconditions: ["control_execution.state in [scheduled, executed]"]
@@ -78,6 +79,7 @@ events:
   - { event: "control_design_approved", audit: true }
   - { event: "control_executed", audit: true }
   - { event: "evidence_validated", audit: true }
+  - { event: "ai_validation_completed", audit: true }
   - { event: "control_exception_requested", audit: true }
   - { event: "control_exception_approved", audit: true }
   - { event: "issue_opened", audit: true }
@@ -99,6 +101,7 @@ audit_logging:
     - "entity_id"
     - "event"
     - "actor_role"
+    - "ai_validation_ref"
     - "evidence_set_hash"
     - "exception_timebox"
     - "issue_severity"

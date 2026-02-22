@@ -8,10 +8,9 @@ PY := $(VENV)/bin/python
 # Node tools pinned for reproducibility (works without package.json)
 MARKDOWNLINT := npx --yes markdownlint-cli2@0.14.0
 
-.PHONY: help install venv validate schemas md-lint links-internal generate-index check-index lint ci
+.PHONY: help install venv validate schemas md-lint links-internal generate-index check-index lint ci build test
 
-help:
-	@echo "Targets:"
+	@echo "  make help            - show this help"
 	@echo "  make install         - create venv and install dev deps"
 	@echo "  make schemas         - validate YAML files against JSON Schemas"
 	@echo "  make md-lint         - lint markdown"
@@ -19,7 +18,10 @@ help:
 	@echo "  make generate-index  - regenerate content/enterprise-architecture/03-experience/README.md"
 	@echo "  make check-index     - fail if README.md is out of date"
 	@echo "  make lint            - run schemas + md-lint + links-internal + check-index"
-	@echo "  make ci              - same as lint (CI entrypoint)"
+	@echo "  make ci              - same as lint + build + test (Full CI suite)"
+	@echo "  make build           - build all services using Turbo (with caching)"
+	@echo "  make test            - test all services using Turbo (with caching)"
+	@echo "  make deploy-wait     - retry OCI deployment until capacity is available"
 
 venv:
 	@test -d $(VENV) || $(PYTHON) -m venv $(VENV)
@@ -45,4 +47,13 @@ check-index: generate-index
 
 lint: schemas md-lint links-internal check-index
 
-ci: lint
+build:
+	npm run build
+
+test:
+	npm run test
+
+ci: lint build test
+
+deploy-wait:
+	powershell -ExecutionPolicy Bypass -File .\infra\terraform\retry-deploy.ps1

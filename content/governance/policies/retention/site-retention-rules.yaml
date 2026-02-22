@@ -1,0 +1,19 @@
+version: 0.1.0
+scope:
+  bu_ids: [BU-01]
+
+rules:
+  - category: Safety
+    retention_years: 10
+    rationale: "Align with ISO 45001 and local safety regulatory requirements."
+    legal_ref: "OHS-REG-2024-SEC8"
+
+  - category: AI_Audit_Logs
+    retention_years: 5
+    rationale: "Maintain traceability for model calibration and bias audits."
+    legal_ref: "AI-GOV-PLATFORM-V1"
+
+  - category: Evidence_Artifacts
+    retention_years: 7
+    rationale: "Standard corporate record retention for evidence-based decisions."
+    legal_ref: "CORP-GOV-7Y"

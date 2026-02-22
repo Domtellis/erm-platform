@@ -56,6 +56,13 @@ Core objects map to platform entities and drive navigation consistency:
 | `Threshold` | Risk / Appetite | Tolerance rules |
 | `AuditEvent` | Audit timeline | Immutable event log |
 
+### SB-02 AI Objects
+| Object | Hub Location | Purpose |
+|:-------|:-------------|:--------|
+| `AISuggestion` | Case Detail | Automated assessment and reasoning card |
+| `CalibrationRecord` | AI Oversight Hub | Feedback and disagreement tracking |
+| `BiasReport` | AI Oversight Hub | Monthly automated bias test results |
+
 ---
 
 ## Persona-Based Navigation ("Where do I go to...?")
@@ -83,8 +90,15 @@ Core objects map to platform entities and drive navigation consistency:
 | Task | Navigate To |
 |:-----|:------------|
 | Review decision asks | Home → Decision Asks section OR Decisions → Pending |
-| Approve a High severity decision | Decision Ask screen (direct link from Teams) |
+| Approve a High severity decision | Decision Ask screen (direct link from Notification Service (Email/Jira)) |
 | View breach status | Breaches → Filter by BU |
+
+### AI Oversight Lead (New Role)
+| Task | Navigate To |
+|:-----|:------------|
+| Review AI disagreement patterns | Admin → AI Oversight Hub → Disagreements |
+| Conduct monthly bias audit | Admin → AI Oversight Hub → Bias Reports |
+| Calibrate risk prompt | Admin → AI Oversight Hub → Model Config |
 
 ---
 

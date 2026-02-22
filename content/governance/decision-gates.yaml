@@ -1,0 +1,30 @@
+version: 0.1.0
+scope:
+  lighthouse: sb-01
+  category: safety
+
+gates:
+  - id: gate-triage-to-assessment
+    name: "Triage to Assessment Entry"
+    from_state: Triaged
+    to_state: AssessmentPending
+    conditions:
+      - "evidence_attached >= 1"
+      - "severity_level_assigned"
+
+  - id: gate-assessment-to-approval
+    name: "Assessment to Approval Submission"
+    from_state: AssessmentCompleted
+    to_state: ApprovalPending
+    conditions:
+      - "sod_check_passed"
+      - "ai_disagreement_rationale_present (if AI used)"
+      - "rca_attached (for High/Critical)"
+
+  - id: gate-approval-to-closed
+    name: "Final Closure Gate"
+    from_state: Approved
+    to_state: Closed
+    conditions:
+      - "corrective_action_evidence_attached"
+      - "final_approver_digital_signature_present"

@@ -20,7 +20,7 @@ last_updated: 2026-02-03
 | 1 | VS-00 | Configure taxonomy, scales, criteria model versioning, gates, waivers | In control | Version drift; inconsistent adoption | Versioned criteria embedded into key gates |
 | 2 | VS-01 | Onboard sensing sources, triage rules, freshness SLAs | Alert | Data access friction; poor relevance | Sources live; signal-to-triage time improves |
 | 3 | VS-02 | Enforce risk statement quality, ownership, and linking | Firm | Duplicate risks; missing links | Quality pass rate high; unowned WIP down |
-| 4 | VS-03 | Run challenge and QA: evidence + assumptions + confidence | Exacting | Evidence chasing; override abuse | Rework rate down; evidence coverage up |
+| 4 | VS-03 | Run challenge and QA: AI-assisted qualification + evidence + assumptions | Exacting | Evidence chasing; override abuse | Rework rate down; **AI-Human Agreement** up |
 | 5 | VS-04 | Facilitate prioritisation and concentration/systemic views | Focused | Trade-offs not explicit | Ranked backlog agreed; breaches surfaced |
 | 6 | VS-05 | Ensure treatments are measurable and acceptance has conditions/expiry | Practical | “Treatments” not linked to delivery | Residual movement verified post-delivery |
 | 7 | VS-06 | Use control health + exceptions to adjust risk posture | Concerned | Weak provenance; audit fire drills | Evidence automation up; repeat findings down |

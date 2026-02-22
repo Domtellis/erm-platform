@@ -117,7 +117,7 @@ A: [Answer]
 ## Getting Help
 
 If you need assistance:
-- **Quick questions:** [Slack channel, Teams channel]
+- **Quick questions:** [Notification Service (Email/Jira) channel, Notification Service (Email/Jira) channel]
 - **Bug reports:** [Jira, GitHub Issues]
 - **Feature requests:** [Product team contact]
 

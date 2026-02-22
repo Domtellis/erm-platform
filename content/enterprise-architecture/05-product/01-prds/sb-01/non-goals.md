@@ -7,7 +7,6 @@ version: 0.1.0
 
 The following are explicitly out of scope for MVP (may appear in v1+):
 
-- ML-based recommendations (root cause, mitigations, prioritisation)
 - Enterprise-wide taxonomy migration or reclassification programme
 - Full policy library management and attestations (beyond minimum references)
 - Complex quantitative risk models and Monte Carlo style analytics
