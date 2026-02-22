@@ -3,18 +3,19 @@
     "private": true,
     "description": "Enterprise Risk Management Platform Monorepo Root",
     "scripts": {
-        "build": "npx turbo run build",
-        "test": "npx turbo run test",
-        "lint": "npx turbo run lint",
-        "clean": "npx turbo run clean"
+        "build": "turbo run build",
+        "test": "turbo run test",
+        "lint": "turbo run lint",
+        "clean": "turbo run clean"
     },
     "workspaces": [
         "services/*",
         "web/*"
     ],
-    "devDependencies": {
+    "dependencies": {
         "turbo": "^2.0.0",
         "@nestjs/cli": "^11.0.0"
     },
+    "devDependencies": {},
     "packageManager": "npm@11.1.0"
 }

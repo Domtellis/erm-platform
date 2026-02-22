@@ -31,7 +31,7 @@ jobs:
         run: |
           npm install -g npm@latest
           npm ci --include=dev
-          echo "$(pwd)/node_modules/.bin" >> $GITHUB_PATH
+          echo "${{ github.workspace }}/node_modules/.bin" >> $GITHUB_PATH
           make install
 
       - name: Monorepo Audit (Lint + Build + Test)
