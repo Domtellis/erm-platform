@@ -363,7 +363,7 @@ Thanks,
 - [AI Governance Policy](../../content/governance/policies/ai-governance-policy.md)
 - [ADR-0009: Bias Mitigation Strategy](../adrs/0009-ai-bias-mitigation-strategy.md)
 - [Operating Model Runbook](./operating-model.md)
-- [AI Deployment Checklist](./ai-deployment-checklist.md)
+- [AI Deployment Checklist](../../content/governance/approvals/ai-deployment-checklist.md)
 
 ---
 

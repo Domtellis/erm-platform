@@ -246,7 +246,7 @@ What we're explicitly NOT doing (to avoid scope creep):
   - [ADR-0010: Data Privacy](../../../../../docs/adrs/0010-ai-data-privacy.md)
 - **Deployment:** [AI Deployment Checklist](../../../../governance/approvals/ai-deployment-checklist.md)
 - **Operations:** [Bias Incident Response Runbook](../../../../../docs/runbooks/ai-bias-incident-response.md)
-- **Backlog:** [SB-02 Epics](../../../02-backlog/sb-02/epics.yaml)
+- **Backlog:** [SB-02 Epics](../../02-backlog/sb-02/epics.yaml)
 
 ### 10.2 Stakeholder Sign-Off
 
