@@ -1,10 +1,17 @@
 config:
   default: true
-  MD013: false   # line length (handled by readability + wrapping pragmatically)
-  MD033: false   # inline HTML allowed for advanced docs formatting if needed
-  MD041: true    # first line should be a top-level heading
+  MD013: false   # line length
+  MD033: false   # inline HTML
+  MD041: false   # first line heading (YAML frontmatter breaks this)
+  MD032: false   # blanks around lists (too noisy for deep docs)
+  MD029: false   # ordered list prefix (allows using 1. 1. 1.)
 globs:
   - "**/*.md"
 ignores:
   - "node_modules/**"
   - ".venv/**"
+  - ".agent/**"
+  - ".gemini/**"
+  - "dist/**"
+  - ".next/**"
+  - ".git/**"
