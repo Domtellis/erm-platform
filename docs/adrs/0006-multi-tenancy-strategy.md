@@ -20,4 +20,4 @@ Adopt a **Logical Isolation (Shared Database, Separate Schemas)** strategy using
 - **Negative**: Risk of "noisy neighbor" scenarios; high complexity in RLS policy management.
 
 ## Related Decisions
-- See the [Content Index](../../content/README.md) for more details.
+- See the [Repository Index](../../README.md) for more details.
