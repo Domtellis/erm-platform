@@ -11,11 +11,21 @@ const oidcConfig = {
     client_id: "erm-web-portal",
     redirect_uri: `${origin}/`,
     post_logout_redirect_uri: `${origin}/`,
+    scope: "openid profile email",
+    loadUserInfo: true,
+    monitorSession: false, // Disable to prevent cross-origin cookie issues on HTTP
     onSigninCallback: () => {
         const newUrl = window.location.href.split("?")[0];
         window.history.replaceState({}, document.title, newUrl);
     },
 };
+
+console.log("OIDC Initialization Parameters:", {
+    authority: oidcConfig.authority,
+    redirect_uri: oidcConfig.redirect_uri,
+    scope: oidcConfig.scope,
+    client_id: oidcConfig.client_id
+});
 
 console.log("OIDC Config Initialized:", { authority, redirect_uri: oidcConfig.redirect_uri });
 
