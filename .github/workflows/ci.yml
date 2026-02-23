@@ -168,4 +168,4 @@ jobs:
             
             # Ensure Keycloak SSL is disabled for HTTP deployments (idempotent)
             sleep 15
-            sudo docker exec erm-postgres psql -U postgres -d keycloak -c "UPDATE realm SET ssl_required='NONE' WHERE id='erm-platform';" || true
+            sudo docker exec erm-postgres psql -U postgres -d keycloak -c "UPDATE realm SET ssl_required='NONE' WHERE name='erm-platform';" || true
