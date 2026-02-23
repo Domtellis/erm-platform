@@ -1,8 +1,10 @@
 import axios from 'axios';
 
-// Derive API URL from current hostname
-const hostname = typeof window !== 'undefined' ? window.location.hostname : 'localhost';
-const MONITORING_API_URL = import.meta.env.VITE_MONITORING_API_URL || `http://${hostname}:4010`;
+const getBaseUrl = (port: number) => {
+    if (import.meta.env.VITE_MONITORING_API_URL && port === 4010) return import.meta.env.VITE_MONITORING_API_URL;
+    const hostname = typeof window !== 'undefined' ? window.location.hostname : 'localhost';
+    return `http://${hostname}:${port}`;
+};
 
 export interface BreachCase {
     id: string;
@@ -27,14 +29,14 @@ export interface MonitoringMetrics {
 }
 
 export const getBreaches = async (token?: string): Promise<BreachCase[]> => {
-    const response = await axios.get(`${MONITORING_API_URL}/breaches`, {
+    const response = await axios.get(`${getBaseUrl(4010)}/breaches`, {
         headers: token ? { Authorization: `Bearer ${token}` } : {}
     });
     return response.data;
 };
 
 export const getMetrics = async (token?: string): Promise<MonitoringMetrics> => {
-    const response = await axios.get(`${MONITORING_API_URL}/breaches/metrics`, {
+    const response = await axios.get(`${getBaseUrl(4010)}/breaches/metrics`, {
         headers: token ? { Authorization: `Bearer ${token}` } : {}
     });
     return response.data;
