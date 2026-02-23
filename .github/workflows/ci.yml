@@ -59,7 +59,8 @@ jobs:
           path: |
             services/*/dist
             services/*/prisma
-            services/*/*.prisma
+            services/*/schema.prisma
+            services/*/migrations
             web/portal/dist
             web/portal/nginx.conf
           retention-days: 1

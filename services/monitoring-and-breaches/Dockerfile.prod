@@ -9,11 +9,11 @@ RUN npm ci --omit=dev
 
 # Copy natively built app
 COPY ./dist ./dist
-COPY ./prisma ./prisma
 COPY ./schema.prisma ./schema.prisma
+COPY ./migrations ./migrations
 
 # Generate Prisma client for the target architecture (Native Engine)
-RUN PRISMA_CLI_QUERY_ENGINE_TYPE=library PRISMA_CLIENT_ENGINE_TYPE=library npx prisma generate
+RUN PRISMA_CLI_QUERY_ENGINE_TYPE=library PRISMA_CLIENT_ENGINE_TYPE=library npx prisma generate --schema=./schema.prisma
 
 EXPOSE 4010
 

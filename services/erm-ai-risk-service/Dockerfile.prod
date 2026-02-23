@@ -9,7 +9,6 @@ RUN npm install --omit=dev
 
 # Copy natively built app
 COPY ./dist ./dist
-# AI Risk service does not use Prisma (confirmed from previous view)
 
 EXPOSE 4014
 
