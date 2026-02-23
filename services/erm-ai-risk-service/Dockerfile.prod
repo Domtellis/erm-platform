@@ -12,4 +12,5 @@ COPY ./dist ./dist
 
 EXPOSE 4014
 
-CMD ["node", "dist/main"]
+CMD ["node", "dist/src/main"]
+

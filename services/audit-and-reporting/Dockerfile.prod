@@ -16,4 +16,5 @@ RUN PRISMA_CLI_QUERY_ENGINE_TYPE=library PRISMA_CLIENT_ENGINE_TYPE=library npx p
 
 EXPOSE 4013
 
-CMD ["node", "dist/main"]
+CMD ["node", "dist/src/main"]
+
