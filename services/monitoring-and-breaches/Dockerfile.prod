@@ -3,9 +3,13 @@ FROM node:20-slim
 
 WORKDIR /app
 
+# Install OpenSSL (required by Prisma native engine on Debian Bookworm)
+RUN apt-get update && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
+
 # Install production dependencies only
 COPY package*.json ./
 RUN npm ci --omit=dev
+
 
 # Copy natively built app
 COPY ./dist ./dist
