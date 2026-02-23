@@ -8,7 +8,7 @@ interface AuditEvent {
     event_id: string;
     type: string;
     source: string;
-    payload: any;
+    payload: Record<string, unknown>;
     occurred_at: string;
 }
 

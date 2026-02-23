@@ -12,13 +12,13 @@ import { getBreaches, getMetrics } from './api/monitoring';
 // ...
 
 function Dashboard() {
-  const { data: breachCases, isLoading: isLoadingBreaches } = useQuery<any[]>({
+  const { data: breachCases, isLoading: isLoadingBreaches } = useQuery<Record<string, unknown>[]>({
     queryKey: ['dashboard-breaches'],
     queryFn: () => getBreaches(),
     refetchInterval: 5000,
   });
 
-  const { data: decisions, isLoading: isLoadingDecisions } = useQuery<any[]>({
+  const { data: decisions, isLoading: isLoadingDecisions } = useQuery<Record<string, unknown>[]>({
     queryKey: ['dashboard-decisions'],
     queryFn: async () => {
       const hostname = window.location.hostname;

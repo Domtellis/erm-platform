@@ -23,7 +23,7 @@ export function DecisionReviewCard({ caseData, onClose }: DecisionCardProps) {
     const userId = userProfile?.preferred_username || userProfile?.sub || 'unknown';
 
     // Determine highest role for approval context
-    const roles = ((userProfile as any)?.realm_access?.roles || []) as string[];
+    const roles = ((userProfile as Record<string, unknown>)?.realm_access as { roles?: string[] })?.roles || [];
     const activeRole = roles.includes('bu_risk_owner') ? 'bu_risk_owner'
         : roles.includes('risk_lead') ? 'risk_lead'
             : 'viewer';
@@ -97,8 +97,9 @@ export function DecisionReviewCard({ caseData, onClose }: DecisionCardProps) {
             // Small delay to ensure DB consistency before approval check
             await new Promise(resolve => setTimeout(resolve, 500));
             await approveMutation.mutateAsync(decision.id);
-        } catch (error: any) {
-            alert(error.response?.data?.message || 'Policy Violation: Approval denied by OPA.');
+        } catch (error: unknown) {
+            const err = error as { response?: { data?: { message?: string } } };
+            alert(err.response?.data?.message || 'Policy Violation: Approval denied by OPA.');
         }
     };
 

@@ -33,9 +33,10 @@ export function BreachSubmissionForm({ onSuccess }: { onSuccess: () => void }) {
             reset();
             onSuccess();
         },
-        onError: (error: any) => {
-            console.error('Submission failed:', error.response?.data || error.message);
-            alert(`Error: ${error.response?.data?.message || 'Failed to connect to monitoring service'}`);
+        onError: (error: unknown) => {
+            const err = error as { response?: { data?: { message?: string } }, message?: string };
+            console.error('Submission failed:', err.response?.data || err.message);
+            alert(`Error: ${err.response?.data?.message || 'Failed to connect to monitoring service'}`);
         }
     });
 

@@ -18,7 +18,7 @@ interface BreachCase {
     observed_value: number;
     severity: string;
     status: string;
-    metrics?: any;
+    metrics?: Record<string, unknown>;
     triage_due_at?: string;
     decision_due_at?: string;
     closure_due_at?: string;

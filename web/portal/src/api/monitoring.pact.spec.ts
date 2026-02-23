@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll, afterAll, afterEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { PactV3, MatchersV3 } from '@pact-foundation/pact';
 import path from 'path';
 import axios from 'axios';
