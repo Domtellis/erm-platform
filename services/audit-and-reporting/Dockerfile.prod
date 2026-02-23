@@ -20,5 +20,6 @@ RUN PRISMA_CLI_QUERY_ENGINE_TYPE=library PRISMA_CLIENT_ENGINE_TYPE=library npx p
 
 EXPOSE 4013
 
-CMD ["node", "dist/src/main"]
+CMD ["sh", "-c", "npx prisma migrate deploy --schema=./schema.prisma && node dist/src/main"]
+
 
