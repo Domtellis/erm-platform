@@ -103,7 +103,7 @@ jobs:
             ghcr.io/${{ steps.owner.outputs.owner }}/erm-${{ matrix.name }}:latest
             ghcr.io/${{ steps.owner.outputs.owner }}/erm-${{ matrix.name }}:${{ github.sha }}
           cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-to: type=gha,mode=min
 
   deploy:
     name: Deploy to OCI

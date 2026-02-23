@@ -7,20 +7,14 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 COPY schema.prisma ./
 
-# Install all dependencies (including dev for building)
-RUN npm install
+# Install dependencies and Generate Prisma Client
+RUN npm install && \
+    npx prisma generate
 
-# Generate Prisma Client
-RUN npx prisma generate
-
-# Copy source code
+# Copy source code and build the application
 COPY . .
-
-# Build the application
-RUN npx nest build
-
-# Prune dev dependencies
-RUN npm prune --production
+RUN npx nest build && \
+    npm prune --production
 
 # Stage 2: Production
 FROM node:20-alpine AS production
