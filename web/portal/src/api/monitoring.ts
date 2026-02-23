@@ -1,7 +1,8 @@
 import axios from 'axios';
 
-// Use environment variable or default to localhost
-const MONITORING_API_URL = import.meta.env.VITE_MONITORING_API_URL || 'http://localhost:4010';
+// Derive API URL from current hostname
+const hostname = typeof window !== 'undefined' ? window.location.hostname : 'localhost';
+const MONITORING_API_URL = import.meta.env.VITE_MONITORING_API_URL || `http://${hostname}:4010`;
 
 export interface BreachCase {
     id: string;

@@ -1,13 +1,13 @@
 import { AuthProvider as OidcProvider } from "react-oidc-context";
 
-const origin = window.location.origin;
 const hostname = window.location.hostname;
+const origin = window.location.origin;
 
-// Use 'erm.prod' if present, otherwise fallback to current hostname
-const authDomain = hostname === 'erm.prod' ? 'erm.prod' : hostname;
+// Authority must be the hostname the BROWSER uses to reach Keycloak
+const authority = `http://${hostname}:8080/realms/erm-platform`;
 
 const oidcConfig = {
-    authority: `http://${authDomain}:8080/realms/erm-platform`,
+    authority: authority,
     client_id: "erm-web-portal",
     redirect_uri: `${origin}/`,
     post_logout_redirect_uri: `${origin}/`,
@@ -17,6 +17,12 @@ const oidcConfig = {
     },
 };
 
+console.log("OIDC Config Initialized:", { authority, redirect_uri: oidcConfig.redirect_uri });
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-    return <OidcProvider {...oidcConfig}>{children}</OidcProvider>;
+    return (
+        <OidcProvider {...oidcConfig}>
+            {children}
+        </OidcProvider>
+    );
 }

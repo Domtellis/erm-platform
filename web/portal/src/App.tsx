@@ -21,7 +21,8 @@ function Dashboard() {
   const { data: decisions, isLoading: isLoadingDecisions } = useQuery<any[]>({
     queryKey: ['dashboard-decisions'],
     queryFn: async () => {
-      const response = await axios.get('http://localhost:4011/decisions');
+      const hostname = window.location.hostname;
+      const response = await axios.get(`http://${hostname}:4011/decisions`);
       return response.data;
     },
     refetchInterval: 5000,
