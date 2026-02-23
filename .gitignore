@@ -42,6 +42,9 @@ tools/.last_sync
 *.tfstate.backup
 terraform.tfvars
 *.tfvars
+tfplan
+*.tfplan
+
 
 # Github related for OCI, ssh keys, etc
 .ssh/

@@ -21,6 +21,14 @@ const getOidcConfig = () => {
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
     const config = getOidcConfig();
+
+    // Self-healing: Clear OIDC storage if we get into a redirect loop/error state
+    if (typeof window !== 'undefined' && window.location.search.includes('error=')) {
+        console.warn("Auth Error detected in URL, clearing storage...");
+        localStorage.clear();
+        sessionStorage.clear();
+    }
+
     console.log("OIDC Initialization Parameters (Runtime):", config);
 
     return (

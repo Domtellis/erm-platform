@@ -122,6 +122,8 @@ services:
       KC_HOSTNAME: erm.prod
       KC_HOSTNAME_STRICT: "false"
       KC_HOSTNAME_STRICT_HTTPS: "false"
+      KC_HOSTNAME_ALLOW_ANY_HTTPS: "true"
+      KC_PROXY: edge
       KC_HTTP_RELATIVE_PATH: /
       KC_HTTP_ENABLED: "true"
     volumes:

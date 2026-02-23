@@ -1,41 +1,20 @@
-# Stage 1: Builder
-FROM node:20-alpine AS builder
+# Build is handled natively in CI to avoid QEMU slowness
+FROM node:20-slim
 
-ARG PRISMA_CLI_QUERY_ENGINE_TYPE=binary
-ENV PRISMA_CLI_QUERY_ENGINE_TYPE=$PRISMA_CLI_QUERY_ENGINE_TYPE
+WORKDIR /app
 
-WORKDIR /usr/src/app
-
-# Install dependencies
+# Install production dependencies only
 COPY package*.json ./
-COPY schema.prisma ./
+RUN npm ci --omit=dev
 
-# Install dependencies and Generate Prisma Client
-RUN npm ci && \
-    PRISMA_CLI_QUERY_ENGINE_TYPE=library PRISMA_CLIENT_ENGINE_TYPE=library npx prisma generate
+# Copy natively built app
+COPY ./dist ./dist
+COPY ./prisma ./prisma
+COPY ./schema.prisma ./schema.prisma
 
-# Copy source code and build the application
-COPY . .
-RUN npx nest build && \
-    npm prune --production
+# Generate Prisma client for the target architecture (Native Engine)
+RUN PRISMA_CLI_QUERY_ENGINE_TYPE=library PRISMA_CLIENT_ENGINE_TYPE=library npx prisma generate
 
-# Stage 2: Production
-FROM node:20-alpine AS production
-
-WORKDIR /usr/src/app
-
-RUN apk add --no-cache openssl
-
-
-# Copy assets
-COPY --from=builder /usr/src/app/node_modules ./node_modules
-COPY --from=builder /usr/src/app/dist ./dist
-COPY --from=builder /usr/src/app/package*.json ./
-COPY --from=builder /usr/src/app/schema.prisma ./
-
-ENV NODE_ENV=production
-
-# Audit Service uses 4013
 EXPOSE 4013
 
 CMD ["node", "dist/main"]

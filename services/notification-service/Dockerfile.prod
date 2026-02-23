@@ -1,24 +1,15 @@
-# Build Stage
-FROM node:20-alpine AS builder
+# Build is handled natively in CI to avoid QEMU slowness
+FROM node:20-slim
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
+# Install production dependencies only
 COPY package*.json ./
+RUN npm ci --omit=dev
 
-RUN npm ci
+# Copy natively built app
+COPY ./dist ./dist
 
-COPY . .
-
-RUN npm run build && \
-    npm prune --production
-
-# Production Stage
-FROM node:20-alpine
-
-WORKDIR /usr/src/app
-
-COPY --from=builder /usr/src/app/node_modules ./node_modules
-COPY --from=builder /usr/src/app/dist ./dist
-COPY --from=builder /usr/src/app/package*.json ./
+EXPOSE 4014
 
 CMD ["node", "dist/main"]
