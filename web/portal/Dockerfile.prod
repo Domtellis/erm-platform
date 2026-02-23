@@ -1,13 +1,24 @@
 # Build is handled natively in CI to avoid QEMU slowness
 FROM nginx:alpine
 
-# Install openssl and generate a self-signed SSL certificate
+# Generate self-signed SSL cert with SAN — required by Chrome/Edge/Brave (not just CN)
 RUN apk add --no-cache openssl && \
     mkdir -p /etc/nginx/ssl && \
-    openssl req -x509 -nodes -days 3650 -newkey rsa:2048 \
+    cat > /tmp/cert.cfg << 'EOF'
+[req]
+distinguished_name = req_distinguished_name
+x509_extensions = v3_req
+prompt = no
+[req_distinguished_name]
+CN = erm-platform
+[v3_req]
+subjectAltName = IP:REDACTED_IP,IP:127.0.0.1,DNS:localhost
+EOF
+openssl req -x509 -nodes -days 3650 -newkey rsa:2048 \
     -keyout /etc/nginx/ssl/key.pem \
     -out /etc/nginx/ssl/cert.pem \
-    -subj "/CN=erm-platform/O=ERM/C=US" && \
+    -config /tmp/cert.cfg && \
+    rm /tmp/cert.cfg && \
     apk del openssl
 
 # Remove default nginx static assets
