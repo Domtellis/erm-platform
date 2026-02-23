@@ -7,18 +7,23 @@ import { DecisioningPage } from './pages/DecisioningPage';
 import { AuditPage } from './pages/AuditPage';
 import { ReportsPage } from './pages/ReportsPage';
 
-import { getBreaches, getMetrics } from './api/monitoring';
+import { getBreaches, getMetrics, BreachCase } from './api/monitoring';
+
+interface Decision {
+  status: string;
+  approvals: unknown[];
+}
 
 // ...
 
 function Dashboard() {
-  const { data: breachCases, isLoading: isLoadingBreaches } = useQuery<Record<string, unknown>[]>({
+  const { data: breachCases, isLoading: isLoadingBreaches } = useQuery<BreachCase[]>({
     queryKey: ['dashboard-breaches'],
     queryFn: () => getBreaches(),
     refetchInterval: 5000,
   });
 
-  const { data: decisions, isLoading: isLoadingDecisions } = useQuery<Record<string, unknown>[]>({
+  const { data: decisions, isLoading: isLoadingDecisions } = useQuery<Decision[]>({
     queryKey: ['dashboard-decisions'],
     queryFn: async () => {
       const hostname = window.location.hostname;
