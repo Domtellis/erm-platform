@@ -155,8 +155,8 @@ jobs:
           script: |
             cd ~/erm-platform
             
-            # Sync Server Firewall
-            sudo iptables -I INPUT 6 -m state --state NEW -p tcp --match multiport --dports 5180,3000,8080,16686,8025 -j ACCEPT && sudo netfilter-persistent save
+            # Sync Server Firewall — include all portal + API + observability ports
+            sudo iptables -I INPUT 6 -m state --state NEW -p tcp --match multiport --dports 5180,3000,8080,16686,8025,4010,4011,4012,4013,4014 -j ACCEPT && sudo netfilter-persistent save
             
             # Login to GHCR
             echo ${{ secrets.GITHUB_TOKEN }} | sudo docker login ghcr.io -u ${{ github.actor }} --password-stdin

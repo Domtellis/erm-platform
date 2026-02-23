@@ -121,7 +121,6 @@ services:
       KC_HEALTH_ENABLED: "true"
       KC_HOSTNAME_STRICT: "false"
       KC_HOSTNAME_STRICT_HTTPS: "false"
-      KC_PROXY: edge
       KC_HTTP_RELATIVE_PATH: /
       KC_HTTP_ENABLED: "true"
     volumes:
