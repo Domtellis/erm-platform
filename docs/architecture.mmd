@@ -15,12 +15,12 @@ graph TB
     end
 
     %% ── NETWORK EDGE ──────────────────────────────────────
-    subgraph Edge["🔒 OCI Edge — REDACTED_IP:5180 (HTTPS)"]
+    subgraph Edge["🔒 OCI Edge — REDACTED_IP:5180 - HTTPS"]
         direction TB
         nginx["nginx:alpine\n──────────────\nTLS 1.2 / 1.3\nSelf-signed cert\nSAN: IP:REDACTED_IP\nPort 443 → external 5180"]
 
         subgraph Routing["nginx Routing Rules"]
-            StaticRoute["GET /* → /dist\n(React SPA static files)"]
+            StaticRoute["GET /* → /dist\n - React SPA static files"]
             KCRoute["GET /realms/* /admin/*\n→ http://keycloak:8080\nX-Forwarded-Host: REDACTED_IP:5180\nX-Forwarded-Proto: https\nX-Forwarded-Port: 5180"]
         end
 
