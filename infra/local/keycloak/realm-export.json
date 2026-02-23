@@ -78,9 +78,11 @@
       "directAccessGrantsEnabled": true,
       "standardFlowEnabled": true,
       "implicitFlowEnabled": false,
-      "rootUrl": "http://localhost:5180",
+      "rootUrl": "",
       "redirectUris": [
-        "http://localhost:5180/*"
+        "http://localhost:5180/*",
+        "http://erm.prod:5180/*",
+        "http://REDACTED_IP:5180/*"
       ],
       "webOrigins": [
         "+"

@@ -149,10 +149,12 @@ services:
       NODE_ENV: production
       DATABASE_URL: postgresql://postgres:${DB_PASSWORD}@postgres:5432/monitoring?schema=monitoring
       KAFKA_BROKERS: redpanda:29092
-      KEYCLOAK_ISSUER_URL: http://localhost:8080/realms/erm-platform
+      KEYCLOAK_ISSUER_URL: http://erm.prod:8080/realms/erm-platform
       KEYCLOAK_JWKS_URL: http://keycloak:8080/realms/erm-platform/protocol/openid-connect/certs
       OPA_URL: http://opa:8181/v1/data/erm/governance
       PORT: 4010
+    extra_hosts:
+      - "erm.prod:host-gateway"
     ports:
       - "4010:4010"
     depends_on:
@@ -188,11 +190,13 @@ services:
       NODE_ENV: production
       DATABASE_URL: postgresql://postgres:${DB_PASSWORD}@postgres:5432/decisioning?schema=decisioning
       KAFKA_BROKERS: redpanda:29092
-      KEYCLOAK_ISSUER_URL: http://localhost:8080/realms/erm-platform
+      KEYCLOAK_ISSUER_URL: http://erm.prod:8080/realms/erm-platform
       KEYCLOAK_JWKS_URL: http://keycloak:8080/realms/erm-platform/protocol/openid-connect/certs
       MONITORING_SERVICE_URL: http://monitoring-service:4010
       OPA_URL: http://opa:8181/v1/data/erm/governance
       PORT: 4011
+    extra_hosts:
+      - "erm.prod:host-gateway"
     ports:
       - "4011:4011"
     depends_on:
@@ -210,9 +214,11 @@ services:
       NODE_ENV: production
       DATABASE_URL: postgresql://postgres:${DB_PASSWORD}@postgres:5432/audit?schema=audit
       KAFKA_BROKERS: redpanda:29092
-      KEYCLOAK_ISSUER_URL: http://localhost:8080/realms/erm-platform
+      KEYCLOAK_ISSUER_URL: http://erm.prod:8080/realms/erm-platform
       KEYCLOAK_JWKS_URL: http://keycloak:8080/realms/erm-platform/protocol/openid-connect/certs
       PORT: 4013
+    extra_hosts:
+      - "erm.prod:host-gateway"
     ports:
       - "4013:4013"
     depends_on:
