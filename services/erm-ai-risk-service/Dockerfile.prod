@@ -1,6 +1,9 @@
 # Stage 1: Builder
 FROM node:20-alpine AS builder
 
+ARG PRISMA_CLI_QUERY_ENGINE_TYPE=binary
+ENV PRISMA_CLI_QUERY_ENGINE_TYPE=$PRISMA_CLI_QUERY_ENGINE_TYPE
+
 WORKDIR /usr/src/app
 
 # Install dependencies
