@@ -7,7 +7,8 @@ import { DecisioningPage } from './pages/DecisioningPage';
 import { AuditPage } from './pages/AuditPage';
 import { ReportsPage } from './pages/ReportsPage';
 
-import { getBreaches, getMetrics, BreachCase } from './api/monitoring';
+import { getBreaches, getMetrics } from './api/monitoring';
+import type { BreachCase } from './api/monitoring';
 
 interface Decision {
   status: string;
