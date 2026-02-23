@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:4014'; // AI Risk Service
+const API_URL = '/api/ai';
+
 
 export interface AiAssessmentSuggestion {
     id: string;

@@ -13,4 +13,13 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
   },
+  server: {
+    proxy: {
+      '/api/monitoring': { target: 'http://localhost:4010', rewrite: (path) => path.replace(/^\/api\/monitoring/, '') },
+      '/api/decisioning': { target: 'http://localhost:4011', rewrite: (path) => path.replace(/^\/api\/decisioning/, '') },
+      '/api/audit': { target: 'http://localhost:4013', rewrite: (path) => path.replace(/^\/api\/audit/, '') },
+      '/api/ai': { target: 'http://localhost:4014', rewrite: (path) => path.replace(/^\/api\/ai/, '') },
+    },
+  },
 })
+

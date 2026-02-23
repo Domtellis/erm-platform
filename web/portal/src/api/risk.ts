@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:4011'; // Decisioning Service
+const API_URL = '/api/decisioning';
+
 
 export interface RiskAssessment {
     id: string;

@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const AUDIT_API_URL = import.meta.env.VITE_AUDIT_API_URL || 'http://localhost:4013';
+const AUDIT_API_URL = '/api/audit';
+
 
 export interface TrendPoint {
     date: string;
