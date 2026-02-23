@@ -3,8 +3,20 @@ name: Monorepo CI/CD Pipeline
 on:
   push:
     branches: [ main ]
+    paths-ignore:
+      - 'docs/**'
+      - '**.md'
+      - '**.mmd'
+      - '.gitignore'
+      - 'LICENSE'
   pull_request:
     branches: [ main ]
+    paths-ignore:
+      - 'docs/**'
+      - '**.md'
+      - '**.mmd'
+      - '.gitignore'
+      - 'LICENSE'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
