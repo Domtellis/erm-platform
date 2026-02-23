@@ -27,6 +27,7 @@ export function Header() {
                     ) : auth.error ? (
                         <div className="flex flex-col items-end">
                             <span className="text-xs text-crm-danger font-medium">Auth Error</span>
+                            <span className="text-[10px] text-crm-danger max-w-xs truncate">{auth.error?.message}</span>
                             <button
                                 onClick={() => window.location.reload()}
                                 className="text-[10px] underline hover:text-crm-brand"
