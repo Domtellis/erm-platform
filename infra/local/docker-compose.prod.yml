@@ -237,7 +237,7 @@ services:
     image: ghcr.io/domtellis/erm-portal:latest
     container_name: erm-web-portal
     ports:
-      - "5180:80"
+      - "5180:443"
     depends_on:
       - monitoring-service
       - decisioning-service
