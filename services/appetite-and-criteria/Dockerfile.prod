@@ -12,7 +12,7 @@ COPY schema.prisma ./
 
 # Install dependencies and Generate Prisma Client
 RUN npm ci && \
-    npx prisma generate
+    PRISMA_CLI_QUERY_ENGINE_TYPE=library PRISMA_CLIENT_ENGINE_TYPE=library npx prisma generate
 
 # Copy source code and build the application
 COPY . .
