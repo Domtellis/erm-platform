@@ -5,7 +5,7 @@ const getOidcConfig = () => {
     const origin = window.location.origin;
 
     return {
-        authority: `http://${hostname}:8080/realms/erm-platform`,
+        authority: `https://${hostname}:5180/realms/erm-platform`,
         client_id: "erm-web-portal",
         redirect_uri: `${origin}/`,
         post_logout_redirect_uri: `${origin}/`,
