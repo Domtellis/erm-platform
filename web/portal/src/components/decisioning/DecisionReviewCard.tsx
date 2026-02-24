@@ -31,7 +31,7 @@ export function DecisionReviewCard({ caseData, onClose }: DecisionCardProps) {
     // 1. First Mutation: Record Decision
     const recordDecisionMutation = useMutation({
         mutationFn: async ({ type, evidence }: { type: string, evidence: string[] }) => {
-            const decisionResponse = await axios.post('http://localhost:4011/decisions', {
+            const decisionResponse = await axios.post('/api/decisioning/decisions', {
                 breach_case_id: caseData.id,
                 decision_type: type,
                 rationale: `Manual decision recorded via Portal by ${userId}.`,
@@ -45,7 +45,7 @@ export function DecisionReviewCard({ caseData, onClose }: DecisionCardProps) {
     // 2. Second Mutation: Approve (Governance Gate)
     const approveMutation = useMutation({
         mutationFn: async (decisionId: string) => {
-            return axios.post(`http://localhost:4011/decisions/${decisionId}/approve`, {
+            return axios.post(`/api/decisioning/decisions/${decisionId}/approve`, {
                 approver_user_id: userId,
                 approver_role: activeRole,
             });
@@ -63,7 +63,7 @@ export function DecisionReviewCard({ caseData, onClose }: DecisionCardProps) {
         queryFn: async () => {
             if (!auth.user?.access_token) return [];
             try {
-                const res = await axios.get(`http://localhost:4011/decisions?breach_case_id=${caseData.id}`, {
+                const res = await axios.get(`/api/decisioning/decisions?breach_case_id=${caseData.id}`, {
                     headers: {
                         Authorization: `Bearer ${auth.user.access_token}`
                     }

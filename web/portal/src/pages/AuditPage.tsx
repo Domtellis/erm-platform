@@ -19,7 +19,8 @@ export function AuditPage() {
         queryKey: ['audit-logs'],
         queryFn: async () => {
             try {
-                const response = await axios.get('http://localhost:4013/audit', {
+                const response = await axios.get('/api/audit/audit', {
+
                     headers: {
                         Authorization: `Bearer ${user?.access_token}`
                     }

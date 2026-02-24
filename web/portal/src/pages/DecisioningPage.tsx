@@ -40,7 +40,8 @@ export function DecisioningPage() {
     const { data: cases, isLoading } = useQuery<BreachCase[]>({
         queryKey: ['breaches'],
         queryFn: async () => {
-            const response = await axios.get('http://localhost:4010/breaches');
+            const response = await axios.get('/api/monitoring/breaches');
+
             return response.data;
         },
     });

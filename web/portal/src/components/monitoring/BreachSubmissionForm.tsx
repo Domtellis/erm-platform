@@ -25,7 +25,8 @@ export function BreachSubmissionForm({ onSuccess }: { onSuccess: () => void }) {
     const mutation = useMutation({
         mutationFn: (newBreach: BreachFormValues) => {
             console.log('Submitting breach:', newBreach);
-            return axios.post('http://localhost:4010/breaches/manual-submission', newBreach);
+            return axios.post('/api/monitoring/breaches/manual-submission', newBreach);
+
         },
         onSuccess: () => {
             console.log('Submission successful');

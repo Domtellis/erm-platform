@@ -19,7 +19,8 @@ export function ClosureCard({ caseData, onClose }: ClosureCardProps) {
 
     const closeMutation = useMutation({
         mutationFn: async () => {
-            await axios.post(`http://localhost:4010/breaches/${caseData.id}/close`, {}, {
+            await axios.post(`/api/monitoring/breaches/${caseData.id}/close`, {}, {
+
                 headers: { Authorization: `Bearer ${auth.user?.access_token}` }
             });
         },
