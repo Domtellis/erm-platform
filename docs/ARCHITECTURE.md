@@ -1,7 +1,7 @@
 # ERM Platform — System Architecture Document
 
 > **Document type:** System Architecture Document (SAD) · C4 Container View  
-> **Status:** Baseline · last updated 2026-02-23  
+> **Status:** Baseline · last updated 2026-02-24  
 > **Authors:** Platform Engineering
 
 ---
@@ -63,7 +63,7 @@ graph TB
         MonSvc["monitoring-service\n:4010\n──────────────\nBreach ingestion\nRisk scoring\nKafka producer"]
         DecSvc["decisioning-service\n:4011\n──────────────\nApproval workflows\nOPA policy checks\nKafka consumer"]
         AuditSvc["audit-service\n:4013\n──────────────\nEvent log\nCompliance reports\nKafka consumer"]
-        NotifySvc["notification-service\n:4012\n──────────────\nEmail dispatch\nKafka consumer\nSMTP → Mailpit"]
+        NotifySvc["notification-service\n:4020\n──────────────\nEmail dispatch\nKafka consumer\nSMTP → Mailpit"]
         AISvc["erm-ai-risk-service\n:4014\n──────────────\nAI risk analysis\nML scoring engine"]
     end
 
@@ -209,7 +209,7 @@ All services are built with **NestJS** and use **Prisma ORM** for database acces
 |---|---|---|---|
 | `monitoring-service` | 4010 | Breach ingestion, risk scoring | Producer |
 | `decisioning-service` | 4011 | Approval workflows, OPA policy evaluation | Consumer |
-| `notification-service` | 4012 | Email dispatch via SMTP | Consumer |
+| `notification-service` | 4020 | Email dispatch via SMTP | Consumer |
 | `audit-service` | 4013 | Immutable event log, compliance reports | Consumer |
 | `erm-ai-risk-service` | 4014 | AI/ML-assisted risk analysis | — |
 
@@ -223,7 +223,7 @@ Single PostgreSQL 15 instance with schema-level isolation:
 
 | Schema | Owner service |
 |---|---|
-| `monitoring` | monitoring-service |
+| `monitoring` | monitoring-service (Includes ISO 31000/45001 standards) |
 | `decisioning` | decisioning-service |
 | `audit` | audit-service |
 | `keycloak` | Keycloak (managed internally) |
@@ -253,11 +253,10 @@ Open Policy Agent evaluates **Rego policies** for approval authorization. The `d
 
 ### 4.8 Observability
 
-| Component | Role |
-|---|---|
 | OpenTelemetry Collector | Receives OTLP traces and metrics from all NestJS services |
 | Jaeger (`:16686`) | Distributed trace visualization |
-| Prometheus (`:9090`) | Time-series metrics storage |
+| Prometheus (`:9090`) | Time-series metrics storage (**Pinned v2.54.1 for stability**) |
+| Blackbox Exporter (`:9115`) | Active health checking via `/api` (Swagger UI) probes |
 | Grafana (`:3000`) | Unified dashboards over Prometheus data |
 
 ---
@@ -292,7 +291,7 @@ GitHub Actions on every push to `main`:
 |---|---|---|
 | `5180` | Portal (nginx HTTPS) | ✅ Public |
 | `8080` | Keycloak (HTTP) | ✅ Public (admin) |
-| `4010–4014` | Backend APIs | ✅ Public (REST) |
+| `4010–4014, 4020` | Backend APIs | ✅ Public (REST/Swagger) |
 | `16686` | Jaeger | ✅ Public |
 | `3000` | Grafana | ✅ Public |
 | `8025` | Mailpit UI | ✅ Public |
@@ -304,7 +303,6 @@ GitHub Actions on every push to `main`:
 
 ## 7. Related Documents
 
-- [`docs/architecture.mmd`](./architecture.mmd) — raw Mermaid source for the container diagram
 - `infra/local/docker-compose.prod.yml` — full service definitions
 - `infra/local/keycloak/realm-export.json` — Keycloak realm configuration
 - `.github/workflows/ci.yml` — CI/CD pipeline definition
