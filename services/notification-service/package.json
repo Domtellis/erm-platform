@@ -26,6 +26,7 @@
         "nodemailer": "^6.9.8",
         "reflect-metadata": "^0.1.13",
         "rxjs": "^7.8.1",
+        "@nestjs/swagger": "^7.1.17",
         "@opentelemetry/api": "^1.9.0",
         "@opentelemetry/auto-instrumentations-node": "^0.69.0",
         "@opentelemetry/exporter-metrics-otlp-http": "^0.212.0",

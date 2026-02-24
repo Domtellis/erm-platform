@@ -2,6 +2,12 @@
 
 ## 1. Identity & Access Management (Security)
 - [x] **Infrastructure**: Deploy Keycloak container in `docker-compose.yml` <!-- id: 100 -->
+- [x] **Infrastructure**: Fix OTel dependency version conflict in `notification-service` <!-- id: 1200 -->
+- [x] **Data**: Seed OCI database with ISO 31000 & 45001 standards for Ports & Terminals <!-- id: 1201 -->
+    - [x] Research historical seed data and thresholds
+    - [x] Create OCI-compatible SQL seed scripts
+    - [x] Execute seeding on OCI environment
+    - [x] Verify data presence in Portal
 - [x] **Backend (Monitoring)**: Implement JWT Strategy & AuthGuard in `services/monitoring-and-breaches` <!-- id: 101 -->
 - [x] **Backend (Decisioning)**: Implement JWT Strategy & AuthGuard in `services/decisioning-and-approvals` <!-- id: 101.1 -->
 - [x] **Backend (Audit)**: Implement JWT Strategy & AuthGuard in `services/audit-and-reporting` <!-- id: 101.2 -->
@@ -96,6 +102,9 @@
 - [x] **Backend**: Update Monitoring Service to set timestamps on status change <!-- id: 1301 -->
 - [x] **Frontend**: Visualize "SLA Met/Missed" status in Breach List <!-- id: 1302 -->
 - [x] **Verification**: Verify timestamps and UI updates <!-- id: 1303 -->
+- [x] **Infrastructure**: Fixed Grafana Downtime on OCI (Duplicate Jobs + Missing OTel Vars) <!-- id: 1305 -->
+- [x] **Infrastructure**: Standardized health probes using Blackbox + Swagger UI <!-- id: 1306 -->
+- [x] **Infrastructure**: Sync all fixes to OCI server <!-- id: 1307 -->
 - [x] **Migration Fix**: Applied schema changes via direct SQL migration (Prisma CLI version conflict) <!-- id: 1304 -->
 
 ## Phase 14: AI-Assisted Risk Assessment (Intelligence - SB-02)

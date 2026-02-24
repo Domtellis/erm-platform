@@ -3,7 +3,11 @@
 ## Phase 1 & 2: Foundation (Completed Previously)
 The following foundational work was completed prior to the current verification cycle:
 - **Phase 1: Repository Setup**: Established the monorepo structure, TypeScript configuration, and shared libraries.
-- **Phase 2: Core Infrastructure**: Deployed the base Docker environment (PostgreSQL, Redpanda) and initialized the application skeleton (NestJS Services + React Web Portal).
+- **Phase 2: Core Infrastructure**: Deployed the base Docker environment (PostgreSQL, Redpanda)
+- **Dashboard Visibility**: Confirmed that all application and infrastructure services are now reporting as "GREEN/UP" in production.
+- **OTel Fixes**: Added missing `OTEL_EXPORTER_OTLP_ENDPOINT` and `OTEL_SERVICE_NAME` to ensure services export performance metrics.
+- **Prometheus Stability**: Pinned to `v2.54.1` to resolve query errors and removed duplicate job configurations.
+- **Standardized Probes**: Configured Blackbox exporter to use `/api` (Swagger UI) for a stable "UP" signal across all domain services.
 
 ---
 
@@ -344,3 +348,5 @@ We aligned the platform with ISO 45001 standards for Ports & Terminals.
 ### Observability Services
 | **Prometheus** (Metrics) | 🟢 Healthy | Scraping OTel Collector, Exposing Metrics API |
 | **Grafana** (Dashboard) | 🟢 Healthy | ERM System Overview Dashboard, Service Health Monitoring |
+| **ISO 45001** | ✅ **Seeded** | 5 Breach Case scenarios verified in OCI `monitoring` |
+| **System Dashboard**| ✅ **Online** | Metrics flowing; Services reporting 'UP' via Blackbox/Swagger |

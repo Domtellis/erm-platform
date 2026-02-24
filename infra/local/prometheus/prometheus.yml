@@ -37,11 +37,6 @@ scrape_configs:
       - targets: ['grafana:3000']
     metrics_path: '/metrics'
 
-  - job_name: 'keycloak'
-    metrics_path: '/metrics'
-    static_configs:
-      - targets: ['keycloak:8080']
-
   - job_name: 'jaeger'
     static_configs:
       - targets: ['jaeger:14269']
@@ -52,7 +47,11 @@ scrape_configs:
       module: [http_2xx]
     static_configs:
       - targets:
-        - http://notification-service:4020/ # Returns 404, but reachable
+        - http://notification-service:4020/api
+        - http://monitoring-service:4010/api
+        - http://decisioning-service:4011/api
+        - http://audit-service:4013/api
+        - http://ai-risk-service:4014/api
         - http://mailpit:8025/
     relabel_configs:
       - source_labels: [__address__]

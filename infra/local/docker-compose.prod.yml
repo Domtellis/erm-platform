@@ -62,7 +62,7 @@ services:
       - "14268:14268"
 
   prometheus:
-    image: prom/prometheus:latest
+    image: prom/prometheus:v2.54.1
     container_name: erm-prometheus
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
@@ -164,6 +164,8 @@ services:
       KEYCLOAK_JWKS_URL: http://keycloak:8080/realms/erm-platform/protocol/openid-connect/certs
       OPA_URL: http://opa:8181/v1/data/erm/governance
       PORT: 4010
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318
+      OTEL_SERVICE_NAME: erm-monitoring-service
     ports:
       - "4010:4010"
     depends_on:
@@ -188,6 +190,8 @@ services:
       SMTP_PORT: 1025
       OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318
       OTEL_SERVICE_NAME: erm-notification-service
+    ports:
+      - "4020:4020"
     depends_on:
       redpanda:
         condition: service_healthy
@@ -206,6 +210,8 @@ services:
       MONITORING_SERVICE_URL: http://monitoring-service:4010
       OPA_URL: http://opa:8181/v1/data/erm/governance
       PORT: 4011
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318
+      OTEL_SERVICE_NAME: erm-decisioning-service
     command: /bin/sh -c "npx prisma db push --schema=./schema.prisma --accept-data-loss && node dist/main"
     ports:
       - "4011:4011"
@@ -227,6 +233,8 @@ services:
       KEYCLOAK_ISSUER_URL: https://REDACTED_IP:5180/realms/erm-platform
       KEYCLOAK_JWKS_URL: http://keycloak:8080/realms/erm-platform/protocol/openid-connect/certs
       PORT: 4013
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318
+      OTEL_SERVICE_NAME: erm-audit-service
     command: /bin/sh -c "npx prisma db push --schema=./schema.prisma --accept-data-loss && node dist/main"
     ports:
       - "4013:4013"
