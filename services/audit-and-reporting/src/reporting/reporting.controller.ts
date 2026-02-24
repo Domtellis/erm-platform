@@ -3,6 +3,8 @@ import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { ReportingService } from './reporting.service';
 
 @ApiTags('Reporting & Analytics')
+@ApiBearerAuth()
+@UseGuards(AuthGuard('jwt'))
 @Controller('reports')
 export class ReportingController {
     constructor(private readonly reportingService: ReportingService) { }
