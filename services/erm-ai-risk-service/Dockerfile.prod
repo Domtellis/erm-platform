@@ -4,11 +4,14 @@ FROM node:20-slim
 WORKDIR /app
 
 # Install production dependencies only
+RUN apt-get update -y && apt-get install -y openssl
+
 COPY package*.json ./
 RUN npm install --omit=dev
 
-# Copy natively built app
+# Copy natively built app and schema
 COPY ./dist ./dist
+COPY ./schema.prisma ./schema.prisma
 
 EXPOSE 4014
 
