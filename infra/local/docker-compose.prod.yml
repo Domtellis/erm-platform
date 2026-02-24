@@ -228,6 +228,19 @@ services:
       keycloak:
         condition: service_started
 
+  ai-risk-service:
+    image: ghcr.io/domtellis/erm-ai-risk-service:latest
+    container_name: erm-ai-risk-service
+    environment:
+      NODE_ENV: production
+      PORT: 4014
+      KAFKA_BROKERS: redpanda:29092
+    ports:
+      - "4014:4014"
+    depends_on:
+      redpanda:
+        condition: service_healthy
+
   web-portal:
     image: ghcr.io/domtellis/erm-portal:latest
     container_name: erm-web-portal
