@@ -21,7 +21,7 @@ export class AuditService implements OnModuleInit, OnModuleDestroy {
 
     async onModuleInit() {
         await this.kafkaConsumer.connect();
-        await this.kafkaConsumer.subscribe({ topics: ['erm-audit-events', /^erm\..*/], fromBeginning: true });
+        await this.kafkaConsumer.subscribe({ topics: [/^erm\..*/], fromBeginning: true });
         // Also subscribe to domain topics if needed, or use a pattern that matches both
         // For now, enforcing the shared topic pattern
 

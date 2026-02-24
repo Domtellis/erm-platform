@@ -50,21 +50,18 @@ def get_recommendation(task, registry):
         
     # Architecture / High Context / Repository-wide
     if any(k in task for k in ['architect', 'design', 'multi-service', 'system', 'structure', 'planning', 'repository', 'traceability']):
-        if 'reasoning' in task or 'logic' in task or 'deep' in task:
-             return models['gemini-3-1-pro-high']
         if 'critical' in task or 'legacy' in task:
-             return models.get('claude-opus-4-5-thinking', models['gemini-3-1-pro-high'])
-        return models.get('gemini-3-1-pro-high', models['gemini-3-pro-high'])
+             return models.get('claude-opus-4-5-thinking', models['gemini-3-pro-high'])
+        return models['gemini-3-pro-high']
         
     # Complex Coding / Logic / Sub-system
     if any(k in task for k in ['algorithm', 'refactor', 'optimization', 'performance', 'logic', 'module']):
-        if '3.1' in task or 'expert' in task:
-            return models['gemini-3-1-pro-low']
         return models['claude-sonnet-4-5']
         
     # Standard Development
     if any(k in task for k in ['feature', 'test', 'api', 'service']):
         return models['gemini-3-pro-low']
+
 
     # Research
     if any(k in task for k in ['research', 'explain', 'search', 'find']):

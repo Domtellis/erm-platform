@@ -1,6 +1,6 @@
 {
-    "version": "1.0.0",
-    "last_updated": "2026-02-20T11:15:00Z",
+    "version": "1.1.0",
+    "last_updated": "2026-02-24T06:50:00Z",
     "models": [
         {
             "id": "gemini-3-flash",
@@ -24,18 +24,11 @@
             "description": "High context window for architectural reviews and multi-service planning."
         },
         {
-            "id": "gemini-3-1-pro-low",
-            "name": "Gemini 3.1 Pro (Low Reasoning)",
-            "tier": "Expert-Low",
-            "cost_rank": 3,
-            "description": "High-throughput expert reasoning for localized code logic and sub-system refactoring."
-        },
-        {
-            "id": "gemini-3-1-pro-high",
-            "name": "Gemini 3.1 Pro (High Reasoning)",
-            "tier": "Expert-High",
-            "cost_rank": 4,
-            "description": "Peak logical reasoning with maximum context for repository-scale architectural synthesis."
+            "id": "gpt-oss-120b-medium",
+            "name": "GPT-OSS 120B (Medium)",
+            "tier": "Research",
+            "cost_rank": 2,
+            "description": "Strong for open-ended research and documentation exploration."
         },
         {
             "id": "claude-sonnet-4-5",
@@ -64,13 +57,6 @@
             "tier": "Elite",
             "cost_rank": 7,
             "description": "Maximum reasoning capability. Use only for project-critical architectural breakthroughs."
-        },
-        {
-            "id": "gpt-oss-120b-medium",
-            "name": "GPT-OSS 120B (Medium)",
-            "tier": "Research",
-            "cost_rank": 2,
-            "description": "Strong for open-ended research and documentation exploration."
         }
     ]
 }
