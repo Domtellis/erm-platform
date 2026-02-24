@@ -4,12 +4,13 @@ FROM node:20-slim
 WORKDIR /app
 
 # Install production dependencies only
+# Note: using npm install (not ci) because this service's lock file predates OTel deps
 COPY package*.json ./
-RUN npm ci --omit=dev
+RUN npm install --omit=dev
 
 # Copy natively built app
 COPY ./dist ./dist
 
-EXPOSE 4014
+EXPOSE 4020
 
 CMD ["node", "dist/main"]
