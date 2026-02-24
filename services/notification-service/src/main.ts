@@ -1,3 +1,4 @@
+import './instrumentation';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
@@ -10,7 +11,8 @@ async function bootstrap() {
         transport: Transport.KAFKA,
         options: {
             client: {
-                brokers: (process.env.KAFKA_BROKERS || 'localhost:9092').split(','),
+                brokers: (process.env.KAFKA_BROKERS || 'redpanda:29092').split(','),
+
             },
             consumer: {
                 groupId: 'erm-notification-group',

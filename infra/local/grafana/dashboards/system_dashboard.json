@@ -350,7 +350,7 @@
                         "type": "prometheus",
                         "uid": "P1809F7CD0C75ACF3"
                     },
-                    "expr": "count(http_client_duration_milliseconds_count{exported_job=\"erm-notification-service\"}) > 0 or count(http_client_duration_milliseconds_count{job=\"erm-notification-service\"}) > 0",
+                    "expr": "probe_success{instance=\"http://notification-service:4020/\"}",
                     "instant": true,
                     "legendFormat": "🟢 RUNNING",
                     "refId": "A"
@@ -431,7 +431,7 @@
                         "type": "prometheus",
                         "uid": "P1809F7CD0C75ACF3"
                     },
-                    "expr": "count(http_client_duration_milliseconds_count{exported_job=\"web-portal\"}) > 0 or count(http_client_duration_milliseconds_count{job=\"web-portal\"}) > 0",
+                    "expr": "up{job=\"portal\"}",
                     "instant": true,
                     "legendFormat": "🟢 RUNNING",
                     "refId": "A"
@@ -691,7 +691,7 @@
                         "type": "prometheus",
                         "uid": "P1809F7CD0C75ACF3"
                     },
-                    "expr": "pg_up",
+                    "expr": "up{job=\"postgres\"}",
                     "instant": true,
                     "legendFormat": "🟢 UP",
                     "refId": "A"
@@ -772,7 +772,7 @@
                         "type": "prometheus",
                         "uid": "P1809F7CD0C75ACF3"
                     },
-                    "expr": "kafka_server_replicamanager_isrexpands_total",
+                    "expr": "up{job=\"redpanda\"}",
                     "instant": true,
                     "legendFormat": "🟢 UP",
                     "refId": "A"
@@ -853,7 +853,7 @@
                         "type": "prometheus",
                         "uid": "P1809F7CD0C75ACF3"
                     },
-                    "expr": "keycloak_request_duration_count",
+                    "expr": "up{job=\"keycloak\"}",
                     "instant": true,
                     "legendFormat": "🟢 UP",
                     "refId": "A"
@@ -934,7 +934,7 @@
                         "type": "prometheus",
                         "uid": "P1809F7CD0C75ACF3"
                     },
-                    "expr": "opa_http_request_duration_seconds_count",
+                    "expr": "up{job=\"opa\"}",
                     "instant": true,
                     "legendFormat": "🟢 UP",
                     "refId": "A"
@@ -1100,7 +1100,7 @@
                         "type": "prometheus",
                         "uid": "P1809F7CD0C75ACF3"
                     },
-                    "expr": "grafana_build_info",
+                    "expr": "up{job=\"grafana\"}",
                     "instant": true,
                     "legendFormat": "🟢 UP",
                     "refId": "A"
@@ -1181,7 +1181,7 @@
                         "type": "prometheus",
                         "uid": "P1809F7CD0C75ACF3"
                     },
-                    "expr": "jaeger_agent_http_server_requests_total",
+                    "expr": "up{job=\"jaeger\"}",
                     "instant": true,
                     "legendFormat": "🟢 UP",
                     "refId": "A"
@@ -1262,7 +1262,7 @@
                         "type": "prometheus",
                         "uid": "P1809F7CD0C75ACF3"
                     },
-                    "expr": "mailpit_messages_total",
+                    "expr": "probe_success{instance=\"http://mailpit:8025/\"}",
                     "instant": true,
                     "legendFormat": "🟢 UP",
                     "refId": "A"

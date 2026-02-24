@@ -17,7 +17,7 @@ async function bootstrap() {
         transport: Transport.KAFKA,
         options: {
             client: {
-                brokers: (process.env.KAFKA_BROKERS || 'localhost:9092').split(','),
+                brokers: (process.env.KAFKA_BROKERS || 'redpanda:9092').split(','),
             },
             consumer: {
                 groupId: 'ai-risk-consumer',

@@ -84,6 +84,11 @@ services:
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SECURITY_DISABLE_INITIAL_ADMIN_PASSWORD_CHG=true
+      - GF_SECURITY_ALLOW_EMBEDDING=true
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_SERVER_ROOT_URL=https://REDACTED_IP:5180/grafana/
+      - GF_SERVER_SERVE_FROM_SUB_PATH=true
     depends_on:
       - prometheus
     deploy:
@@ -119,6 +124,7 @@ services:
       KC_BOOTSTRAP_ADMIN_USERNAME: admin
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin
       KC_HEALTH_ENABLED: "true"
+      KC_METRICS_ENABLED: "true"
       KC_HOSTNAME_STRICT: "false"
       KC_HOSTNAME_STRICT_HTTPS: "false"
       KC_HTTP_RELATIVE_PATH: /
@@ -180,6 +186,8 @@ services:
       JIRA_PROJECT: SCRUM
       SMTP_HOST: mailpit
       SMTP_PORT: 1025
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318
+      OTEL_SERVICE_NAME: erm-notification-service
     depends_on:
       redpanda:
         condition: service_healthy
@@ -237,18 +245,55 @@ services:
       NODE_ENV: production
       PORT: 4014
       KAFKA_BROKERS: redpanda:29092
+      DATABASE_URL: postgresql://postgres:${DB_PASSWORD}@postgres:5432/ai_risk?schema=ai_risk
+      KEYCLOAK_ISSUER_URL: https://REDACTED_IP:5180/realms/erm-platform
+      KEYCLOAK_JWKS_URL: http://keycloak:8080/realms/erm-platform/protocol/openid-connect/certs
+      GEMINI_API_KEY: REDACTED_GEMINI_KEY
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318
+      OTEL_SERVICE_NAME: erm-ai-risk-service
+    command: /bin/sh -c "npx prisma db push --schema=./schema.prisma --accept-data-loss && node dist/main"
     ports:
       - "4014:4014"
     depends_on:
+      postgres:
+        condition: service_healthy
       redpanda:
         condition: service_healthy
+      keycloak:
+        condition: service_started
 
   web-portal:
     image: ghcr.io/domtellis/erm-portal:latest
     container_name: erm-web-portal
     ports:
       - "5180:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
     depends_on:
       - monitoring-service
       - decisioning-service
       - audit-service
+
+  # Metrics Exporters
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter
+    container_name: erm-postgres-exporter
+    environment:
+      DATA_SOURCE_NAME: "postgresql://postgres@postgres:5432/postgres?sslmode=disable"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  web-portal-exporter:
+    image: nginx/nginx-prometheus-exporter:latest
+    container_name: erm-web-portal-exporter
+    command:
+      - -nginx.scrape-uri=http://web-portal:80/nginx_status
+    depends_on:
+      - web-portal
+
+  blackbox-exporter:
+    image: prom/blackbox-exporter:latest
+    container_name: erm-blackbox-exporter
+    ports:
+      - "9115:9115"

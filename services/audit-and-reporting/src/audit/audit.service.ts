@@ -14,7 +14,7 @@ export class AuditService implements OnModuleInit, OnModuleDestroy {
     ) {
         const kafka = new Kafka({
             clientId: 'audit-service-sink',
-            brokers: [this.configService.get<string>('KAFKA_BROKERS', 'localhost:9092')],
+            brokers: [this.configService.get<string>('KAFKA_BROKERS', 'redpanda:9092')],
         });
         this.kafkaConsumer = kafka.consumer({ groupId: 'erm-audit-production-group-v2' });
     }
