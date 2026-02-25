@@ -13,7 +13,7 @@ The ERM Platform includes a comprehensive observability stack for monitoring sys
 - **Retention**: Default (15 days)
 
 ### Grafana (Dashboards)
-- **URL**: http://localhost:3000
+- **URL**: https://erm.prod:5180/grafana/ (or http://localhost:3000)
 - **Default Credentials**: `admin` / `admin`
 - **Provisioning**: Auto-provisioned via `/infra/local/grafana/provisioning`
 - **Dashboards**: 
@@ -21,7 +21,7 @@ The ERM Platform includes a comprehensive observability stack for monitoring sys
   - "AI Risk Assessment Performance": AI TRiSM & FinOps telemetry.
 
 ### Jaeger (Distributed Tracing)
-- **URL**: http://localhost:16686
+- **URL**: https://erm.prod:5180/grafana/ (proxied) or http://localhost:16686
 - **Purpose**: Trace visualization and service dependency mapping
 - **Backend**: In-memory storage (development mode)
 

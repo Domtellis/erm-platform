@@ -289,12 +289,12 @@ GitHub Actions on every push to `main`:
 
 | Port | Service | External access |
 |---|---|---|
-| `5180` | Portal (nginx HTTPS) | ✅ Public |
-| `8080` | Keycloak (HTTP) | ✅ Public (admin) |
-| `4010–4014, 4020` | Backend APIs | ✅ Public (REST/Swagger) |
-| `16686` | Jaeger | ✅ Public |
-| `3000` | Grafana | ✅ Public |
-| `8025` | Mailpit UI | ✅ Public |
+| `5180` | Portal (nginx HTTPS) | ✅ Public (https://erm.prod:5180) |
+| `8080` | Keycloak (HTTP) | ✅ Public (https://erm.prod:5180/realms/...) |
+| `4010–4014, 4020` | Backend APIs | ✅ Public (https://erm.prod:5180/api/...) |
+| `16686` | Jaeger | ✅ Public (https://erm.prod:5180/grafana/) |
+| `3000` | Grafana | ✅ Public (https://erm.prod:5180/grafana/) |
+| `8025` | Mailpit UI | ✅ Public (https://erm.prod:5180/mail/) |
 | `5432` | PostgreSQL | ❌ Internal only |
 | `29092` | Redpanda (Kafka) | ❌ Internal only |
 | `8181` | OPA | ❌ Internal only |

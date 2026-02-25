@@ -11,7 +11,7 @@ Mid-fidelity clickable HTML prototype for the **Appetite Breach Response** workf
 ```powershell
 cd docs/ux/prototypes/sb-01/app
 python -m http.server 8080
-# Open http://localhost:8080 in browser
+# Open https://erm.prod:5180/admin/ in browser
 ```
 
 Or simply open `app/index.html` directly in a browser.

@@ -22,7 +22,7 @@
 docker ps | grep [service-name]
 
 # Check health endpoint
-curl http://localhost:[port]/health
+curl https://erm.prod:5180/api/[service]/health
 ```
 
 **Expected Response:**
@@ -43,7 +43,7 @@ curl http://localhost:[port]/health
 docker logs [service-name] --tail 100
 
 # Check metrics
-curl http://localhost:[port]/metrics
+curl https://erm.prod:5180/api/[service]/metrics
 ```
 
 ---

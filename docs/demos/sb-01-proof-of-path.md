@@ -51,6 +51,6 @@ After execution, verify the following:
 
 - **Logs**: The `event-harness` terminal should show validated CloudEvents for `breach-detected` and `decision-approved`.
 - **Audit**: The `audit-sink` terminal should show the events being persisted with consistent trace metadata.
-- **Observability**: Navigate to [Jaeger](http://localhost:16686) and search for the `trace_id` printed by the script to see the end-to-end span.
+- **Observability**: Navigate to [AI TRiSM Dashboard](https://erm.prod:5180/grafana/d/ai-risk-performance/) to see the end-to-end telemetry.
 - **Contract Integrity**: The script will fail if the payloads do not match the JSON Schemas in `core/specs`.
 - **Governance**: The mock `decision-approved` response includes the `sod_check_passed` flag, simulating the OPA policy engine evaluation.

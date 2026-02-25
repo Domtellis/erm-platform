@@ -29,7 +29,7 @@ This section validates the integration of Keycloak OIDC authentication.
 | BU Risk Owner | `bu-owner-01` | `password` | Approve High Severity |
 
 ### 3. Verification Steps
-1.  **Login**: Open `http://localhost:5180`. Click the "Sign In" button in the header.
+1.  **Login**: Open `https://erm.prod:5180`. Click the "Sign In" button in the header.
 2.  **Redirect**: You should be redirected to the Keycloak login page.
 3.  **Authenticate**: Use `site-user-01` / `password`.
 4.  **Session**: Upon success, you are redirected back to the portal. The header should show "site-user-01".
@@ -55,7 +55,7 @@ We have instrumented the backend services with OpenTelemetry to trace requests a
 2.  **Approve it**: Log in as `risk-lead-01` and approve the breach.
 
 ### 2. Visualize Traces
-1.  Open **Jaeger UI**: `http://localhost:16686`
+1.  Open **Jaeger UI**: `https://erm.prod:5180/grafana/` (or internal `http://localhost:16686` if tunnelled)
 2.  Select Service: `erm-monitoring-service`
 3.  Click **Find Traces**.
 4.  **Verify**: You should see a trace that spans:
@@ -100,7 +100,7 @@ As of February 9th, 2026, the complete "Walking Skeleton" of the ERM Platform is
 We have enabled the **Risk Assessment** and **Remediation Plan** domains.
 
 ### 1. Assess Risk
-1.  **Login**: `http://localhost:5180`.
+1.  **Login**: `https://erm.prod:5180`.
 2.  **User**: `risk-lead-01` / `password`.
 3.  **Navigate**: Go to **Monitoring & Breaches**.
 4.  **Action**: Find a breach and click **Assess Risk**.
@@ -200,7 +200,7 @@ echo '{"payload": {"title":"Test High Breach", "severity":"high", "detected_at":
 docker exec erm-mailpit wget -qO- http://localhost:8025/api/v1/messages
 # Result: [{"Subject":"[ERM] HIGH Breach Detected: Test High Breach (Email)", ...}]
 ```
-- **Access Mailpit UI**: `http://localhost:8025`
+- **Access Mailpit UI**: `https://erm.prod:5180/mail/`
 
 ### 2. Jira Integration
 Implemented `notification-service` to listen for `erm.remediation.plan-created.v1`.

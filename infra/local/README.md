@@ -37,12 +37,12 @@ docker-compose up -d --build
 - **Mailpit** (8025): Email testing
 
 ## Access Points
-- Web Portal: http://localhost:5180
-- Grafana Dashboard: http://localhost:3000 (admin/admin)
-- Prometheus: http://localhost:9090
-- Keycloak Admin: http://localhost:8080 (admin/admin)
-- Jaeger UI: http://localhost:16686
-- Mailpit UI: http://localhost:8025
+- Web Portal: https://erm.prod:5180
+- Grafana Dashboard: https://erm.prod:5180/grafana/
+- Prometheus: http://localhost:9090 (Internal only)
+- Keycloak Admin: https://erm.prod:5180/realms/erm-platform/account/
+- Jaeger UI: https://erm.prod:5180/grafana/ (or internal 16686)
+- Mailpit UI: https://erm.prod:5180/mail/
 
 ## Documentation
 - **[Observability Operations Guide](./OBSERVABILITY.md)** - Comprehensive guide for monitoring and troubleshooting

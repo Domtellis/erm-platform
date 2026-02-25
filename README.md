@@ -26,13 +26,13 @@ docker-compose -f docker-compose.prod.yml up -d --build
 ```
 
 ### 2. Access Points
-- **Web Portal**: [http://localhost:5180](http://localhost:5180)
-- **Grafana (General)**: [http://localhost:3000](http://localhost:3000)
-- **AI TRiSM Dashboard**: [http://localhost:3000/d/ai-risk-performance/](http://localhost:3000/d/ai-risk-performance/)
-- **Prometheus Metrics**: [http://localhost:9090](http://localhost:9090)
-- **Keycloak (Auth)**: [http://localhost:8080](http://localhost:8080)
-- **Mailpit (Email)**: [http://localhost:8025](http://localhost:8025)
-- **Jaeger (Traces)**: [http://localhost:16686](http://localhost:16686)
+- **Web Portal**: [https://erm.prod:5180](https://erm.prod:5180)
+- **Grafana (General)**: [https://erm.prod:5180/grafana/](https://erm.prod:5180/grafana/)
+- **AI TRiSM Dashboard**: [https://erm.prod:5180/grafana/d/ai-risk-performance/](https://erm.prod:5180/grafana/d/ai-risk-performance/)
+- **Keycloak (Auth)**: [https://erm.prod:5180/realms/erm-platform/account/](https://erm.prod:5180/realms/erm-platform/account/)
+- **Mailpit (Email)**: [https://erm.prod:5180/mail/](https://erm.prod:5180/mail/)
+- **Prometheus Metrics**: [http://localhost:9090](http://localhost:9090) *(Internal only)*
+- **Jaeger (Traces)**: [http://localhost:16686](http://localhost:16686) *(Internal only)*
 
 ### 3. Default Credentials
 | Role | Username | Password |

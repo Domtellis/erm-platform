@@ -64,7 +64,7 @@ This runbook defines procedures for responding to AI bias incidents - situations
    OR
    ```bash
    # Selective suspension (preferred)
-   curl -X POST http://localhost:4015/ai/config/suspend \
+   curl -X POST https://erm.prod:5180/api/ai/config/suspend \
      -H "Content-Type: application/json" \
      -d '{"breach_types": ["chemical_spill", "crane_operations"]}'
    ```
