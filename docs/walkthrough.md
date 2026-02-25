@@ -158,7 +158,7 @@ Implemented an **On-Demand Aggregation** engine in `audit-service`.
 
 **Verification:**
 ```bash
-wget -qO- http://localhost:4013/reports/trends
+wget -qO- https://erm.prod:5180/api/audit/reports/trends
 # Returns: [..., {"date":"2026-02-13","critical":0,"high":0,"medium":2,"low":0}, {"date":"2026-02-14","critical":0,"high":1,"medium":0,"low":0}]
 ```
 
@@ -177,7 +177,7 @@ wget -qO- http://localhost:4013/reports/trends
 
 **Verification:**
 ```bash
-wget -qO- http://localhost:4013/reports/burndown
+wget -qO- https://erm.prod:5180/api/audit/reports/burndown
 # Returns: [{"date":"2026-02-13","open":2}, {"date":"2026-02-14","open":2}]
 # Calculation:
 # Feb 13: +2 (New) = 2 Open
