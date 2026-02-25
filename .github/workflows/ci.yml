@@ -155,7 +155,7 @@ jobs:
           host: ${{ secrets.OCI_SERVER_IP }}
           username: ${{ secrets.OCI_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "infra,policy,observability"
+          source: "infra,policy,observability,web/portal/nginx.conf"
           target: "~/erm-platform"
 
       - name: Deploy via SSH
@@ -167,8 +167,8 @@ jobs:
           script: |
             cd ~/erm-platform
             
-            # Sync Server Firewall — include all portal + API + observability ports
-            sudo iptables -I INPUT 6 -m state --state NEW -p tcp --match multiport --dports 5180,3000,8080,16686,8025,4010,4011,4012,4013,4014 -j ACCEPT && sudo netfilter-persistent save
+            # Sync Server Firewall — ensure insertion at top to override REJECT rules
+            sudo iptables -I INPUT 1 -m state --state NEW -p tcp --match multiport --dports 5180,3000,8080,16686,8025,4010,4011,4012,4013,4014,4020 -j ACCEPT && sudo netfilter-persistent save
             
             # Login to GHCR
             echo ${{ secrets.GITHUB_TOKEN }} | sudo docker login ghcr.io -u ${{ github.actor }} --password-stdin
@@ -176,7 +176,7 @@ jobs:
             # Start the platform
             cd infra/local
             sudo docker-compose -f docker-compose.prod.yml pull
-            sudo docker-compose -f docker-compose.prod.yml up -d --remove-orphans
+            sudo docker-compose -f docker-compose.prod.yml up -d --force-recreate --remove-orphans
             
             # Ensure Keycloak SSL is disabled for HTTP deployments (idempotent)
             sleep 15
