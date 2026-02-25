@@ -9,6 +9,7 @@ The "Walking Skeleton" is **Fully Operational**. All core domains have been inte
 - **Decisioning**: Risk Assessment & Remediation Planning.
 - **Audit**: Immutable Event Log & Historical Reporting.
 - **Notifications**: Email Alerts (High/Critical) & Jira Integration.
+- **AI TRiSM**: 3-Tier Monitoring (FinOps, Safety, Performance) & Model Safety Guardrails.
 - **Observability**: Real-time Metrics Dashboard with Service Health Monitoring.
 
 ## 🚀 Quick Start
@@ -26,7 +27,8 @@ docker-compose -f docker-compose.prod.yml up -d --build
 
 ### 2. Access Points
 - **Web Portal**: [http://localhost:5180](http://localhost:5180)
-- **Grafana Dashboard**: [http://localhost:3000](http://localhost:3000) *(login: admin/admin)*
+- **Grafana (General)**: [http://localhost:3000](http://localhost:3000)
+- **AI TRiSM Dashboard**: [http://localhost:3000/d/ai-risk-performance/](http://localhost:3000/d/ai-risk-performance/)
 - **Prometheus Metrics**: [http://localhost:9090](http://localhost:9090)
 - **Keycloak (Auth)**: [http://localhost:8080](http://localhost:8080)
 - **Mailpit (Email)**: [http://localhost:8025](http://localhost:8025)
@@ -57,6 +59,7 @@ docker-compose -f docker-compose.prod.yml up -d --build
 - **Monitoring Service**: Ingestion & System of Record for Metric Breaches.
 - **Decisioning Service**: Governance orchestration, Risk Assessment, and Approvals.
 - **Audit Service**: Immutable event sinking and Reporting API.
+- **AI Risk Service**: AI/ML-assisted risk analysis featuring 2026 TRiSM standards.
 - **Notification Service**: Proactive alerting (Email) and Jira integration.
 
 ### Frontend
