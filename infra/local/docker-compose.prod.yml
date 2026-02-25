@@ -87,7 +87,7 @@ services:
       - GF_SECURITY_DISABLE_INITIAL_ADMIN_PASSWORD_CHG=true
       - GF_SECURITY_ALLOW_EMBEDDING=true
       - GF_USERS_ALLOW_SIGN_UP=false
-      - GF_SERVER_ROOT_URL=https://REDACTED_IP:5180/grafana/
+      - GF_SERVER_ROOT_URL=https://erm.prod:5180/grafana/
       - GF_SERVER_SERVE_FROM_SUB_PATH=true
     depends_on:
       - prometheus
@@ -148,6 +148,7 @@ services:
       MP_MAX_MESSAGES: 5000
       MP_SMTP_AUTH_ACCEPT_ANY: 1
       MP_SMTP_AUTH_ALLOW_INSECURE: 1
+      MP_WEBROOT: /mail
 
   # ==========================================
   # Application Services
@@ -160,7 +161,7 @@ services:
       NODE_ENV: production
       DATABASE_URL: postgresql://postgres:${DB_PASSWORD}@postgres:5432/monitoring?schema=monitoring
       KAFKA_BROKERS: redpanda:29092
-      KEYCLOAK_ISSUER_URL: https://REDACTED_IP:5180/realms/erm-platform
+      KEYCLOAK_ISSUER_URL: https://erm.prod:5180/realms/erm-platform
       KEYCLOAK_JWKS_URL: http://keycloak:8080/realms/erm-platform/protocol/openid-connect/certs
       OPA_URL: http://opa:8181/v1/data/erm/governance
       PORT: 4010
@@ -205,7 +206,7 @@ services:
       NODE_ENV: production
       DATABASE_URL: postgresql://postgres:${DB_PASSWORD}@postgres:5432/decisioning?schema=decisioning
       KAFKA_BROKERS: redpanda:29092
-      KEYCLOAK_ISSUER_URL: https://REDACTED_IP:5180/realms/erm-platform
+      KEYCLOAK_ISSUER_URL: https://erm.prod:5180/realms/erm-platform
       KEYCLOAK_JWKS_URL: http://keycloak:8080/realms/erm-platform/protocol/openid-connect/certs
       MONITORING_SERVICE_URL: http://monitoring-service:4010
       OPA_URL: http://opa:8181/v1/data/erm/governance
@@ -230,7 +231,7 @@ services:
       NODE_ENV: production
       DATABASE_URL: postgresql://postgres:${DB_PASSWORD}@postgres:5432/audit?schema=audit
       KAFKA_BROKERS: redpanda:29092
-      KEYCLOAK_ISSUER_URL: https://REDACTED_IP:5180/realms/erm-platform
+      KEYCLOAK_ISSUER_URL: https://erm.prod:5180/realms/erm-platform
       KEYCLOAK_JWKS_URL: http://keycloak:8080/realms/erm-platform/protocol/openid-connect/certs
       PORT: 4013
       OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318
@@ -254,7 +255,7 @@ services:
       PORT: 4014
       KAFKA_BROKERS: redpanda:29092
       DATABASE_URL: postgresql://postgres:${DB_PASSWORD}@postgres:5432/ai_risk?schema=ai_risk
-      KEYCLOAK_ISSUER_URL: https://REDACTED_IP:5180/realms/erm-platform
+      KEYCLOAK_ISSUER_URL: https://erm.prod:5180/realms/erm-platform
       KEYCLOAK_JWKS_URL: http://keycloak:8080/realms/erm-platform/protocol/openid-connect/certs
       GEMINI_API_KEY: REDACTED_GEMINI_KEY
       OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318

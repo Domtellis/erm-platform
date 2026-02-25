@@ -2,11 +2,11 @@ import sys
 import argparse
 import json
 import os
-import time
-from datetime import datetime, timedelta
+import subprocess
+from datetime import datetime, timedelta, timezone
 
 REGISTRY_PATH = os.path.join(os.path.dirname(__file__), 'models.json')
-REFRESH_INTERVAL_HOURS = 24
+REFRESH_INTERVAL_HOURS = 1 # Dynamic Quota Snapshot refresh
 
 def load_registry():
     if not os.path.exists(REGISTRY_PATH):
@@ -14,66 +14,152 @@ def load_registry():
     with open(REGISTRY_PATH, 'r') as f:
         return json.load(f)
 
-def check_for_updates():
+def trigger_shadow_sync():
+    """Launches sync-daemon.py in the background without blocking."""
+    daemon_path = os.path.join(os.path.dirname(__file__), 'sync-daemon.py')
+    try:
+        if os.name == 'nt': # Windows
+            subprocess.Popen([sys.executable, daemon_path], 
+                             creationflags=subprocess.CREATE_NO_WINDOW | subprocess.DETACHED_PROCESS)
+        else:
+            subprocess.Popen([sys.executable, daemon_path], 
+                             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True)
+    except:
+        pass
+
+def check_for_updates(registry):
     """
-    Simulates checking for a new version of the model registry.
-    In a real platform, this would fetch from a remote URL.
+    Checks if the registry is stale (> 24h) and triggers shadow sync.
     """
-    last_check_file = os.path.join(os.path.dirname(__file__), '.last_sync')
-    should_refresh = False
-    
-    if not os.path.exists(last_check_file):
-        should_refresh = True
-    else:
-        last_sync = os.path.getmtime(last_check_file)
-        if datetime.fromtimestamp(last_sync) < datetime.now() - timedelta(hours=REFRESH_INTERVAL_HOURS):
-            should_refresh = True
-            
-    if should_refresh:
-        # touch the sync file
-        with open(last_check_file, 'w') as f:
-            f.write(datetime.now().isoformat())
+    last_updated_str = registry.get('last_updated')
+    if not last_updated_str:
+        trigger_shadow_sync()
+        return True
+        
+    try:
+        # Handle ISO strings like 2026-02-24T22:13:33.112402Z
+        cleaned_time = last_updated_str.replace('Z', '')
+        last_updated = datetime.fromisoformat(cleaned_time)
+        if last_updated < datetime.now(timezone.utc) - timedelta(hours=REFRESH_INTERVAL_HOURS):
+            trigger_shadow_sync()
+            return True
+    except:
+        trigger_shadow_sync()
         return True
     return False
 
-def get_recommendation(task, registry):
+def get_recommendation(task, registry, critical=False):
     task = task.lower()
-    models = {m['id']: m for m in registry['models']}
+    models_list = registry['models']
+    models_dict = {m['id']: m for m in models_list}
     
-    # Priority Keywords Mapping
-    # Critical reasoning / Debugging
-    if any(k in task for k in ['bug', 'error', 'fails', 'crash', 'race condition', 'logic', 'why']):
-        # Escalate based on "Thinking" keywords
-        if 'security' in task or 'critical' in task:
-            return models.get('claude-sonnet-4-6-thinking', models['claude-sonnet-4-5-thinking'])
-        return models['claude-sonnet-4-5-thinking']
-        
-    # Architecture / High Context / Repository-wide
-    if any(k in task for k in ['architect', 'design', 'multi-service', 'system', 'structure', 'planning', 'repository', 'traceability']):
-        if 'critical' in task or 'legacy' in task:
-             return models.get('claude-opus-4-5-thinking', models['gemini-3-pro-high'])
-        return models['gemini-3-pro-high']
-        
-    # Complex Coding / Logic / Sub-system
-    if any(k in task for k in ['algorithm', 'refactor', 'optimization', 'performance', 'logic', 'module']):
-        return models['claude-sonnet-4-5']
-        
-    # Standard Development
-    if any(k in task for k in ['feature', 'test', 'api', 'service']):
-        return models['gemini-3-pro-low']
+    # helper for fallback
+    def find_fallback(current_id):
+        # Fallback priority: Elite -> Critical -> Advanced -> Enhanced -> Standard
+        tiers = ["Elite", "Critical", "Advanced", "Enhanced", "Standard"]
+        try:
+            current_tier = models_dict[current_id]['tier']
+            idx = tiers.index(current_tier)
+            for next_tier in tiers[idx+1:]:
+                for m in models_list:
+                    if m['tier'] == next_tier and m.get('quota', 1.0) > 0.15:
+                        return m
+        except:
+            pass
+        return models_dict.get('gemini-3-flash')
 
+    # --- LIFECYCLE-AWARE WEIGHTED SCORING ---
+    score = 0
+    factors = []
 
-    # Research
-    if any(k in task for k in ['research', 'explain', 'search', 'find']):
-        return models['gpt-oss-120b-medium']
+    # 1. Maintenance & Housekeeping (Strong Penalty)
+    maint_keys = ['cleanup', 'delete', 'remove', 'format', 'organize', 'formalize', 'temporary', 'unused', 'ledger', 'attribution', 'badges', 'clean']
+    for k in maint_keys:
+        if k in task:
+            score -= 20
+            factors.append(f"Maintenance ({k}): -20")
 
-    # Default to Flash for everything else (Quota safe)
-    return models['gemini-3-flash']
+    # 2. Product Feature Development (Low-Medium)
+    dev_keys = ['feature', 'test', 'api', 'service', 'frontend', 'ui', 'component', 'endpoint', 'controller']
+    for k in dev_keys:
+        if k in task:
+            score += 4
+            factors.append(f"Product Dev ({k}): +4")
+
+    # 3. Governance & Complex Logic (High)
+    logic_keys = ['algorithm', 'refactor', 'optimization', 'performance', 'logic', 'module', 'race condition', 'concurrency', 'governance', 'policy', 'opa', 'risk score']
+    for k in logic_keys:
+        if k in task:
+            score += 10
+            factors.append(f"Logic ({k}): +10")
+
+    # 4. Strategic Architecture (Critical)
+    arch_keys = ['architect', 'design', 'multi-service', 'system', 'structure', 'planning', 'repository', 'traceability', 'strategy', 'security', 'infrastructure', 'oci', 'redpanda', 'kafka', 'baseline']
+    for k in arch_keys:
+        if k in task:
+            score += 15
+            factors.append(f"Architecture ({k}): +15")
+
+    # 5. Diagnostic & Research
+    research_keys = ['research', 'explain', 'search', 'find', 'best practices', 'summarize', 'scan', 'debug', 'bug', 'error', 'fails']
+    for k in research_keys:
+        if k in task:
+            score += 5
+            factors.append(f"Research/Debug ({k}): +5")
+
+    # --- TIER MAPPING ---
+    # Score Thresholds:
+    # >= 25: Elite (Opus)
+    # >= 15: Critical (Sonnet)
+    # >= 8: Advanced (Pro High)
+    # >= 3: Enhanced (Pro Low)
+    # < 3: Standard (Flash)
+
+    if score >= 25:
+        primary = models_dict.get('claude-opus-4-6-thinking', models_dict.get('claude-sonnet-4-6-thinking'))
+    elif score >= 15:
+        primary = models_dict.get('claude-sonnet-4-6-thinking', models_dict.get('gemini-3-1-pro-high'))
+    elif score >= 8:
+        primary = models_dict.get('gemini-3-1-pro-high', models_dict.get('gemini-3-1-pro-low'))
+    elif score >= 3:
+        primary = models_dict.get('gemini-3-1-pro-low', models_dict.get('gemini-3-flash'))
+    else:
+        primary = models_dict.get('gemini-3-flash')
+
+    # Force Elite if --critical flag is used ON high-score tasks
+    if critical and score >= 15:
+        primary = models_dict.get('claude-opus-4-6-thinking', primary)
+
+    # Fail-safe
+    if not primary:
+        primary = models_dict.get('gemini-3-flash')
+
+    # --- DECISION ENGINE: Quota Check ---
+    quota = primary.get('quota', 1.0)
+    final_model = primary
+    fallback_active = False
+    intended_model_name = None
+
+    if quota < 0.15 and not critical:
+        fallback = find_fallback(primary['id'])
+        if fallback and fallback['id'] != primary['id']:
+            intended_model_name = primary['name']
+            final_model = fallback
+            fallback_active = True
+
+    return {
+        "model": final_model,
+        "is_fallback": fallback_active,
+        "score": score,
+        "factors": factors,
+        "intended": intended_model_name
+    }
 
 def main():
     parser = argparse.ArgumentParser(description="Advanced Antigravity Model Selection Engine")
     parser.add_argument("--task", required=False, help="Description of the task to perform")
     parser.add_argument("--sync", action="store_true", help="Force a refresh of the model registry")
+    parser.add_argument("--critical", action="store_true", help="Force primary model usage even if quota is low")
     args = parser.parse_args()
 
     registry = load_registry()
@@ -82,33 +168,49 @@ def main():
         sys.exit(1)
 
     if args.sync:
-        print("Forcing Model Registry sync...")
-        # In a real impl, this would download the latest models.json
-        print(f"Successfully synced registry (Version {registry['version']}).")
+        print("Explicitly triggering Model Registry sync...")
+        daemon_path = os.path.join(os.path.dirname(__file__), 'sync-daemon.py')
+        subprocess.run([sys.executable, daemon_path])
+        # Reload after sync to get new results
+        registry = load_registry()
+        print(f"Successfully synced registry (Version {registry.get('version', 'unknown')}).")
         sys.exit(0)
 
-    updated = check_for_updates()
-    if updated:
-        # Check against latest known version
-        latest_version = "1.1.0"
-        if registry['version'] < latest_version:
-             print(f"[UPDATE] New models detected! Please run --sync to update from {registry['version']} to {latest_version}.")
-        else:
-             print(f"[NOTE] Automated model check performed (Interval: {REFRESH_INTERVAL_HOURS}h). No new models found.")
+    # Shadow Sync (Auto-background)
+    if check_for_updates(registry):
+        print("[MODELOPS] Background sync initiated (Registry older than 24h).")
 
     if not args.task:
         parser.print_help()
         sys.exit(0)
 
-    rec = get_recommendation(args.task, registry)
+    result = get_recommendation(args.task, registry, critical=args.critical)
+    rec = result['model']
+    is_fallback = result['is_fallback']
+    score = result['score']
+    factors = result['factors']
+    intended = result['intended']
     
-    print("-" * 60)
-    print(f"RECOMMENDED MODEL : {rec['name']}")
+    # Model Attribution Output (Uniform Badge)
+    print("=" * 60)
+    print(f" MODEL IN USE: {rec['name']} ".center(60, "="))
+    print("=" * 60)
     print(f"TIER              : {rec['tier']}")
-    print(f"DESCRIPTION       : {rec['description']}")
     print(f"PLATFORM ID       : {rec['id']}")
+    print(f"QUOTA REMAINING   : {rec.get('quota', 1.0)*100:.1f}%")
+    if is_fallback:
+        print(f"STATUS            : GRACEFUL DEGRADATION ACTIVE (Intended: {intended})")
+    elif args.critical:
+        print(f"STATUS            : CRITICAL OVERRIDE (Quota Buffer Ignored)")
+    else:
+        print(f"STATUS            : OPTIMAL")
     print("-" * 60)
-    print(f"Quota Impact      : {'*' * rec['cost_rank']}")
+    print(f"TASK CONTEXT      : {args.task[:50]}{'...' if len(args.task) > 50 else ''}")
+    print(f"LIFECYCLE SCORE   : {score}")
+    print(f"ROUTING FACTORS   : {', '.join(factors)}")
+    print(f"QUOTA IMPACT      : {'*' * rec['cost_rank']}")
+    print("-" * 60)
+    print(f"DESCRIPTION       : {rec['description']}")
     print("-" * 60)
 
 if __name__ == "__main__":

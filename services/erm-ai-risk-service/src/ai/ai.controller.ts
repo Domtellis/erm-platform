@@ -16,7 +16,10 @@ export class AiController {
     async handleBreachDetected(@Payload() data: any) {
         this.logger.log(`Received raw Kafka data: ${JSON.stringify(data)}`);
         // If data is wrapped in a value property (common in some NestJS Kafka configs)
-        const payload = data.value || data;
+        const kafkaValue = data.value || data;
+        // The Outbox service nests the original payload inside a 'data' field
+        const payload = kafkaValue.data || kafkaValue;
+
         this.logger.log(`Extracted payload breach_case_id: ${payload.breach_case_id}`);
         await this.aiService.handleBreachDetected(payload);
     }

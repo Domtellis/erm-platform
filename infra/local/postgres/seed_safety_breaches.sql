@@ -23,6 +23,21 @@ VALUES (
     NOW() + INTERVAL '6 days'
 );
 
+INSERT INTO monitoring."Outbox" (id, type, payload, occurred_at)
+VALUES (
+    gen_random_uuid(),
+    'erm.monitoring.breach-detected.v1',
+    jsonb_build_object(
+        'breach_case_id', 'safe-001',
+        'bu_id', 'BU-PACIFIC',
+        'category', 'Safety',
+        'severity', 'critical',
+        'title', 'CRITICAL: High Wind Gusts at Quay 4',
+        'detected_at', NOW() - INTERVAL '30 minutes'
+    ),
+    NOW() - INTERVAL '30 minutes'
+);
+
 -- 2. Dangerous Stacking (Stability)
 INSERT INTO monitoring."BreachCase" (id, site_id, bu_id, title, metric_name, observed_value, severity, status, created_at, updated_at, triage_due_at, decision_due_at, closure_due_at)
 VALUES (
@@ -39,6 +54,21 @@ VALUES (
     NOW() - INTERVAL '1 hour',  -- Overdue Triage
     NOW() + INTERVAL '6 hours',
     NOW() + INTERVAL '6 days'
+);
+
+INSERT INTO monitoring."Outbox" (id, type, payload, occurred_at)
+VALUES (
+    gen_random_uuid(),
+    'erm.monitoring.breach-detected.v1',
+    jsonb_build_object(
+        'breach_case_id', 'safe-002',
+        'bu_id', 'BU-ATLANTIC',
+        'category', 'Safety',
+        'severity', 'high',
+        'title', 'Stack Height Exceedance (Block B)',
+        'detected_at', NOW() - INTERVAL '2 hours'
+    ),
+    NOW() - INTERVAL '2 hours'
 );
 
 -- 3. PM 2.5 Air Quality (Health)
@@ -59,8 +89,23 @@ VALUES (
     NOW() + INTERVAL '13 days'
 );
 
+INSERT INTO monitoring."Outbox" (id, type, payload, occurred_at)
+VALUES (
+    gen_random_uuid(),
+    'erm.monitoring.breach-detected.v1',
+    jsonb_build_object(
+        'breach_case_id', 'safe-003',
+        'bu_id', 'BU-PACIFIC',
+        'category', 'Safety',
+        'severity', 'medium',
+        'title', 'Air Quality Warning: Bulk Terminal',
+        'detected_at', NOW() - INTERVAL '15 minutes'
+    ),
+    NOW() - INTERVAL '15 minutes'
+);
+
 -- 4. Traffic Collision Risk (Vehicle Safety)
-INSERT INTO monitoring."BreachCase" (id, site_id, bu_id, title, metric_name, observed_value, severity, status, created_at, updated_at, triage_due_at, decision_due_at, closure_due_at)
+INSERT INTO monitoring."BreachCase" (id, site_id, bu_id, title, metric_name, observed_value, severity, status, created_at, updated_at, triage_due_at, decision_due_at, closure_due_at, closed_at)
 VALUES (
     'safe-004',
     'PORT-AUTO-03',
@@ -69,12 +114,41 @@ VALUES (
     'prox_alert_count',
     12,
     'low',
-    'open',
+    'closed',
     NOW() - INTERVAL '4 hours',
     NOW(),
     NOW() + INTERVAL '4 hours',
     NOW() + INTERVAL '44 hours',
-    NOW() + INTERVAL '29 days'
+    NOW() + INTERVAL '29 days',
+    NOW() - INTERVAL '10 minutes'
+);
+
+INSERT INTO monitoring."Outbox" (id, type, payload, occurred_at, processed_at)
+VALUES (
+    gen_random_uuid(),
+    'erm.monitoring.breach-detected.v1',
+    jsonb_build_object(
+        'breach_case_id', 'safe-004',
+        'bu_id', 'BU-ATLANTIC',
+        'category', 'Safety',
+        'severity', 'low',
+        'title', 'Proximity Alert Cluster: Zone D',
+        'detected_at', NOW() - INTERVAL '4 hours'
+    ),
+    NOW() - INTERVAL '4 hours',
+    NOW()
+);
+
+INSERT INTO monitoring."Outbox" (id, type, payload, occurred_at, processed_at)
+VALUES (
+    gen_random_uuid(),
+    'erm.monitoring.breach-closed.v1',
+    jsonb_build_object(
+        'breach_case_id', 'safe-004',
+        'closed_at', NOW() - INTERVAL '10 minutes'
+    ),
+    NOW() - INTERVAL '10 minutes',
+    NOW()
 );
 
 -- 5. Fatigue Index (Workforce Safety)
@@ -93,4 +167,19 @@ VALUES (
     NOW() + INTERVAL '3 hours',
     NOW() + INTERVAL '24 hours',
     NOW() + INTERVAL '14 days'
+);
+
+INSERT INTO monitoring."Outbox" (id, type, payload, occurred_at)
+VALUES (
+    gen_random_uuid(),
+    'erm.monitoring.breach-detected.v1',
+    jsonb_build_object(
+        'breach_case_id', 'safe-005',
+        'bu_id', 'BU-PACIFIC',
+        'category', 'Safety',
+        'severity', 'medium',
+        'title', 'Shift Fatigue Limit Approaching',
+        'detected_at', NOW()
+    ),
+    NOW()
 );

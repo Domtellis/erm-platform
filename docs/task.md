@@ -105,6 +105,7 @@
 - [x] **Infrastructure**: Fixed Grafana Downtime on OCI (Duplicate Jobs + Missing OTel Vars) <!-- id: 1305 -->
 - [x] **Infrastructure**: Standardized health probes using Blackbox + Swagger UI <!-- id: 1306 -->
 - [x] **Infrastructure**: Sync all fixes to OCI server <!-- id: 1307 -->
+- [x] **CI/CD**: Synchronized `package-lock.json` to resolve build failures <!-- id: 1308 -->
 - [x] **Migration Fix**: Applied schema changes via direct SQL migration (Prisma CLI version conflict) <!-- id: 1304 -->
 
 ## Phase 14: AI-Assisted Risk Assessment (Intelligence - SB-02)

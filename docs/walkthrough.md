@@ -8,6 +8,7 @@ The following foundational work was completed prior to the current verification 
 - **OTel Fixes**: Added missing `OTEL_EXPORTER_OTLP_ENDPOINT` and `OTEL_SERVICE_NAME` to ensure services export performance metrics.
 - **Prometheus Stability**: Pinned to `v2.54.1` to resolve query errors and removed duplicate job configurations.
 - **Standardized Probes**: Configured Blackbox exporter to use `/api` (Swagger UI) for a stable "UP" signal across all domain services.
+- **CI/CD Reliability**: Resolved a build failure caused by out-of-sync `package-lock.json` after manual `package.json` updates, ensuring future automated deployments are stable.
 
 ---
 

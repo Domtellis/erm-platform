@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { GeminiClient } from './gemini.client';
 import { OutboxService } from '../outbox/outbox.service';
@@ -8,6 +8,7 @@ import {
     assessmentModified,
     assessmentRejected,
     assessmentPending,
+    assessmentFailed,
 } from '../instrumentation';
 
 export interface BreachDetectedPayload {
@@ -23,7 +24,7 @@ export interface BreachDetectedPayload {
 }
 
 @Injectable()
-export class AiService {
+export class AiService implements OnModuleInit {
     private readonly logger = new Logger(AiService.name);
 
     constructor(
@@ -31,6 +32,15 @@ export class AiService {
         private readonly geminiClient: GeminiClient,
         private readonly outboxService: OutboxService,
     ) { }
+
+    async onModuleInit() {
+        // Initialize metrics to ensure they appear in Prometheus on startup
+        const labels = { model: this.geminiClient.modelVersion };
+        assessmentTotal.add(0, labels);
+        assessmentFailed.add(0, labels);
+        assessmentPending.add(0);
+        this.logger.log('AI TRiSM Metrics initialized');
+    }
 
     /**
      * Main entry point — called by the Kafka consumer when a breach is detected.
@@ -41,6 +51,9 @@ export class AiService {
         const { breach_case_id, bu_id, severity, title, metric_name, observed_value, threshold, site_id } = payload;
 
         this.logger.log(`Processing breach ${breach_case_id} for AI assessment | Type: ${typeof breach_case_id}`);
+
+        // Record initiation
+        assessmentTotal.add(1, { severity, model: this.geminiClient.modelVersion });
 
         // Skip if we already have an assessment for this breach (idempotency)
         const existing = await this.prisma.assessmentSuggestion.findUnique({
@@ -79,8 +92,7 @@ export class AiService {
                 },
             });
 
-            // Record metrics
-            assessmentTotal.add(1, { severity, model: this.geminiClient.modelVersion });
+            // Record success telemetry
             assessmentPending.add(1);
 
             // Publish assessment-created event via outbox
@@ -100,6 +112,7 @@ export class AiService {
             );
         } catch (err) {
             this.logger.error(`AI assessment failed for breach ${breach_case_id}: ${err.message}`);
+            assessmentFailed.add(1, { severity, model: this.geminiClient.modelVersion, reason: err.message });
 
             // Publish a failed event so downstream services know assessment is unavailable
             await this.outboxService.enqueue('erm.risk.assessment-failed.v1', {

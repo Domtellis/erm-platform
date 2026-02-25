@@ -1,20 +1,20 @@
-# Build is handled natively in CI to avoid QEMU slowness
-FROM node:20-slim
-
+# Build stage
+FROM node:20-slim AS builder
 WORKDIR /app
-
-# Install production dependencies only
-RUN apt-get update -y && apt-get install -y openssl
-
 COPY package*.json ./
-RUN npm install --omit=dev
+RUN npm install
+COPY . .
+RUN npx prisma generate --schema=./schema.prisma
+RUN npm run build
 
-# Copy natively built app and schema
-COPY ./dist ./dist
-COPY ./schema.prisma ./schema.prisma
+# Production stage
+FROM node:20-slim
+WORKDIR /app
+RUN apt-get update -y && apt-get install -y openssl
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/schema.prisma ./schema.prisma
 
 EXPOSE 4014
-
 CMD ["node", "dist/main"]
-
-

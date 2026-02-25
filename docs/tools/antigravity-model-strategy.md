@@ -7,23 +7,23 @@ This strategy document has been updated to reflect the specific 8-model catalog 
 | Platform Model Name | Intelligence Tier | Logical Cost | Ideal Use Case |
 | :--- | :--- | :---: | :--- |
 | **Gemini 3 Flash** | Standard | ⭐ | Routine edits, unit tests, CSS/HTML |
-| **Gemini 3 Pro (Low)** | Enhanced | ⭐⭐ | Feature development, API creation |
-| **Gemini 3 Pro (High)** | Advanced | ⭐⭐⭐ | Cross-file refactoring, large context |
+| **Gemini 3.1 Pro (Low)** | Enhanced | ⭐⭐ | Feature development, API creation |
+| **Gemini 3.1 Pro (High)** | Advanced | ⭐⭐⭐ | Cross-file refactoring, large context |
 | **GPT-OSS 120B (Medium)** | Research | ⭐⭐ | Documentation exploration, general R&D |
-| **Claude Sonnet 4.5** | Premium | ⭐⭐⭐⭐ | Complex algorithmic coding |
-| **Claude Sonnet 4.5 (Thinking)** | Critical | ⭐⭐⭐⭐⭐ | Deep debugging, logical analysis |
-| **Claude Sonnet 4.6 (Thinking)** | Critical+ | ⭐⭐⭐⭐⭐⭐ | Hardest logic puzzles, security audits |
-| **Claude Opus 4.5 (Thinking)**| Elite | ⭐⭐⭐⭐⭐⭐⭐| Critical architectural breakthroughs |
+| **Claude Sonnet 4.6 (Thinking)** | Critical | ⭐⭐⭐⭐⭐ | Deep debugging, logical analysis |
+| **Claude Opus 4.6 (Thinking)** | Elite | ⭐⭐⭐⭐⭐⭐ | Critical architectural breakthroughs |
 
-## Dynamic Model Registry
+## ModelOps & Quota Policies
 
-To ensure we never miss a new model or use a deprecated one, the Platform uses a **Self-Updating Registry** system.
+To ensure uninterrupted development during complex problem solving, the Platform employs automated Model Operations (ModelOps).
 
-### How it Works:
-1.  **Registry Source**: `tools/models.json` is the source of truth.
-2.  **Auto-Checks**: The `model-router.py` utility checks this registry before every recommendation.
-3.  **Platform Sync**: By default, the system checks for a newer version of the registry every **24 hours**.
-4.  **Manual Refresh**: You can force a refresh at any time via the `/select-model sync` command.
+### Shadow Sync (Auto-Refresh)
+The model registry automatically refreshes its "Ground Truth" status every 24 hours in a non-blocking background process. This ensures that any model provisioning changes in the Antigravity IDE are reflected without manual intervention.
+
+### Graceful Degradation (Fallback Engine)
+The recommendation engine monitors your remaining quota fraction for every model.
+- **Buffer Zone (15%)**: If the ideal model (e.g., Pro High) is below 15% quota, the router automatically "steps down" to the next best available tier (e.g., Pro Low) for routine tasks.
+- **Critical Override**: Use the `--critical` flag to bypass fallback and use the primary model even in the "Danger Zone" (<15%). This reserves the last 15% for your most important breakthroughs.
 
 ## Selection Logic: The "Why"
 

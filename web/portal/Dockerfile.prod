@@ -4,7 +4,7 @@ FROM nginx:alpine
 # Generate self-signed SSL cert with SAN (IP) — required by Chrome/Edge/Brave
 RUN apk add --no-cache openssl && \
     mkdir -p /etc/nginx/ssl && \
-    printf '[req]\ndistinguished_name=req_dn\nx509_extensions=v3\nprompt=no\n[req_dn]\nCN=erm-platform\n[v3]\nsubjectAltName=IP:REDACTED_IP,IP:127.0.0.1,DNS:localhost\n' > /tmp/cert.cfg && \
+    printf '[req]\ndistinguished_name=req_dn\nx509_extensions=v3\nprompt=no\n[req_dn]\nCN=erm-platform\n[v3]\nsubjectAltName=DNS:erm.prod,DNS:erm-platform,IP:REDACTED_IP,IP:127.0.0.1,DNS:localhost\n' > /tmp/cert.cfg && \
     openssl req -x509 -nodes -days 3650 -newkey rsa:2048 \
     -keyout /etc/nginx/ssl/key.pem \
     -out /etc/nginx/ssl/cert.pem \

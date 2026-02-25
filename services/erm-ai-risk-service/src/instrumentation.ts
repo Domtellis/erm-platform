@@ -53,6 +53,11 @@ export const assessmentTotal = meter.createCounter('ai.assessment.total', {
     description: 'Total AI risk assessments generated',
 });
 
+// Failed assessments
+export const assessmentFailed = meter.createCounter('ai.assessment.failed', {
+    description: 'Number of AI risk assessments that failed',
+});
+
 // Human feedback counters
 export const assessmentAccepted = meter.createCounter('ai.assessment.accepted', {
     description: 'AI assessments accepted by human reviewer',
@@ -74,4 +79,29 @@ export const assessmentPending = meter.createUpDownCounter('ai.assessment.pendin
 // Kafka events published
 export const kafkaPublishedCount = meter.createCounter('ai.kafka.published.count', {
     description: 'Number of events published to Kafka by the AI service',
+});
+
+// ─── AI TRiSM & FinOps Metrics (2026 Standards) ─────────────────────────────
+
+// Token usage (Prompt vs Completion)
+export const aiTokenUsage = meter.createCounter('ai.usage.tokens', {
+    description: 'Number of tokens consumed by the LLM',
+});
+
+// Estimated cost in USD (Based on model pricing)
+export const aiCostTotal = meter.createCounter('ai.usage.cost', {
+    description: 'Estimated cost of LLM usage in USD',
+});
+
+// Safety blocks by category
+export const aiSafetyBlockCount = meter.createCounter('ai.safety.block.count', {
+    description: 'Number of safety filter blocks by category',
+});
+
+// Groundedness score (0.0 - 1.0)
+export const aiGroundednessScore = meter.createHistogram('ai.quality.groundedness', {
+    description: 'Semantic groundedness score of the AI response',
+    advice: {
+        explicitBucketBoundaries: [0.1, 0.3, 0.5, 0.7, 0.8, 0.9, 0.95, 1.0],
+    },
 });

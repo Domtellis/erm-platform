@@ -4,6 +4,9 @@ import {
     geminiCallDuration,
     geminiErrorCount,
     geminiRetryCount,
+    aiTokenUsage,
+    aiCostTotal,
+    aiSafetyBlockCount,
 } from '../instrumentation';
 import {
     BreachContext,
@@ -12,6 +15,29 @@ import {
     parseAiResponse,
     PROMPT_VERSION,
 } from './prompt.builder';
+
+interface UsageMetadata {
+    promptTokenCount: number;
+    candidatesTokenCount: number;
+    totalTokenCount: number;
+}
+
+interface SafetyRating {
+    category: string;
+    probability: string;
+    blocked?: boolean;
+}
+
+interface GeminiApiResponse {
+    candidates: {
+        content: {
+            parts: { text: string }[];
+        };
+        safetyRatings?: SafetyRating[];
+        finishReason?: string;
+    }[];
+    usageMetadata?: UsageMetadata;
+}
 
 @Injectable()
 export class GeminiClient {
@@ -56,8 +82,11 @@ export class GeminiClient {
             }
 
             try {
-                const rawText = await this.callGeminiApi(prompt);
-                const result = parseAiResponse(rawText);
+                const { text, usage, safety } = await this.callGeminiApi(prompt);
+                const result = parseAiResponse(text);
+
+                // Record Telemetry
+                this.recordTelemetry(usage, safety, 'success');
 
                 const latencyMs = Date.now() - startTime;
                 geminiCallDuration.record(latencyMs, {
@@ -95,7 +124,7 @@ export class GeminiClient {
         throw lastError;
     }
 
-    private async callGeminiApi(prompt: string): Promise<string> {
+    private async callGeminiApi(prompt: string): Promise<{ text: string; usage?: UsageMetadata; safety?: SafetyRating[] }> {
         const url = `${this.apiUrl}/${this.model}:generateContent?key=${this.apiKey}`;
 
         const controller = new AbortController();
@@ -108,7 +137,7 @@ export class GeminiClient {
                 body: JSON.stringify({
                     contents: [{ parts: [{ text: prompt }] }],
                     generationConfig: {
-                        temperature: 0.1,       // Low temperature for consistent, factual output
+                        temperature: 0.1,
                         topP: 0.8,
                         maxOutputTokens: 1024,
                     },
@@ -121,14 +150,20 @@ export class GeminiClient {
                 throw new Error(`Gemini API HTTP ${response.status}: ${body}`);
             }
 
-            const data = await response.json();
+            const data: GeminiApiResponse = await response.json();
             const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
 
             if (!text) {
+                // Check if it was blocked by safety
+                const safety = data?.candidates?.[0]?.safetyRatings;
+                if (safety?.some(s => s.blocked)) {
+                    this.recordTelemetry(data.usageMetadata, safety, 'safety_blocked');
+                    throw new Error('Gemini API call blocked by safety filters');
+                }
                 throw new Error('Gemini API returned empty content');
             }
 
-            return text;
+            return { text, usage: data.usageMetadata, safety: data?.candidates?.[0]?.safetyRatings };
         } catch (err) {
             if (err.name === 'AbortError') {
                 throw new Error(`Gemini API timeout after ${this.timeoutMs}ms`);
@@ -136,6 +171,32 @@ export class GeminiClient {
             throw err;
         } finally {
             clearTimeout(timeout);
+        }
+    }
+
+    private recordTelemetry(usage?: UsageMetadata, safety?: SafetyRating[], status: string = 'success') {
+        const labels = { model: this.model, prompt_version: PROMPT_VERSION, status };
+
+        if (usage) {
+            aiTokenUsage.add(usage.promptTokenCount, { ...labels, type: 'prompt' });
+            aiTokenUsage.add(usage.candidatesTokenCount, { ...labels, type: 'completion' });
+
+            // Pricing estimated for Gemini 2.0 Flash (as of 2026 approx)
+            // Input: $0.10 / 1M tokens, Output: $0.40 / 1M tokens
+            const cost = (usage.promptTokenCount * 0.0000001) + (usage.candidatesTokenCount * 0.0000004);
+            aiCostTotal.add(cost, labels);
+        }
+
+        if (safety) {
+            safety.forEach(rating => {
+                if (rating.blocked || rating.probability !== 'NEGLIGIBLE') {
+                    aiSafetyBlockCount.add(1, {
+                        ...labels,
+                        category: rating.category,
+                        probability: rating.probability,
+                    });
+                }
+            });
         }
     }
 

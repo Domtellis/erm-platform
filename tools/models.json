@@ -1,62 +1,54 @@
 {
-    "version": "1.1.0",
-    "last_updated": "2026-02-24T06:50:00Z",
+    "version": "1.3.0",
+    "last_updated": "2026-02-25T10:34:07.753444+00:00Z",
     "models": [
         {
             "id": "gemini-3-flash",
             "name": "Gemini 3 Flash",
             "tier": "Standard",
             "cost_rank": 1,
-            "description": "Fast, low-quota usage for routine tasks, style updates, and boilerplate."
+            "description": "Fast, low-quota usage for routine tasks and documentation.",
+            "quota": 0.8
         },
         {
-            "id": "gemini-3-pro-low",
-            "name": "Gemini 3 Pro (Low)",
+            "id": "gemini-3-1-pro-low",
+            "name": "Gemini 3.1 Pro (Low)",
             "tier": "Enhanced",
             "cost_rank": 2,
-            "description": "Balanced for standard feature development and single-service refactoring."
+            "description": "Balanced for standard feature development.",
+            "quota": 1.0
         },
         {
-            "id": "gemini-3-pro-high",
-            "name": "Gemini 3 Pro (High)",
+            "id": "gemini-3-1-pro-high",
+            "name": "Gemini 3.1 Pro (High)",
             "tier": "Advanced",
             "cost_rank": 3,
-            "description": "High context window for architectural reviews and multi-service planning."
+            "description": "High context window for architectural reviews.",
+            "quota": 1.0
         },
         {
             "id": "gpt-oss-120b-medium",
             "name": "GPT-OSS 120B (Medium)",
             "tier": "Research",
             "cost_rank": 2,
-            "description": "Strong for open-ended research and documentation exploration."
-        },
-        {
-            "id": "claude-sonnet-4-5",
-            "name": "Claude Sonnet 4.5",
-            "tier": "Premium",
-            "cost_rank": 4,
-            "description": "High accuracy for complex coding tasks without explicit deep reasoning."
-        },
-        {
-            "id": "claude-sonnet-4-5-thinking",
-            "name": "Claude Sonnet 4.5 (Thinking)",
-            "tier": "Critical",
-            "cost_rank": 5,
-            "description": "For debugging complex bugs that require clear step-by-step logic."
+            "description": "Strong for open-ended research.",
+            "quota": 1.0
         },
         {
             "id": "claude-sonnet-4-6-thinking",
             "name": "Claude Sonnet 4.6 (Thinking)",
-            "tier": "Critical+",
+            "tier": "Critical",
             "cost_rank": 6,
-            "description": "Next-gen reasoning for the most difficult logical puzzles and security audits."
+            "description": "Deep reasoning for complex debugging.",
+            "quota": 1.0
         },
         {
-            "id": "claude-opus-4-5-thinking",
-            "name": "Claude Opus 4.5 (Thinking)",
+            "id": "claude-opus-4-6-thinking",
+            "name": "Claude Opus 4.6 (Thinking)",
             "tier": "Elite",
             "cost_rank": 7,
-            "description": "Maximum reasoning capability. Use only for project-critical architectural breakthroughs."
+            "description": "Maximum reasoning for critical architectural breakthroughs.",
+            "quota": 1.0
         }
     ]
 }
