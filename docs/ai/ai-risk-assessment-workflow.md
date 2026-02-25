@@ -80,5 +80,10 @@ The `AiService` embeds the following context in every request:
 ## 5. Escalation Path
 If the AI service is unavailable (e.g., API quota exceeded or network failure):
 1.  System alerts **Risk Lead** via internal dashboard.
-2.  Workflow reverts to **Manual Entry** mode automatically.
 3.  "AI Service Down" banner is displayed on the Decisioning Page.
+
+## 6. Monitoring & TRiSM Visibility
+The AI assessment pipeline is instrumented for **AI TRiSM (2026 Standards)**. 
+- **Dashboard**: [AI Risk Assessment Performance](https://erm.prod:5180/grafana/d/ai-risk-performance/)
+- **Golden Signals**: Real-time tracking of token cost, safety blocks, and human agreement rates.
+- **Bootstrapping**: Metrics are initialized to `0` on service startup via `OnModuleInit` to ensure continuous visibility even during low-traffic periods.

@@ -257,7 +257,7 @@ Open Policy Agent evaluates **Rego policies** for approval authorization. The `d
 | Jaeger (`:16686`) | Distributed trace visualization |
 | Prometheus (`:9090`) | Time-series metrics storage (**Pinned v2.54.1 for stability**) |
 | Blackbox Exporter (`:9115`) | Active health checking via `/api` (Swagger UI) probes |
-| Grafana (`:3000`) | Unified dashboards over Prometheus data |
+| Grafana (`:3000`) | Unified dashboards, including **AI TRiSM (2026)** framework |
 
 ---
 

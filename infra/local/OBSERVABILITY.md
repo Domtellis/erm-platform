@@ -15,8 +15,10 @@ The ERM Platform includes a comprehensive observability stack for monitoring sys
 ### Grafana (Dashboards)
 - **URL**: http://localhost:3000
 - **Default Credentials**: `admin` / `admin`
-- **Dashboard**: "ERM System Overview"
 - **Provisioning**: Auto-provisioned via `/infra/local/grafana/provisioning`
+- **Dashboards**: 
+  - "ERM System Overview": Infrastructure & API health.
+  - "AI Risk Assessment Performance": AI TRiSM & FinOps telemetry.
 
 ### Jaeger (Distributed Tracing)
 - **URL**: http://localhost:16686
@@ -47,6 +49,24 @@ Application services display real-time status indicators:
 - PostgreSQL, Kafka, Keycloak, OPA, Prometheus, Grafana, Jaeger, Mailpit
 - Status: 🟡 YELLOW "NO METRICS" (expected - these don't export Prometheus metrics)
 
+### AI TRiSM Monitoring (2026 Standards)
+The `ai-risk-service` provides deep visibility into the AI lifecycle via a 3-Tier framework:
+
+**Tier 1: High-Level Health**
+- **Total Assessments**: Volume of AI risk suggestions generated.
+- **AI Cost Burn**: Estimated USD spend based on token consumption (Input vs Output).
+- **Safety Blocks**: Count of responses blocked by provider safety filters.
+
+**Tier 2: Security & Quality**
+- **Validation Rate**: Groundedness and semantic quality scores.
+- **Human Agreement**: Rate at which AI suggestions are accepted vs modified.
+- **Policy Violations**: Categorization of safety hits (Harassment, Hatespeech, etc.).
+
+**Tier 3: Operational Telemetry**
+- **Gemini Latency**: p95/p50 response times for the LLM provider.
+- **Token Throughput**: Input vs Output tokens per second.
+- **Provider Reliability**: Rate of 429 (Quota) and 5xx (API) errors.
+
 ### Traffic & Performance Metrics
 - **Request Rate**: HTTP requests per minute (grouped by service)
 - **Average Latency**: Response time in milliseconds
@@ -60,10 +80,14 @@ Application Services → OTel Collector → Prometheus → Grafana
 ```
 
 ### Key Metrics
-Application services export OpenTelemetry HTTP metrics:
-- `http_client_duration_milliseconds_bucket` - Client request duration histogram
-- `http_server_duration_milliseconds_count` - Server request count
 - `http_server_duration_milliseconds_sum` - Server request duration sum
+
+### AI TRiSM Metrics
+- `ai_assessment_total` - Total assessments generated (counter).
+- `ai_usage_tokens_total` - Tokens consumed (prompt vs completion).
+- `ai_usage_cost_total` - Estimated USD cost (calculated in GeminiClient).
+- `ai_safety_block_count_total` - Safety filter hits by category.
+- `ai_gemini_call_duration_milliseconds` - Latency histogram.
 
 ### Label Handling
 **Important**: When services push metrics to OTel Collector, the original `job` label is renamed to `exported_job` when Prometheus scrapes. Dashboard queries use:
