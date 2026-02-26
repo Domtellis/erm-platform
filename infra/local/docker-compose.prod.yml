@@ -183,9 +183,9 @@ services:
     environment:
       NODE_ENV: production
       KAFKA_BROKERS: redpanda:29092
-      JIRA_URL: https://REDACTED_JIRA_DOMAIN
-      JIRA_USER: REDACTED_EMAIL
-      JIRA_TOKEN: REDACTED_JIRA_TOKEN
+      JIRA_URL: ${JIRA_URL}
+      JIRA_USER: ${JIRA_USER}
+      JIRA_TOKEN: ${JIRA_TOKEN}
       JIRA_PROJECT: SCRUM
       SMTP_HOST: mailpit
       SMTP_PORT: 1025

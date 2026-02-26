@@ -51,6 +51,9 @@ jobs:
           npm ci --include=dev
           make install
 
+      - name: Install Pact Linux Binary
+        run: npm install @pact-foundation/pact-core-linux-x64-glibc --no-save
+
       - name: Build Monorepo (Turbo)
         run: npm run build
 
