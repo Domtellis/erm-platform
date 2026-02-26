@@ -9,7 +9,8 @@
     "start:debug": "nest start --watch --debug",
     "start:prod": "node dist/main",
     "build": "nest build",
-    "test": "echo \"Error: no test specified\" && exit 0"
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "test": "jest --passWithNoTests"
   },
   "keywords": [],
   "author": "",
@@ -38,6 +39,11 @@
     "prisma": "^5.22.0",
     "ts-jest": "^29.4.6",
     "ts-node": "^10.9.2",
-    "typescript": "^5.9.3"
+    "eslint": "^8.42.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "prettier": "^3.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0"
   }
 }

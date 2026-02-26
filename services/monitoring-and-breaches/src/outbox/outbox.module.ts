@@ -1,8 +1,8 @@
-import { Module } from '@nestjs/common';
-import { OutboxService } from './outbox.service';
+import { Module } from "@nestjs/common";
+import { OutboxService } from "./outbox.service";
 
 @Module({
-    providers: [OutboxService],
-    exports: [OutboxService],
+  providers: [OutboxService],
+  exports: [OutboxService],
 })
-export class OutboxModule { }
+export class OutboxModule {}

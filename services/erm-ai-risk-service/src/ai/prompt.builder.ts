@@ -7,33 +7,34 @@
  * IMPORTANT: No PII is included in prompts. Only operational metrics are sent.
  */
 
-export const PROMPT_VERSION = 'v1.0';
+export const PROMPT_VERSION = "v1.0";
 
 export interface BreachContext {
-    breach_case_id: string;
-    metric_name: string;
-    observed_value: number;
-    threshold?: number;
-    severity: string;
-    site_id: string;
-    bu_id: string;
-    title: string;
+  breach_case_id: string;
+  metric_name: string;
+  observed_value: number;
+  threshold?: number;
+  severity: string;
+  site_id: string;
+  bu_id: string;
+  title: string;
 }
 
 export interface AiAssessmentResult {
-    impact: number;       // 1-5
-    likelihood: number;   // 1-5
-    risk_score: number;   // impact × likelihood
-    justification: string;
-    recommendations: string[];
+  impact: number; // 1-5
+  likelihood: number; // 1-5
+  risk_score: number; // impact × likelihood
+  justification: string;
+  recommendations: string[];
 }
 
 export function buildRiskAssessmentPrompt(ctx: BreachContext): string {
-    const thresholdLine = ctx.threshold != null
-        ? `Threshold: ${ctx.threshold}`
-        : 'Threshold: Not specified';
+  const thresholdLine =
+    ctx.threshold != null
+      ? `Threshold: ${ctx.threshold}`
+      : "Threshold: Not specified";
 
-    return `You are an expert occupational health and safety risk assessor trained in ISO 45001:2018.
+  return `You are an expert occupational health and safety risk assessor trained in ISO 45001:2018.
 
 A safety metric breach has been detected at a ports and terminals facility. Assess the risk using the ISO 45001 risk matrix.
 
@@ -79,36 +80,42 @@ Respond ONLY with valid JSON in this exact structure — no markdown, no explana
 }
 
 export function parseAiResponse(rawText: string): AiAssessmentResult {
-    // Strip markdown code fences if present (defensive parsing)
-    const cleaned = rawText
-        .replace(/^```json\s*/i, '')
-        .replace(/^```\s*/i, '')
-        .replace(/```\s*$/i, '')
-        .trim();
+  // Strip markdown code fences if present (defensive parsing)
+  const cleaned = rawText
+    .replace(/^```json\s*/i, "")
+    .replace(/^```\s*/i, "")
+    .replace(/```\s*$/i, "")
+    .trim();
 
-    const parsed = JSON.parse(cleaned);
+  const parsed = JSON.parse(cleaned);
 
-    const impact = Number(parsed.impact);
-    const likelihood = Number(parsed.likelihood);
+  const impact = Number(parsed.impact);
+  const likelihood = Number(parsed.likelihood);
 
-    if (!Number.isInteger(impact) || impact < 1 || impact > 5) {
-        throw new Error(`Invalid impact value: ${parsed.impact}`);
-    }
-    if (!Number.isInteger(likelihood) || likelihood < 1 || likelihood > 5) {
-        throw new Error(`Invalid likelihood value: ${parsed.likelihood}`);
-    }
-    if (typeof parsed.justification !== 'string' || parsed.justification.trim().length === 0) {
-        throw new Error('Missing or empty justification');
-    }
-    if (!Array.isArray(parsed.recommendations) || parsed.recommendations.length === 0) {
-        throw new Error('Missing or empty recommendations');
-    }
+  if (!Number.isInteger(impact) || impact < 1 || impact > 5) {
+    throw new Error(`Invalid impact value: ${parsed.impact}`);
+  }
+  if (!Number.isInteger(likelihood) || likelihood < 1 || likelihood > 5) {
+    throw new Error(`Invalid likelihood value: ${parsed.likelihood}`);
+  }
+  if (
+    typeof parsed.justification !== "string" ||
+    parsed.justification.trim().length === 0
+  ) {
+    throw new Error("Missing or empty justification");
+  }
+  if (
+    !Array.isArray(parsed.recommendations) ||
+    parsed.recommendations.length === 0
+  ) {
+    throw new Error("Missing or empty recommendations");
+  }
 
-    return {
-        impact,
-        likelihood,
-        risk_score: impact * likelihood,
-        justification: parsed.justification.trim(),
-        recommendations: parsed.recommendations.map((r: any) => String(r).trim()),
-    };
+  return {
+    impact,
+    likelihood,
+    risk_score: impact * likelihood,
+    justification: parsed.justification.trim(),
+    recommendations: parsed.recommendations.map((r: any) => String(r).trim()),
+  };
 }

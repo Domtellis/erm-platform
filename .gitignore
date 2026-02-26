@@ -48,3 +48,6 @@ tfplan
 
 # Github related for OCI, ssh keys, etc
 .ssh/
+
+# Turbo
+.turbo/
