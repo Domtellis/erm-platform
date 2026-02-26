@@ -66,15 +66,14 @@ jobs:
 
       - name: Pack Build Artifacts
         run: |
+          # Use tar to pack the actual built artifacts while preserving the full monorepo structure.
+          # We exclude node_modules to keep the artifact size manageable.
           tar -czf artifacts.tar.gz \
             package.json \
-            services/*/dist \
-            services/*/prisma \
-            services/*/schema.prisma \
-            services/*/migrations \
-            web/portal/dist \
-            web/portal/nginx.conf \
-            || echo "Some artifacts missing, continuing..."
+            services/ \
+            web/ \
+            --exclude="node_modules" \
+            --exclude=".git"
 
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
@@ -122,9 +121,10 @@ jobs:
 
       - name: Unpack Build Artifacts
         run: |
+          # Overwrite the checkout with the actual build artifacts (dist, prisma, etc.)
           tar -xzf artifacts.tar.gz
           echo "Verifying service dist layout..."
-          ls -d services/*/dist || echo "Warning: No dist folders found after unpack"
+          find services -name dist -type d
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
