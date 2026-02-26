@@ -24,9 +24,5 @@
         "ts-jest": "^29.1.5",
         "typescript": "^5.3.3"
     },
-    "optionalDependencies": {
-        "@pact-foundation/pact-core-linux-x64-glibc": "16.2.0",
-        "@pact-foundation/pact-core-windows-x64": "16.2.0"
-    },
     "packageManager": "npm@11.1.0"
 }

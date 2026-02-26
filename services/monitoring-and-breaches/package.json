@@ -1,7 +1,7 @@
 {
   "name": "monitoring-and-breaches",
   "version": "1.0.0",
-  "description": "",
+  "description": "ERM Monitoring and Breaches Service",
   "main": "index.js",
   "scripts": {
     "start": "nest start",
@@ -15,7 +15,7 @@
     "test": "jest --passWithNoTests"
   },
   "keywords": [],
-  "author": "",
+  "author": "Antigravity",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
@@ -52,7 +52,7 @@
     "@pact-foundation/pact": "^16.2.0",
     "prisma": "^5.22.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.9.3",
+    "typescript": "^5.3.3",
     "eslint": "^8.42.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.0",

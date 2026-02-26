@@ -1,7 +1,7 @@
 {
   "name": "appetite-and-criteria",
   "version": "1.0.0",
-  "description": "",
+  "description": "ERM Appetite and Criteria Service",
   "main": "index.js",
   "scripts": {
     "start": "nest start",
@@ -13,7 +13,7 @@
     "test": "jest --passWithNoTests"
   },
   "keywords": [],
-  "author": "",
+  "author": "Antigravity",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {

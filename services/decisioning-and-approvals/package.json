@@ -1,7 +1,7 @@
 {
   "name": "decisioning-and-approvals",
   "version": "1.0.0",
-  "description": "",
+  "description": "ERM Decisioning and Approvals Service",
   "main": "index.js",
   "scripts": {
     "start": "nest start",
