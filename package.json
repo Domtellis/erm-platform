@@ -16,6 +16,16 @@
         "turbo": "^2.0.0",
         "@nestjs/cli": "^11.0.0"
     },
-    "devDependencies": {},
+    "devDependencies": {
+        "@types/jest": "^29.5.14",
+        "@types/node": "^20.11.0",
+        "jest": "^29.7.0",
+        "ts-jest": "^29.1.5",
+        "typescript": "^5.3.3"
+    },
+    "optionalDependencies": {
+        "@pact-foundation/pact-core-linux-x64-glibc": "16.2.0",
+        "@pact-foundation/pact-core-windows-x64": "16.2.0"
+    },
     "packageManager": "npm@11.1.0"
 }
