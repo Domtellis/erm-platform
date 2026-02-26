@@ -1,28 +1,29 @@
-{
-    "name": "erm-platform-root",
-    "private": true,
-    "description": "Enterprise Risk Management Platform Monorepo Root",
-    "scripts": {
-        "build": "turbo run build",
-        "test": "turbo run test",
-        "lint": "turbo run lint",
-        "clean": "turbo run clean",
-        "install:binaries": "node scripts/install-pact.js"
-    },
-    "workspaces": [
-        "services/*",
-        "web/*"
-    ],
-    "dependencies": {
-        "turbo": "^2.0.0",
-        "@nestjs/cli": "^11.0.0"
-    },
-    "devDependencies": {
-        "@types/jest": "^29.5.14",
-        "@types/node": "^20.11.0",
-        "jest": "^29.7.0",
-        "ts-jest": "^29.1.5",
-        "typescript": "^5.3.3"
-    },
-    "packageManager": "npm@11.1.0"
+﻿{
+    "name":  "erm-platform-root",
+    "version":  "1.0.0",
+    "private":  true,
+    "description":  "Enterprise Risk Management Platform Monorepo Root",
+    "scripts":  {
+                    "build":  "turbo run build",
+                    "test":  "turbo run test",
+                    "lint":  "turbo run lint",
+                    "clean":  "turbo run clean",
+                    "install:binaries":  "node scripts/install-pact.js"
+                },
+    "workspaces":  [
+                       "services/*",
+                       "web/*"
+                   ],
+    "dependencies":  {
+                         "turbo":  "^2.0.0",
+                         "@nestjs/cli":  "^11.0.0"
+                     },
+    "devDependencies":  {
+                            "@types/jest":  "^29.5.14",
+                            "@types/node":  "^20.11.0",
+                            "jest":  "^29.7.0",
+                            "ts-jest":  "^29.1.5",
+                            "typescript":  "^5.3.3"
+                        },
+    "author":  "Antigravity"
 }

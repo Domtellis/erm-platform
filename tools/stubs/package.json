@@ -1,10 +1,12 @@
-{
-    "name": "erm-stubs",
-    "version": "1.0.0",
-    "scripts": {
-        "start": "npx @stoplight/prism-cli mock ../../specs/apis/monitoring.yaml -p 4010 & npx @stoplight/prism-cli mock ../../specs/apis/decisioning.yaml -p 4011 & npx @stoplight/prism-cli mock ../../specs/apis/appetite.yaml -p 4012"
-    },
-    "dependencies": {
-        "@stoplight/prism-cli": "^5.0.0"
-    }
+﻿{
+    "name":  "erm-stubs",
+    "version":  "1.0.0",
+    "scripts":  {
+                    "start":  "npx @stoplight/prism-cli mock ../../specs/apis/monitoring.yaml -p 4010 \u0026 npx @stoplight/prism-cli mock ../../specs/apis/decisioning.yaml -p 4011 \u0026 npx @stoplight/prism-cli mock ../../specs/apis/appetite.yaml -p 4012"
+                },
+    "dependencies":  {
+                         "@stoplight/prism-cli":  "^5.0.0"
+                     },
+    "author":  "Antigravity",
+    "description":  "ERM Platform Component"
 }
