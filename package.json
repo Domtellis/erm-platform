@@ -16,5 +16,6 @@
         "turbo": "^2.0.0",
         "@nestjs/cli": "^11.0.0"
     },
-    "devDependencies": {}
+    "devDependencies": {},
+    "packageManager": "npm@11.1.0"
 }
