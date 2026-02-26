@@ -31,11 +31,13 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Install Make (if needed)
-        run: sudo apt-get update && sudo apt-get install -y make
+      - name: Install dependencies
+        run: |
+          npm ci --include=dev
+          make install
 
       - name: Run schema validation + markdown lint + internal links + index check
-        run: make ci
+        run: make lint
 
       - name: External link check (Lychee)
         uses: lycheeverse/lychee-action@v2
