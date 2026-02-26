@@ -23,10 +23,8 @@
             ]
         }
     },
-    "exclude": [
-        "node_modules",
-        "test",
-        "dist",
-        "**/*.spec.ts"
+    "include": [
+        "src/**/*",
+        "test/**/*"
     ]
 }

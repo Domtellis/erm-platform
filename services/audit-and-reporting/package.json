@@ -8,7 +8,7 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --watch --debug",
     "start:prod": "node dist/main",
-    "build": "npx prisma generate --schema=./schema.prisma && nest build",
+    "build": "npx prisma generate --schema=./schema.prisma && nest build -p tsconfig.build.json",
     "doc:generate": "ts-node src/generate-openapi.ts",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest --passWithNoTests"
