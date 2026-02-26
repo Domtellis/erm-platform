@@ -69,12 +69,13 @@ jobs:
         with:
           name: dist-artifacts
           path: |
-            **/dist
-            **/prisma
-            **/schema.prisma
-            **/migrations
-            **/nginx.conf
-          # Ensure we exclude node_modules to keep artifact size small
+            package.json
+            services/*/dist/**
+            services/*/prisma/**
+            services/*/schema.prisma
+            services/*/migrations/**
+            web/portal/dist/**
+            web/portal/nginx.conf
           include-hidden-files: true
 
   package:
@@ -113,6 +114,11 @@ jobs:
         with:
           name: dist-artifacts
           path: .
+
+      - name: Debug Artifact Structure
+        run: |
+          echo "Checking downloaded artifact layout..."
+          ls -R services/appetite-and-criteria || echo "Path not found yet"
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
