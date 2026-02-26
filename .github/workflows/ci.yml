@@ -49,6 +49,7 @@ jobs:
         run: |
           npm install -g npm@latest
           npm ci --include=dev --legacy-peer-deps
+          npm run install:binaries
           make install
 
       - name: Build Monorepo (Turbo)
