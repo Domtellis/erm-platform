@@ -48,11 +48,8 @@ jobs:
       - name: Install dependencies
         run: |
           npm install -g npm@latest
-          npm ci --include=dev
+          npm ci --include=dev --legacy-peer-deps
           make install
-
-      - name: Install Pact Linux Binary
-        run: npm install @pact-foundation/pact-core-linux-x64-glibc --no-save
 
       - name: Build Monorepo (Turbo)
         run: npm run build
