@@ -69,13 +69,13 @@ jobs:
         with:
           name: dist-artifacts
           path: |
-            services/*/dist
-            services/*/prisma
-            services/*/schema.prisma
-            services/*/migrations
-            web/portal/dist
-            web/portal/nginx.conf
-          retention-days: 1
+            **/dist
+            **/prisma
+            **/schema.prisma
+            **/migrations
+            **/nginx.conf
+          # Ensure we exclude node_modules to keep artifact size small
+          include-hidden-files: true
 
   package:
     name: Build & Push
