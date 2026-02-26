@@ -4,9 +4,9 @@
     "private": true,
     "description": "Enterprise Risk Management Platform Monorepo Root",
     "scripts": {
-        "build": "turbo run build",
-        "test": "turbo run test",
-        "lint": "turbo run lint",
+        "build:all": "turbo run build",
+        "test:all": "turbo run test",
+        "lint:all": "turbo run lint",
         "clean": "turbo run clean",
         "install:binaries": "node scripts/install-pact.js"
     },

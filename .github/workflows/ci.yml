@@ -53,12 +53,12 @@ jobs:
           make install
 
       - name: Build Monorepo (Turbo)
-        run: npm run build
+        run: npx turbo build
 
       - name: Monorepo Audit (Lint + Test)
         run: |
-          npm run lint
-          npm run test
+          npx turbo lint
+          npx turbo test
 
       - name: Lowercase repository owner
         id: owner
