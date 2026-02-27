@@ -20,25 +20,25 @@ export class AuditService implements OnModuleInit, OnModuleDestroy {
     const kafka = new Kafka({
       clientId: "audit-service-sink",
       brokers: [
-        this.configService.get<string>("KAFKA_BROKERS", "redpanda:9092"),
+        this.configService.get<string>("KAFKA_BROKERS", "redpanda:29092"),
       ],
     });
     this.kafkaConsumer = kafka.consumer({
-      groupId: "erm-audit-production-group-v2",
+      groupId: "erm-audit-production-group-v3",
     });
   }
 
   async onModuleInit() {
     await this.kafkaConsumer.connect();
     await this.kafkaConsumer.subscribe({
-      topics: [/^erm\..*/],
+      topics: [/^erm[.-].*/],
       fromBeginning: true,
     });
     // Also subscribe to domain topics if needed, or use a pattern that matches both
     // For now, enforcing the shared topic pattern
 
     this.logger.log(
-      "Audit Sink Consumer connected and subscribed to: erm-audit-events",
+      "Audit Sink Consumer connected and subscribed to patterns: erm.*",
     );
 
     await this.kafkaConsumer.run({

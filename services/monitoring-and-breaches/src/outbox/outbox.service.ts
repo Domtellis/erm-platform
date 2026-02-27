@@ -21,7 +21,7 @@ export class OutboxService implements OnModuleInit, OnModuleDestroy {
     const kafka = new Kafka({
       clientId: "monitoring-outbox-relay",
       brokers: [
-        this.configService.get<string>("KAFKA_BROKERS", "localhost:9092"),
+        this.configService.get<string>("KAFKA_BROKERS", "redpanda:29092"),
       ],
     });
     this.kafkaProducer = kafka.producer();
@@ -54,7 +54,7 @@ export class OutboxService implements OnModuleInit, OnModuleDestroy {
 
       for (const event of pendingEvents) {
         await this.kafkaProducer.send({
-          topic: "erm-audit-events", // Default topic for PoPath
+          topic: event.type, // Use event type as topic for granular routing
           messages: [
             {
               key: event.id,

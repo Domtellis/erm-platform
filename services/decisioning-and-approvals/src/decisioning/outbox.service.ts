@@ -21,7 +21,7 @@ export class OutboxService implements OnModuleInit, OnModuleDestroy {
     const kafka = new Kafka({
       clientId: "outbox-relay-decisioning",
       brokers: [
-        this.configService.get<string>("KAFKA_BROKERS", "localhost:9092"),
+        this.configService.get<string>("KAFKA_BROKERS", "redpanda:29092"),
       ],
     });
     this.producer = kafka.producer();
