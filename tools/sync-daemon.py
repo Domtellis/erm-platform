@@ -6,12 +6,11 @@ import sys
 from datetime import datetime, timezone
 
 MODELS_PATH = os.path.join(os.path.dirname(__file__), 'models.json')
-LAST_SYNC_PATH = os.path.join(os.path.dirname(__file__), '.last_sync')
 
 def get_session_info():
-    """Dynamically discover the language server PID, port, and token."""
+    """Dynamically discover the language server PID and token."""
     try:
-        # 1. Get PID and Command Line from wmic
+        # Get PID and Command Line from wmic
         cmd_wmic = 'wmic process where "name=\'language_server_windows_x64.exe\'" get processid,commandline /format:list'
         output_wmic = subprocess.check_output(cmd_wmic, shell=True).decode()
         
@@ -24,19 +23,15 @@ def get_session_info():
         pid = pid_match.group(1)
         token = token_match.group(1)
         
-        # 2. Get listening ports for this PID
-        cmd_netstat = f'netstat -ano | findstr {pid} | findstr LISTENING'
+        # Get listening ports for this PID
+        cmd_netstat = f'netstat -ano | findstr {pid}'
         output_netstat = subprocess.check_output(cmd_netstat, shell=True).decode()
         
-        # We usually want the first local address port (often HTTPS)
-        # Pattern: TCP 127.0.0.1:PORT ... LISTENING PID
         ports = re.findall(rf'127\.0\.0\.1:(\d+).+LISTENING\s+{pid}', output_netstat)
         
         if not ports:
             return None
             
-        # Try finding a port that responds to HTTPS (port 60483 was working in tests)
-        # We'll just return the list and try them in order
         return {
             "ports": ports,
             "token": token
@@ -53,10 +48,10 @@ def sync():
     
     request_data = '{"metadata": {"ideName": "antigravity", "extensionName": "antigravity", "locale": "en"}}'
     
-    # Try discovered ports
     success = False
     for port in session['ports']:
-        url = f"https://127.0.0.1:{port}/exa.language_server_pb.LanguageServerService/GetUserStatus"
+        # Try HTTP first as it's the more common internal protocol for this service
+        url = f"http://127.0.0.1:{port}/exa.language_server_pb.LanguageServerService/GetUserStatus"
         
         try:
             with open('temp_req.json', 'w') as f:
@@ -67,13 +62,13 @@ def sync():
                 '-H', 'Content-Type: application/json',
                 '-H', 'Connect-Protocol-Version: 1',
                 '-H', f'X-Codeium-Csrf-Token: {session["token"]}',
-                '-d', '@temp_req.json',
+                '-T', 'temp_req.json',
                 url
             ]
             
             response_json = subprocess.check_output(cmd).decode()
             if "userStatus" not in response_json:
-                continue # Try next port
+                continue
                 
             data = json.loads(response_json)
             
@@ -91,18 +86,19 @@ def sync():
                         api_data = api_models[m['name']]
                         quota_info = api_data.get('quotaInfo')
                         if quota_info:
-                            m['quota'] = float(quota_info.get('remainingFraction', 1.0))
+                            fraction = quota_info.get('remainingFraction')
+                            # If fraction is None, it means 0 for reasoning models
+                            m['quota'] = float(fraction) if fraction is not None else 0.0
                         else:
-                            m['quota'] = 1.0 # Default to 1.0 if no quota info (infinite)
+                            # No quota info at all (like for reasoning models) should be zero if it's not a standard model
+                            # Actually, looking at debug results, Gemini Flash returns 1, others returned None
+                            m['quota'] = 0.0 if "Thinking" in m['name'] or "GPT-OSS" in m['name'] else 1.0
                 
-            registry['last_updated'] = datetime.now(timezone.utc).isoformat() + 'Z'
-            
-            with open(MODELS_PATH, 'w') as f:
-                json.dump(registry, f, indent=4)
-            
-            with open(LAST_SYNC_PATH, 'w') as f:
-                f.write(datetime.now(timezone.utc).isoformat())
+                registry['last_updated'] = datetime.now(timezone.utc).isoformat() + 'Z'
                 
+                with open(MODELS_PATH, 'w') as f:
+                    json.dump(registry, f, indent=4)
+                    
                 print(f"Successfully synced via port {port}")
                 success = True
                 break
