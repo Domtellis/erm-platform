@@ -31,7 +31,7 @@ export class AiService implements OnModuleInit {
     private readonly prisma: PrismaService,
     private readonly geminiClient: GeminiClient,
     private readonly outboxService: OutboxService,
-  ) {}
+  ) { }
 
   async onModuleInit() {
     // Initialize metrics to ensure they appear in Prometheus on startup
@@ -64,7 +64,11 @@ export class AiService implements OnModuleInit {
     );
 
     // Record initiation
-    assessmentTotal.add(1, { severity, model: this.geminiClient.modelVersion });
+    assessmentTotal.add(1, {
+      severity,
+      site_id: site_id || "unknown",
+      model: this.geminiClient.modelVersion,
+    });
 
     // Skip if we already have an assessment for this breach (idempotency)
     const existing = await this.prisma.assessmentSuggestion.findUnique({
@@ -121,7 +125,7 @@ export class AiService implements OnModuleInit {
 
       this.logger.log(
         `AI assessment created for breach ${breach_case_id} | ` +
-          `impact=${result.impact} likelihood=${result.likelihood} risk_score=${result.risk_score}`,
+        `impact=${result.impact} likelihood=${result.likelihood} risk_score=${result.risk_score}`,
       );
     } catch (err) {
       this.logger.error(
@@ -129,6 +133,7 @@ export class AiService implements OnModuleInit {
       );
       assessmentFailed.add(1, {
         severity,
+        site_id: site_id || "unknown",
         model: this.geminiClient.modelVersion,
         reason: err.message,
       });

@@ -7,7 +7,7 @@ import { context, propagation } from "@opentelemetry/api";
 export class MonitoringService {
   private readonly logger = new Logger(MonitoringService.name);
 
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async submitBreach(dto: CreateBreachSubmissionDto) {
     this.logger.log(`Processing breach submission: ${dto.title}`);
@@ -47,8 +47,12 @@ export class MonitoringService {
             category: dto.category,
             severity: breachCase.severity,
             title: breachCase.title,
+            site_id: breachCase.site_id,
+            metric_name: breachCase.metric_name,
+            observed_value: breachCase.observed_value,
+            threshold: dto.threshold, // Original threshold from DTO
             detected_at: breachCase.created_at,
-            triage_due_at: breachCase.triage_due_at, // Include in payload for downstream?
+            triage_due_at: breachCase.triage_due_at,
           },
           trace_context: carrier as any, // Save trace context
         },

@@ -53,28 +53,33 @@ export class OutboxService implements OnModuleInit, OnModuleDestroy {
       this.logger.log(`Relaying ${pendingEvents.length} events to Kafka...`);
 
       for (const event of pendingEvents) {
-        await this.kafkaProducer.send({
-          topic: event.type, // Use event type as topic for granular routing
-          messages: [
-            {
-              key: event.id,
-              value: JSON.stringify({
-                id: event.id,
-                time: event.occurred_at,
-                type: event.type,
-                data: event.payload,
-                source: "/services/monitoring-and-breaches",
-                specversion: "1.0",
-              }),
-            },
-          ],
-        });
+        try {
+          await this.kafkaProducer.send({
+            topic: event.type, // Use event type as topic for granular routing
+            messages: [
+              {
+                key: event.id,
+                value: JSON.stringify({
+                  id: event.id,
+                  time: event.occurred_at,
+                  type: event.type,
+                  data: event.payload,
+                  source: "/services/monitoring-and-breaches",
+                  specversion: "1.0",
+                }),
+              },
+            ],
+          });
 
-        // Mark as processed in the same DB context
-        await this.prisma.outbox.update({
-          where: { id: event.id },
-          data: { processed_at: new Date() },
-        });
+          // Mark as processed in the same DB context
+          await this.prisma.outbox.update({
+            where: { id: event.id },
+            data: { processed_at: new Date() },
+          });
+        } catch (error) {
+          this.logger.error(`Error relaying event ${event.id}:`, error);
+          // Optional: Increment retry count or mark as failed if multiple attempts occur
+        }
       }
     } catch (error) {
       this.logger.error("Error in Outbox Relay:", error);

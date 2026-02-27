@@ -35,4 +35,8 @@ export class CreateBreachSubmissionDto {
   @IsString()
   @IsOptional()
   severity?: string;
+
+  @ApiProperty({ example: 45.0, required: false })
+  @IsOptional()
+  threshold?: number;
 }
