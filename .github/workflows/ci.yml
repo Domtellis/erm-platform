@@ -53,7 +53,7 @@ jobs:
           make install
 
       - name: Build Monorepo (Turbo)
-        run: npx turbo run build
+        run: npx turbo run build --force
 
       - name: Verify Build Artifacts
         run: |
