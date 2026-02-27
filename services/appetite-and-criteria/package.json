@@ -1,48 +1,46 @@
-﻿{
-    "name":  "appetite-and-criteria",
-    "version":  "1.0.0",
-    "description":  "ERM Appetite and Criteria Service",
-    "main":  "index.js",
-    "scripts":  {
-                    "start":  "nest start",
-                    "start:dev":  "nest start --watch",
-                    "start:debug":  "nest start --watch --debug",
-                    "start:prod":  "node dist/main",
-                    "build":  "npx prisma generate --schema=./schema.prisma && npx nest build -p tsconfig.build.json",
-                    "lint":  "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-                    "test":  "jest --passWithNoTests"
-                },
-    "keywords":  [
-
-                 ],
-    "author":  "Antigravity",
-    "license":  "ISC",
-    "type":  "commonjs",
-    "dependencies":  {
-                         "@nestjs/common":  "^11.1.13",
-                         "@nestjs/config":  "^4.0.3",
-                         "@nestjs/core":  "^11.1.13",
-                         "@nestjs/platform-express":  "^11.1.13",
-                         "@nestjs/swagger":  "^11.2.6",
-                         "@prisma/client":  "^5.22.0",
-                         "class-transformer":  "^0.5.1",
-                         "class-validator":  "^0.14.3",
-                         "cloudevents":  "^10.0.0",
-                         "kafkajs":  "^2.2.4",
-                         "reflect-metadata":  "^0.2.2",
-                         "rxjs":  "^7.8.1"
-                     },
-    "devDependencies":  {
-                            "@nestjs/cli":  "^11.0.16",
-                            "@types/express":  "^5.0.6",
-                            "@types/node":  "^25.2.2",
-                            "prisma":  "^5.22.0",
-                            "ts-node":  "^10.9.2",
-                            "eslint":  "^8.42.0",
-                            "eslint-config-prettier":  "^9.0.0",
-                            "eslint-plugin-prettier":  "^5.0.0",
-                            "prettier":  "^3.0.0",
-                            "@typescript-eslint/eslint-plugin":  "^6.0.0",
-                            "@typescript-eslint/parser":  "^6.0.0"
-                        }
+{
+    "name": "appetite-and-criteria",
+    "version": "1.0.0",
+    "description": "ERM Appetite and Criteria Service",
+    "main": "index.js",
+    "scripts": {
+        "start": "nest start",
+        "start:dev": "nest start --watch",
+        "start:debug": "nest start --watch --debug",
+        "start:prod": "node dist/main",
+        "build": "npx prisma generate --schema=./schema.prisma && npx nest build -p tsconfig.build.json",
+        "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+        "test": "jest --passWithNoTests"
+    },
+    "keywords": [],
+    "author": "Antigravity",
+    "license": "ISC",
+    "type": "commonjs",
+    "dependencies": {
+        "@nestjs/common": "^11.1.13",
+        "@nestjs/config": "^4.0.3",
+        "@nestjs/core": "^11.1.13",
+        "@nestjs/platform-express": "^11.1.13",
+        "@nestjs/swagger": "^11.2.6",
+        "@prisma/client": "^5.22.0",
+        "class-transformer": "^0.5.1",
+        "class-validator": "^0.14.3",
+        "cloudevents": "^10.0.0",
+        "kafkajs": "^2.2.4",
+        "reflect-metadata": "^0.2.2",
+        "rxjs": "^7.8.1"
+    },
+    "devDependencies": {
+        "@nestjs/cli": "^11.0.16",
+        "@types/express": "^5.0.6",
+        "@types/node": "^25.2.2",
+        "prisma": "^5.22.0",
+        "ts-node": "^10.9.2",
+        "eslint": "^8.42.0",
+        "eslint-config-prettier": "^9.0.0",
+        "eslint-plugin-prettier": "^5.0.0",
+        "prettier": "^3.0.0",
+        "@typescript-eslint/eslint-plugin": "^6.0.0",
+        "@typescript-eslint/parser": "^6.0.0"
+    }
 }
