@@ -66,14 +66,15 @@ jobs:
 
       - name: Pack Build Artifacts
         run: |
-          # Use tar to pack the actual built artifacts while preserving the full monorepo structure.
-          # We exclude node_modules to keep the artifact size manageable.
           tar -czf artifacts.tar.gz \
             --exclude="node_modules" \
             --exclude=".git" \
-            package.json \
-            services/ \
-            web/
+            ./package.json \
+            ./services \
+            ./web
+
+      - name: Audit Pack Contents
+        run: tar -tvf artifacts.tar.gz | head -n 50
 
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
@@ -121,10 +122,14 @@ jobs:
 
       - name: Unpack Build Artifacts
         run: |
-          # Overwrite the checkout with the actual build artifacts (dist, prisma, etc.)
-          tar -xzf artifacts.tar.gz
-          echo "Verifying service dist layout..."
-          find services -name dist -type d
+          tar -xzf artifacts.tar.gz -C .
+          echo "Verifying monorepo layout..."
+          find services -name dist -type d -maxdepth 3
+
+      - name: Audit Docker Context
+        run: |
+          echo "Listing files in context: ./${{ matrix.path }}"
+          ls -la ./${{ matrix.path }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
