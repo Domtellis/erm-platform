@@ -69,11 +69,11 @@ jobs:
           # Use tar to pack the actual built artifacts while preserving the full monorepo structure.
           # We exclude node_modules to keep the artifact size manageable.
           tar -czf artifacts.tar.gz \
+            --exclude="node_modules" \
+            --exclude=".git" \
             package.json \
             services/ \
-            web/ \
-            --exclude="node_modules" \
-            --exclude=".git"
+            web/
 
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
