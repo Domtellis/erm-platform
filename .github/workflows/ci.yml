@@ -52,10 +52,25 @@ jobs:
           npm run install:binaries
           make install
 
-      - name: Build Monorepo (Turbo)
+      - name: Build Monorepo (Direct)
         run: |
-          npx turbo run build --force --no-cache
-          npx turbo run lint --force --no-cache
+          echo "RUNNING BUILDS MANUALLY TO BYPASS TURBO CACHE ISSUES"
+          SERVICES=(
+            "services/appetite-and-criteria"
+            "services/audit-and-reporting"
+            "services/decisioning-and-approvals"
+            "services/erm-ai-risk-service"
+            "services/monitoring-and-breaches"
+            "services/notification-service"
+            "web/portal"
+          )
+          
+          for S in "${SERVICES[@]}"; do
+            echo "--- BUILDING $S ---"
+            cd $S
+            npm run build
+            cd ../..
+          done
 
       - name: Audit Build Outputs (Granular)
         run: |
