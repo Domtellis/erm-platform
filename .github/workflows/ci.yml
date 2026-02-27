@@ -62,6 +62,10 @@ jobs:
           find services web -name prisma -type d
           find services web -name migrations -type d
 
+      - name: Lowercase repository owner
+        id: owner
+        run: echo "owner=${GITHUB_REPOSITORY_OWNER,,}" >> $GITHUB_OUTPUT
+
       - name: Pack Build Artifacts
         run: |
           # Create a surgical list of files to pack to avoid bloat and corruption
