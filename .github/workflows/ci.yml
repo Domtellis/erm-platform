@@ -57,33 +57,48 @@ jobs:
           npx turbo run build --force --no-cache
           npx turbo run lint --force --no-cache
 
-      - name: Verify & Panic (Mandatory Build Check)
+      - name: Audit Build Outputs (Granular)
         run: |
-          echo "DUMPING FILE TREE FOR AUDIT..."
-          find services web -maxdepth 3 -not -path '*/node_modules*'
+          SERVICES=(
+            "services/appetite-and-criteria"
+            "services/audit-and-reporting"
+            "services/decisioning-and-approvals"
+            "services/erm-ai-risk-service"
+            "services/monitoring-and-breaches"
+            "services/notification-service"
+            "web/portal"
+          )
           
-          echo "CHECKING FOR DIST FOLDERS..."
-          DIST_COUNT=$(find services web -name dist -type d | wc -l)
-          if [ "$DIST_COUNT" -eq 0 ]; then
-            echo "::error::FATAL: No dist folders found after build! Build failed silently."
+          FAILED=0
+          for S in "${SERVICES[@]}"; do
+            if [ ! -d "$S/dist" ]; then
+              echo "::error::MISSING DIST: $S/dist not found!"
+              FAILED=1
+            else
+              echo "OK: $S/dist exists"
+            fi
+          done
+          
+          if [ $FAILED -ne 0 ]; then
+            echo "FATAL: One or more services failed to build dist folders."
             exit 1
           fi
-          echo "Found $DIST_COUNT dist folders. Proceeding to pack."
 
-      - name: Pack Build Artifacts
+      - name: Pack Build Artifacts (Total Capture)
         run: |
-          # Create a surgical list of files to pack
-          find services web -name "dist" -type d > files.txt
-          find services web -name "prisma" -type d >> files.txt
-          find services web -name "migrations" -type d >> files.txt
-          find services web -name "Dockerfile.prod" >> files.txt
-          find services web -name "schema.prisma" >> files.txt
-          find services web -name "nginx.conf" >> files.txt
-          echo "package.json" >> files.txt
-          
-          echo "Packing the following verified files:"
-          cat files.txt
-          tar -czf artifacts.tar.gz -T files.txt
+          # Simple, robust capture of all relevant folders
+          # We exclude node_modules to keep it small, but capture everything else
+          tar -czf artifacts.tar.gz \
+            services/*/dist \
+            services/*/prisma \
+            services/*/migrations \
+            services/*/Dockerfile.prod \
+            services/*/schema.prisma \
+            services/*/package.json \
+            web/*/dist \
+            web/*/Dockerfile.prod \
+            web/*/package.json \
+            package.json
 
       - name: Audit Pack Contents
         run: tar -tvf artifacts.tar.gz | head -n 50
@@ -139,8 +154,8 @@ jobs:
       - name: Unpack Build Artifacts
         run: |
           tar -xzf artifacts.tar.gz -C .
-          echo "Verifying monorepo layout..."
-          ls -R services/*/dist || echo "DIST NOT FOUND IN UNPACK"
+          echo "Verifying unpack results for ${{ matrix.path }}..."
+          ls -R ${{ matrix.path }}/dist || echo "DIST STILL MISSING IN UNPACK"
 
       - name: Audit Docker Context
         run: |
