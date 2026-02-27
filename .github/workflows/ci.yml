@@ -53,22 +53,26 @@ jobs:
           make install
 
       - name: Build Monorepo (Turbo)
-        run: npx turbo run build --force
-
-      - name: Verify Build Artifacts
         run: |
-          echo "Verifying build outputs..."
-          find services web -name dist -type d
-          find services web -name prisma -type d
-          find services web -name migrations -type d
+          npx turbo run build --force --no-cache
+          npx turbo run lint --force --no-cache
 
-      - name: Lowercase repository owner
-        id: owner
-        run: echo "owner=${GITHUB_REPOSITORY_OWNER,,}" >> $GITHUB_OUTPUT
+      - name: Verify & Panic (Mandatory Build Check)
+        run: |
+          echo "DUMPING FILE TREE FOR AUDIT..."
+          find services web -maxdepth 3 -not -path '*/node_modules*'
+          
+          echo "CHECKING FOR DIST FOLDERS..."
+          DIST_COUNT=$(find services web -name dist -type d | wc -l)
+          if [ "$DIST_COUNT" -eq 0 ]; then
+            echo "::error::FATAL: No dist folders found after build! Build failed silently."
+            exit 1
+          fi
+          echo "Found $DIST_COUNT dist folders. Proceeding to pack."
 
       - name: Pack Build Artifacts
         run: |
-          # Create a surgical list of files to pack to avoid bloat and corruption
+          # Create a surgical list of files to pack
           find services web -name "dist" -type d > files.txt
           find services web -name "prisma" -type d >> files.txt
           find services web -name "migrations" -type d >> files.txt
@@ -77,9 +81,8 @@ jobs:
           find services web -name "nginx.conf" >> files.txt
           echo "package.json" >> files.txt
           
-          echo "Packing the following files:"
+          echo "Packing the following verified files:"
           cat files.txt
-          
           tar -czf artifacts.tar.gz -T files.txt
 
       - name: Audit Pack Contents
@@ -123,6 +126,10 @@ jobs:
       - name: Checkout Code (for Dockerfiles)
         uses: actions/checkout@v4
 
+      - name: Lowercase repository owner
+        id: owner
+        run: echo "owner=${GITHUB_REPOSITORY_OWNER,,}" >> $GITHUB_OUTPUT
+
       - name: Download Build Artifacts
         uses: actions/download-artifact@v4
         with:
@@ -133,7 +140,7 @@ jobs:
         run: |
           tar -xzf artifacts.tar.gz -C .
           echo "Verifying monorepo layout..."
-          find services -name dist -type d -maxdepth 3
+          ls -R services/*/dist || echo "DIST NOT FOUND IN UNPACK"
 
       - name: Audit Docker Context
         run: |
@@ -161,8 +168,8 @@ jobs:
           push: true
           platforms: linux/amd64,linux/arm64
           tags: |
-            ghcr.io/${{ needs.verify.outputs.owner }}/erm-${{ matrix.name }}:latest
-            ghcr.io/${{ needs.verify.outputs.owner }}/erm-${{ matrix.name }}:${{ github.sha }}
+            ghcr.io/${{ steps.owner.outputs.owner }}/erm-${{ matrix.name }}:latest
+            ghcr.io/${{ steps.owner.outputs.owner }}/erm-${{ matrix.name }}:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=min
 
