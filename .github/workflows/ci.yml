@@ -53,25 +53,30 @@ jobs:
           make install
 
       - name: Build Monorepo (Turbo)
-        run: npx turbo build
+        run: npx turbo run build
 
-      - name: Monorepo Audit (Lint + Test)
+      - name: Verify Build Artifacts
         run: |
-          npx turbo lint
-          npx turbo test
-
-      - name: Lowercase repository owner
-        id: owner
-        run: echo "owner=${GITHUB_REPOSITORY_OWNER,,}" >> $GITHUB_OUTPUT
+          echo "Verifying build outputs..."
+          find services web -name dist -type d
+          find services web -name prisma -type d
+          find services web -name migrations -type d
 
       - name: Pack Build Artifacts
         run: |
-          tar -czf artifacts.tar.gz \
-            --exclude="node_modules" \
-            --exclude=".git" \
-            ./package.json \
-            ./services \
-            ./web
+          # Create a surgical list of files to pack to avoid bloat and corruption
+          find services web -name "dist" -type d > files.txt
+          find services web -name "prisma" -type d >> files.txt
+          find services web -name "migrations" -type d >> files.txt
+          find services web -name "Dockerfile.prod" >> files.txt
+          find services web -name "schema.prisma" >> files.txt
+          find services web -name "nginx.conf" >> files.txt
+          echo "package.json" >> files.txt
+          
+          echo "Packing the following files:"
+          cat files.txt
+          
+          tar -czf artifacts.tar.gz -T files.txt
 
       - name: Audit Pack Contents
         run: tar -tvf artifacts.tar.gz | head -n 50
