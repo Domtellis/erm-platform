@@ -14,10 +14,10 @@ import { AiService } from "./ai.service";
 import { UpdateAiStatusDto } from "./dto/assessment-suggestion.dto";
 
 @ApiTags("AI Risk Assessment")
-@Controller() // Removed prefix to handle health/version at root
+@Controller("ai-suggestions") // Path matched exactly by Nginx and Frontend
 export class AiController {
   private readonly logger = new Logger(AiController.name);
-  private readonly version = "1.0.3-hitl-sync"; // Updated version to verify push
+  private readonly version = "1.0.4-hitl-sync"; // Updated version to verify push
 
   constructor(private readonly aiService: AiService) { }
 
@@ -47,7 +47,7 @@ export class AiController {
     return { version: this.version };
   }
 
-  @Get("ai-suggestions/pending/count")
+  @Get("pending/count")
   @UseGuards(AuthGuard("jwt"))
   @ApiBearerAuth()
   @ApiOperation({
@@ -58,7 +58,7 @@ export class AiController {
     return { count };
   }
 
-  @Get("ai-suggestions/:breach_case_id")
+  @Get(":breach_case_id")
   @UseGuards(AuthGuard("jwt"))
   @ApiBearerAuth()
   @ApiOperation({
@@ -81,7 +81,7 @@ export class AiController {
     return suggestion;
   }
 
-  @Patch("ai-suggestions/:id/feedback")
+  @Patch(":id/feedback")
   @UseGuards(AuthGuard("jwt"))
   @ApiBearerAuth()
   @ApiOperation({
