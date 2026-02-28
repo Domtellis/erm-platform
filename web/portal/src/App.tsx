@@ -8,7 +8,9 @@ import { AuditPage } from './pages/AuditPage';
 import { ReportsPage } from './pages/ReportsPage';
 
 import { getBreaches, getMetrics } from './api/monitoring';
+import { getPendingCount } from './api/ai';
 import type { BreachCase } from './api/monitoring';
+import { useAuth } from 'react-oidc-context';
 
 interface Decision {
   status: string;
@@ -32,6 +34,14 @@ function Dashboard() {
       return response.data;
     },
     refetchInterval: 5000,
+  });
+
+  const auth = useAuth();
+  const { data: pendingFeedback, isLoading: isLoadingFeedback } = useQuery({
+    queryKey: ['dashboard-pending-feedback'],
+    queryFn: () => getPendingCount(auth.user?.access_token || ''),
+    refetchInterval: 5000,
+    enabled: !!auth.user?.access_token,
   });
 
   const { data: metrics, isLoading: isLoadingMetrics } = useQuery({
@@ -61,6 +71,12 @@ function Dashboard() {
           <h3 className="text-sm font-medium text-slate-500">Pending Decisions</h3>
           <p className="mt-2 text-3xl font-bold text-crm-warning">
             {isLoadingDecisions ? '...' : pendingDecisions}
+          </p>
+        </div>
+        <div className="card p-6">
+          <h3 className="text-sm font-medium text-slate-500">Human Feedback Required</h3>
+          <p className={`mt-2 text-3xl font-bold ${isLoadingFeedback ? '' : (pendingFeedback || 0) > 0 ? 'text-crm-accent' : 'text-slate-900'}`}>
+            {isLoadingFeedback ? '...' : pendingFeedback}
           </p>
         </div>
         <div className="card p-6">

@@ -186,7 +186,25 @@ export class AiService implements OnModuleInit {
     else if (status === "modified") assessmentModified.add(1, attrs);
     else if (status === "rejected") assessmentRejected.add(1, attrs);
 
+    // Publish feedback event via outbox
+    await this.outboxService.enqueue("erm.risk.feedback-recorded.v1", {
+      suggestion_id: id,
+      breach_case_id: suggestion.breach_case_id,
+      status,
+      human_feedback: humanFeedback,
+      recorded_at: new Date(),
+    });
+
     this.logger.log(`Feedback recorded for assessment ${id}: ${status}`);
     return suggestion;
+  }
+
+  /**
+   * Get the count of pending AI suggestions.
+   */
+  async getPendingCount() {
+    return this.prisma.assessmentSuggestion.count({
+      where: { status: "pending" },
+    });
   }
 }

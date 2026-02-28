@@ -18,7 +18,7 @@ import { UpdateAiStatusDto } from "./dto/assessment-suggestion.dto";
 export class AiController {
   private readonly logger = new Logger(AiController.name);
 
-  constructor(private readonly aiService: AiService) {}
+  constructor(private readonly aiService: AiService) { }
 
   @EventPattern("erm.monitoring.breach-detected.v1")
   async handleBreachDetected(@Payload() data: any) {
@@ -38,6 +38,17 @@ export class AiController {
   @ApiOperation({ summary: "Basic health check for the AI service" })
   healthCheck() {
     return { status: "ok", timestamp: new Date().toISOString() };
+  }
+
+  @Get("pending/count")
+  @UseGuards(AuthGuard("jwt"))
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: "Get the count of pending AI risk assessments",
+  })
+  async getPendingCount() {
+    const count = await this.aiService.getPendingCount();
+    return { count };
   }
 
   @Get(":breach_case_id")

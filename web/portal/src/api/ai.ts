@@ -45,3 +45,9 @@ export const recordAiFeedback = async (
     );
     return response.data;
 };
+export const getPendingCount = async (token: string): Promise<number> => {
+    const response = await axios.get(`${API_URL}/ai-suggestions/pending/count`, {
+        headers: { Authorization: `Bearer ${token}` }
+    });
+    return response.data.count;
+};

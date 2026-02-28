@@ -10,6 +10,8 @@ import { getAssessments } from '../api/risk';
 import { getBreaches, type BreachCase } from '../api/monitoring';
 import { SLACountdown } from '../components/common/SLACountdown';
 import { SLABadge } from '../components/common/SLABadge';
+import { AISuggestionCard } from '../components/ai/AISuggestionCard';
+import { getAiSuggestion } from '../api/ai';
 
 export function MonitoringPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -28,6 +30,13 @@ export function MonitoringPage() {
         queryKey: ['risk-assessments', selectedCaseId],
         queryFn: () => getAssessments(selectedCaseId!, user?.access_token || ''),
         enabled: !!selectedCaseId && !!user?.access_token
+    });
+
+    const { data: aiSuggestion, isLoading: isLoadingAi } = useQuery({
+        queryKey: ['ai-suggestion', selectedCaseId],
+        queryFn: () => getAiSuggestion(selectedCaseId!, user?.access_token || ''),
+        enabled: !!selectedCaseId && !!user?.access_token,
+        refetchInterval: (query) => query.state.data?.status === 'pending' ? 5000 : false,
     });
 
     const currentAssessment = assessments?.[0];
@@ -134,11 +143,30 @@ export function MonitoringPage() {
             </Modal>
 
             <Modal isOpen={!!selectedCaseId} onClose={() => setSelectedCaseId(null)} title="Risk Assessment">
-                {selectedCaseId && !currentAssessment && (
-                    <RiskAssessmentForm
-                        breachCaseId={selectedCaseId}
-                        onSuccess={() => {/* Refetch logic handled by query invalidation */ }}
-                    />
+                {selectedCaseId && (
+                    <div className="space-y-6">
+                        {isLoadingAi ? (
+                            <div className="flex items-center justify-center p-8 text-slate-400">
+                                <Clock className="mr-2 h-5 w-5 animate-spin" />
+                                Analysis by Gemini...
+                            </div>
+                        ) : aiSuggestion && (
+                            <AISuggestionCard
+                                suggestion={aiSuggestion}
+                                breachCaseId={selectedCaseId}
+                            />
+                        )}
+
+                        {!currentAssessment && (
+                            <div className="space-y-4 pt-4 border-t border-slate-100">
+                                <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider">Manual Risk Assessment</h3>
+                                <RiskAssessmentForm
+                                    breachCaseId={selectedCaseId}
+                                    onSuccess={() => {/* Refetch logic handled by query invalidation */ }}
+                                />
+                            </div>
+                        )}
+                    </div>
                 )}
 
                 {selectedCaseId && currentAssessment && (
