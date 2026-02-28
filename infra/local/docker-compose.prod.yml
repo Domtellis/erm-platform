@@ -226,7 +226,7 @@ services:
         condition: service_started
 
   audit-service:
-    image: ghcr.io/domtellis/erm-audit-and-reporting:ef5808f5774a2d0d2e95bdb04ffcbb74a4b65a76
+    image: ghcr.io/domtellis/erm-audit-and-reporting:latest
     container_name: erm-audit-service
     environment:
       NODE_ENV: production
@@ -249,7 +249,7 @@ services:
         condition: service_started
 
   ai-risk-service:
-    image: ghcr.io/domtellis/erm-ai-risk-service:ef5808f5774a2d0d2e95bdb04ffcbb74a4b65a76
+    image: ghcr.io/domtellis/erm-ai-risk-service:latest
     container_name: erm-ai-risk-service
     environment:
       NODE_ENV: production
@@ -273,7 +273,7 @@ services:
         condition: service_started
 
   web-portal:
-    image: ghcr.io/domtellis/erm-portal:ef5808f5774a2d0d2e95bdb04ffcbb74a4b65a76
+    image: ghcr.io/domtellis/erm-portal:latest
     container_name: erm-web-portal
     ports:
       - "5180:443"
