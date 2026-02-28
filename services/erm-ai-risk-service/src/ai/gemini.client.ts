@@ -108,7 +108,7 @@ export class GeminiClient {
 
         this.logger.log(
           `Gemini assessment complete | model=${this.model} prompt_version=${PROMPT_VERSION} ` +
-            `latency=${latencyMs}ms attempt=${attempt} impact=${result.impact} likelihood=${result.likelihood}`,
+          `latency=${latencyMs}ms attempt=${attempt} impact=${result.impact} likelihood=${result.likelihood}`,
         );
 
         return result;
@@ -162,6 +162,10 @@ export class GeminiClient {
 
       if (!response.ok) {
         const body = await response.text().catch(() => "");
+        if (response.status === 429) {
+          this.logger.error(`GEMINI QUOTA EXCEEDED (429): ${body}`);
+          throw new Error("Gemini API Quota Exceeded. Please check your billing/tier or try again later.");
+        }
         throw new Error(`Gemini API HTTP ${response.status}: ${body}`);
       }
 
