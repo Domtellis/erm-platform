@@ -54,6 +54,9 @@ jobs:
 
       - name: Build Monorepo (Direct)
         run: |
+          npm install
+          echo "CLEANING STALE DIST FOLDERS"
+          rm -rf services/*/dist web/*/dist
           echo "RUNNING BUILDS MANUALLY TO BYPASS TURBO CACHE ISSUES"
           SERVICES=(
             "services/appetite-and-criteria"

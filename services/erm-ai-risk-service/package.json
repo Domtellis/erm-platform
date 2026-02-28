@@ -1,6 +1,6 @@
 {
     "name": "erm-ai-risk-service",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "ERM AI Risk Assessment Service â€” Gemini-powered ISO 45001 risk scoring",
     "main": "index.js",
     "scripts": {
