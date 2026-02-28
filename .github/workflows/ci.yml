@@ -215,6 +215,17 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Prepare Target Directory
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.OCI_SERVER_IP }}
+          username: ${{ secrets.OCI_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            mkdir -p ~/erm-platform
+            sudo chown -R ${{ secrets.OCI_USER }}:${{ secrets.OCI_USER }} ~/erm-platform
+            chmod -R 755 ~/erm-platform
+
       - name: Copy Config to Server
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -222,7 +233,8 @@ jobs:
           username: ${{ secrets.OCI_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "infra,policy,observability,web/portal/nginx.conf"
-          target: "~/erm-platform"
+          target: "/home/${{ secrets.OCI_USER }}/erm-platform"
+          overwrite: true
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
