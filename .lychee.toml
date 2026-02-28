@@ -8,7 +8,7 @@ timeout = 20
 retry_wait_time = 2
 max_retries = 2
 accept = ["200", "204", "206", "301", "302", "307", "308", "429"]
-exclude_mail = true
+include_mail = false
 
 # Avoid noisy/unstable targets if needed (add as you find them)
 exclude = [
