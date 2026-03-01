@@ -15,7 +15,15 @@ export class AuditController {
     private auditService: AuditService,
   ) { }
 
-  @EventPattern(/^erm\..*/)
+  @EventPattern([
+    "erm.monitoring.breach-detected.v1",
+    "erm.monitoring.breach-closed.v1",
+    "erm.risk.assessment-created.v1",
+    "erm.risk.assessment-failed.v1",
+    "erm.risk.feedback-recorded.v1",
+    "erm.decisioning.decision-approved.v1",
+    "erm.remediation.plan-created.v1"
+  ])
   async handleAuditEvents(@Payload() data: any) {
     this.logger.log(`Received event for auditing: ${data.type}`);
     // NestJS Microservices wrap the payload; extract 'data' if nested by Outbox
