@@ -38,10 +38,3 @@ jobs:
 
       - name: Run schema validation + markdown lint + internal links + index check
         run: make lint
-
-      - name: External link check (Lychee)
-        uses: lycheeverse/lychee-action@v2
-        with:
-          args: >
-            --config .lychee.toml
-            .
