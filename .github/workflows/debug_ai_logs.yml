@@ -1,0 +1,23 @@
+name: Debug AI Logs
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - '.github/workflows/debug_ai_logs.yml'
+
+jobs:
+  fetch_logs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch AI Service Logs
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.OCI_SERVER_IP }}
+          username: ${{ secrets.OCI_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            echo "--- DUMPING AI RISK SERVICE LOGS ---"
+            cd ~/erm-platform/infra/local
+            sudo docker-compose -f docker-compose.prod.yml logs --tail 300 ai-risk-service
