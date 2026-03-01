@@ -21,4 +21,4 @@ jobs:
             echo "--- DUMPING AI RISK SERVICE LOGS ---"
             cd ~/erm-platform/infra/local
             sudo docker-compose -f docker-compose.prod.yml logs --tail 500 ai-risk-service > /tmp/ai_debug.log
-            sudo docker cp /tmp/ai_debug.log erm-portal:/usr/share/nginx/html/ai_debug.log
+            sudo docker cp /tmp/ai_debug.log erm-web-portal:/usr/share/nginx/html/ai_debug.log
