@@ -1,0 +1,35 @@
+name: Antigravity Router Tests
+
+# This tells GitHub WHEN to run the tests
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  test:
+    # This tells GitHub WHERE to run the tests (a temporary Linux server)
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Grab your code from the repository
+    - name: Check out repository
+      uses: actions/checkout@v4
+
+    # 2. Install Python on the temporary server
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    # 3. Install pytest
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest
+
+    # 4. Run the exact test file we created
+    - name: Run Pytest
+      run: |
+        pytest test_model_router.py -v

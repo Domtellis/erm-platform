@@ -2,15 +2,17 @@ import os
 import json
 import re
 import subprocess
-import sys
+import urllib.request
+import urllib.error
+import ssl
 from datetime import datetime, timezone
 
 MODELS_PATH = os.path.join(os.path.dirname(__file__), 'models.json')
 
 def get_session_info():
-    """Dynamically discover the language server PID and token."""
+    """Dynamically discover the language server PID and token (Windows-specific)."""
     try:
-        # Get PID and Command Line from wmic
+        # Get PID and Command Line
         cmd_wmic = 'wmic process where "name=\'language_server_windows_x64.exe\'" get processid,commandline /format:list'
         output_wmic = subprocess.check_output(cmd_wmic, shell=True).decode()
         
@@ -26,16 +28,12 @@ def get_session_info():
         # Get listening ports for this PID
         cmd_netstat = f'netstat -ano | findstr {pid}'
         output_netstat = subprocess.check_output(cmd_netstat, shell=True).decode()
-        
         ports = re.findall(rf'127\.0\.0\.1:(\d+).+LISTENING\s+{pid}', output_netstat)
         
         if not ports:
             return None
             
-        return {
-            "ports": ports,
-            "token": token
-        }
+        return {"ports": ports, "token": token}
     except Exception as e:
         print(f"Discovery failed: {e}")
         return None
@@ -43,30 +41,36 @@ def get_session_info():
 def sync():
     session = get_session_info()
     if not session:
-        print("Could not find active Antigravity session.")
+        print("[SYNC WARNING] Could not find active Antigravity session.")
         return
     
-    request_data = '{"metadata": {"ideName": "antigravity", "extensionName": "antigravity", "locale": "en"}}'
+    request_data = json.dumps({
+        "metadata": {"ideName": "antigravity", "extensionName": "antigravity", "locale": "en"}
+    }).encode('utf-8')
     
+    # Ignore SSL verification (equivalent to curl -k)
+    ssl_context = ssl._create_unverified_context()
     success = False
+    
     for port in session['ports']:
-        # Try HTTP first as it's the more common internal protocol for this service
         url = f"http://127.0.0.1:{port}/exa.language_server_pb.LanguageServerService/GetUserStatus"
         
+        req = urllib.request.Request(
+            url,
+            data=request_data,
+            headers={
+                'Content-Type': 'application/json',
+                'Connect-Protocol-Version': '1',
+                'X-Codeium-Csrf-Token': session["token"]
+            },
+            method='POST'
+        )
+        
         try:
-            with open('temp_req.json', 'w') as f:
-                f.write(request_data)
+            # Native Python HTTP request (No temp files, no curl.exe)
+            with urllib.request.urlopen(req, context=ssl_context, timeout=5) as response:
+                response_json = response.read().decode('utf-8')
                 
-            cmd = [
-                'curl.exe', '-k', '-s', '-X', 'POST',
-                '-H', 'Content-Type: application/json',
-                '-H', 'Connect-Protocol-Version: 1',
-                '-H', f'X-Codeium-Csrf-Token: {session["token"]}',
-                '-T', 'temp_req.json',
-                url
-            ]
-            
-            response_json = subprocess.check_output(cmd).decode()
             if "userStatus" not in response_json:
                 continue
                 
@@ -85,31 +89,30 @@ def sync():
                     if m['name'] in api_models:
                         api_data = api_models[m['name']]
                         quota_info = api_data.get('quotaInfo')
-                        if quota_info:
-                            fraction = quota_info.get('remainingFraction')
-                            # If fraction is None, it means 0 for reasoning models
-                            m['quota'] = float(fraction) if fraction is not None else 0.0
+                        
+                        if quota_info and quota_info.get('remainingFraction') is not None:
+                            m['quota'] = float(quota_info['remainingFraction'])
                         else:
-                            # No quota info at all (like for reasoning models) should be zero if it's not a standard model
-                            # Actually, looking at debug results, Gemini Flash returns 1, others returned None
-                            m['quota'] = 0.0 if "Thinking" in m['name'] or "GPT-OSS" in m['name'] else 1.0
+                            # Safer Fallback: Standard/Enhanced models assume 1.0, high-tier models assume 0.0
+                            m['quota'] = 1.0 if m.get('tier') in ["Standard", "Enhanced"] else 0.0
                 
                 registry['last_updated'] = datetime.now(timezone.utc).isoformat() + 'Z'
                 
                 with open(MODELS_PATH, 'w') as f:
                     json.dump(registry, f, indent=4)
                     
-                print(f"Successfully synced via port {port}")
+                print(f"[SYNC SUCCESS] Registry updated via port {port}")
                 success = True
                 break
-        except Exception as e:
+                
+        except urllib.error.URLError:
             continue
-        finally:
-            if os.path.exists('temp_req.json'):
-                os.remove('temp_req.json')
+        except Exception as e:
+            print(f"[SYNC ERROR] Port {port} failed: {e}")
+            continue
 
     if not success:
-        print("Sync failed on all discovered ports.")
+        print("[SYNC FATAL] Sync failed on all discovered ports.")
 
 if __name__ == "__main__":
     sync()
