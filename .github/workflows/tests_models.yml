@@ -32,4 +32,4 @@ jobs:
     # 4. Run the exact test file we created
     - name: Run Pytest
       run: |
-        pytest test_model_router.py -v
+        pytest tools/test_model_router.py -v
