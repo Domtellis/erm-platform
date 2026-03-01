@@ -262,11 +262,18 @@ jobs:
             # Start the platform
             cd infra/local
             sudo docker-compose -f docker-compose.prod.yml pull
+            
+            # Ensure databases exist before starting dependent services
+            sudo docker-compose -f docker-compose.prod.yml up -d postgres
+            sleep 10
+            sudo docker exec erm-postgres psql -U postgres -c "CREATE DATABASE audit;" || true
+            sudo docker exec erm-postgres psql -U postgres -c "CREATE DATABASE ai_risk;" || true
+
             sudo docker-compose -f docker-compose.prod.yml up -d --force-recreate --remove-orphans
             
             # Verify Audit Service Health
             echo "Verifying Audit Service Health..."
-            max_retries=10
+            max_retries=30
             count=0
             until [ $(curl -s -o /dev/null -w "%{http_code}" http://localhost:4013/audit/health) -eq 200 ] || [ $count -eq $max_retries ]; do
               echo "Waiting for Audit service... ($count/$max_retries)"
