@@ -215,16 +215,23 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Prepare Target Directory
+      - name: Prepare & Audit Target Directory
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.OCI_SERVER_IP }}
           username: ${{ secrets.OCI_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            echo "--- REMOTE AUDIT START ---"
+            whoami
+            pwd
+            ls -ld ~/erm-platform || echo "Directory does not exist yet"
             mkdir -p ~/erm-platform
             sudo chown -R ${{ secrets.OCI_USER }}:${{ secrets.OCI_USER }} ~/erm-platform
             chmod -R 755 ~/erm-platform
+            df -h ~/erm-platform
+            tar --version
+            echo "--- REMOTE AUDIT END ---"
 
       - name: Copy Config to Server
         uses: appleboy/scp-action@v0.1.7
@@ -235,6 +242,7 @@ jobs:
           source: "infra,policy,observability,web/portal/nginx.conf"
           target: "/home/${{ secrets.OCI_USER }}/erm-platform"
           overwrite: true
+          debug: true
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
