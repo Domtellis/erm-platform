@@ -1,20 +1,23 @@
-# Build stage
-FROM node:20-slim AS builder
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-RUN npx prisma generate --schema=./schema.prisma
-RUN npm run build
-
-# Production stage
+# Build is handled natively in CI to avoid QEMU slowness
 FROM node:20-slim
+
 WORKDIR /app
-RUN apt-get update -y && apt-get install -y openssl
-COPY --from=builder /app/package*.json ./
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/schema.prisma ./schema.prisma
+
+# Install OpenSSL (required by Prisma native engine on Debian Bookworm)
+RUN apt-get update && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
+
+# Install production dependencies only
+COPY package*.json ./
+RUN npm install --omit=dev
+
+
+# Copy natively built app
+COPY ./dist ./dist
+COPY ./schema.prisma ./schema.prisma
+
+# Generate Prisma client for the target architecture (Native Engine)
+RUN PRISMA_CLI_QUERY_ENGINE_TYPE=library PRISMA_CLIENT_ENGINE_TYPE=library npx prisma generate --schema=./schema.prisma
 
 EXPOSE 4014
-CMD ["node", "dist/main"]
+
+CMD ["sh", "-c", "npx prisma db push --schema=./schema.prisma --accept-data-loss && node dist/main"]
