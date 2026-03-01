@@ -246,10 +246,17 @@ jobs:
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          JIRA_URL: ${{ secrets.JIRA_URL }}
+          JIRA_USER: ${{ secrets.JIRA_USER }}
+          JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         with:
           host: ${{ secrets.OCI_SERVER_IP }}
           username: ${{ secrets.OCI_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          envs: GEMINI_API_KEY,JIRA_URL,JIRA_USER,JIRA_TOKEN,DB_PASSWORD
           script: |
             cd ~/erm-platform
             
@@ -261,6 +268,14 @@ jobs:
             
             # Start the platform
             cd infra/local
+            
+            # Formulate .env file so docker-compose seamlessly injects secrets into containers
+            echo "GEMINI_API_KEY=$GEMINI_API_KEY" > .env
+            echo "JIRA_URL=$JIRA_URL" >> .env
+            echo "JIRA_USER=$JIRA_USER" >> .env
+            echo "JIRA_TOKEN=$JIRA_TOKEN" >> .env
+            echo "DB_PASSWORD=${DB_PASSWORD:-password}" >> .env
+
             sudo docker-compose -f docker-compose.prod.yml pull
             
             # Ensure databases exist before starting dependent services
