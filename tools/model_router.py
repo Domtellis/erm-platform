@@ -76,7 +76,7 @@ def get_recommendation(task, registry, critical=False, plan_only=False):
         matches = re.findall(pattern, text, flags=re.IGNORECASE)
         return list(set(matches)) # Return unique matches
 
-    # --- LIFECYCLE-AWARE WEIGHTED SCORING ---
+# --- LIFECYCLE-AWARE WEIGHTED SCORING ---
     score = 0
     factors = []
 
@@ -88,36 +88,42 @@ def get_recommendation(task, registry, critical=False, plan_only=False):
     maint_keys = ['cleanup', 'delete', 'remove', 'format', 'organize', 'formalize', 'temporary', 'unused', 'ledger', 'attribution', 'badges', 'clean']
     matched_maint = check_keywords(task, maint_keys)
     if matched_maint:
-        score -= 20
-        factors.append(f"Maintenance ({', '.join(matched_maint)}): -20")
+        points = 20 * len(matched_maint)
+        score -= points
+        factors.append(f"Maintenance ({', '.join(matched_maint)}): -{points}")
 
     # 2. Product Feature Development (Low-Medium)
     dev_keys = ['feature', 'test', 'api', 'service', 'frontend', 'ui', 'component', 'endpoint', 'controller']
     matched_dev = check_keywords(task, dev_keys)
     if matched_dev:
-        score += 4
-        factors.append(f"Product Dev ({', '.join(matched_dev)}): +4")
+        points = 4 * len(matched_dev)
+        score += points
+        factors.append(f"Product Dev ({', '.join(matched_dev)}): +{points}")
 
     # 3. Governance & Complex Logic (High)
     logic_keys = ['algorithm', 'refactor', 'optimization', 'performance', 'logic', 'module', 'race condition', 'concurrency', 'governance', 'policy', 'opa', 'risk score']
     matched_logic = check_keywords(task, logic_keys)
     if matched_logic:
-        score += 10
-        factors.append(f"Logic ({', '.join(matched_logic)}): +10")
+        points = 10 * len(matched_logic)
+        score += points
+        factors.append(f"Logic ({', '.join(matched_logic)}): +{points}")
 
     # 4. Strategic Architecture (Critical)
     arch_keys = ['architect', 'design', 'multi-service', 'system', 'structure', 'planning', 'repository', 'traceability', 'strategy', 'security', 'infrastructure', 'oci', 'redpanda', 'kafka', 'baseline']
     matched_arch = check_keywords(task, arch_keys)
     if matched_arch:
-        score += 15
-        factors.append(f"Architecture ({', '.join(matched_arch)}): +15")
+        points = 15 * len(matched_arch)
+        score += points
+        factors.append(f"Architecture ({', '.join(matched_arch)}): +{points}")
 
     # 5. Diagnostic & Research
     research_keys = ['research', 'explain', 'search', 'find', 'best practices', 'summarize', 'scan', 'debug', 'bug', 'error', 'fails']
     matched_research = check_keywords(task, research_keys)
     if matched_research:
-        score += 5
-        factors.append(f"Research/Debug ({', '.join(matched_research)}): +5")
+        points = 5 * len(matched_research)
+        score += points
+        factors.append(f"Research/Debug ({', '.join(matched_research)}): +{points}")
+
 
     # --- TIER MAPPING & FLOORS ---
     tiers = ["Elite", "Critical", "Advanced", "Enhanced", "Standard"]
