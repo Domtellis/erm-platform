@@ -1,6 +1,6 @@
 {
     "name": "audit-and-reporting",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "ERM Audit and Reporting Service",
     "main": "audit-sink.js",
     "scripts": {

@@ -1,6 +1,6 @@
 {
     "name": "erm-platform-root",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "private": true,
     "description": "Enterprise Risk Management Platform Monorepo Root",
     "scripts": {

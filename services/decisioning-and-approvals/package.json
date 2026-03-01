@@ -1,6 +1,6 @@
 {
     "name": "decisioning-and-approvals",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "ERM Decisioning and Approvals Service",
     "main": "index.js",
     "scripts": {

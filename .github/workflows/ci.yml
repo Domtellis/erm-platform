@@ -222,16 +222,16 @@ jobs:
           username: ${{ secrets.OCI_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            echo "--- REMOTE AUDIT START ---"
-            whoami
-            pwd
-            ls -ld ~/erm-platform || echo "Directory does not exist yet"
+            echo "--- REMOTE AUDIT & CLEANUP START ---"
+            df -h /
+            # Emergency Prune: Remove unused Docker data to reclaim space
+            sudo docker system prune -af --volumes || true
             mkdir -p ~/erm-platform
             sudo chown -R ${{ secrets.OCI_USER }}:${{ secrets.OCI_USER }} ~/erm-platform
             chmod -R 755 ~/erm-platform
-            df -h ~/erm-platform
+            df -h /
             tar --version
-            echo "--- REMOTE AUDIT END ---"
+            echo "--- REMOTE AUDIT & CLEANUP END ---"
 
       - name: Copy Config to Server
         uses: appleboy/scp-action@v0.1.7
