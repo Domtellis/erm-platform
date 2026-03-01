@@ -32,4 +32,14 @@ export class AuditController {
       take: 100,
     });
   }
+
+  @Get("health")
+  async health() {
+    return { status: "ok", service: "audit-and-reporting" };
+  }
+
+  @Get("version")
+  async version() {
+    return { version: "1.1.0-fix" };
+  }
 }

@@ -264,6 +264,22 @@ jobs:
             sudo docker-compose -f docker-compose.prod.yml pull
             sudo docker-compose -f docker-compose.prod.yml up -d --force-recreate --remove-orphans
             
+            # Verify Audit Service Health
+            echo "Verifying Audit Service Health..."
+            max_retries=10
+            count=0
+            until [ $(curl -s -o /dev/null -w "%{http_code}" http://localhost:4013/health) -eq 200 ] || [ $count -eq $max_retries ]; do
+              echo "Waiting for Audit service... ($count/$max_retries)"
+              sleep 5
+              count=$((count+1))
+            done
+            if [ $count -eq $max_retries ]; then
+              echo "::error::Audit service failed health check!"
+              sudo docker-compose -f docker-compose.prod.yml logs audit-service
+              exit 1
+            fi
+            echo "Audit service is healthy."
+
             # Ensure Keycloak SSL is disabled for HTTP deployments (idempotent)
             sleep 15
             sudo docker exec erm-postgres psql -U postgres -d keycloak -c "UPDATE realm SET ssl_required='NONE' WHERE name='erm-platform';" || true
