@@ -1,61 +1,44 @@
 # ==========================================
-# STAGE 1: BUILDER (Monorepo Root Context)
+# STAGE 1: BUILDER
 # ==========================================
 FROM node:20-slim AS builder
 
-# Debian-slim sometimes requires openssl for Prisma to generate correctly
-RUN apt-get update && apt-get install -y openssl
-
 WORKDIR /app
 
-# 1. Copy the entire monorepo (shielded by your new .dockerignore!)
+# 1. Copy the entire monorepo
 COPY . .
 
-# 2. Install ALL dependencies across the monorepo workspaces
+# 2. Install ALL dependencies
 RUN npm ci
 
-# 3. Generate Prisma client natively
-# We use the exact environment variables from your original file
-ENV PRISMA_CLI_QUERY_ENGINE_TYPE=library
-ENV PRISMA_CLIENT_ENGINE_TYPE=library
-RUN npx prisma generate --schema=./services/notification-service/schema.prisma
-
-# 4. Build ONLY the notification-service workspace
+# 3. Build ONLY the notification-service
+# (Notice we removed the 'npx prisma generate' line entirely)
 RUN npm run build -w services/notification-service
 
 
 # ==========================================
-# STAGE 2: RUNNER (Production Image)
+# STAGE 2: RUNNER
 # ==========================================
 FROM node:20-slim AS runner
 
-# Ensure openssl is available in production for the Prisma engine
-RUN apt-get update && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
-
+# We can also remove 'openssl' here if the app doesn't need it
 WORKDIR /app
 ENV NODE_ENV=production
-ENV PRISMA_CLI_QUERY_ENGINE_TYPE=library
-ENV PRISMA_CLIENT_ENGINE_TYPE=library
 
-# 1. Copy the root lockfile and workspace package.json
+# 1. Copy root manifests
 COPY package.json package-lock.json ./
 COPY services/notification-service/package.json ./services/notification-service/
 
-# 2. Install ONLY production dependencies across the workspace
+# 2. Install production dependencies
 RUN npm ci --omit=dev
 
-# 3. Copy the compiled Prisma Client from the builder
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
-COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
-
-# 4. Copy the compiled Javascript and Prisma files from the builder
+# 3. Copy ONLY the compiled Javascript (Removed Prisma COPY lines)
 COPY --from=builder /app/services/notification-service/dist ./services/notification-service/dist
-COPY --from=builder /app/services/notification-service/prisma ./services/notification-service/prisma
-COPY --from=builder /app/services/notification-service/schema.prisma ./services/notification-service/schema.prisma
 
-# 5. Drop down into the specific service directory to run the app
+# 4. Set workdir to the service folder
 WORKDIR /app/services/notification-service
 
+# Expose the correct port for this service
 EXPOSE 4020
 
 CMD ["node", "dist/main"]

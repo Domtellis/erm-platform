@@ -50,7 +50,6 @@ COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 
 # 4. Copy the compiled Javascript and Prisma files from the builder
 COPY --from=builder /app/services/appetite-and-criteria/dist ./services/appetite-and-criteria/dist
-COPY --from=builder /app/services/appetite-and-criteria/prisma ./services/appetite-and-criteria/prisma
 COPY --from=builder /app/services/appetite-and-criteria/schema.prisma ./services/appetite-and-criteria/schema.prisma
 
 # 5. Drop down into the specific service directory to run the app

@@ -50,7 +50,6 @@ COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 
 # 4. Copy the compiled Javascript and Prisma files from the builder
 COPY --from=builder /app/services/monitoring-and-breaches/dist ./services/monitoring-and-breaches/dist
-COPY --from=builder /app/services/monitoring-and-breaches/prisma ./services/monitoring-and-breaches/prisma
 COPY --from=builder /app/services/monitoring-and-breaches/schema.prisma ./services/monitoring-and-breaches/schema.prisma
 
 # 5. Drop down into the specific service directory to run the app
