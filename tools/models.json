@@ -1,6 +1,6 @@
 {
     "version": "1.3.0",
-    "last_updated": "2026-03-01T11:05:19.270677+00:00Z",
+    "last_updated": "2026-03-01T20:41:40.537719+00:00Z",
     "models": [
         {
             "id": "gemini-3-flash",
@@ -8,7 +8,7 @@
             "tier": "Standard",
             "cost_rank": 1,
             "description": "Fast, low-quota usage for routine tasks and documentation.",
-            "quota": 0.0
+            "quota": 1.0
         },
         {
             "id": "gemini-3-1-pro-low",
@@ -16,7 +16,7 @@
             "tier": "Enhanced",
             "cost_rank": 2,
             "description": "Balanced for standard feature development.",
-            "quota": 1.0
+            "quota": 0.8
         },
         {
             "id": "gemini-3-1-pro-high",
@@ -24,7 +24,7 @@
             "tier": "Advanced",
             "cost_rank": 3,
             "description": "High context window for architectural reviews.",
-            "quota": 1.0
+            "quota": 0.8
         },
         {
             "id": "gpt-oss-120b-medium",
