@@ -10,6 +10,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 COPY web/portal/package.json ./web/portal/
 
+
 # 2. Install dependencies across the entire monorepo (respects root package-lock.json)
 RUN npm ci
 
