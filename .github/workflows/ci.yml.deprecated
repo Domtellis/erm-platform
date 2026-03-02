@@ -11,6 +11,7 @@ on:
       - 'LICENSE'
       - 'tools/**'
       - '.github/workflows/tests_models.yml'
+
   pull_request:
     branches: [ main ]
     paths-ignore:
@@ -27,55 +28,115 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  detect-changes:
-    name: Detect Changed Services
+  verify:
+    name: Build, Lint & Test
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.set-matrix.outputs.matrix }}
+      owner: ${{ steps.owner.outputs.owner }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-
-      - name: Determine Changed Paths
-        uses: dorny/paths-filter@v3
-        id: filter
         with:
-          filters: |
-            appetite-and-criteria: ['services/appetite-and-criteria/**', 'package.json', 'package-lock.json']
-            audit-and-reporting: ['services/audit-and-reporting/**', 'package.json', 'package-lock.json']
-            decisioning-and-approvals: ['services/decisioning-and-approvals/**', 'package.json', 'package-lock.json']
-            ai-risk-service: ['services/erm-ai-risk-service/**', 'package.json', 'package-lock.json']
-            monitoring-and-breaches: ['services/monitoring-and-breaches/**', 'package.json', 'package-lock.json']
-            notification-service: ['services/notification-service/**', 'package.json', 'package-lock.json']
-            portal: ['web/portal/**', 'package.json', 'package-lock.json']
+          fetch-depth: 0
 
-      - name: Generate Dynamic Matrix
-        id: set-matrix
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
         run: |
-          # Convert the paths-filter output array into a JSON array of objects for the matrix
-          CHANGES='${{ steps.filter.outputs.changes }}'
-          
-          MATRIX_JSON=$(echo "$CHANGES" | jq -c '
-            def get_path:
-              if . == "appetite-and-criteria" then "services/appetite-and-criteria"
-              elif . == "audit-and-reporting" then "services/audit-and-reporting"
-              elif . == "decisioning-and-approvals" then "services/decisioning-and-approvals"
-              elif . == "ai-risk-service" then "services/erm-ai-risk-service"
-              elif . == "monitoring-and-breaches" then "services/monitoring-and-breaches"
-              elif . == "notification-service" then "services/notification-service"
-              elif . == "portal" then "web/portal"
-              else empty end;
-            map({name: ., path: get_path})
-          ')
-          
-          echo "Generated Matrix: $MATRIX_JSON"
-          echo "matrix=$MATRIX_JSON" >> $GITHUB_OUTPUT
+          npm install -g npm@latest
+          npm ci --include=dev --legacy-peer-deps
+          npm run install:binaries
+          make install
 
-  build-and-push:
-    name: Build & Validate
-    needs: detect-changes
-    # Only run this job if the matrix is NOT an empty array
-    if: needs.detect-changes.outputs.matrix != '[]'
+      - name: Build Monorepo (Direct)
+        run: |
+          npm install
+          echo "CLEANING STALE DIST FOLDERS"
+          rm -rf services/*/dist web/*/dist
+          echo "RUNNING BUILDS MANUALLY TO BYPASS TURBO CACHE ISSUES"
+          SERVICES=(
+            "services/appetite-and-criteria"
+            "services/audit-and-reporting"
+            "services/decisioning-and-approvals"
+            "services/erm-ai-risk-service"
+            "services/monitoring-and-breaches"
+            "services/notification-service"
+            "web/portal"
+          )
+          
+          for S in "${SERVICES[@]}"; do
+            echo "--- BUILDING $S ---"
+            cd $S
+            npm run build
+            cd ../..
+          done
+
+      - name: Audit Build Outputs (Granular)
+        run: |
+          SERVICES=(
+            "services/appetite-and-criteria"
+            "services/audit-and-reporting"
+            "services/decisioning-and-approvals"
+            "services/erm-ai-risk-service"
+            "services/monitoring-and-breaches"
+            "services/notification-service"
+            "web/portal"
+          )
+          
+          FAILED=0
+          for S in "${SERVICES[@]}"; do
+            if [ ! -d "$S/dist" ]; then
+              echo "::error::MISSING DIST: $S/dist not found!"
+              FAILED=1
+            else
+              echo "OK: $S/dist exists"
+            fi
+          done
+          
+          if [ $FAILED -ne 0 ]; then
+            echo "FATAL: One or more services failed to build dist folders."
+            exit 1
+          fi
+
+      - name: Pack Build Artifacts (Total Capture)
+        run: |
+          # Simple, robust capture of all relevant folders
+          # We exclude node_modules to keep it small, but capture everything else
+          tar -czf artifacts.tar.gz \
+            services/*/dist \
+            services/*/prisma \
+            services/*/migrations \
+            services/*/Dockerfile.prod \
+            services/*/schema.prisma \
+            services/*/package.json \
+            web/*/dist \
+            web/*/Dockerfile.prod \
+            web/*/package.json \
+            package.json
+
+      - name: Audit Pack Contents
+        run: tar -tvf artifacts.tar.gz | head -n 50
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-artifacts
+          path: artifacts.tar.gz
+          retention-days: 1
+
+  package:
+    name: Build & Push
+    needs: verify
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -83,14 +144,46 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include: ${{ fromJSON(needs.detect-changes.outputs.matrix) }}
+        include:
+          - name: appetite-and-criteria
+            path: services/appetite-and-criteria
+          - name: audit-and-reporting
+            path: services/audit-and-reporting
+          - name: decisioning-and-approvals
+            path: services/decisioning-and-approvals
+          - name: ai-risk-service
+            path: services/erm-ai-risk-service
+          - name: monitoring-and-breaches
+            path: services/monitoring-and-breaches
+          - name: notification-service
+            path: services/notification-service
+          - name: portal
+            path: web/portal
+
     steps:
-      - name: Checkout Code
+      - name: Checkout Code (for Dockerfiles)
         uses: actions/checkout@v4
 
       - name: Lowercase repository owner
         id: owner
         run: echo "owner=${GITHUB_REPOSITORY_OWNER,,}" >> $GITHUB_OUTPUT
+
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-artifacts
+          path: .
+
+      - name: Unpack Build Artifacts
+        run: |
+          tar -xzf artifacts.tar.gz -C .
+          echo "Verifying unpack results for ${{ matrix.path }}..."
+          ls -R ${{ matrix.path }}/dist || echo "DIST STILL MISSING IN UNPACK"
+
+      - name: Audit Docker Context
+        run: |
+          echo "Listing files in context: ./${{ matrix.path }}"
+          ls -la ./${{ matrix.path }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -99,34 +192,29 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Login to GHCR
-        # We only need to login if we are actually pushing (i.e., on 'push' to main)
-        if: github.event_name == 'push'
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and Push Docker Image
+      - name: Build and Push
         uses: docker/build-push-action@v5
         with:
-          # CRITICAL FIX: Set context to the root directory to support NPM workspaces
-          context: . 
+          context: ./${{ matrix.path }}
           file: ./${{ matrix.path }}/Dockerfile.prod
-          # CRITICAL SECURITY FIX: Only push to the registry if this is a merge/push to main.
-          push: ${{ github.event_name == 'push' }}
+          push: true
           platforms: linux/amd64,linux/arm64
           tags: |
             ghcr.io/${{ steps.owner.outputs.owner }}/erm-${{ matrix.name }}:latest
             ghcr.io/${{ steps.owner.outputs.owner }}/erm-${{ matrix.name }}:${{ github.sha }}
-          cache-from: type=gha,scope=${{ matrix.name }}
-          cache-to: type=gha,mode=min,scope=${{ matrix.name }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=min
 
   deploy:
     name: Deploy to OCI
-    needs: [detect-changes, build-and-push]
-    # Only deploy on direct pushes/merges to main, NEVER on Pull Requests
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.detect-changes.outputs.matrix != '[]'
+    needs: [verify, package]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code

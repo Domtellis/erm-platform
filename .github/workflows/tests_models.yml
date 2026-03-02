@@ -4,32 +4,39 @@ name: Antigravity Router Tests
 on:
   push:
     branches: [ "main", "master" ]
+    # ONLY fire this workflow if files in the tools directory change
+    paths:
+      - 'tools/model_router.py'
+      - 'tools/models.json'
+      - 'tools/test_model_router.py'
+      - '.github/workflows/tests_models.yml'
+
   pull_request:
     branches: [ "main", "master" ]
+    paths:
+      - 'tools/**'
+
+  # This allows you to run this workflow manually from the GitHub Actions tab
+  workflow_dispatch:
 
 jobs:
   test:
-    # This tells GitHub WHERE to run the tests (a temporary Linux server)
     runs-on: ubuntu-latest
 
     steps:
-    # 1. Grab your code from the repository
     - name: Check out repository
       uses: actions/checkout@v4
 
-    # 2. Install Python on the temporary server
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.10'
+        python-version: '3.12'
 
-    # 3. Install pytest
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install pytest
 
-    # 4. Run the exact test file we created
     - name: Run Pytest
       run: |
         pytest tools/test_model_router.py -v

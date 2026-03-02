@@ -1,23 +1,61 @@
-# Build is handled natively in CI to avoid QEMU slowness
-FROM node:20-slim
+# ==========================================
+# STAGE 1: BUILDER (Monorepo Root Context)
+# ==========================================
+FROM node:20-slim AS builder
+
+# Debian-slim sometimes requires openssl for Prisma to generate correctly
+RUN apt-get update && apt-get install -y openssl
 
 WORKDIR /app
 
-# Install OpenSSL (required by Prisma native engine on Debian Bookworm)
+# 1. Copy the entire monorepo (shielded by your new .dockerignore!)
+COPY . .
+
+# 2. Install ALL dependencies across the monorepo workspaces
+RUN npm ci
+
+# 3. Generate Prisma client natively
+# We use the exact environment variables from your original file
+ENV PRISMA_CLI_QUERY_ENGINE_TYPE=library
+ENV PRISMA_CLIENT_ENGINE_TYPE=library
+RUN npx prisma generate --schema=./services/erm-ai-risk-service/schema.prisma
+
+# 4. Build ONLY the erm-ai-risk-service workspace
+RUN npm run build -w services/erm-ai-risk-service
+
+
+# ==========================================
+# STAGE 2: RUNNER (Production Image)
+# ==========================================
+FROM node:20-slim AS runner
+
+# Ensure openssl is available in production for the Prisma engine
 RUN apt-get update && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
 
-# Install production dependencies only
-COPY package*.json ./
-RUN npm install --omit=dev
+WORKDIR /app
+ENV NODE_ENV=production
+ENV PRISMA_CLI_QUERY_ENGINE_TYPE=library
+ENV PRISMA_CLIENT_ENGINE_TYPE=library
 
+# 1. Copy the root lockfile and workspace package.json
+COPY package.json package-lock.json ./
+COPY services/erm-ai-risk-service/package.json ./services/erm-ai-risk-service/
 
-# Copy natively built app
-COPY ./dist ./dist
-COPY ./schema.prisma ./schema.prisma
+# 2. Install ONLY production dependencies across the workspace
+RUN npm ci --omit=dev
 
-# Generate Prisma client for the target architecture (Native Engine)
-RUN PRISMA_CLI_QUERY_ENGINE_TYPE=library PRISMA_CLIENT_ENGINE_TYPE=library npx prisma generate --schema=./schema.prisma
+# 3. Copy the compiled Prisma Client from the builder
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
+
+# 4. Copy the compiled Javascript and Prisma files from the builder
+COPY --from=builder /app/services/erm-ai-risk-service/dist ./services/erm-ai-risk-service/dist
+COPY --from=builder /app/services/erm-ai-risk-service/prisma ./services/erm-ai-risk-service/prisma
+COPY --from=builder /app/services/erm-ai-risk-service/schema.prisma ./services/erm-ai-risk-service/schema.prisma
+
+# 5. Drop down into the specific service directory to run the app
+WORKDIR /app/services/erm-ai-risk-service
 
 EXPOSE 4014
 
-CMD ["sh", "-c", "npx prisma db push --schema=./schema.prisma --accept-data-loss && node dist/main"]
+CMD ["node", "dist/main"]
