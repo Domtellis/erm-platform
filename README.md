@@ -49,6 +49,7 @@ docker-compose -f docker-compose.prod.yml up -d --build
 - **OPA (Open Policy Agent)**: Decoupled policy engine for authorization.
 - **Mailpit**: SMTP server for email testing and capture.
 
+
 ### Observability
 - **Prometheus**: Metrics collection and time-series database.
 - **Grafana**: Real-time dashboard with service health monitoring (🟢/🔴 traffic lights).
