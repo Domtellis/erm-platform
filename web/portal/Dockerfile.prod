@@ -5,14 +5,19 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# 1. Copy the entire monorepo into the builder
-# (Ensure you have a .dockerignore at the root ignoring local node_modules!)
-COPY . .
+# 1. Copy ONLY the dependency manifests first
+# This creates a "Cache Layer" for your node_modules
+COPY package.json package-lock.json ./
+COPY web/portal/package.json ./web/portal/
 
 # 2. Install dependencies across the entire monorepo (respects root package-lock.json)
 RUN npm ci
 
-# 3. Build ONLY the web/portal workspace
+# 3. The "Source" - Copy the rest of the monorepo
+# Since this is Step 3, changing code here will NOT trigger a re-install.
+COPY . .
+
+# 4. Build ONLY the web/portal workspace
 RUN npm run build -w web/portal
 
 # ==========================================
