@@ -29,7 +29,7 @@ concurrency:
 jobs:
   detect-changes:
     name: Detect Changed Services
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
@@ -115,7 +115,7 @@ jobs:
           file: ./${{ matrix.path }}/Dockerfile.prod
           # CRITICAL SECURITY FIX: Only push to the registry if this is a merge/push to main.
           push: ${{ github.event_name == 'push' }}
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/arm64
           tags: |
             ghcr.io/${{ steps.owner.outputs.owner }}/erm-${{ matrix.name }}:latest
             ghcr.io/${{ steps.owner.outputs.owner }}/erm-${{ matrix.name }}:${{ github.sha }}
