@@ -125,30 +125,41 @@ jobs:
   deploy:
     name: Deploy to OCI
     needs: [detect-changes, build-and-push]
-    # Only deploy on direct pushes/merges to main, NEVER on Pull Requests
+    # Only deploy on direct pushes to main when changes are actually detected
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.detect-changes.outputs.matrix != '[]'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Prepare & Audit Target Directory
+      - name: Remote Audit, Cleanup, and Deploy
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.OCI_SERVER_IP }}
           username: ${{ secrets.OCI_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            echo "--- REMOTE AUDIT & CLEANUP START ---"
+            echo "--- 1. REMOTE AUDIT & CLEANUP ---"
             df -h /
-            # Emergency Prune: Remove unused Docker data to reclaim space
-            sudo docker system prune -af --volumes || true
+            # Prune dangling images to keep the disk clean
+            sudo docker image prune -f
+            
+            echo "--- 2. PREPARE ENVIRONMENT ---"
             mkdir -p ~/erm-platform
             sudo chown -R ${{ secrets.OCI_USER }}:${{ secrets.OCI_USER }} ~/erm-platform
-            chmod -R 755 ~/erm-platform
+            
+            echo "--- 3. PULL & SURGICAL RESTART ---"
+            cd ~/erm-platform
+            # Pull only new versions of images
+            sudo docker-compose -f docker-compose.prod.yml pull
+            
+            # Restart ONLY changed services (No --force-recreate)
+            # This keeps your DB and Redpanda online if only code changed!
+            sudo docker-compose -f docker-compose.prod.yml up -d --remove-orphans
+            
+            echo "--- 4. FINAL STATUS ---"
+            sudo docker ps
             df -h /
-            tar --version
-            echo "--- REMOTE AUDIT & CLEANUP END ---"
 
       - name: Copy Config to Server
         uses: appleboy/scp-action@v0.1.7
@@ -201,7 +212,7 @@ jobs:
             sudo docker exec erm-postgres psql -U postgres -c "CREATE DATABASE audit;" || true
             sudo docker exec erm-postgres psql -U postgres -c "CREATE DATABASE ai_risk;" || true
 
-            sudo docker-compose -f docker-compose.prod.yml up -d --force-recreate --remove-orphans
+            sudo docker-compose -f docker-compose.prod.yml up -d --remove-orphans
             
             # Verify Audit Service Health
             echo "Verifying Audit Service Health..."
