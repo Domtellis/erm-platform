@@ -15,6 +15,7 @@ RUN npm ci
 # 3. Build ONLY the web/portal workspace
 RUN npm run build -w web/portal
 
+
 # ==========================================
 # STAGE 2: RUNNER (Nginx)
 # ==========================================
