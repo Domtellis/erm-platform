@@ -3,6 +3,7 @@ import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import { Transport } from "@nestjs/microservices";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
+import { getKafkaBrokers } from "./common/kafka.config";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -14,7 +15,7 @@ async function bootstrap() {
     options: {
       client: {
         clientId: "audit-service-sink",
-        brokers: [process.env.KAFKA_BROKERS || "redpanda:29092"],
+        brokers: getKafkaBrokers(),
       },
       consumer: {
         groupId: "erm-audit-production-group-v3",

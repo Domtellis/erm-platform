@@ -5,6 +5,7 @@ import { NotificationController } from "./notifications/notification.controller"
 import { NotificationService } from "./notifications/notification.service";
 import { EmailService } from "./notifications/email.service";
 import { JiraService } from "./notifications/jira.service";
+import { getKafkaBrokers } from "./common/kafka.config";
 
 @Module({
   imports: [
@@ -15,10 +16,10 @@ import { JiraService } from "./notifications/jira.service";
         transport: Transport.KAFKA,
         options: {
           client: {
-            brokers: (process.env.KAFKA_BROKERS || "localhost:9092").split(","),
+            brokers: getKafkaBrokers(),
           },
           consumer: {
-            groupId: "erm-notification-group",
+            groupId: "erm-notification-client",
           },
         },
       },
@@ -27,4 +28,4 @@ import { JiraService } from "./notifications/jira.service";
   controllers: [NotificationController],
   providers: [NotificationService, EmailService, JiraService],
 })
-export class AppModule {}
+export class AppModule { }

@@ -7,6 +7,7 @@ import {
 import { PrismaService } from "../prisma/prisma.service";
 import { Kafka, Producer } from "kafkajs";
 import { ConfigService } from "@nestjs/config";
+import { getKafkaBrokers } from "../common/kafka.config";
 
 @Injectable()
 export class OutboxService implements OnModuleInit, OnModuleDestroy {
@@ -20,9 +21,7 @@ export class OutboxService implements OnModuleInit, OnModuleDestroy {
   ) {
     const kafka = new Kafka({
       clientId: "monitoring-outbox-relay",
-      brokers: [
-        this.configService.get<string>("KAFKA_BROKERS", "redpanda:29092"),
-      ],
+      brokers: getKafkaBrokers(),
     });
     this.kafkaProducer = kafka.producer();
   }

@@ -3,6 +3,7 @@ import { ClientsModule, Transport } from "@nestjs/microservices";
 import { RemediationService } from "./remediation.service";
 import { RemediationController } from "./remediation.controller";
 import { PrismaModule } from "../prisma/prisma.module";
+import { getKafkaBrokers } from "../common/kafka.config";
 
 @Module({
   imports: [
@@ -13,7 +14,7 @@ import { PrismaModule } from "../prisma/prisma.module";
         transport: Transport.KAFKA,
         options: {
           client: {
-            brokers: (process.env.KAFKA_BROKERS || "redpanda:29092").split(","),
+            brokers: getKafkaBrokers(),
           },
           consumer: {
             groupId: "erm-decisioning-producer",

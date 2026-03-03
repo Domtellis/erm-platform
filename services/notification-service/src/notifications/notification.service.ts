@@ -12,11 +12,8 @@ export class NotificationService {
   ) { }
 
   async handleBreachDetected(event: any) {
-    let { payload } = event;
-    // Handle monitoring-service format where payload is in 'data'
-    if (!payload && event.data) {
-      payload = event.data;
-    }
+    // The controller already unwrapped this, so 'event' is the actual payload
+    const payload = event;
 
     const severity = (payload?.severity || "low").toLowerCase();
 
@@ -48,11 +45,8 @@ Action Required: Please log in to the ERM Portal to assess this breach immediate
   }
 
   async handleRemediationPlanCreated(event: any) {
-    let { payload } = event;
-    // Fallback if payload is not wrapped (backward compatibility or direct objects)
-    if (!payload && event.title) {
-      payload = event;
-    }
+    // The controller already unwrapped this, so 'event' is the actual payload
+    const payload = event;
 
     if (!payload || !payload.title) {
       this.logger.warn(

@@ -8,6 +8,7 @@ import { AppModule } from "./app.module";
 import { ValidationPipe } from "@nestjs/common";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { Transport, MicroserviceOptions } from "@nestjs/microservices";
+import { getKafkaBrokers } from "./common/kafka.config";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -17,7 +18,7 @@ async function bootstrap() {
     transport: Transport.KAFKA,
     options: {
       client: {
-        brokers: (process.env.KAFKA_BROKERS || "redpanda:29092").split(","),
+        brokers: getKafkaBrokers(),
       },
       consumer: {
         groupId: "ai-risk-consumer",

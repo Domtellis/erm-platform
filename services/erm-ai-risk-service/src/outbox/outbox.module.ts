@@ -4,6 +4,7 @@ import { CompressionTypes, CompressionCodecs } from "kafkajs";
 import { SnappyCodec } from "kafkajs-snappy";
 import { OutboxService } from "./outbox.service";
 import { PrismaModule } from "../prisma/prisma.module";
+import { getKafkaBrokers } from "../common/kafka.config";
 
 CompressionCodecs[CompressionTypes.Snappy] = SnappyCodec;
 
@@ -18,7 +19,7 @@ CompressionCodecs[CompressionTypes.Snappy] = SnappyCodec;
         options: {
           client: {
             clientId: "ai-risk-service",
-            brokers: (process.env.KAFKA_BROKERS || "redpanda:29092").split(","),
+            brokers: getKafkaBrokers(),
           },
           producer: {
             allowAutoTopicCreation: true,
@@ -30,4 +31,4 @@ CompressionCodecs[CompressionTypes.Snappy] = SnappyCodec;
   providers: [OutboxService],
   exports: [OutboxService],
 })
-export class OutboxModule {}
+export class OutboxModule { }
