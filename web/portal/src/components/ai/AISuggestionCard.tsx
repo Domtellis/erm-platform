@@ -32,6 +32,25 @@ export const AISuggestionCard: React.FC<AISuggestionCardProps> = ({ suggestion, 
         return 'bg-blue-100 text-blue-700 border-blue-200';
     };
 
+    if (suggestion.status === 'failed') {
+        return (
+            <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 transition-all animate-fade-in shadow-sm">
+                <div className="flex items-start space-x-3">
+                    <div className="rounded-full bg-amber-100 p-2 text-amber-600 flex-shrink-0">
+                        <AlertTriangle className="h-5 w-5" />
+                    </div>
+                    <div>
+                        <h4 className="text-sm font-bold text-amber-900">AI Assessment Unavailable</h4>
+                        <p className="text-xs text-amber-700 mt-1 leading-relaxed">
+                            {suggestion.justification || "The AI assessment could not be generated due to system limits. Please review this breach manually."}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+
     if (suggestion.status !== 'pending') {
         return (
             <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 transition-all animate-fade-in">

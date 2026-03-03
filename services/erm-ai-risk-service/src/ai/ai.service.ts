@@ -138,6 +138,29 @@ export class AiService implements OnModuleInit {
         reason: err.message,
       });
 
+      try {
+        await this.prisma.assessmentSuggestion.upsert({
+          where: { breach_case_id: String(breach_case_id) },
+          create: {
+            breach_case_id: String(breach_case_id),
+            model_version: this.geminiClient.modelVersion,
+            prompt_version: this.geminiClient.promptVersion,
+            impact: 0,
+            likelihood: 0,
+            risk_score: 0,
+            justification: "AI assessment could not be generated due to system limits or an API error. Please review manually.",
+            recommendations: ["Manual review required."],
+            latency_ms: 0,
+            status: "failed",
+          },
+          update: {}, // Don't overwrite an existing successful record on Kafka re-delivery
+        });
+        this.logger.log(`Created 'failed' fallback assessment record for breach ${breach_case_id}`);
+      } catch (dbErr) {
+        this.logger.error(`Failed to write fallback assessment record for ${breach_case_id}: ${dbErr.message}`);
+      }
+
+
       // Publish a failed event so downstream services know assessment is unavailable
       await this.outboxService
         .enqueue("erm.risk.assessment-failed.v1", {

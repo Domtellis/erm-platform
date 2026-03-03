@@ -14,7 +14,7 @@ export interface AiAssessmentSuggestion {
     justification: string;
     recommendations: string[];
     latency_ms: number;
-    status: 'pending' | 'accepted' | 'modified' | 'rejected';
+    status: 'pending' | 'accepted' | 'modified' | 'rejected' | 'failed';
     human_feedback?: string;
     created_at: string;
 }
