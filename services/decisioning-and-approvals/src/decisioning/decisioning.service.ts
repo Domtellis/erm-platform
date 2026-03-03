@@ -11,6 +11,8 @@ import axios from "axios";
 import { ConfigService } from "@nestjs/config";
 import axiosRetry from "axios-retry";
 
+import { RemediationService } from "../remediation/remediation.service";
+
 @Injectable()
 export class DecisioningService {
   private readonly logger = new Logger(DecisioningService.name);
@@ -19,6 +21,7 @@ export class DecisioningService {
   constructor(
     private prisma: PrismaService,
     private configService: ConfigService,
+    private remediationService: RemediationService,
   ) {
     this.opaUrl = this.configService.get<string>(
       "OPA_URL",
@@ -159,7 +162,23 @@ export class DecisioningService {
           data: { status: "approved" },
         });
 
-        // 3. Record the decision event in Outbox
+        // 3. Automation Bridge: Create Remediation Plan for Mitigations
+        if (decision.decision_type === "mitigation") {
+          this.logger.log(`Automating remediation plan for mitigation decision ${id}`);
+          try {
+            await this.remediationService.create({
+              risk_assessment_id: decision.risk_assessment_id,
+              title: `Remediation: ${decision.rationale || "Automated Plan"}`,
+              description: `Generated automatically after approval of mitigation decision ${id}.`,
+              assigned_to: "unassigned",
+              due_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days from now
+            });
+          } catch (remError) {
+            this.logger.error(`Failed to automate remediation plan: ${remError.message}`);
+          }
+        }
+
+        // 4. Record the decision event in Outbox
         await tx.outbox.create({
           data: {
             type: "erm.decisioning.decision-approved.v1",
