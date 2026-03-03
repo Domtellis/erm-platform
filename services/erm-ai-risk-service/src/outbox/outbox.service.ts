@@ -46,7 +46,19 @@ export class OutboxService implements OnModuleInit {
 
     for (const message of pending) {
       try {
-        await this.kafkaClient.emit(message.type, message.payload).toPromise();
+        // Wrap the payload in a CloudEvent structure expected by the Audit Service
+        const cloudEvent = {
+          id: message.id,
+          time: message.occurred_at,
+          type: message.type,
+          data: message.payload,
+          source: "/services/erm-ai-risk-service",
+          specversion: "1.0",
+        };
+
+        // NestJS ClientKafka emit requires a key/value payload for non-JSON serialization sometimes, 
+        // but since pattern is topic, we just send the structured object
+        await this.kafkaClient.emit(message.type, cloudEvent).toPromise();
 
         await this.prisma.outbox.update({
           where: { id: message.id },
