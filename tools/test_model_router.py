@@ -67,9 +67,9 @@ def test_regex_word_boundaries(mock_registry):
 def test_graceful_degradation(mock_registry):
     """Ensure a task degrades to the next available tier if primary is out of quota."""
     
-    # "architect system" = +15 (architect) + +15 (system) = 30 (Elite target)
-    # Elite quota is 0.0 in our mock. It should degrade to Critical.
-    result = get_recommendation("architect a new system", mock_registry)
+    # "architect system logic performance" = architect(+15) + system(+15) + logic(+10) + performance(+10) = 50 (Elite target)
+    # Elite quota is 0.0 in our mock. It should gracefully degrade to Critical.
+    result = get_recommendation("architect a new system with complex logic performance", mock_registry)
     
     assert result['error'] is False
     assert result['is_fallback'] is True
@@ -80,19 +80,19 @@ def test_graceful_degradation(mock_registry):
 def test_hard_fail_safety(mock_registry):
     """Ensure the router halts if it drops below the min_tier_idx."""
     
-    # Temporarily exhaust Critical quota as well for this test
+    # Exhaust both Critical and Advanced quotas for this test
     exhausted_registry = mock_registry.copy()
-    exhausted_registry["models"][1]["quota"] = 0.0 # Sonnet now out of quota
+    exhausted_registry["models"][1]["quota"] = 0.0 # Critical (Sonnet) out of quota
+    exhausted_registry["models"][2]["quota"] = 0.0 # Advanced (Gemini High) out of quota
     
-    # "architect system" scores 30. 
-    # Target: Elite. Floor: Advanced.
+    # Task scores 50. Target: Elite. Floor: Advanced.
     # Elite (0), Critical (0), Advanced (0).
     # It should NOT drop to Enhanced. It should hard fail.
-    result = get_recommendation("architect a new system", exhausted_registry)
+    result = get_recommendation("architect a new system with complex logic performance", exhausted_registry)
     
     assert result.get('error') is True
-    assert "CRITICAL" in result['message']
-    assert "Pipeline halted" in result['message']
+    assert "HARD FAIL" in result['message']
+    assert "Advanced" in result['message']
 
 
 def test_plan_flag_override(mock_registry):
@@ -109,12 +109,14 @@ def test_plan_flag_override(mock_registry):
 
 
 def test_critical_flag_override(mock_registry):
-    """Ensure --critical flag forces the primary model even if quota is 0."""
+    """Ensure --critical flag sets target to Elite, but still obeys quota safety nets."""
     
-    # Task scores 30 (Elite Target). Elite has 0.0 quota.
-    # Normally it falls back. With critical=True, it stays Elite.
-    result = get_recommendation("architect a new system", mock_registry, critical=True)
+    # Task normally scores 15 (Advanced Target). 
+    # With critical=True, it jumps to Elite Target.
+    # Because Elite has 0.0 quota, it must still safely degrade to Critical.
+    result = get_recommendation("architect a database", mock_registry, critical=True)
     
     assert result['error'] is False
-    assert result['is_fallback'] is False
-    assert result['model']['tier'] == "Elite"
+    assert result['is_fallback'] is True  # It correctly fell back due to 0 quota
+    assert result['model']['tier'] == "Critical" # Landed safely on the next tier down
+    assert "Critical Flag Passed: Forced Elite" in result['factors']

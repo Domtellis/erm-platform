@@ -7,7 +7,7 @@ import subprocess
 from datetime import datetime, timezone
 
 MODELS_PATH = os.path.join(os.path.dirname(__file__), 'models.json')
-TIERS = ["Elite", "Critical", "Advanced", "Enhanced", "Standard"]
+TIERS = ["Elite", "Critical", "Advanced","Research", "Enhanced", "Standard"]
 
 def load_registry():
     try:
@@ -121,20 +121,20 @@ def get_recommendation(task, registry, critical=False, plan_only=False):
         # Map score to Tier
         if critical or score >= 40:
             target_tier = "Elite"
-            min_tier_idx = 2  # Hard fail if drops below Advanced
+            min_tier_idx = 2  # Hard fail if drops below Advanced (Index 2)
             if critical: factors.append("Critical Flag Passed: Forced Elite")
         elif score >= 20:
             target_tier = "Critical"
-            min_tier_idx = 3  # Hard fail if drops below Enhanced
+            min_tier_idx = 4  # Hard fail if drops below Enhanced (Index 4)
         elif score >= 10:
             target_tier = "Advanced"
-            min_tier_idx = 4  # Can drop to Standard
+            min_tier_idx = 5  # Can drop to Standard (Index 5)
         elif score >= 0:
             target_tier = "Enhanced"
-            min_tier_idx = 4
+            min_tier_idx = 5
         else:
             target_tier = "Standard"
-            min_tier_idx = 4
+            min_tier_idx = 5
 
     # --- GRACEFUL DEGRADATION & HARD FAILS ---
     start_idx = TIERS.index(target_tier)
