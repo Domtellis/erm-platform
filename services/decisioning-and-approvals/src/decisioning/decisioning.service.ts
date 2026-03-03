@@ -166,13 +166,23 @@ export class DecisioningService {
         if (decision.decision_type === "mitigation") {
           this.logger.log(`Automating remediation plan for mitigation decision ${id}`);
           try {
-            await this.remediationService.create({
-              risk_assessment_id: decision.risk_assessment_id,
-              title: `Remediation: ${decision.rationale || "Automated Plan"}`,
-              description: `Generated automatically after approval of mitigation decision ${id}.`,
-              assigned_to: "unassigned",
-              due_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days from now
+            // Find the associated risk assessment first
+            const assessment = await tx.riskAssessment.findFirst({
+              where: { breach_case_id: decision.breach_case_id },
+              orderBy: { created_at: 'desc' }
             });
+
+            if (assessment) {
+              await this.remediationService.create({
+                risk_assessment_id: assessment.id,
+                title: `Remediation: ${decision.rationale || "Automated Plan"}`,
+                description: `Generated automatically after approval of mitigation decision ${id}.`,
+                assigned_to: "unassigned",
+                due_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days from now
+              });
+            } else {
+              this.logger.warn(`No risk assessment found for breach ${decision.breach_case_id}, automation skipped.`);
+            }
           } catch (remError) {
             this.logger.error(`Failed to automate remediation plan: ${remError.message}`);
           }
