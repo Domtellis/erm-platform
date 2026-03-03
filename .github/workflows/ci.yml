@@ -199,6 +199,7 @@ jobs:
             
             # Formulate .env file so docker-compose seamlessly injects secrets into containers
             echo "GEMINI_API_KEY=$GEMINI_API_KEY" > .env
+            echo "GEMINI_MODEL=gemini-2.5-flash-lite" >> .env
             echo "JIRA_URL=$JIRA_URL" >> .env
             echo "JIRA_USER=$JIRA_USER" >> .env
             echo "JIRA_TOKEN=$JIRA_TOKEN" >> .env

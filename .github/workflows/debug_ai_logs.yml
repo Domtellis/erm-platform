@@ -6,6 +6,7 @@ on:
     paths:
       - '.github/workflows/debug_ai_logs.yml'
 
+
 jobs:
   fetch_logs:
     runs-on: ubuntu-latest
