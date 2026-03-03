@@ -9,7 +9,7 @@ export class NotificationService {
   constructor(
     private readonly emailService: EmailService,
     private readonly jiraService: JiraService,
-  ) {}
+  ) { }
 
   async handleBreachDetected(event: any) {
     let { payload } = event;
@@ -22,7 +22,7 @@ export class NotificationService {
 
     this.logger.log(`Processing Breach: ${payload?.title} (${severity})`);
 
-    if (severity === "high" || severity === "critical") {
+    if (severity === "critical" || severity === "high" || severity === "medium") {
       this.logger.log(
         "High/Critical Severity Detected. Sending Email Alert...",
       );
@@ -62,6 +62,10 @@ Action Required: Please log in to the ERM Portal to assess this breach immediate
     }
 
     this.logger.log(`Processing Remediation Plan: ${payload.title}`);
-    await this.jiraService.createIssue(payload);
+    try {
+      await this.jiraService.createIssue(payload);
+    } catch (err) {
+      this.logger.error(`Critical failure in JiraService: ${err.message}`);
+    }
   }
 }

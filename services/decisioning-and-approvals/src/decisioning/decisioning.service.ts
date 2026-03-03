@@ -164,7 +164,7 @@ export class DecisioningService {
 
         // 3. Automation Bridge: Create Remediation Plan for Mitigations
         if (decision.decision_type === "mitigation") {
-          this.logger.log(`Automating remediation plan for mitigation decision ${id}`);
+          this.logger.log(`[BRIDGE] Automating remediation plan for mitigation decision ${id}`);
           try {
             // Find the associated risk assessment first
             const assessment = await tx.riskAssessment.findFirst({
@@ -173,18 +173,19 @@ export class DecisioningService {
             });
 
             if (assessment) {
-              await this.remediationService.create({
+              const plan = await this.remediationService.create({
                 risk_assessment_id: assessment.id,
                 title: `Remediation: ${decision.rationale || "Automated Plan"}`,
                 description: `Generated automatically after approval of mitigation decision ${id}.`,
                 assigned_to: "unassigned",
                 due_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days from now
               });
+              this.logger.log(`[BRIDGE SUCCESS] Created remediation plan ${plan.id} for breach ${decision.breach_case_id}`);
             } else {
-              this.logger.warn(`No risk assessment found for breach ${decision.breach_case_id}, automation skipped.`);
+              this.logger.warn(`[BRIDGE WARN] No risk assessment found for breach ${decision.breach_case_id}, automation skipped.`);
             }
           } catch (remError) {
-            this.logger.error(`Failed to automate remediation plan: ${remError.message}`);
+            this.logger.error(`[BRIDGE FAILURE] Failed to automate remediation plan: ${remError.message}`);
           }
         }
 

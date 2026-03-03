@@ -13,7 +13,7 @@ import { PrismaModule } from "../prisma/prisma.module";
         transport: Transport.KAFKA,
         options: {
           client: {
-            brokers: (process.env.KAFKA_BROKERS || "localhost:9092").split(","),
+            brokers: (process.env.KAFKA_BROKERS || "redpanda:29092").split(","),
           },
           consumer: {
             groupId: "erm-decisioning-producer",
@@ -26,4 +26,4 @@ import { PrismaModule } from "../prisma/prisma.module";
   providers: [RemediationService],
   exports: [RemediationService],
 })
-export class RemediationModule {}
+export class RemediationModule { }
