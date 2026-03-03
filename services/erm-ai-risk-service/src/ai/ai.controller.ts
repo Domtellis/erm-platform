@@ -19,6 +19,7 @@ export class AiController {
   private readonly logger = new Logger(AiController.name);
   private readonly version = "1.0.4-hitl-sync"; // Updated version to verify push
 
+
   constructor(private readonly aiService: AiService) { }
 
   @EventPattern("erm.monitoring.breach-detected.v1")
