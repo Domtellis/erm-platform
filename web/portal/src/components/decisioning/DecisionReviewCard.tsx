@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import axios from 'axios';
-import { Check, X, Shield, User } from 'lucide-react';
+import { Check, X, Shield, User, Brain, AlertTriangle } from 'lucide-react';
 
 interface DecisionCardProps {
     caseData: {
@@ -57,7 +57,6 @@ export function DecisionReviewCard({ caseData, onClose }: DecisionCardProps) {
     });
 
     // 0. Check for existing decision
-    // 0. Check for existing decision
     const { data: existingDecisions } = useQuery({
         queryKey: ['decisions', caseData.id],
         queryFn: async () => {
@@ -76,6 +75,23 @@ export function DecisionReviewCard({ caseData, onClose }: DecisionCardProps) {
         },
         enabled: !!auth.user?.access_token,
     });
+
+    // 0.1 Check for human risk assessments (Segregation of Duties)
+    const { data: humanAssessments } = useQuery({
+        queryKey: ['risk-assessments', caseData.id],
+        queryFn: async () => {
+            if (!auth.user?.access_token) return [];
+            const res = await axios.get(`/api/decisioning/assessments?breach_case_id=${caseData.id}`, {
+                headers: {
+                    Authorization: `Bearer ${auth.user.access_token}`
+                }
+            });
+            return res.data;
+        },
+        enabled: !!auth.user?.access_token,
+    });
+
+    const humanAssessment = humanAssessments?.[0]; // Get the first assessment for comparison
 
     const decision = existingDecisions?.[0]; // Assuming one active decision per breach for now
     const isApproved = decision?.status === 'approved';
@@ -182,6 +198,61 @@ export function DecisionReviewCard({ caseData, onClose }: DecisionCardProps) {
                     <div>
                         <span className="text-slate-500 block">Value</span>
                         <span className="text-slate-900 font-mono">{caseData.observed_value}</span>
+                    </div>
+                </div>
+            </div>
+
+            {/* Assessment Comparison Section */}
+            <div className="space-y-3">
+                <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center">
+                    <Shield className="mr-2 h-3.5 w-3.5" />
+                    Risk Assessment Verification
+                </h4>
+
+                <div className="grid grid-cols-2 gap-3">
+                    {/* Human Assessment Summary */}
+                    <div className={`p-3 rounded-lg border ${humanAssessment ? 'bg-indigo-50/30 border-indigo-100' : 'bg-slate-50 border-slate-100 italic'}`}>
+                        <div className="flex items-center justify-between mb-2">
+                            <span className="text-[10px] font-bold text-indigo-600 uppercase flex items-center">
+                                <User className="mr-1 h-3 w-3" /> Human
+                            </span>
+                            {humanAssessment && (
+                                <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold ${humanAssessment.risk_level === 'Critical' ? 'bg-red-100 text-red-700' :
+                                        humanAssessment.risk_level === 'High' ? 'bg-orange-100 text-orange-700' :
+                                            'bg-blue-100 text-blue-700'
+                                    }`}>
+                                    {humanAssessment.risk_level}
+                                </span>
+                            )}
+                        </div>
+                        {humanAssessment ? (
+                            <div className="space-y-1">
+                                <p className="text-xs font-semibold text-slate-800 line-clamp-1">{humanAssessment.title}</p>
+                                <div className="flex text-[10px] text-slate-500 space-x-2">
+                                    <span>Imp: {humanAssessment.impact_score}</span>
+                                    <span>Lik: {humanAssessment.likelihood_score}</span>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="flex items-center space-x-2 text-slate-400 text-[10px] py-1">
+                                <AlertTriangle className="h-3 w-3 text-amber-400" />
+                                <span>No site assessment found</span>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* AI Assessment Summary - (Note: AISuggestionCard is above, this is just a quick summary link) */}
+                    <div className="p-3 rounded-lg border bg-green-50/30 border-green-100">
+                        <div className="flex items-center justify-between mb-2">
+                            <span className="text-[10px] font-bold text-green-600 uppercase flex items-center">
+                                <Brain className="mr-1 h-3 w-3" /> Gemini AI
+                            </span>
+                            <span className="text-[10px] text-green-600 font-medium">Auto-Calculated</span>
+                        </div>
+                        <div className="flex items-center space-x-2 py-1">
+                            <div className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
+                            <span className="text-[10px] text-slate-500 italic">Score synchronized from AI service</span>
+                        </div>
                     </div>
                 </div>
             </div>
