@@ -1,4 +1,5 @@
 import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
+import { Cron, CronExpression } from "@nestjs/schedule";
 import { PrismaService } from "../prisma/prisma.service";
 import { ClientKafka } from "@nestjs/microservices";
 import { Inject } from "@nestjs/common";
@@ -11,7 +12,7 @@ export class OutboxService implements OnModuleInit {
   constructor(
     private prisma: PrismaService,
     @Inject("KAFKA_SERVICE") private readonly kafkaClient: ClientKafka,
-  ) {}
+  ) { }
 
   async onModuleInit() {
     await this.kafkaClient.connect();
@@ -36,6 +37,7 @@ export class OutboxService implements OnModuleInit {
    * unprocessed outbox messages and publishes them to Kafka.
    * In production, this would be a separate worker or a Debezium connector.
    */
+  @Cron(CronExpression.EVERY_5_SECONDS)
   async processOutbox() {
     const pending = await this.prisma.outbox.findMany({
       where: { processed_at: null },

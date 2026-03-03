@@ -61,7 +61,7 @@ export const AISuggestionCard: React.FC<AISuggestionCardProps> = ({ suggestion, 
                         </div>
                         <div>
                             <h4 className="text-sm font-semibold text-slate-900">AI Assessment {suggestion.status.charAt(0).toUpperCase() + suggestion.status.slice(1)}</h4>
-                            <p className="text-xs text-slate-500">Processed by Gemini 2.0 Flash</p>
+                            <p className="text-xs text-slate-500">Processed by {suggestion.model_version}</p>
                         </div>
                     </div>
                 </div>
