@@ -21,7 +21,7 @@ export class NotificationService {
 
     if (severity === "critical" || severity === "high" || severity === "medium") {
       this.logger.log(
-        "High/Critical Severity Detected. Sending Email Alert...",
+        `[TRACE] Severity '${severity}' matches threshold. Sending Email...`,
       );
       const subject = `[ERM] ${severity.toUpperCase()} Breach Detected: ${payload.title}`;
       const body = `
@@ -41,6 +41,8 @@ Action Required: Please log in to the ERM Portal to assess this breach immediate
         subject,
         body,
       );
+    } else {
+      this.logger.log(`[TRACE] Severity '${severity}' skipped (low)`);
     }
   }
 

@@ -10,6 +10,10 @@ export class NotificationController {
 
   @EventPattern("erm.monitoring.breach-detected.v1")
   async handleBreachDetected(@Payload() message: any) {
+    // Surgical Diagnostic Logs
+    this.logger.log(`[TRACE] Inbound Type: ${Buffer.isBuffer(message) ? 'Buffer' : typeof message}`);
+    this.logger.log(`[TRACE] Raw Snippet: ${JSON.stringify(message).substring(0, 50)}...`);
+
     let event = message;
 
     // Robust parsing for KafkaJS/NestJS microservice payloads
@@ -24,9 +28,11 @@ export class NotificationController {
 
       // Handle nesting: NestJS wraps in 'value' or monitoring sends in 'data'
       const finalEvent = event.value || event.data || event;
+      this.logger.log(`[TRACE] Parsed Event Keys: ${Object.keys(finalEvent || {}).join(', ')}`);
+
       await this.notificationService.handleBreachDetected(finalEvent);
     } catch (err) {
-      this.logger.error(`Failed to parse breach-detected event: ${err.message}`);
+      this.logger.error(`[TRACE ERROR] Breach parsing failed: ${err.message}`);
     }
   }
 
@@ -46,7 +52,7 @@ export class NotificationController {
       const finalEvent = event.value || event.data || event;
       await this.notificationService.handleRemediationPlanCreated(finalEvent);
     } catch (err) {
-      this.logger.error(`Failed to parse remediation-plan-created event: ${err.message}`);
+      this.logger.error(`Failed to parse remediation - plan - created event: ${err.message} `);
     }
   }
 }

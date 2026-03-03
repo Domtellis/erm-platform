@@ -9,6 +9,13 @@ export class JiraService {
   private readonly jiraToken = process.env.JIRA_TOKEN;
   private readonly jiraProject = process.env.JIRA_PROJECT;
 
+  constructor() {
+    const hasUrl = !!this.jiraUrl;
+    const hasUser = !!this.jiraUser;
+    const hasToken = !!this.jiraToken;
+    this.logger.log(`[STARTUP] Jira Config Status - URL: ${hasUrl}, User: ${hasUser}, Token: ${hasToken}, Project: ${this.jiraProject || 'KAN'}`);
+  }
+
   async createIssue(plan: any) {
     if (!this.jiraUrl || !this.jiraUser || !this.jiraToken) {
       this.logger.warn(
