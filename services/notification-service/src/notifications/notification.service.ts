@@ -4,6 +4,7 @@ import { JiraService } from "./jira.service";
 
 @Injectable()
 export class NotificationService {
+  // CI Trigger: 2026-03-04 15:58
   private readonly logger = new Logger(NotificationService.name);
 
   constructor(

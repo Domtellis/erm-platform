@@ -49,6 +49,12 @@ jobs:
             notification-service: ['services/notification-service/**', 'package.json', 'package-lock.json', 'infra/local/docker-compose.yml']
             portal: ['web/portal/**', 'package.json', 'package-lock.json', 'infra/local/docker-compose.yml']
 
+      - name: Debug Filter Outputs
+        run: |
+          echo "Changes detected: ${{ steps.filter.outputs.changes }}"
+          echo "Monitoring changed: ${{ steps.filter.outputs.monitoring-and-breaches }}"
+          echo "Notification changed: ${{ steps.filter.outputs.notification-service }}"
+
       - name: Generate Dynamic Matrix
         id: set-matrix
         run: |
