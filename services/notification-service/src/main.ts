@@ -4,8 +4,20 @@ import { AppModule } from "./app.module";
 import { MicroserviceOptions, Transport } from "@nestjs/microservices";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { getKafkaBrokers } from "./common/kafka.config";
+import { KafkaJSNonRetriableError } from "kafkajs";
+const { SnappyCodec } = require('kafkajs-snappy');
 
 async function bootstrap() {
+  // Register Snappy codec for KafkaJS
+  try {
+    const { Kafka } = require('kafkajs');
+    const { setCompressionHierarchy } = require('kafkajs/src/protocol/message/compression');
+    // Note: KafkaJS 2.x often requires manual registration for snappy
+    require('kafkajs').CompressionCodecs[require('kafkajs').CompressionTypes.SNAPPY] = () => require('kafkajs-snappy');
+  } catch (err) {
+    console.error('Failed to register Snappy codec:', err);
+  }
+
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
