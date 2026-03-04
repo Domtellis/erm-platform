@@ -179,12 +179,13 @@ jobs:
           JIRA_URL: ${{ secrets.JIRA_URL }}
           JIRA_USER: ${{ secrets.JIRA_USER }}
           JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
+          JIRA_PROJECT: ${{ secrets.JIRA_PROJECT }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         with:
           host: ${{ secrets.OCI_SERVER_IP }}
           username: ${{ secrets.OCI_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          envs: GEMINI_API_KEY,JIRA_URL,JIRA_USER,JIRA_TOKEN,DB_PASSWORD
+          envs: GEMINI_API_KEY,JIRA_URL,JIRA_USER,JIRA_TOKEN,JIRA_PROJECT,DB_PASSWORD
           script: |
             cd ~/erm-platform
             
@@ -203,6 +204,7 @@ jobs:
             echo "JIRA_URL=$JIRA_URL" >> .env
             echo "JIRA_USER=$JIRA_USER" >> .env
             echo "JIRA_TOKEN=$JIRA_TOKEN" >> .env
+            echo "JIRA_PROJECT=$JIRA_PROJECT" >> .env
             echo "DB_PASSWORD=${DB_PASSWORD:-password}" >> .env
 
             sudo docker-compose -f docker-compose.prod.yml pull
