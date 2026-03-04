@@ -26,6 +26,16 @@ export class NotificationController {
         event = JSON.parse(message);
       }
 
+      // Hardening: If 'event' is STILL a string after first parse (double-stringified)
+      if (typeof event === 'string') {
+        try {
+          event = JSON.parse(event);
+          this.logger.log(`[TRACE] Double-stringified payload detected and resolved.`);
+        } catch (e) {
+          // Not JSON, keep as string
+        }
+      }
+
       // Handle nesting: NestJS wraps in 'value' or monitoring sends in 'data'
       const finalEvent = event.value || event.data || event;
       this.logger.log(`[TRACE] Parsed Event Keys: ${Object.keys(finalEvent || {}).join(', ')}`);
