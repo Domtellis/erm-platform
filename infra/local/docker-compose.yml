@@ -1,5 +1,5 @@
 # ERM Monorepo Infrastructure - Local/Dev
-# Last Trigger: 2026-03-04 15:45
+# Last Secret Update Trigger: 2026-03-04 16:42
 version: '3.8'
 services:
   # Event Bus (Redpanda - Kafka compatible)
