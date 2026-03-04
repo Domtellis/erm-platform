@@ -14,11 +14,6 @@ export class JiraService {
     const hasUser = !!this.jiraUser;
     const hasToken = !!this.jiraToken;
 
-    // Self-healing: Fix double-dot typos in the URL if they exist
-    if (this.jiraUrl && this.jiraUrl.includes("..atlassian.com")) {
-      this.logger.warn(`[STARTUP] Double-dot typo detected in JIRA_URL. Self-healing applied.`);
-      (this as any).jiraUrl = this.jiraUrl.replace("..atlassian.com", ".atlassian.com");
-    }
 
     this.logger.log(`[STARTUP] Jira Config Status - URL: ${hasUrl}, User: ${hasUser}, Token: ${hasToken}, Project: ${this.jiraProject || 'KAN'}`);
   }

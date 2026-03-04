@@ -17,7 +17,7 @@ export class NotificationService {
     const payload = event;
 
     const severity = (payload?.severity || "low").toLowerCase();
-    this.logger.log(`[VERIFY-V3] Processing Breach: ${payload?.title} (${severity})`);
+    this.logger.log(`[FINAL-VERIFY] Processing Breach: ${payload?.title} (${severity})`);
 
     if (severity === "critical" || severity === "high" || severity === "medium") {
       this.logger.log(
