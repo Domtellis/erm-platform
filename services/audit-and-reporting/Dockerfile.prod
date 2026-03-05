@@ -1,60 +1,40 @@
 # ==========================================
-# STAGE 1: BUILDER (Monorepo Root Context)
+# STAGE 1: PRUNER
+# ==========================================
+FROM node:20-slim AS pruner
+WORKDIR /app
+RUN npm install -g turbo
+COPY . .
+RUN turbo prune audit-and-reporting --docker
+
+# ==========================================
+# STAGE 2: BUILDER
 # ==========================================
 FROM node:20-slim AS builder
-
-# Debian-slim sometimes requires openssl for Prisma to generate correctly
-RUN apt-get update && apt-get install -y openssl
-
 WORKDIR /app
-
-# 1. Copy the entire monorepo (shielded by your new .dockerignore!)
-COPY . .
-
-# 2. Install ALL dependencies across the monorepo workspaces
+RUN apt-get update && apt-get install -y openssl
+COPY --from=pruner /app/out/json/ .
+COPY --from=pruner /app/out/package-lock.json ./package-lock.json
 RUN npm ci
-
-# 3. Generate Prisma client natively
-# We use the exact environment variables from your original file
-ENV PRISMA_CLI_QUERY_ENGINE_TYPE=library
-ENV PRISMA_CLIENT_ENGINE_TYPE=library
+COPY --from=pruner /app/out/full/ .
+COPY services/audit-and-reporting/schema.prisma ./services/audit-and-reporting/schema.prisma
 RUN npx prisma generate --schema=./services/audit-and-reporting/schema.prisma
-
-# 4. Build ONLY the audit-and-reporting workspace
 RUN npm run build -w services/audit-and-reporting
 
-
 # ==========================================
-# STAGE 2: RUNNER (Production Image)
+# STAGE 3: RUNNER
 # ==========================================
 FROM node:20-slim AS runner
-
-# Ensure openssl is available in production for the Prisma engine
 RUN apt-get update && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
-
 WORKDIR /app
 ENV NODE_ENV=production
-ENV PRISMA_CLI_QUERY_ENGINE_TYPE=library
-ENV PRISMA_CLIENT_ENGINE_TYPE=library
-
-# 1. Copy the root lockfile and workspace package.json
-COPY package.json package-lock.json ./
-COPY services/audit-and-reporting/package.json ./services/audit-and-reporting/
-
-# 2. Install ONLY production dependencies for THIS workspace
-RUN npm ci --omit=dev -w services/audit-and-reporting --include-workspace-root
-
-# 3. Copy the compiled Prisma Client from the builder
+COPY --from=pruner /app/out/json/ .
+COPY --from=pruner /app/out/package-lock.json ./package-lock.json
+RUN npm ci --omit=dev
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
-
-# 4. Copy the compiled Javascript and Prisma files from the builder
 COPY --from=builder /app/services/audit-and-reporting/dist ./services/audit-and-reporting/dist
 COPY --from=builder /app/services/audit-and-reporting/schema.prisma ./services/audit-and-reporting/schema.prisma
-
-# 5. Drop down into the specific service directory to run the app
 WORKDIR /app/services/audit-and-reporting
-
 EXPOSE 4013
-
 CMD ["node", "dist/main"]

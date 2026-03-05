@@ -1,44 +1,33 @@
 # ==========================================
-# STAGE 1: BUILDER
+# STAGE 1: PRUNER
+# ==========================================
+FROM node:20-slim AS pruner
+WORKDIR /app
+RUN npm install -g turbo
+COPY . .
+RUN turbo prune notification-service --docker
+
+# ==========================================
+# STAGE 2: BUILDER
 # ==========================================
 FROM node:20-slim AS builder
-
 WORKDIR /app
-
-# 1. Copy the entire monorepo
-COPY . .
-
-# 2. Install ALL dependencies
+COPY --from=pruner /app/out/json/ .
+COPY --from=pruner /app/out/package-lock.json ./package-lock.json
 RUN npm ci
-
-# 3. Build ONLY the notification-service
-# (Notice we removed the 'npx prisma generate' line entirely)
+COPY --from=pruner /app/out/full/ .
 RUN npm run build -w services/notification-service
 
-
 # ==========================================
-# STAGE 2: RUNNER
+# STAGE 3: RUNNER
 # ==========================================
 FROM node:20-slim AS runner
-
-# We can also remove 'openssl' here if the app doesn't need it
 WORKDIR /app
 ENV NODE_ENV=production
-
-# 1. Copy root manifests
-COPY package.json package-lock.json ./
-COPY services/notification-service/package.json ./services/notification-service/
-
-# 2. Install production dependencies for THIS workspace
-RUN npm ci --omit=dev -w services/notification-service --include-workspace-root
-
-# 3. Copy ONLY the compiled Javascript (Removed Prisma COPY lines)
+COPY --from=pruner /app/out/json/ .
+COPY --from=pruner /app/out/package-lock.json ./package-lock.json
+RUN npm ci --omit=dev
 COPY --from=builder /app/services/notification-service/dist ./services/notification-service/dist
-
-# 4. Set workdir to the service folder
 WORKDIR /app/services/notification-service
-
-# Expose the correct port for this service
 EXPOSE 4020
-
 CMD ["node", "dist/main"]

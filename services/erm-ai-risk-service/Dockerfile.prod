@@ -1,60 +1,40 @@
 # ==========================================
-# STAGE 1: BUILDER (Monorepo Root Context)
+# STAGE 1: PRUNER
+# ==========================================
+FROM node:20-slim AS pruner
+WORKDIR /app
+RUN npm install -g turbo
+COPY . .
+RUN turbo prune erm-ai-risk-service --docker
+
+# ==========================================
+# STAGE 2: BUILDER
 # ==========================================
 FROM node:20-slim AS builder
-
-# Debian-slim sometimes requires openssl for Prisma to generate correctly
-RUN apt-get update && apt-get install -y openssl
-
 WORKDIR /app
-
-# 1. Copy the entire monorepo (shielded by your new .dockerignore!)
-COPY . .
-
-# 2. Install ALL dependencies across the monorepo workspaces
+RUN apt-get update && apt-get install -y openssl
+COPY --from=pruner /app/out/json/ .
+COPY --from=pruner /app/out/package-lock.json ./package-lock.json
 RUN npm ci
-
-# 3. Generate Prisma client natively
-# We use the exact environment variables from your original file
-ENV PRISMA_CLI_QUERY_ENGINE_TYPE=library
-ENV PRISMA_CLIENT_ENGINE_TYPE=library
+COPY --from=pruner /app/out/full/ .
+COPY services/erm-ai-risk-service/schema.prisma ./services/erm-ai-risk-service/schema.prisma
 RUN npx prisma generate --schema=./services/erm-ai-risk-service/schema.prisma
-
-# 4. Build ONLY the erm-ai-risk-service workspace
 RUN npm run build -w services/erm-ai-risk-service
 
-
 # ==========================================
-# STAGE 2: RUNNER (Production Image)
+# STAGE 3: RUNNER
 # ==========================================
 FROM node:20-slim AS runner
-
-# Ensure openssl is available in production for the Prisma engine
 RUN apt-get update && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
-
 WORKDIR /app
 ENV NODE_ENV=production
-ENV PRISMA_CLI_QUERY_ENGINE_TYPE=library
-ENV PRISMA_CLIENT_ENGINE_TYPE=library
-
-# 1. Copy the root lockfile and workspace package.json
-COPY package.json package-lock.json ./
-COPY services/erm-ai-risk-service/package.json ./services/erm-ai-risk-service/
-
-# 2. Install ONLY production dependencies for THIS workspace
-RUN npm ci --omit=dev -w services/erm-ai-risk-service --include-workspace-root
-
-# 3. Copy the compiled Prisma Client from the builder
+COPY --from=pruner /app/out/json/ .
+COPY --from=pruner /app/out/package-lock.json ./package-lock.json
+RUN npm ci --omit=dev
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
-
-# 4. Copy the compiled Javascript and Prisma files from the builder
 COPY --from=builder /app/services/erm-ai-risk-service/dist ./services/erm-ai-risk-service/dist
 COPY --from=builder /app/services/erm-ai-risk-service/schema.prisma ./services/erm-ai-risk-service/schema.prisma
-
-# 5. Drop down into the specific service directory to run the app
 WORKDIR /app/services/erm-ai-risk-service
-
 EXPOSE 4014
-
 CMD ["node", "dist/main"]
