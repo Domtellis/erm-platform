@@ -41,8 +41,8 @@ ENV PRISMA_CLIENT_ENGINE_TYPE=library
 COPY package.json package-lock.json ./
 COPY services/erm-ai-risk-service/package.json ./services/erm-ai-risk-service/
 
-# 2. Install ONLY production dependencies across the workspace
-RUN npm ci --omit=dev
+# 2. Install ONLY production dependencies for THIS workspace
+RUN npm ci --omit=dev -w services/erm-ai-risk-service --include-workspace-root
 
 # 3. Copy the compiled Prisma Client from the builder
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma

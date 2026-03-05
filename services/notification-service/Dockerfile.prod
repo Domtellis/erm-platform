@@ -29,8 +29,8 @@ ENV NODE_ENV=production
 COPY package.json package-lock.json ./
 COPY services/notification-service/package.json ./services/notification-service/
 
-# 2. Install production dependencies
-RUN npm ci --omit=dev
+# 2. Install production dependencies for THIS workspace
+RUN npm ci --omit=dev -w services/notification-service --include-workspace-root
 
 # 3. Copy ONLY the compiled Javascript (Removed Prisma COPY lines)
 COPY --from=builder /app/services/notification-service/dist ./services/notification-service/dist
