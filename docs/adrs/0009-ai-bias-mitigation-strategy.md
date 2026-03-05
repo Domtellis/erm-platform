@@ -1,7 +1,8 @@
 # ADR-0009: AI Bias Mitigation Strategy
 
-## Status: Proposed
+## Status: Accepted
 ## Date: 2026-02-17
+## Last Updated: 2026-03-05
 ## Decision Makers: [Chief Risk Officer, AI Oversight Lead, VP Product]
 
 ## Context
@@ -28,6 +29,8 @@ Implement a **multi-layered bias prevention and detection framework** centered o
 3. **Diverse Validation Panels** - Multi-perspective human review
 4. **Continuous Feedback Loop** - Track disagreements, update prompts
 5. **Transparency Requirements** - Force AI to show reasoning
+6. **Standards Drift Monitoring** — Detect ILO/ISO clause staleness before it biases AI outputs
+
 
 ##Rationale
 
@@ -110,6 +113,23 @@ AI Suggestion → Human Decision → Track Disagreement → Weekly Analysis → 
 - `reasoning.alternative_interpretations`: Could this be different?
 
 **Why:** Makes implicit bias explicit, allows human to catch flawed logic
+
+### Layer 6: Standards Drift Prevention (S-AIR)
+
+With the S-AIR RAG architecture, a new bias vector exists: **stale ILO/ISO clauses** injected into prompts can lead to systematically incorrect assessments if the underlying publications have changed.
+
+**Detection:**
+- `SyncLog.status` is checked before every AI call
+- If `status = 'stale'`, the `erm.risk.standards-unavailable.v1` event is emitted and the assessment is flagged
+- Weekly `SyncEngineService` cron independently checks ILO publication metadata for changes
+
+**Mitigation:**
+- Stale registry → AI assessment proceeds with a `standards_warning` flag; HITL review is mandatory
+- AI Oversight Lead is notified via `erm.standards.out-of-sync.v1` event
+- `unable_to_cite_reason` field in `AssessmentSuggestion` captures when Gemini could not apply a clause, enabling systematic gap analysis
+
+**Pass Threshold:** `SyncLog.status = 'active'` must be present for any assessment that will be auto-accepted.
+
 
 ## Consequences
 
@@ -228,7 +248,9 @@ model AssessmentDisagreement {
 
 - [ADR-0008: AI Model Selection](./0008-ai-model-selection.md)
 - [ADR-0010: AI Data Privacy](./0010-ai-data-privacy.md)
+- [ADR-0011: Standards RAG Strategy](./0011-standards-rag-strategy.md)
 - [AI Governance Policy](../../content/governance/policies/ai-governance-policy.md)
+
 
 ## Success Criteria
 

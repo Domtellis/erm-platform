@@ -1,23 +1,28 @@
 # AI Risk Assessment Workflow — SB-02
 
-This document defines the end-to-end operational workflow for AI-assisted risk assessments within the ERM Platform.
+This document defines the end-to-end operational workflow for AI-assisted risk assessments within the ERM Platform using the **S-AIR (Standards-Aware AI Risk)** architecture.
 
 ## 1. Process Overview
-The workflow ensures that every appetite breach is analyzed by a vetted AI model against ISO 45001 standards, with mandatory human verification before any governance decision is finalized.
+
+Every appetite breach is analysed by a RAG-grounded AI model, with assessments explicitly anchored to ILO Port Code clauses (Option B) and ISO 45001/31000 (Option A — Gemini's pre-trained knowledge). Mandatory human verification is required before any governance decision is finalised.
 
 ```mermaid
 graph TD
-    A[Breach Detected] --> B[AiService Triggered]
-    B --> C[Gemini Analysis]
-    C --> D[Suggestion Stored]
-    D --> E[Human Notification]
-    E --> F{Human Review}
-    F -->|Accept| G[Final Score Saved]
-    F -->|Modify| H[Human Calibration]
-    F -->|Reject| I[Manual Scoring]
-    G --> J[Governance Decision]
-    H --> J
-    I --> J
+    A[Breach Detected] --> B[Standards Registry Health Check]
+    B -- Empty Registry --> W["Emit erm.risk.standards-unavailable.v1<br/>Warn user — AI continues without ILO grounding"]
+    B -- Registry OK --> C[Retrieve ILO Port Clauses by metric_tags]
+    C --> D["Gemini RAG Assessment<br/>(ILO clauses injected + ISO citation requested)"]
+    W --> D
+    D --> E["Suggestion Stored<br/>(impact, likelihood, ILO clause, ISO clause)"]
+    E --> F[StandardSnapshot created — Audit Trail]
+    F --> G[Human Notification]
+    G --> H{Human Review}
+    H -->|Accept| I[Final Score Saved]
+    H -->|Modify| J[Human Calibration]
+    H -->|Reject| K[Manual Scoring]
+    I --> L[Governance Decision]
+    J --> L
+    K --> L
 ```
 
 ```mermaid
@@ -25,65 +30,85 @@ sequenceDiagram
     participant User as User / System
     participant Portal as ERM Portal
     participant API as AI Risk Service
+    participant Standards as Port Context Registry
+    participant Gemini as Gemini API
     participant DB as Database
-    participant Kafka as Kafka Bus
 
     User->>Portal: Submit Breach Report
     Portal->>DB: Save Draft
-    Portal->>User: Show Draft
 
     User->>Portal: Request AI Assessment
     Portal->>API: POST /api/ai/assess
-    API->>API: Load Context (ISO 45001, Site History)
-    API->>API: Call Gemini 2.0 Flash
-    API-->>Portal: JSON Suggestion (Score, Rationale)
 
-    Portal->>Portal: Store Suggestion (Pending Review)
-    Portal->>User: Show "AI Suggestion" Card
+    API->>Standards: getClausesForMetric(metric_name)
+    Standards-->>API: ILO Port Code clauses (e.g. §4.3)
+
+    API->>Gemini: Prompt with injected ILO context + ISO citation instruction
+    Gemini-->>API: JSON with impact, likelihood, ilo_clause_applied, iso_clause_applied
+
+    API->>DB: Save AssessmentSuggestion (with dual citations)
+    API->>DB: Save StandardSnapshot (audit trail)
+    API-->>Portal: Suggestion + Standard Citations
+
+    Portal->>User: Show AI Suggestion Card with ILO + ISO citations
 
     alt User Accepts
         User->>Portal: Click "Accept"
         Portal->>DB: Save Final Score
-        Portal->>Kafka: Emit "RiskAssessed" Event
-        Portal->>User: Show Success Message
     else User Modifies
         User->>Portal: Edit Score/Rationale
         Portal->>DB: Update Suggestion
-        Portal->>User: Show "Updated Suggestion"
     else User Rejects
         User->>Portal: Click "Reject"
         Portal->>DB: Mark as Rejected
-        Portal->>User: Revert to Manual Entry
     end
 ```
 
+## 2. Standards Grounding (S-AIR)
 
-## 2. Roles & Responsibilities
+Every AI assessment must include:
+
+| Field | Source | Example |
+|---|---|---|
+| `ilo_clause_applied` | Port Context Registry (ILO Port Code) | `ILO-PORT-2018 §4.3` |
+| `ilo_clause_title` | Port Context Registry | `Crane and Lifting Equipment Safety` |
+| `iso_clause_applied` | Gemini pre-trained knowledge | `ISO 45001:2018 Clause 6.1.2` |
+| `iso_clause_title` | Gemini pre-trained knowledge | `Hazard identification and risk assessment` |
+| `unable_to_cite_reason` | Set if AI cannot determine clause | Shown explicitly to Risk Analyst |
+
+## 3. Roles & Responsibilities
 
 | Role | Responsibility |
 | :--- | :--- |
-| **System Agent** | Monitor Gemini API health, token usage, and Kafka outbox processing. |
-| **Risk Analyst** | Perform primary review of AI suggestions; calibrate scores based on local context. |
-| **BU Risk Owner** | Approve high-severity assessments; ensure AI recommendations are implemented. |
+| **System Agent** | Monitor Gemini API health, token usage, Kafka outbox, and Standards Registry health. |
+| **Compliance Team** | Maintain ILO clause seed data; validate summaries annually. |
+| **Risk Analyst** | Review AI suggestion and citation; flag if standard citation appears incorrect. |
+| **BU Risk Owner** | Approve high-severity assessments. |
 
-## 3. SLA & Quality Targets
+## 4. SLA & Quality Targets
 - **AI Turnaround**: < 5 seconds from breach detection to suggestion availability.
 - **Human Review**: Mandatory within 24 hours for High/Critical breaches.
 - **Accuracy Target**: > 85% human acceptance rate (Initial target: 65%).
+- **Citation Rate**: > 95% of assessments must include a valid `iso_clause_applied`.
 
-## 4. Model Context (Prompt Engineering)
-The `AiService` embeds the following context in every request:
-- ISO 45001 Clause mapping.
-- Historical breach context for the specific site.
-- Current Risk Appetite thresholds.
+## 5. Standards Sync & Out-of-Sync Handling
 
-## 5. Escalation Path
-If the AI service is unavailable (e.g., API quota exceeded or network failure):
-1.  System alerts **Risk Lead** via internal dashboard.
-3.  "AI Service Down" banner is displayed on the Decisioning Page.
+If the `SyncEngine` detects the ILO publication has changed:
+1. `SyncLog.status` is set to `"stale"`.
+2. A Kafka event `erm.standards.out-of-sync.v1` is emitted.
+3. The UI displays: *"Port safety standards may need review. Last verified: [date]."*
+4. The Compliance team must review the ILO publication and re-run the ingestion guide.
 
-## 6. Monitoring & TRiSM Visibility
-The AI assessment pipeline is instrumented for **AI TRiSM (2026 Standards)**. 
+See: [Standards Ingestion Guide](../guides/standards-ingestion-guide.md)
+
+## 6. Escalation Path
+
+If the AI service or Standards Registry is unavailable:
+1. System emits `erm.risk.standards-unavailable.v1` event.
+2. "AI Service Notice" banner is displayed on the Decisioning Page.
+3. Risk Lead is alerted via internal dashboard.
+
+## 7. Monitoring & TRiSM Visibility
 - **Dashboard**: [AI Risk Assessment Performance](https://erm.prod:5180/grafana/d/ai-risk-performance/)
-- **Golden Signals**: Real-time tracking of token cost, safety blocks, and human agreement rates.
-- **Bootstrapping**: Metrics are initialized to `0` on service startup via `OnModuleInit` to ensure continuous visibility even during low-traffic periods.
+- **Golden Signals**: Token cost, citation rate, safety blocks, human agreement rates.
+- **New Metric**: `standards_registry_active_clauses` — drops to 0 if registry is empty.

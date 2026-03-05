@@ -1,8 +1,9 @@
 # ERM Platform — System Architecture Document
 
 > **Document type:** System Architecture Document (SAD) · C4 Container View  
-> **Status:** Baseline · last updated 2026-02-24  
+> **Status:** Baseline · last updated 2026-03-05  
 > **Authors:** Platform Engineering
+
 
 ---
 
@@ -64,17 +65,19 @@ graph TB
         DecSvc["decisioning-service\n:4011\n──────────────\nApproval workflows\nOPA policy checks\nKafka consumer"]
         AuditSvc["audit-service\n:4013\n──────────────\nEvent log\nCompliance reports\nKafka consumer"]
         NotifySvc["notification-service\n:4020\n──────────────\nEmail dispatch\nKafka consumer\nSMTP → Mailpit"]
-        AISvc["erm-ai-risk-service\n:4014\n──────────────\nAI risk analysis\nML scoring engine"]
+        AISvc["erm-ai-risk-service\n:4014\n──────────────\nS-AIR RAG Assessment\nILO/ISO Standards Registry\nSync Engine"]
     end
 
     %% ── DATA ──────────────────────────────────────────────
     subgraph DataStores["🗄️ Data Layer"]
-        Postgres["PostgreSQL 15\n:5432\n──────────────\nSchema: monitoring\nSchema: decisioning\nSchema: audit\nSchema: keycloak\n(Prisma ORM per service)"]
+        Postgres["PostgreSQL 15\n:5432\n──────────────\nSchema: monitoring\nSchema: decisioning\nSchema: audit\nSchema: ai_risk\nSchema: keycloak\n(Prisma ORM per service)"]
+
     end
 
     %% ── MESSAGE BUS ───────────────────────────────────────
     subgraph Messaging["📨 Event Bus"]
-        Redpanda["Redpanda (Kafka-compatible)\n:29092 internal / :19092 external\n──────────────\nTopics: breach.created\nbreach.decision\naudit.event\nnotification.request"]
+        Redpanda["Redpanda (Kafka-compatible)\n:29092 internal / :19092 external\n──────────────\nTopics: breach.created\nbreach.decision\naudit.event\nnotification.request\nerm.ai.suggestion.v1\nerm.risk.standards-unavailable.v1\nerm.standards.out-of-sync.v1"]
+
     end
 
     %% ── POLICY ────────────────────────────────────────────

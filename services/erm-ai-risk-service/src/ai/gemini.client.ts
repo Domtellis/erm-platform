@@ -15,6 +15,7 @@ import {
   parseAiResponse,
   PROMPT_VERSION,
 } from "./prompt.builder";
+import { PortClauseContext } from "../standards/port-context.service";
 
 interface UsageMetadata {
   promptTokenCount: number;
@@ -73,8 +74,11 @@ export class GeminiClient {
     return PROMPT_VERSION;
   }
 
-  async assessRisk(ctx: BreachContext): Promise<AiAssessmentResult> {
-    const prompt = buildRiskAssessmentPrompt(ctx);
+  async assessRisk(
+    ctx: BreachContext,
+    portClauses: PortClauseContext[] = [],
+  ): Promise<AiAssessmentResult> {
+    const prompt = buildRiskAssessmentPrompt(ctx, portClauses);
     const startTime = Date.now();
     let lastError: Error;
 

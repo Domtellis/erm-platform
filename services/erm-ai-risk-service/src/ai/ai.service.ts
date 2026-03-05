@@ -2,6 +2,7 @@ import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import { GeminiClient } from "./gemini.client";
 import { OutboxService } from "../outbox/outbox.service";
+import { PortContextService } from "../standards/port-context.service";
 import {
   assessmentTotal,
   assessmentAccepted,
@@ -31,10 +32,10 @@ export class AiService implements OnModuleInit {
     private readonly prisma: PrismaService,
     private readonly geminiClient: GeminiClient,
     private readonly outboxService: OutboxService,
+    private readonly portContextService: PortContextService,
   ) { }
 
   async onModuleInit() {
-    // Initialize metrics to ensure they appear in Prometheus on startup
     const labels = { model: this.geminiClient.modelVersion };
     assessmentTotal.add(0, labels);
     assessmentFailed.add(0, labels);
@@ -44,8 +45,13 @@ export class AiService implements OnModuleInit {
 
   /**
    * Main entry point — called by the Kafka consumer when a breach is detected.
-   * Generates an AI risk assessment and persists it. Never throws — failures are
-   * logged and a failed event is published so the breach can still be processed manually.
+   *
+   * S-AIR Flow:
+   * 1. Check Standards Registry health (graceful degradation on empty)
+   * 2. Retrieve relevant ILO Port Code clauses (Option B)
+   * 3. Pass clauses to Gemini for ISO-grounded assessment (Option A)
+   * 4. Persist AssessmentSuggestion + StandardSnapshot (audit trail)
+   * 5. Publish events via outbox
    */
   async handleBreachDetected(payload: BreachDetectedPayload): Promise<void> {
     const {
@@ -60,17 +66,16 @@ export class AiService implements OnModuleInit {
     } = payload;
 
     this.logger.log(
-      `Processing breach ${breach_case_id} for AI assessment | Type: ${typeof breach_case_id}`,
+      `Processing breach ${breach_case_id} for AI assessment | metric: ${metric_name}`,
     );
 
-    // Record initiation
     assessmentTotal.add(1, {
       severity,
       site_id: site_id || "unknown",
       model: this.geminiClient.modelVersion,
     });
 
-    // Skip if we already have an assessment for this breach (idempotency)
+    // Idempotency check
     const existing = await this.prisma.assessmentSuggestion.findUnique({
       where: { breach_case_id: String(breach_case_id) },
     });
@@ -81,19 +86,47 @@ export class AiService implements OnModuleInit {
       return;
     }
 
-    try {
-      const result = await this.geminiClient.assessRisk({
+    // ── S-AIR Step 1: Standards Registry Health Check ──────────────────────
+    const registryHealthy = await this.portContextService.isRegistryHealthy();
+    if (!registryHealthy) {
+      this.logger.warn(
+        `Standards Registry is empty! Assessment for ${breach_case_id} will proceed ` +
+        `without ILO clause grounding. Seed the registry via: npm run standards:seed`,
+      );
+      // We do NOT abort — AI still provides ISO guidance from its own knowledge.
+      // But we publish a warning event so operators are aware.
+      await this.outboxService.enqueue("erm.risk.standards-unavailable.v1", {
         breach_case_id,
-        metric_name: metric_name || "unknown",
-        observed_value: observed_value ?? 0,
-        threshold,
-        severity,
-        site_id: site_id || "unknown",
-        bu_id,
-        title,
+        reason:
+          "Port Context Registry is empty. ILO clause grounding unavailable.",
       });
+    }
 
-      // Persist the assessment
+    // ── S-AIR Step 2: Retrieve ILO Port Context Clauses (Option B) ─────────
+    const portClauses = await this.portContextService.getClausesForMetric(
+      metric_name || "unknown",
+    );
+    this.logger.log(
+      `Retrieved ${portClauses.length} ILO clause(s) for metric "${metric_name}"`,
+    );
+
+    try {
+      // ── S-AIR Step 3: Gemini assessment with grounded ILO context ──────────
+      const result = await this.geminiClient.assessRisk(
+        {
+          breach_case_id,
+          metric_name: metric_name || "unknown",
+          observed_value: observed_value ?? 0,
+          threshold,
+          severity,
+          site_id: site_id || "unknown",
+          bu_id,
+          title,
+        },
+        portClauses,
+      );
+
+      // ── S-AIR Step 4a: Persist AssessmentSuggestion with dual citations ────
       const suggestion = await this.prisma.assessmentSuggestion.create({
         data: {
           breach_case_id,
@@ -102,34 +135,54 @@ export class AiService implements OnModuleInit {
           impact: result.impact,
           likelihood: result.likelihood,
           risk_score: result.risk_score,
+          ilo_clause_applied: result.ilo_clause_applied,
+          ilo_clause_title: result.ilo_clause_title,
+          iso_clause_applied: result.iso_clause_applied,
+          iso_clause_title: result.iso_clause_title,
+          unable_to_cite_reason: result.unable_to_cite_reason,
           justification: result.justification,
           recommendations: result.recommendations,
-          latency_ms: 0, // latency is recorded in GeminiClient metrics
+          latency_ms: 0,
           status: "pending",
         },
       });
 
-      // Record success telemetry
+      // ── S-AIR Step 4b: Persist StandardSnapshot (immutable audit trail) ───
+      const activeClauseIds = await this.portContextService.getActiveClauseIds();
+      await this.prisma.standardSnapshot.create({
+        data: {
+          assessment_id: suggestion.id,
+          ilo_clauses_used: portClauses.map((c) => c.clause_ref),
+          iso_clauses_cited: result.iso_clause_applied
+            ? [result.iso_clause_applied]
+            : [],
+          sources_version: "ILO_PORT_2018",
+        },
+      });
+
       assessmentPending.add(1);
 
-      // Publish assessment-created event via outbox
+      // ── Step 5: Publish success event ──────────────────────────────────────
       await this.outboxService.enqueue("erm.risk.assessment-created.v1", {
         assessment_id: suggestion.id,
         breach_case_id,
         impact: result.impact,
         likelihood: result.likelihood,
         risk_score: result.risk_score,
+        ilo_clause_applied: result.ilo_clause_applied,
+        iso_clause_applied: result.iso_clause_applied,
         model_version: this.geminiClient.modelVersion,
         prompt_version: this.geminiClient.promptVersion,
       });
 
       this.logger.log(
-        `AI assessment created for breach ${breach_case_id} | ` +
-        `impact=${result.impact} likelihood=${result.likelihood} risk_score=${result.risk_score}`,
+        `✅ AI assessment created for ${breach_case_id} | ` +
+        `impact=${result.impact} likelihood=${result.likelihood} ` +
+        `ILO=${result.ilo_clause_applied ?? "none"} ISO=${result.iso_clause_applied ?? "none"}`,
       );
     } catch (err) {
       this.logger.error(
-        `AI assessment failed for breach ${breach_case_id}: ${err.message}`,
+        `AI assessment failed for ${breach_case_id}: ${err.message}`,
       );
       assessmentFailed.add(1, {
         severity,
@@ -148,20 +201,21 @@ export class AiService implements OnModuleInit {
             impact: 0,
             likelihood: 0,
             risk_score: 0,
-            justification: "AI assessment could not be generated due to system limits or an API error. Please review manually.",
+            justification:
+              "AI assessment could not be generated due to system limits or an API error. Please review manually.",
             recommendations: ["Manual review required."],
+            unable_to_cite_reason: "Assessment failed — no AI response received.",
             latency_ms: 0,
             status: "failed",
           },
-          update: {}, // Don't overwrite an existing successful record on Kafka re-delivery
+          update: {},
         });
-        this.logger.log(`Created 'failed' fallback assessment record for breach ${breach_case_id}`);
       } catch (dbErr) {
-        this.logger.error(`Failed to write fallback assessment record for ${breach_case_id}: ${dbErr.message}`);
+        this.logger.error(
+          `Failed to write fallback record for ${breach_case_id}: ${dbErr.message}`,
+        );
       }
 
-
-      // Publish a failed event so downstream services know assessment is unavailable
       await this.outboxService
         .enqueue("erm.risk.assessment-failed.v1", {
           breach_case_id,
@@ -175,18 +229,13 @@ export class AiService implements OnModuleInit {
     }
   }
 
-  /**
-   * Fetch the AI suggestion for a given breach case.
-   */
   async getSuggestion(breachCaseId: string) {
     return this.prisma.assessmentSuggestion.findUnique({
       where: { breach_case_id: breachCaseId },
+      include: { snapshot: true },
     });
   }
 
-  /**
-   * Record human feedback (Accept / Modify / Reject) on an AI suggestion.
-   */
   async recordFeedback(
     id: string,
     status: "accepted" | "modified" | "rejected",
@@ -200,17 +249,12 @@ export class AiService implements OnModuleInit {
       },
     });
 
-    // Decrement pending backlog
     assessmentPending.add(-1);
-
-    // Record acceptance/modification/rejection metric
-    const attrs = { severity: "unknown" }; // severity not stored on suggestion; enrich if needed
+    const attrs = { severity: "unknown" };
     if (status === "accepted") assessmentAccepted.add(1, attrs);
     else if (status === "modified") assessmentModified.add(1, attrs);
     else if (status === "rejected") assessmentRejected.add(1, attrs);
 
-
-    // Publish feedback event via outbox
     await this.outboxService.enqueue("erm.risk.feedback-recorded.v1", {
       suggestion_id: id,
       breach_case_id: suggestion.breach_case_id,
@@ -223,9 +267,6 @@ export class AiService implements OnModuleInit {
     return suggestion;
   }
 
-  /**
-   * Get the count of pending AI suggestions.
-   */
   async getPendingCount() {
     return this.prisma.assessmentSuggestion.count({
       where: { status: "pending" },

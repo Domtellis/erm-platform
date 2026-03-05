@@ -1,7 +1,8 @@
 # ADR-0008: AI Model Selection for Risk Assessment
 
-## Status: Proposed
+## Status: Accepted
 ## Date: 2026-02-17
+## Last Updated: 2026-03-05
 ## Decision Makers: [Product Lead, CTO, Chief Risk Officer]
 
 ## Context
@@ -27,8 +28,9 @@ Use **Gemini 2.0 Flash** via Google AI API for zero-shot risk assessment.
 **Technical Specification:**
 - **Provider:** Google (Vertex AI or AI Studio API)
 - **Model:** `gemini-2.0-flash` (experimental thinking mode)
-- **Input:** Breach metadata + ISO 45001 knowledge via prompt
-- **Output:** Structured JSON (Impact 1-5, Likelihood 1-5, Justification, Recommendations)
+- **Input:** Breach metadata + dynamically retrieved ILO Port Code clauses (RAG) + ISO 45001/31000 knowledge via prompt
+- **Output:** Structured JSON (Impact 1–5, Likelihood 1–5, Justification, Recommendations, ILO clause cited, ISO clause cited)
+
 - **Integration:** REST API with 10-second timeout, 3 retry attempts
 
 ## Rationale
@@ -180,10 +182,12 @@ const geminiConfig = {
 ```
 
 ### Prompt Strategy
-- Embed ISO 45001 risk matrix in system prompt
-- Include 5-10 synthetic examples (zero-shot → few-shot)
+- **S-AIR RAG approach (v2.0):** Dynamically inject ILO Port Code 2018 clauses from `PortContextClause` registry matching the metric tags of the breached metric
+- Instruct Gemini to cite the relevant ISO 45001/31000 sub-clause it applied from its pre-trained knowledge (Gemini-as-Oracle)
+- Response schema enforces dual citation: `ilo_clause_applied` + `iso_clause_applied` (with `unable_to_cite_reason` for fallback)
 - Force step-by-step reasoning before final answer
-- Require citation of standards in justification
+- Zero-anchoring: initial severity and historical rates excluded from prompt
+
 
 ### Monitoring
 - Track API latency (target: p95 <2s)
@@ -209,7 +213,9 @@ const geminiConfig = {
 
 - [ADR-0009: Bias Mitigation Strategy](./0009-ai-bias-mitigation-strategy.md)
 - [ADR-0010: AI Data Privacy](./0010-ai-data-privacy.md)
+- [ADR-0011: Standards RAG Strategy](./0011-standards-rag-strategy.md)
 - [AI Governance Policy](../../content/governance/policies/ai-governance-policy.md)
+
 
 ## Approval Signatures
 

@@ -1,0 +1,172 @@
+[
+    {
+        "source": "ILO_PORT_2018",
+        "clause_id": "ILO-PORT-2018-3.1",
+        "clause_ref": "ILO-PORT-2018 §3.1",
+        "title": "Occupational Health and Safety Management",
+        "summary": "Port employers must establish, implement, and maintain an OHS management system. This includes setting measurable safety objectives, monitoring performance indicators such as injury frequency rates, and conducting periodic management reviews. Reactive metrics like Lost Time Injury Frequency Rate (LTIFR) serve as primary lagging indicators under this clause.",
+        "metric_tags": [
+            "ltifr",
+            "trir"
+        ],
+        "version": "2018",
+        "is_active": true
+    },
+    {
+        "source": "ILO_PORT_2018",
+        "clause_id": "ILO-PORT-2018-3.5",
+        "clause_ref": "ILO-PORT-2018 §3.5",
+        "title": "Incident Investigation and Near Miss Reporting",
+        "summary": "All incidents, near misses, and dangerous occurrences must be reported, recorded, and investigated. Ports should encourage workers to report near misses without fear of reprisal. A declining near miss reporting rate is a leading indicator of a deteriorating safety culture and must trigger a management review. High reporting rates indicate a healthy safety culture.",
+        "metric_tags": [
+            "near_miss_reporting_rate"
+        ],
+        "version": "2018",
+        "is_active": true
+    },
+    {
+        "source": "ILO_PORT_2018",
+        "clause_id": "ILO-PORT-2018-3.8",
+        "clause_ref": "ILO-PORT-2018 §3.8",
+        "title": "Working Hours, Rest Periods and Fatigue Management",
+        "summary": "Port employers must ensure that no worker operates safety-critical equipment (cranes, straddle carriers, reach stackers) while fatigued. Maximum consecutive working hours must be documented and enforced. Each violation of mandated rest periods constitutes a safety breach. Elevated fatigue violations are a leading precursor to dropped objects, equipment collisions, and serious injury. Shift scheduling systems must flag rest-period breaches before the next shift begins.",
+        "metric_tags": [
+            "fatigue_rest_violation_rate"
+        ],
+        "version": "2018",
+        "is_active": true
+    },
+    {
+        "source": "ILO_PORT_2018",
+        "clause_id": "ILO-PORT-2018-4.3",
+        "clause_ref": "ILO-PORT-2018 §4.3",
+        "title": "Crane and Lifting Equipment Safety",
+        "summary": "All cranes and lifting equipment in port operations must be operated within their certified Safe Working Load (SWL). Operators must conduct pre-shift inspections. Overload alarm systems must be tested regularly. Any overload alarm activation constitutes a safety-critical event and must be investigated. Repeated alarm activations indicate systemic risk from poor cargo planning, inaccurate gross mass declarations, or operator error.",
+        "metric_tags": [
+            "dropped_object_rate",
+            "overload_alarm_frequency"
+        ],
+        "version": "2018",
+        "is_active": true
+    },
+    {
+        "source": "ILO_PORT_2018",
+        "clause_id": "ILO-PORT-2018-4.3.2",
+        "clause_ref": "ILO-PORT-2018 §4.3.2",
+        "title": "Safe Working Load (SWL) Exceedance",
+        "summary": "The SWL of any lifting appliance or gear must not be exceeded at any time. Overload alarms must be calibrated and maintained. When an overload alarm is triggered, operations must cease immediately and a competent person must inspect the equipment before resuming. Frequency of overload alarms is a key leading metric for potential crane failure or dropped object risk.",
+        "metric_tags": [
+            "overload_alarm_frequency"
+        ],
+        "version": "2018",
+        "is_active": true
+    },
+    {
+        "source": "ILO_PORT_2018",
+        "clause_id": "ILO-PORT-2018-4.7",
+        "clause_ref": "ILO-PORT-2018 §4.7",
+        "title": "Adverse Weather Conditions",
+        "summary": "Port operations involving cranes, stacking equipment, and vessel operations must be suspended when wind speeds exceed established operational limits, typically 45-55 knots for STS cranes depending on equipment certification. Wind protocol breach occurs when operations continue beyond the certified wind threshold. Each breach constitutes a safety violation and must be documented and investigated. Gantry tie-down procedures must be initiated before ceasing operations.",
+        "metric_tags": [
+            "wind_protocol_breach_count"
+        ],
+        "version": "2018",
+        "is_active": true
+    },
+    {
+        "source": "ILO_PORT_2018",
+        "clause_id": "ILO-PORT-2018-5.2",
+        "clause_ref": "ILO-PORT-2018 §5.2",
+        "title": "Falls from Height — Working at Height Procedures",
+        "summary": "All work at height in port and terminal environments (including lashing on vessel decks, crane maintenance, and gantry inspections) requires a permit-to-work system, appropriate PPE including a certified harness and fall arrest system, and a buddy or spotter. Fall arrest deployments and harness pre-use inspection failures must be recorded. An elevated Working at Height Incident Rate indicates potential failure in permit controls, PPE compliance, or supervision.",
+        "metric_tags": [
+            "wah_incident_rate"
+        ],
+        "version": "2018",
+        "is_active": true
+    },
+    {
+        "source": "ILO_PORT_2018",
+        "clause_id": "ILO-PORT-2018-6.1",
+        "clause_ref": "ILO-PORT-2018 §6.1",
+        "title": "Permit-to-Work Systems for High-Risk Tasks",
+        "summary": "All high-risk activities in port terminals — including hot work, confined space entry, working at height, and electrical isolation — must be controlled by a formal Permit-to-Work (PTW) system. Each PTW must be reviewed, signed by a competent authority, and audited upon completion. A low PTW Audit Pass Rate indicates systemic failures in the PTW process, which directly exposes the terminal to life-threatening risk. PTW failures are a high-severity compliance breach under ILO and local port authority regulations.",
+        "metric_tags": [
+            "ptw_audit_pass_rate"
+        ],
+        "version": "2018",
+        "is_active": true
+    },
+    {
+        "source": "ILO_PORT_2018",
+        "clause_id": "ILO-PORT-2018-7.2",
+        "clause_ref": "ILO-PORT-2018 §7.2",
+        "title": "Traffic Management and Pedestrian Segregation",
+        "summary": "Terminals must maintain strict physical and procedural separation between heavy vehicle traffic (straddle carriers, terminal trucks, reach stackers) and pedestrian zones. All breaches of designated traffic separation — including pedestrian incursion into vehicle lanes or external trucks entering restricted heavy equipment zones — must be recorded as safety incidents. A rising Traffic Separation Breach Rate signals breakdown of physical controls (barriers, signage) or training compliance, and is a leading indicator of a fatal vehicle-pedestrian collision.",
+        "metric_tags": [
+            "traffic_separation_breach_rate"
+        ],
+        "version": "2018",
+        "is_active": true
+    },
+    {
+        "source": "ILO_PORT_2018",
+        "clause_id": "ILO-PORT-2018-8.3",
+        "clause_ref": "ILO-PORT-2018 §8.3",
+        "title": "Maintenance of Safety-Critical Equipment",
+        "summary": "All safety-critical equipment in terminal operations — including spreader twistlocks, straddle carrier brakes, crane limit switches, and fire suppression systems — must be maintained on schedule per manufacturer specifications and regulatory requirements. Deferred maintenance on safety-critical systems constitutes a latent hazard. A rising Safety-Critical Maintenance Overdue Rate directly increases the probability of catastrophic equipment failure and must trigger an immediate escalation to the terminal's risk register.",
+        "metric_tags": [
+            "safety_critical_maintenance_overdue_rate"
+        ],
+        "version": "2018",
+        "is_active": true
+    },
+    {
+        "source": "ILO_PORT_2018",
+        "clause_id": "ILO-PORT-2018-9.1",
+        "clause_ref": "ILO-PORT-2018 §9.1",
+        "title": "Contractor and Third-Party Safety Management",
+        "summary": "Terminal operators are responsible for ensuring that all contractors and third-party vendors operating on terminal premises comply with the same OHS standards as direct employees. Separate incident tracking for contractors is required to identify differential risk exposure. A Contractor Incident Rate significantly higher than the direct workforce rate indicates inadequate contractor induction, supervision, or control. Terminal operators must review contractor safety performance at least quarterly.",
+        "metric_tags": [
+            "contractor_incident_rate"
+        ],
+        "version": "2018",
+        "is_active": true
+    },
+    {
+        "source": "ILO_PORT_2018",
+        "clause_id": "ILO-PORT-2018-10.2",
+        "clause_ref": "ILO-PORT-2018 §10.2",
+        "title": "Corrective and Preventive Action (CAPA) Management",
+        "summary": "All identified hazards, near misses, and incidents must result in documented corrective and preventive actions (CAPAs) with assigned owners and deadlines. The terminal OHS management system must track CAPA closure rates against committed deadlines. A low CAPA On-Time Closure Rate indicates systemic failure in hazard remediation — identified risks are not being fixed within committed timeframes, creating compounding exposure. ISO 45001 §10.2 mandates documented evidence of CAPA effectiveness.",
+        "metric_tags": [
+            "capa_closure_rate"
+        ],
+        "version": "2018",
+        "is_active": true
+    },
+    {
+        "source": "ISO_31000_2018",
+        "clause_id": "ISO-31000-2018-6.4",
+        "clause_ref": "ISO 31000:2018 §6.4",
+        "title": "Critical Control Effectiveness",
+        "summary": "ISO 31000 §6.4 requires that risk controls are not merely documented but verified to be operating effectively. Critical controls are the physical and procedural barriers that prevent top-tier risks from causing harm (e.g., machine guarding, physical traffic barriers, gas detection systems). A Critical Control Effectiveness (CCE) Score below threshold indicates that life-saving controls have failed or are degrading. This is a top-priority finding in any ISO 31000 risk audit and requires immediate corrective action and management escalation.",
+        "metric_tags": [
+            "cce_score"
+        ],
+        "version": "2018",
+        "is_active": true
+    },
+    {
+        "source": "ISO_31000_2018",
+        "clause_id": "ISO-31000-2018-6.5",
+        "clause_ref": "ISO 31000:2018 §6.5",
+        "title": "Risk Treatment and ALARP Mitigation",
+        "summary": "ISO 31000 §6.5 requires that all high and extreme risks on the terminal risk register are subject to active treatment to reduce residual risk to As Low As Reasonably Practicable (ALARP). The High/Extreme Risk Mitigation Rate measures the percentage of top-tier risks that have been successfully engineered or controlled down from intolerable levels. A low mitigation rate indicates that the terminal is knowingly operating with unacceptable risk levels — a critical governance failure requiring immediate board-level escalation.",
+        "metric_tags": [
+            "high_risk_mitigation_rate"
+        ],
+        "version": "2018",
+        "is_active": true
+    }
+]

@@ -5,6 +5,8 @@ import { PrismaModule } from "./prisma/prisma.module";
 import { AuthModule } from "./auth/auth.module";
 import { AiModule } from "./ai/ai.module";
 import { OutboxModule } from "./outbox/outbox.module";
+import { StandardsModule } from "./standards/standards.module";
+import { SyncEngineModule } from "./sync/sync-engine.module";
 import { envSchema } from "./config/env.schema";
 
 @Module({
@@ -17,6 +19,8 @@ import { envSchema } from "./config/env.schema";
     PrismaModule,
     AuthModule,
     OutboxModule,
+    StandardsModule,
+    SyncEngineModule,
     AiModule,
   ],
 })

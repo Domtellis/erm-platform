@@ -10,6 +10,10 @@ datasource db {
   schemas  = ["ai_risk"]
 }
 
+// ============================================================
+// EXISTING: AI Risk Assessment Suggestion
+// Updated: Added dual-citation fields for S-AIR (ISO + ILO)
+// ============================================================
 model AssessmentSuggestion {
   id               String   @id @default(uuid())
   breach_case_id   String   @unique
@@ -18,6 +22,14 @@ model AssessmentSuggestion {
   impact           Int      // 1-5 (ISO 45001 scale)
   likelihood       Int      // 1-5 (ISO 45001 scale)
   risk_score       Int      // impact × likelihood
+
+  // Standards Citations — S-AIR
+  ilo_clause_applied    String?  // e.g. "ILO-PORT-2018 §4.3"
+  ilo_clause_title      String?  // e.g. "Crane and Lifting Equipment Safety"
+  iso_clause_applied    String?  // e.g. "ISO 45001:2018 Clause 6.1.2"
+  iso_clause_title      String?  // e.g. "Hazard identification and risk assessment"
+  unable_to_cite_reason String?  // Set when AI cannot identify a specific clause
+
   justification    String
   recommendations  String[] // Array of action strings
   latency_ms       Int      // Gemini API call duration for SLA monitoring
@@ -26,13 +38,70 @@ model AssessmentSuggestion {
   created_at       DateTime @default(now())
   updated_at       DateTime @updatedAt
 
+  snapshot         StandardSnapshot?
+
   @@schema("ai_risk")
 }
 
+// ============================================================
+// NEW: Port Context Clause Registry (Option B — ILO/IMO)
+// Stores freely published ILO/IMO port safety code clauses.
+// Each clause maps to one or more terminal metric_tags for
+// semantic retrieval at assessment time.
+// ============================================================
+model PortContextClause {
+  id          String   @id @default(uuid())
+  source      String   // "ILO_PORT_2018" | "IMO_SECURITY_PORT"
+  clause_id   String   // e.g. "ILO-PORT-2018-4.3"
+  clause_ref  String   // Display: "ILO-PORT-2018 §4.3"
+  title       String   // e.g. "Crane and Lifting Equipment"
+  summary     String   // Plain-English injected into AI prompt
+  metric_tags String[] // ["dropped_object_rate", "overload_alarm_frequency"]
+  version     String   // e.g. "2018"
+  is_active   Boolean  @default(true)
+
+  @@unique([source, clause_id])
+  @@schema("ai_risk")
+}
+
+// ============================================================
+// NEW: Sync Log — tracks freshness of ingested standards
+// ============================================================
+model SyncLog {
+  id            String   @id @default(uuid())
+  source        String   // e.g. "ILO_PORT_2018"
+  status        String   // "ok" | "stale" | "failed"
+  checked_at    DateTime @default(now())
+  version_found String?  // version string found at source
+  notes         String?  // error details or change summary
+
+  @@schema("ai_risk")
+}
+
+// ============================================================
+// NEW: Standard Snapshot — immutable audit trail per assessment
+// Links each AI assessment to the exact ILO/ISO version used.
+// Required for temporal traceability under ISO 45001 audit.
+// ============================================================
+model StandardSnapshot {
+  id                   String   @id @default(uuid())
+  assessment_id        String   @unique
+  assessment           AssessmentSuggestion @relation(fields: [assessment_id], references: [id])
+  ilo_clauses_used     String[] // ILO clause IDs injected into prompt
+  iso_clauses_cited    String[] // ISO clause IDs cited by Gemini in output
+  sources_version      String   // e.g. "ILO_PORT_2018"
+  snapshot_at          DateTime @default(now())
+
+  @@schema("ai_risk")
+}
+
+// ============================================================
+// EXISTING: Transactional Outbox
+// ============================================================
 model Outbox {
   id           String    @id @default(uuid())
-  type         String    // Event type e.g. erm.risk.assessment-created.v1
-  payload      Json      // Event data
+  type         String    // e.g. "erm.risk.assessment-created.v1"
+  payload      Json
   occurred_at  DateTime  @default(now())
   processed_at DateTime?
 
