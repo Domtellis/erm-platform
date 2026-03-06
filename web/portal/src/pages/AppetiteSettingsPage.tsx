@@ -31,8 +31,18 @@ export function AppetiteSettingsPage() {
         mutation.mutate({ id, limit: editValue });
     };
 
-    if (isLoading) return <div className="p-8">Loading Appetite limits...</div>;
-    if (error || !appetite) return <div className="p-8 text-crm-danger">Failed to load thresholds. Ensure the backend is running.</div>;
+    if (isLoading) return <div className="p-8 animate-pulse text-slate-500">Loading Appetite limits...</div>;
+    if (error || !appetite || !appetite.thresholds) {
+        return (
+            <div className="p-8 w-full">
+                <div className="bg-red-50 text-red-700 p-4 rounded-lg border border-red-200">
+                    <h3 className="font-bold flex items-center mb-2"><AlertTriangle className="h-5 w-5 mr-2" /> Failed to load thresholds</h3>
+                    <p>It appears the API is not responding with the correct data.</p>
+                    <p className="mt-2 text-sm text-red-600 font-mono">Debugging Tip: If you recently added the new appetite service to the Vite config, you must manually restart the 'npm run dev' server for the proxy to take effect!</p>
+                </div>
+            </div>
+        );
+    }
 
     const zeroTolerance = appetite.thresholds.filter(t => t.limit_value === 0);
     const measurable = appetite.thresholds.filter(t => t.limit_value !== 0);

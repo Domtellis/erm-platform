@@ -9,11 +9,18 @@ export class AppetiteService {
 
   async findCurrentBy(category: string) {
     this.logger.log(`Fetching current appetite for category: ${category}`);
-    return this.prisma.appetiteStatement.findFirst({
-      where: { category, is_active: true },
-      include: { thresholds: true },
-      orderBy: { created_at: "desc" },
-    });
+    try {
+      const result = await this.prisma.appetiteStatement.findFirst({
+        where: { category, is_active: true },
+        include: { thresholds: true },
+        orderBy: { created_at: "desc" },
+      });
+      this.logger.log(`Found appetite: ${result?.id || 'none'}`);
+      return result;
+    } catch (error) {
+      this.logger.error(`Error fetching appetite: ${error.message}`, error.stack);
+      throw error;
+    }
   }
 
   async findAll() {
