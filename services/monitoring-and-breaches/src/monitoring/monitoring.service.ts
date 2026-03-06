@@ -10,16 +10,21 @@ export class MonitoringService {
   constructor(private prisma: PrismaService) { }
 
   async submitBreach(dto: CreateBreachSubmissionDto) {
-    this.logger.log(`Processing breach submission: ${dto.title}`);
+    this.logger.log(`Processing breach submission: ${dto.metric_name} with value ${dto.observed_value}`);
 
     // Capture Trace Context
     const activeContext = context.active();
     const carrier = {};
     propagation.inject(activeContext, carrier);
 
-    // Calculate SLAs
-    const severity = dto.severity?.toLowerCase() || "low"; // Default to low if unknown
-    const slas = this.calculateSLADeadlines(severity);
+    // Calculate Severity based on Appetite Thresholds (Automatic Escalation)
+    const evaluatedSeverity = await this.evaluateSeverity(dto.metric_name, dto.observed_value, dto.category);
+
+    // Override user-provided severity if automatic evaluation succeeded
+    const finalSeverity = evaluatedSeverity !== 'none' ? evaluatedSeverity : (dto.severity?.toLowerCase() || "low");
+    const slas = this.calculateSLADeadlines(finalSeverity);
+
+    this.logger.log(`Breach ${dto.metric_name} evaluated as severity: ${finalSeverity}`);
 
     // Transactional persistence: Case + Outbox Event
     return this.prisma.$transaction(async (tx) => {
@@ -31,7 +36,7 @@ export class MonitoringService {
           metric_name: dto.metric_name,
           observed_value: dto.observed_value,
           bu_id: dto.bu_id,
-          severity: dto.severity || "unknown",
+          severity: finalSeverity,
           status: "open",
           ...slas, // Inject calculated deadlines
         },
@@ -60,6 +65,59 @@ export class MonitoringService {
 
       return breachCase;
     });
+  }
+
+  /**
+   * Evaluates the severity of a breach by querying the current appetite thresholds.
+   * This ensures that zero-tolerance metrics are always correctly escalated.
+   */
+  private async evaluateSeverity(metricName: string, observedValue: number, category: string): Promise<string> {
+    const appetiteUrl = process.env.APPETITE_SERVICE_URL || 'http://appetite-service:4012';
+    try {
+      this.logger.log(`Querying appetite-service for ${metricName} thresholds...`);
+      const response = await fetch(`${appetiteUrl}/appetites/current?category=${category}`);
+
+      if (!response.ok) {
+        this.logger.warn(`Could not fetch thresholds from appetite-service: ${response.statusText}`);
+        return 'none';
+      }
+
+      const appetite: any = await response.json();
+      if (!appetite || !appetite.thresholds) return 'none';
+
+      const threshold = appetite.thresholds.find(t => t.metric_name === metricName);
+      if (!threshold) {
+        this.logger.warn(`No threshold mapping found for metric: ${metricName}`);
+        return 'none';
+      }
+
+      // 1. Check if the value constitutes a breach
+      const isBreach = threshold.operator === '>'
+        ? observedValue > threshold.limit_value
+        : observedValue < threshold.limit_value;
+
+      if (!isBreach) return 'low'; // It's a signal but technically within appetite
+
+      // 2. Map Severity using the multi-tier mapping from the database
+      // Mapping format: { "0": "high", "0.5": "low", "1.0": "high" }
+      const mappings = threshold.severity_mapping || {};
+      const sortedKeys = Object.keys(mappings)
+        .map(Number)
+        .sort((a, b) => b - a); // Higher trigger values take precedence (descending)
+
+      for (const triggerValue of sortedKeys) {
+        if (threshold.operator === '>') {
+          if (observedValue >= triggerValue) return mappings[triggerValue.toString()];
+        } else if (threshold.operator === '<') {
+          if (observedValue <= triggerValue) return mappings[triggerValue.toString()];
+        }
+      }
+
+      return 'low'; // Default breach fallback
+    } catch (error) {
+      this.logger.error(`Automatic severity evaluation failed: ${error.message}`);
+      return 'none'; // Fallback to user-provided or default
+    }
   }
 
   private calculateSLADeadlines(severity: string) {
