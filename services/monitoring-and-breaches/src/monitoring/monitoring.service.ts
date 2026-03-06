@@ -1,4 +1,4 @@
-import { Injectable, Logger } from "@nestjs/common";
+import { Injectable, Logger, ForbiddenException } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import { CreateBreachSubmissionDto } from "./dto/create-breach-submission.dto";
 import { context, propagation } from "@opentelemetry/api";
@@ -188,8 +188,17 @@ export class MonitoringService {
 
   async closeBreach(id: string) {
     return this.prisma.$transaction(async (tx) => {
+      const breach = await tx.breachCase.findUnique({ where: { id } });
+      if (!breach) throw new ForbiddenException("Breach case not found");
+
+      // Mandate human sign-off before closure
+      if (breach.status !== "decision_approved") {
+        this.logger.warn(`Rejected closure attempt for breach ${id}: Status is ${breach.status}, expected decision_approved`);
+        throw new ForbiddenException("Governance Guardrail: Human certification (Decision Approved) is required before a case can be closed.");
+      }
+
       const now = new Date();
-      const breach = await tx.breachCase.update({
+      const updatedBreach = await tx.breachCase.update({
         where: { id },
         data: {
           status: "closed",
@@ -207,7 +216,7 @@ export class MonitoringService {
         },
       });
 
-      return breach;
+      return updatedBreach;
     });
   }
 
@@ -261,11 +270,11 @@ export class MonitoringService {
       await this.prisma.breachCase.update({
         where: { id: breach_case_id },
         data: {
-          status: "triaged",
+          status: "ai_suggested",
           triage_completed_at: new Date(),
         },
       });
-      this.logger.log(`Updated breach ${breach_case_id} status to triaged`);
+      this.logger.log(`Updated breach ${breach_case_id} status to ai_suggested`);
     } catch (error) {
       this.logger.error(
         `Failed to update breach status for ${breach_case_id}: ${error.message}`,

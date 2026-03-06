@@ -48,7 +48,7 @@ export function DecisioningPage() {
 
     const [activeTab, setActiveTab] = useState<'hitl' | 'capa' | 'closed'>('hitl');
 
-    const hitlCases = cases?.filter(c => ['open', 'triaged'].includes(c.status)) || [];
+    const hitlCases = cases?.filter(c => ['open', 'triaged', 'ai_suggested'].includes(c.status)) || [];
     const capaCases = cases?.filter(c => ['decision_approved', 'in_progress'].includes(c.status)) || [];
     const closedCases = cases?.filter(c => c.status === 'closed') || [];
 

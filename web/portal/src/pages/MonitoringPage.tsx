@@ -88,6 +88,7 @@ export function MonitoringPage() {
                                     const getSLA = () => {
                                         switch (item.status) {
                                             case 'open': return { label: 'Triage', due: item.triage_due_at, completed: null };
+                                            case 'ai_suggested': return { label: 'Triage', due: item.triage_due_at, completed: item.triage_completed_at };
                                             case 'triaged': return { label: 'Triage', due: item.triage_due_at, completed: item.triage_completed_at };
                                             case 'decision_submitted': return { label: 'Decision', due: item.decision_due_at, completed: null };
                                             case 'decision_approved': return { label: 'Decision', due: item.decision_due_at, completed: item.decision_approved_at };
@@ -115,8 +116,14 @@ export function MonitoringPage() {
                                             <td className="px-6 py-4">
                                                 <div className="flex flex-col space-y-1">
                                                     <div className="flex items-center text-sm text-slate-600">
-                                                        {item.status === 'open' ? <Clock className="mr-2 h-4 w-4 text-crm-warning" /> : <CheckCircle className="mr-2 h-4 w-4 text-crm-success" />}
-                                                        {item.status}
+                                                        {item.status === 'open' ? (
+                                                            <Clock className="mr-2 h-4 w-4 text-crm-warning" />
+                                                        ) : item.status === 'ai_suggested' ? (
+                                                            <Clock className="mr-2 h-4 w-4 text-amber-500" />
+                                                        ) : (
+                                                            <CheckCircle className="mr-2 h-4 w-4 text-crm-success" />
+                                                        )}
+                                                        {item.status === 'ai_suggested' ? 'AI Assessment Ready' : item.status}
                                                     </div>
                                                     {sla && sla.due && (
                                                         sla.completed ? (
