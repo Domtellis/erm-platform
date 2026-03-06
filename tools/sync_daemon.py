@@ -91,7 +91,10 @@ def sync():
                         quota_info = api_data.get('quotaInfo')
                         
                         if quota_info and quota_info.get('remainingFraction') is not None:
-                            m['quota'] = float(quota_info['remainingFraction'])
+                            fraction = float(quota_info['remainingFraction'])
+                            # Antigravity reserves the last 20% for autocomplete/background tasks.
+                            # For agent routing, <= 0.2 means the model is effectively exhausted.
+                            m['quota'] = 0.0 if fraction <= 0.2 else fraction
                         else:
                             # Safer Fallback: Standard/Enhanced models assume 1.0, high-tier models assume 0.0
                             m['quota'] = 1.0 if m.get('tier') in ["Standard", "Enhanced"] else 0.0
