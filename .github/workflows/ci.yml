@@ -41,7 +41,7 @@ jobs:
         id: filter
         with:
           filters: |
-            appetite-and-criteria: ['services/appetite-and-criteria/**', 'package.json', 'package-lock.json']
+            appetite-and-criteria: ['services/appetite-and-criteria/**', 'package.json', 'package-lock.json', 'infra/local/docker-compose.prod.yml']
             audit-and-reporting: ['services/audit-and-reporting/**', 'package.json', 'package-lock.json']
             decisioning-and-approvals: ['services/decisioning-and-approvals/**', 'package.json', 'package-lock.json']
             ai-risk-service: ['services/erm-ai-risk-service/**', 'package.json', 'package-lock.json']
