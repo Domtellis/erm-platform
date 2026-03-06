@@ -103,7 +103,11 @@ export class MonitoringService {
       const mappings = threshold.severity_mapping || {};
       const sortedKeys = Object.keys(mappings)
         .map(Number)
-        .sort((a, b) => b - a); // Higher trigger values take precedence (descending)
+        .sort((a, b) => {
+          // For 'greater-than', high values are worse (descending)
+          // For 'less-than', low values are worse (ascending)
+          return threshold.operator === '>' ? b - a : a - b;
+        });
 
       for (const triggerValue of sortedKeys) {
         if (threshold.operator === '>') {
