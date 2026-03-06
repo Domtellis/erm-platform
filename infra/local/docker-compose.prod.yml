@@ -225,6 +225,22 @@ services:
       keycloak:
         condition: service_started
 
+  appetite-service:
+    image: ghcr.io/domtellis/erm-appetite-and-criteria:latest
+    container_name: erm-appetite-service
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://postgres:${DB_PASSWORD}@postgres:5432/appetite?schema=appetite
+      PORT: 4012
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318
+      OTEL_SERVICE_NAME: erm-appetite-service
+    command: /bin/sh -c "npx prisma db push --schema=./schema.prisma --accept-data-loss && node dist/main"
+    ports:
+      - "4012:4012"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
   audit-service:
     image: ghcr.io/domtellis/erm-audit-and-reporting:latest
     container_name: erm-audit-service

@@ -220,6 +220,7 @@ jobs:
             sleep 10
             sudo docker exec erm-postgres psql -U postgres -c "CREATE DATABASE audit;" || true
             sudo docker exec erm-postgres psql -U postgres -c "CREATE DATABASE ai_risk;" || true
+            sudo docker exec erm-postgres psql -U postgres -c "CREATE DATABASE appetite;" || true
 
             sudo docker-compose -f docker-compose.prod.yml up -d --remove-orphans
             
