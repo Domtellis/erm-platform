@@ -5,7 +5,7 @@ import { PrismaService } from "../prisma/prisma.service";
 export class AppetiteService {
   private readonly logger = new Logger(AppetiteService.name);
 
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async findCurrentBy(category: string) {
     this.logger.log(`Fetching current appetite for category: ${category}`);
@@ -19,6 +19,14 @@ export class AppetiteService {
   async findAll() {
     return this.prisma.appetiteStatement.findMany({
       include: { thresholds: true },
+    });
+  }
+
+  async updateThreshold(thresholdId: string, limitValue: number) {
+    this.logger.log(`Updating threshold ${thresholdId} to limit: ${limitValue}`);
+    return this.prisma.threshold.update({
+      where: { id: thresholdId },
+      data: { limit_value: limitValue },
     });
   }
 }

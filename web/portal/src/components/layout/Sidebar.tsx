@@ -45,10 +45,20 @@ export function Sidebar() {
             </nav>
 
             <div className="border-t border-white/10 p-4">
-                <button className="flex w-full items-center rounded-lg px-3 py-2 text-sm font-medium text-slate-300 hover:bg-white/10 hover:text-white">
-                    <Settings className="mr-3 h-5 w-5" />
-                    Settings
-                </button>
+                <NavLink
+                    to="/settings/appetite"
+                    className={({ isActive }) =>
+                        cn(
+                            'group flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors',
+                            isActive
+                                ? 'bg-crm-accent text-white'
+                                : 'text-slate-300 hover:bg-white/10 hover:text-white'
+                        )
+                    }
+                >
+                    <Settings className="mr-3 h-5 w-5 flex-shrink-0" />
+                    Appetite Settings
+                </NavLink>
             </div>
         </div>
     );

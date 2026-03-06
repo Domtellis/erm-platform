@@ -42,16 +42,25 @@ export function MonitoringPage() {
     const currentAssessment = assessments?.[0];
 
     return (
-        <div className="space-y-6 animate-fade-in">
+        <div className="space-y-6 animate-fade-in pb-12">
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-3xl font-bold text-slate-900">Monitoring & Breaches</h1>
-                    <p className="mt-2 text-slate-500">Live feed of appetite breaches across all sites.</p>
+                    <h1 className="text-3xl font-bold text-slate-900">Live Breach Dashboard</h1>
+                    <p className="mt-2 text-slate-500">Real-time telemetry and appetite thresholds evaluation feed.</p>
                 </div>
-                <button onClick={() => setIsModalOpen(true)} className="btn btn-primary flex items-center">
-                    <Plus className="mr-2 h-5 w-5" />
-                    Report Breach
-                </button>
+                <div className="flex items-center space-x-4">
+                    <div className="flex items-center text-sm font-medium text-emerald-700 bg-emerald-50 px-4 py-2 rounded-full border border-emerald-200">
+                        <span className="relative flex h-2.5 w-2.5 mr-2.5">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                        </span>
+                        Kafka Telemetry Online
+                    </div>
+                    <button onClick={() => setIsModalOpen(true)} className="btn btn-primary flex items-center">
+                        <Plus className="mr-2 h-5 w-5" />
+                        Report Breach
+                    </button>
+                </div>
             </div>
 
             <div className="card">

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Bot, Check, X, Edit3, AlertTriangle, Clock, ChevronDown, ChevronUp } from 'lucide-react';
+import { Bot, Check, X, Edit3, AlertTriangle, Clock, ChevronDown, ChevronUp, BookOpen } from 'lucide-react';
 import { type AiAssessmentSuggestion, recordAiFeedback } from '../../api/ai';
 import { useAuth } from 'react-oidc-context';
 
@@ -117,6 +117,36 @@ export const AISuggestionCard: React.FC<AISuggestionCardProps> = ({ suggestion, 
                             <p className="font-medium">
                                 <span className="font-bold">CAUTION:</span> This assessment indicates High Risk. Please verify the justification thoroughly before accepting.
                             </p>
+                        </div>
+                    )}
+
+                    {/* Citations */}
+                    {(suggestion.ilo_clause_applied || suggestion.iso_clause_applied) && (
+                        <div className="space-y-3 pt-2">
+                            <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center">
+                                <BookOpen className="h-3 w-3 mr-1.5 text-crm-brand" />
+                                Regulatory & Standards Reasoning
+                            </h4>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                {suggestion.ilo_clause_applied && (
+                                    <div className="bg-blue-50/50 border border-blue-100 p-3 rounded-lg shadow-sm">
+                                        <div className="flex items-center space-x-2 mb-1">
+                                            <span className="bg-blue-600 text-white text-[10px] uppercase font-bold px-1.5 py-0.5 rounded shadow-sm">ILO Reg</span>
+                                            <span className="text-xs font-bold text-blue-900">{suggestion.ilo_clause_applied}</span>
+                                        </div>
+                                        <p className="text-[11px] text-blue-800 leading-relaxed font-medium">{suggestion.ilo_clause_title}</p>
+                                    </div>
+                                )}
+                                {suggestion.iso_clause_applied && (
+                                    <div className="bg-slate-50 border border-slate-200 p-3 rounded-lg shadow-sm">
+                                        <div className="flex items-center space-x-2 mb-1">
+                                            <span className="bg-slate-700 text-white text-[10px] uppercase font-bold px-1.5 py-0.5 rounded shadow-sm">ISO Std</span>
+                                            <span className="text-xs font-bold text-slate-900">{suggestion.iso_clause_applied}</span>
+                                        </div>
+                                        <p className="text-[11px] text-slate-600 leading-relaxed font-medium">{suggestion.iso_clause_title}</p>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     )}
 

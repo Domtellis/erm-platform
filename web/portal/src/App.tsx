@@ -6,6 +6,7 @@ import { MonitoringPage } from './pages/MonitoringPage';
 import { DecisioningPage } from './pages/DecisioningPage';
 import { AuditPage } from './pages/AuditPage';
 import { ReportsPage } from './pages/ReportsPage';
+import { AppetiteSettingsPage } from './pages/AppetiteSettingsPage';
 
 import { getBreaches, getMetrics } from './api/monitoring';
 import { getPendingCount } from './api/ai';
@@ -98,6 +99,7 @@ function App() {
         <Route path="decisioning" element={<DecisioningPage />} />
         <Route path="audit" element={<AuditPage />} />
         <Route path="reports" element={<ReportsPage />} />
+        <Route path="settings/appetite" element={<AppetiteSettingsPage />} />
       </Route>
     </Routes>
   );

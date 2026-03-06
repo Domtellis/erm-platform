@@ -46,12 +46,13 @@ export function DecisioningPage() {
         },
     });
 
-    const [activeTab, setActiveTab] = useState<'active' | 'closed'>('active');
+    const [activeTab, setActiveTab] = useState<'hitl' | 'capa' | 'closed'>('hitl');
 
-    const activeCases = cases?.filter(c => ['open', 'triaged', 'decision_approved'].includes(c.status)) || [];
+    const hitlCases = cases?.filter(c => ['open', 'triaged'].includes(c.status)) || [];
+    const capaCases = cases?.filter(c => ['decision_approved', 'in_progress'].includes(c.status)) || [];
     const closedCases = cases?.filter(c => c.status === 'closed') || [];
 
-    const displayedCases = activeTab === 'active' ? activeCases : closedCases;
+    const displayedCases = activeTab === 'hitl' ? hitlCases : activeTab === 'capa' ? capaCases : closedCases;
 
     return (
         <div className="space-y-6 animate-fade-in">
@@ -62,10 +63,16 @@ export function DecisioningPage() {
                 </div>
                 <div className="flex space-x-1 bg-slate-100 p-1 rounded-lg">
                     <button
-                        onClick={() => setActiveTab('active')}
-                        className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${activeTab === 'active' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                        onClick={() => setActiveTab('hitl')}
+                        className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${activeTab === 'hitl' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
                     >
-                        Active ({activeCases.length})
+                        HITL Inbox ({hitlCases.length})
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('capa')}
+                        className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${activeTab === 'capa' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                    >
+                        Automated CAPA Log ({capaCases.length})
                     </button>
                     <button
                         onClick={() => setActiveTab('closed')}
@@ -83,7 +90,9 @@ export function DecisioningPage() {
                     <div className="card border-dashed border-2 p-12 text-center">
                         <ShieldCheck className="mx-auto h-12 w-12 text-slate-300" />
                         <p className="mt-4 text-slate-500">
-                            {activeTab === 'active' ? 'No pending breaches require decisioning.' : 'No closed cases found.'}
+                            {activeTab === 'hitl' ? 'No pending breaches in the HITL Inbox requiring human review.' :
+                                activeTab === 'capa' ? 'No automated CAPAs currently active.' :
+                                    'No closed cases found.'}
                         </p>
                     </div>
                 ) : (

@@ -11,6 +11,10 @@ export interface AiAssessmentSuggestion {
     impact: number;
     likelihood: number;
     risk_score: number;
+    ilo_clause_applied: string | null;
+    ilo_clause_title: string | null;
+    iso_clause_applied: string | null;
+    iso_clause_title: string | null;
     justification: string;
     recommendations: string[];
     latency_ms: number;
