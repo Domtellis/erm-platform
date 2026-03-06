@@ -69,12 +69,20 @@ export function BreachSubmissionForm({ onSuccess }: { onSuccess: () => void }) {
                         {...register('metric_name', { required: 'Metric is required' })}
                         className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-crm-accent focus:outline-none focus:ring-1 focus:ring-crm-accent"
                     >
-                        <option value="wind_speed_knots">Wind Speed (Knots)</option>
-                        <option value="container_stack_height">Container Stack Height (Tier)</option>
-                        <option value="pm_25_level">Air Quality (PM 2.5)</option>
-                        <option value="prox_alert_count">Proximity Alerts (Collision)</option>
-                        <option value="worker_fatigue_index">Fatigue Index</option>
-                        <option value="hazmat_sensor_ppm">Hazmat Sensor (PPM)</option>
+                        <option value="ltifr">LTIFR (Lost Time Injury Rate)</option>
+                        <option value="dropped_object_rate">Dropped Object Rate</option>
+                        <option value="near_miss_reporting_rate">Near Miss Reporting Rate</option>
+                        <option value="overload_alarm_frequency">Crane Overload Alarms</option>
+                        <option value="wind_protocol_breach_count">Wind Protocol Breaches</option>
+                        <option value="wah_incident_rate">Working at Height Incidents</option>
+                        <option value="ptw_audit_pass_rate">PTW Audit Pass %</option>
+                        <option value="traffic_separation_breach_rate">Traffic Separation Breaches</option>
+                        <option value="safety_critical_maintenance_overdue_rate">Maintenance Overdue Rate</option>
+                        <option value="contractor_incident_rate">Contractor Incident Rate</option>
+                        <option value="capa_closure_rate">CAPA Closure %</option>
+                        <option value="fatigue_rest_violation_rate">Fatigue Rest Violations</option>
+                        <option value="cce_score">CCE Score (Control Effectiveness)</option>
+                        <option value="high_risk_mitigation_rate">High Risk Mitigation Rate</option>
                     </select>
                 </div>
                 <div>
