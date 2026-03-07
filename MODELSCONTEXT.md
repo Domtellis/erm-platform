@@ -19,7 +19,7 @@ Develop and maintain a dynamic, lifecycle-aware Model Orchestrator that routes I
 * **Regex Boundaries:** All keyword scoring must use `re.findall` with `\b` word boundaries to prevent substring collisions.
 
 ## 4. Startup & Health Check
-* **Initialization:** Every time a new session starts, the Agent should run .\ai-route.bat --sync (or ./ai-route.sh --sync) to ensure models.json is populated with live quotas.
+* **Initialization:** Every time a new session starts, the Agent should run .\ai-sync.bat (or ./ai-sync.sh) to ensure models.json is populated with live quotas.
 
 * **Verification:** Run .\ai-route.bat "test" to verify the routing math and alias connectivity.
 

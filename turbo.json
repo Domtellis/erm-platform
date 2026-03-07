@@ -13,7 +13,8 @@
         },
         "test": {
             "dependsOn": [
-                "build"
+                "build",
+                "lint"
             ],
             "inputs": [
                 "src/**/*.ts",

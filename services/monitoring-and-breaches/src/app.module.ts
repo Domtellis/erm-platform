@@ -17,4 +17,4 @@ import { envSchema } from "./config/env.schema";
     AuthModule,
   ],
 })
-export class AppModule { }
+export class AppModule {}

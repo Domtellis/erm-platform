@@ -70,7 +70,9 @@ export class OutboxService implements OnModuleInit, OnModuleDestroy {
           ],
         });
 
-        this.logger.log(`[PRODUCER SUCCESS] Event ${event.id} (${event.type}) sent to Kafka`);
+        this.logger.log(
+          `[PRODUCER SUCCESS] Event ${event.id} (${event.type}) sent to Kafka`,
+        );
 
         await this.prisma.outbox.update({
           where: { id: event.id },
