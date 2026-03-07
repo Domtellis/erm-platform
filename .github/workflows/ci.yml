@@ -45,9 +45,9 @@ jobs:
             audit-and-reporting: ['services/audit-and-reporting/**', 'package.json', 'package-lock.json']
             decisioning-and-approvals: ['services/decisioning-and-approvals/**', 'package.json', 'package-lock.json']
             ai-risk-service: ['services/erm-ai-risk-service/**', 'package.json', 'package-lock.json']
-            monitoring-and-breaches: ['services/monitoring-and-breaches/**', 'package.json', 'package-lock.json', 'infra/local/docker-compose.yml']
-            notification-service: ['services/notification-service/**', 'package.json', 'package-lock.json', 'infra/local/docker-compose.yml']
-            portal: ['web/portal/**', 'package.json', 'package-lock.json', 'infra/local/docker-compose.yml']
+            monitoring-and-breaches: ['services/monitoring-and-breaches/**', 'package.json', 'package-lock.json', 'infra/local/docker-compose.yml', 'infra/local/docker-compose.prod.yml']
+            notification-service: ['services/notification-service/**', 'package.json', 'package-lock.json', 'infra/local/docker-compose.yml', 'infra/local/docker-compose.prod.yml']
+            portal: ['web/portal/**', 'package.json', 'package-lock.json', 'infra/local/docker-compose.yml', 'infra/local/docker-compose.prod.yml']
 
       - name: Debug Filter Outputs
         run: |
@@ -76,6 +76,10 @@ jobs:
           
           echo "Generated Matrix: $MATRIX_JSON"
           echo "matrix=$MATRIX_JSON" >> $GITHUB_OUTPUT
+
+      - name: Debug Output Registry
+        run: |
+          echo "Full filter result: ${{ toJSON(steps.filter.outputs) }}"
 
   build-and-push:
     name: Build & Validate

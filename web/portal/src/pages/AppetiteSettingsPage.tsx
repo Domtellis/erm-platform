@@ -1,5 +1,5 @@
 import { useState } from 'react';
-// Phase 9 UI v1.0.1
+// Phase 9 UI v1.0.2
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getCurrentAppetite, updateThresholdLimit } from '../api/appetite';
 import type { Threshold, AppetiteStatement } from '../api/appetite';
