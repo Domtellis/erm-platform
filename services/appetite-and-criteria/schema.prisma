@@ -29,6 +29,8 @@ model Threshold {
   appetite_id     String
   appetite        AppetiteStatement  @relation(fields: [appetite_id], references: [id])
   metric_name     String
+  display_name    String?
+  description     String?
   operator        String             // e.g. ">", "<", "="
   limit_value     Float
   severity_mapping Json              // e.g. {"0.8": "low", "1.0": "medium", "1.2": "high"}

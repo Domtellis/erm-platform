@@ -6,6 +6,8 @@ export interface Threshold {
     id: string;
     appetite_id: string;
     metric_name: string;
+    display_name?: string;
+    description?: string;
     operator: string;
     limit_value: number;
     severity_mapping: { warning?: string; critical?: string;[key: string]: any };

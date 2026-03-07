@@ -64,19 +64,23 @@ export function AppetiteSettingsPage() {
                         <div key={t.id} className="p-6 flex items-center justify-between hover:bg-slate-50 transition-colors">
                             <div className="w-1/3">
                                 <h3 className="font-semibold text-slate-900 font-mono text-sm">{t.metric_name}</h3>
+                                {t.display_name && <p className="text-xs text-slate-500 mt-0.5">{t.display_name}</p>}
                             </div>
                             <div className="w-1/3 flex items-center text-slate-500 text-sm">
                                 <span className="bg-slate-100 px-2 py-1 rounded font-mono text-xs mr-3">{t.operator}</span>
-                                {editingId === t.id ? (
-                                    <input
-                                        type="number"
-                                        className="w-24 px-2 py-1 border border-crm-brand rounded text-slate-900"
-                                        value={editValue}
-                                        onChange={(e) => setEditValue(Number(e.target.value))}
-                                    />
-                                ) : (
-                                    <span className="font-bold text-slate-900 text-lg">{t.limit_value}</span>
-                                )}
+                                <div className="flex flex-col">
+                                    {editingId === t.id ? (
+                                        <input
+                                            type="number"
+                                            className="w-24 px-2 py-1 border border-crm-brand rounded text-slate-900"
+                                            value={editValue}
+                                            onChange={(e) => setEditValue(Number(e.target.value))}
+                                        />
+                                    ) : (
+                                        <span className="font-bold text-slate-900 text-lg">{t.limit_value}</span>
+                                    )}
+                                </div>
+                                {t.description && <span className="ml-4 text-[10px] text-slate-400 italic max-w-[180px] leading-tight">{t.description}</span>}
                             </div>
                             <div className="w-1/3 flex justify-end">
                                 {editingId === t.id ? (
@@ -111,19 +115,23 @@ export function AppetiteSettingsPage() {
                         <div key={t.id} className="p-6 flex items-center justify-between hover:bg-slate-50 transition-colors">
                             <div className="w-1/3">
                                 <h3 className="font-semibold text-slate-900 font-mono text-sm">{t.metric_name}</h3>
+                                {t.display_name && <p className="text-xs text-slate-500 mt-0.5">{t.display_name}</p>}
                             </div>
                             <div className="w-1/3 flex items-center text-slate-500 text-sm">
                                 <span className="bg-slate-100 px-2 py-1 rounded font-mono text-xs mr-3">{t.operator}</span>
-                                {editingId === t.id ? (
-                                    <input
-                                        type="number"
-                                        className="w-24 px-2 py-1 border border-crm-brand rounded text-slate-900"
-                                        value={editValue}
-                                        onChange={(e) => setEditValue(Number(e.target.value))}
-                                    />
-                                ) : (
-                                    <span className="font-bold text-slate-900 text-lg">{t.limit_value}</span>
-                                )}
+                                <div className="flex flex-col">
+                                    {editingId === t.id ? (
+                                        <input
+                                            type="number"
+                                            className="w-24 px-2 py-1 border border-crm-brand rounded text-slate-900"
+                                            value={editValue}
+                                            onChange={(e) => setEditValue(Number(e.target.value))}
+                                        />
+                                    ) : (
+                                        <span className="font-bold text-slate-900 text-lg">{t.limit_value}{t.limit_value > 5 ? '%' : ''}</span>
+                                    )}
+                                </div>
+                                {t.description && <span className="ml-4 text-[10px] text-slate-400 italic max-w-[180px] leading-tight">{t.description}</span>}
                             </div>
                             <div className="w-1/3 flex justify-end">
                                 {editingId === t.id ? (
