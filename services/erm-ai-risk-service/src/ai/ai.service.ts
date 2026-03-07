@@ -173,6 +173,7 @@ export class AiService implements OnModuleInit {
         iso_clause_applied: result.iso_clause_applied,
         model_version: this.geminiClient.modelVersion,
         prompt_version: this.geminiClient.promptVersion,
+        is_ai: true,
       });
 
       this.logger.log(

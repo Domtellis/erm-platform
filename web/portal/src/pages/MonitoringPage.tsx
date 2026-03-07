@@ -123,7 +123,9 @@ export function MonitoringPage() {
                                                         ) : (
                                                             <CheckCircle className="mr-2 h-4 w-4 text-crm-success" />
                                                         )}
-                                                        {item.status === 'ai_suggested' ? 'AI Assessment Ready' : item.status}
+                                                        {item.status === 'ai_suggested' ? 'AI Assessment Ready' :
+                                                            item.status === 'triaged' ? 'Ready for Decision' :
+                                                                item.status}
                                                     </div>
                                                     {sla && sla.due && (
                                                         sla.completed ? (

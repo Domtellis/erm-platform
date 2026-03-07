@@ -267,14 +267,17 @@ export class MonitoringService {
     }
 
     try {
+      const isAi = eventData.is_ai ?? true; // Default to true for backward compatibility
+      const newStatus = isAi ? "ai_suggested" : "triaged";
+
       await this.prisma.breachCase.update({
         where: { id: breach_case_id },
         data: {
-          status: "ai_suggested",
+          status: newStatus,
           triage_completed_at: new Date(),
         },
       });
-      this.logger.log(`Updated breach ${breach_case_id} status to ai_suggested`);
+      this.logger.log(`Updated breach ${breach_case_id} status to ${newStatus}`);
     } catch (error) {
       this.logger.error(
         `Failed to update breach status for ${breach_case_id}: ${error.message}`,
