@@ -5,10 +5,11 @@ const prisma = new PrismaClient();
 async function main() {
     console.log('Seeding Appetite & Criteria data with industry best practice thresholds...');
 
-    const safetyAppetite = await prisma.appetiteStatement.upsert({
-        where: { id: 'appetite-safety-v1' },
-        update: {},
-        create: {
+    await prisma.threshold.deleteMany({ where: { appetite: { id: 'appetite-safety-v1' } } });
+    await prisma.appetiteStatement.deleteMany({ where: { id: 'appetite-safety-v1' } });
+
+    const safetyAppetite = await prisma.appetiteStatement.create({
+        data: {
             id: 'appetite-safety-v1',
             title: 'Group Safety & Compliance Appetite',
             description: 'Top-tier container terminal threshold limits aligned with ILO (2018) and ISO 31000/45001 standards.',
