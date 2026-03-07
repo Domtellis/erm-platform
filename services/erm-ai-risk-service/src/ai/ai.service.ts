@@ -43,6 +43,18 @@ export class AiService implements OnModuleInit {
     this.logger.log("AI TRiSM Metrics initialized");
   }
 
+  private async resolveModelDisplayName(modelId: string): Promise<string> {
+    try {
+      const reg = await this.prisma.modelRegistry.findUnique({
+        where: { model_id: modelId },
+      });
+      return reg?.display_name || modelId;
+    } catch (err) {
+      this.logger.error(`Failed to resolve display name for ${modelId}: ${err.message}`);
+      return modelId;
+    }
+  }
+
   /**
    * Main entry point — called by the Kafka consumer when a breach is detected.
    *
@@ -127,10 +139,13 @@ export class AiService implements OnModuleInit {
       );
 
       // ── S-AIR Step 4a: Persist AssessmentSuggestion with dual citations ────
+      const modelDisplayName = await this.resolveModelDisplayName(this.geminiClient.modelVersion);
+
       const suggestion = await this.prisma.assessmentSuggestion.create({
         data: {
           breach_case_id,
           model_version: this.geminiClient.modelVersion,
+          model_display_name: modelDisplayName,
           prompt_version: this.geminiClient.promptVersion,
           impact: result.impact,
           likelihood: result.likelihood,
@@ -172,6 +187,7 @@ export class AiService implements OnModuleInit {
         ilo_clause_applied: result.ilo_clause_applied,
         iso_clause_applied: result.iso_clause_applied,
         model_version: this.geminiClient.modelVersion,
+        model_display_name: modelDisplayName,
         prompt_version: this.geminiClient.promptVersion,
         is_ai: true,
       });
@@ -198,6 +214,7 @@ export class AiService implements OnModuleInit {
           create: {
             breach_case_id: String(breach_case_id),
             model_version: this.geminiClient.modelVersion,
+            model_display_name: await this.resolveModelDisplayName(this.geminiClient.modelVersion),
             prompt_version: this.geminiClient.promptVersion,
             impact: 0,
             likelihood: 0,

@@ -18,6 +18,7 @@ model AssessmentSuggestion {
   id               String   @id @default(uuid())
   breach_case_id   String   @unique
   model_version    String   // e.g. "gemini-2.0-flash"
+  model_display_name String?  // e.g. "Gemini 2.0 Flash"
   prompt_version   String   // e.g. "v1.0"
   impact           Int      // 1-5 (ISO 45001 scale)
   likelihood       Int      // 1-5 (ISO 45001 scale)
@@ -104,6 +105,21 @@ model Outbox {
   payload      Json
   occurred_at  DateTime  @default(now())
   processed_at DateTime?
+
+  @@schema("ai_risk")
+}
+
+// ============================================================
+// NEW: AI Model Registry
+// Stores human-readable names and metadata for AI models
+// ============================================================
+model ModelRegistry {
+  id            String   @id @default(uuid())
+  model_id      String   @unique // e.g. "gemini-2.0-flash"
+  display_name  String   // e.g. "Gemini 2.0 Flash"
+  provider      String   // e.g. "google"
+  is_active     Boolean  @default(true)
+  created_at    DateTime @default(now())
 
   @@schema("ai_risk")
 }

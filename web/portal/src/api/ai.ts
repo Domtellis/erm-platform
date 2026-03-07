@@ -7,6 +7,7 @@ export interface AiAssessmentSuggestion {
     id: string;
     breach_case_id: string;
     model_version: string;
+    model_display_name: string | null;
     prompt_version: string;
     impact: number;
     likelihood: number;

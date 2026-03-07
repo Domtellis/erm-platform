@@ -61,7 +61,7 @@ export const AISuggestionCard: React.FC<AISuggestionCardProps> = ({ suggestion, 
                         </div>
                         <div>
                             <h4 className="text-sm font-semibold text-slate-900">AI Assessment {suggestion.status.charAt(0).toUpperCase() + suggestion.status.slice(1)}</h4>
-                            <p className="text-xs text-slate-500">Processed by {suggestion.model_version}</p>
+                            <p className="text-xs text-slate-500">Processed by {suggestion.model_display_name || suggestion.model_version}</p>
                         </div>
                     </div>
                 </div>
@@ -72,7 +72,7 @@ export const AISuggestionCard: React.FC<AISuggestionCardProps> = ({ suggestion, 
     return (
         <div className="rounded-xl border-2 border-crm-accent/30 bg-white shadow-sm overflow-hidden transition-all animate-fade-up">
             {/* Header */}
-            <div className="bg-crm-accent/5 p-4 flex items-center justify-between border-b border-crm-accent/10">
+            <div className="bg-crm-accent/5 p-4 flex items-center justify-between border-b border-crm-accent/10 relative">
                 <div className="flex items-center space-x-3">
                     <div className="rounded-lg bg-crm-accent p-2 text-white shadow-sm">
                         <Bot className="h-5 w-5" />
@@ -80,7 +80,6 @@ export const AISuggestionCard: React.FC<AISuggestionCardProps> = ({ suggestion, 
                     <div>
                         <div className="flex items-center space-x-2">
                             <h3 className="text-sm font-bold text-slate-900 uppercase tracking-tight">AI Risk Suggestion</h3>
-                            <span className="badge bg-slate-200 text-slate-600 border-none text-[10px] py-0">{suggestion.model_version}</span>
                         </div>
                         <div className="flex items-center space-x-1 mt-0.5">
                             <Clock className="h-3 w-3 text-slate-400" />
@@ -88,12 +87,18 @@ export const AISuggestionCard: React.FC<AISuggestionCardProps> = ({ suggestion, 
                         </div>
                     </div>
                 </div>
-                <button
-                    onClick={() => setIsExpanded(!isExpanded)}
-                    className="text-slate-400 hover:text-slate-600 transition-colors"
-                >
-                    {isExpanded ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
-                </button>
+
+                <div className="flex items-center space-x-3">
+                    <span className="badge bg-slate-200 text-slate-600 border-none font-medium text-[10px] px-2 py-0.5 rounded-full shadow-sm">
+                        {suggestion.model_display_name || suggestion.model_version}
+                    </span>
+                    <button
+                        onClick={() => setIsExpanded(!isExpanded)}
+                        className="text-slate-400 hover:text-slate-600 transition-colors p-1"
+                    >
+                        {isExpanded ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
+                    </button>
+                </div>
             </div>
 
             {isExpanded && (
