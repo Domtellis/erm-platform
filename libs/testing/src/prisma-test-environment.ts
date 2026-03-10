@@ -3,6 +3,8 @@ import {
   StartedPostgreSqlContainer,
 } from "@testcontainers/postgresql";
 import { execSync } from "child_process";
+import * as fs from "fs";
+import * as path from "path";
 
 export class PrismaTestEnvironment {
   private static container: StartedPostgreSqlContainer;
@@ -34,9 +36,36 @@ export class PrismaTestEnvironment {
     // Cross-platform compatible script execution (Unix vs Windows CI safeguard)
     const npxCmd = process.platform === "win32" ? "npx.cmd" : "npx";
 
+    // Resilient path discovery: Handle both local root execution and CI package-level execution
+    let resolvedSchemaPath = schemaPath;
+    if (!fs.existsSync(resolvedSchemaPath)) {
+      // If the path doesn't exist relative to CWD, try to find it relative to the monorepo root.
+      // We look for 'package.json' in the parent directories to identify the root.
+      let currentDir = process.cwd();
+      let rootDir = "";
+      while (currentDir !== path.parse(currentDir).root) {
+        if (fs.existsSync(path.join(currentDir, "turbo.json"))) {
+          rootDir = currentDir;
+          break;
+        }
+        currentDir = path.dirname(currentDir);
+      }
+
+      const pathFromRoot = path.join(rootDir, schemaPath);
+      if (rootDir && fs.existsSync(pathFromRoot)) {
+        resolvedSchemaPath = pathFromRoot;
+      } else {
+        // Fallback: search for the filename anywhere in the sub-tree if it's just a filename
+        const fileName = path.basename(schemaPath);
+        if (fileName === schemaPath && fs.existsSync(fileName)) {
+          resolvedSchemaPath = fileName;
+        }
+      }
+    }
+
     try {
       execSync(
-        `${npxCmd} prisma db push --schema=${schemaPath} --accept-data-loss --skip-generate`,
+        `${npxCmd} prisma db push --schema=${resolvedSchemaPath} --accept-data-loss --skip-generate`,
         {
           env: { ...process.env, DATABASE_URL: databaseUrl },
           stdio: "pipe",

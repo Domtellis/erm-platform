@@ -22,7 +22,7 @@ COPY --from=pruner /app/out/json/ .
 COPY --from=pruner /app/out/package-lock.json ./package-lock.json
 
 # 2. Install ALL dependencies for build
-RUN npm ci
+RUN npm ci --ignore-scripts
 
 # 3. Copy source code and generate Prisma Client
 COPY --from=pruner /app/out/full/ .
@@ -48,7 +48,7 @@ COPY --from=pruner /app/out/json/ .
 COPY --from=pruner /app/out/package-lock.json ./package-lock.json
 
 # 2. Install ONLY production dependencies
-RUN npm ci --omit=dev
+RUN npm ci --omit=dev --ignore-scripts
 
 # 3. Copy compiled Prisma Client and Dist files
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma

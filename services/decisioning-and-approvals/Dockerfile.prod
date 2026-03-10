@@ -15,7 +15,7 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y openssl
 COPY --from=pruner /app/out/json/ .
 COPY --from=pruner /app/out/package-lock.json ./package-lock.json
-RUN npm ci
+RUN npm ci --ignore-scripts
 COPY --from=pruner /app/out/full/ .
 COPY services/decisioning-and-approvals/schema.prisma ./services/decisioning-and-approvals/schema.prisma
 RUN npx prisma generate --schema=./services/decisioning-and-approvals/schema.prisma
@@ -30,7 +30,7 @@ WORKDIR /app
 ENV NODE_ENV=production
 COPY --from=pruner /app/out/json/ .
 COPY --from=pruner /app/out/package-lock.json ./package-lock.json
-RUN npm ci --omit=dev
+RUN npm ci --omit=dev --ignore-scripts
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=builder /app/services/decisioning-and-approvals/dist ./services/decisioning-and-approvals/dist

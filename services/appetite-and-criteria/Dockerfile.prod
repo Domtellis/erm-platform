@@ -12,7 +12,7 @@ WORKDIR /app
 COPY . .
 
 # 2. Install ALL dependencies across the monorepo workspaces
-RUN npm ci
+RUN npm ci --ignore-scripts
 
 # 3. Generate Prisma client natively
 # We use the exact environment variables from your original file
@@ -42,7 +42,7 @@ COPY package.json package-lock.json ./
 COPY services/appetite-and-criteria/package.json ./services/appetite-and-criteria/
 
 # 2. Install ONLY production dependencies across the workspace
-RUN npm ci --omit=dev
+RUN npm ci --omit=dev --ignore-scripts
 
 # 3. Copy the compiled Prisma Client from the builder
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
