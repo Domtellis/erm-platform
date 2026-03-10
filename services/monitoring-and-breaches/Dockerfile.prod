@@ -51,7 +51,7 @@ COPY --from=pruner /app/out/package-lock.json ./package-lock.json
 RUN npm ci --omit=dev --ignore-scripts
 
 # 3. Copy compiled Prisma Client and Dist files
-COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
+COPY --from=builder /app/node_modules/@prisma/client/monitoring ./node_modules/@prisma/client/monitoring
 COPY --from=builder /app/services/monitoring-and-breaches/dist ./services/monitoring-and-breaches/dist
 COPY --from=builder /app/services/monitoring-and-breaches/schema.prisma ./services/monitoring-and-breaches/schema.prisma
 
