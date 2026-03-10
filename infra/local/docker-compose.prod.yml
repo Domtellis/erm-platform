@@ -168,7 +168,7 @@ services:
       OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318
       OTEL_SERVICE_NAME: erm-monitoring-service
       APPETITE_SERVICE_URL: http://appetite-service:4012
-    command: /bin/sh -c "npx prisma db push --schema=./schema.prisma --accept-data-loss && node dist/main"
+    command: /bin/sh -c "npx prisma db push --schema=./schema.prisma --accept-data-loss --skip-generate && node dist/main"
     ports:
       - "4010:4010"
     depends_on:
@@ -215,7 +215,7 @@ services:
       PORT: 4011
       OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318
       OTEL_SERVICE_NAME: erm-decisioning-service
-    command: /bin/sh -c "npx prisma db push --schema=./schema.prisma --accept-data-loss && node dist/main"
+    command: /bin/sh -c "npx prisma db push --schema=./schema.prisma --accept-data-loss --skip-generate && node dist/main"
     ports:
       - "4011:4011"
     depends_on:
@@ -235,7 +235,7 @@ services:
       PORT: 4012
       OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318
       OTEL_SERVICE_NAME: erm-appetite-service
-    command: /bin/sh -c "npx prisma db push --schema=./schema.prisma --accept-data-loss && node dist/main"
+    command: /bin/sh -c "npx prisma db push --schema=./schema.prisma --accept-data-loss --skip-generate && node dist/main"
     ports:
       - "4012:4012"
     depends_on:
@@ -254,7 +254,7 @@ services:
       PORT: 4013
       OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318
       OTEL_SERVICE_NAME: erm-audit-service
-    command: /bin/sh -c "npx prisma db push --schema=./schema.prisma --accept-data-loss && node dist/main"
+    command: /bin/sh -c "npx prisma db push --schema=./schema.prisma --accept-data-loss --skip-generate && node dist/main"
     ports:
       - "4013:4013"
     depends_on:
@@ -279,7 +279,7 @@ services:
       GEMINI_MODEL: ${GEMINI_MODEL}
       OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318
       OTEL_SERVICE_NAME: erm-ai-risk-service
-    command: /bin/sh -c "npx prisma db push --schema=./schema.prisma --accept-data-loss && node dist/main"
+    command: /bin/sh -c "npx prisma db push --schema=./schema.prisma --accept-data-loss --skip-generate && node dist/main"
     ports:
       - "4014:4014"
     depends_on:
