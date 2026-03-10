@@ -9,4 +9,4 @@ import { RemediationModule } from "../remediation/remediation.module";
   controllers: [DecisioningController],
   providers: [DecisioningService, OutboxService],
 })
-export class DecisioningModule { }
+export class DecisioningModule {}

@@ -9,7 +9,9 @@ export class EmailService {
   constructor() {
     const host = process.env.SMTP_HOST;
     const port = process.env.SMTP_PORT;
-    this.logger.log(`[STARTUP] Email Config Status - Host: ${!!host}, Port: ${!!port}`);
+    this.logger.log(
+      `[STARTUP] Email Config Status - Host: ${!!host}, Port: ${!!port}`,
+    );
 
     this.transporter = nodemailer.createTransport({
       host: host || "localhost",

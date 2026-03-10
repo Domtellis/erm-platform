@@ -10,16 +10,22 @@ export class NotificationService {
   constructor(
     private readonly emailService: EmailService,
     private readonly jiraService: JiraService,
-  ) { }
+  ) {}
 
   async handleBreachDetected(event: any) {
     // The controller already unwrapped this, so 'event' is the actual payload
     const payload = event;
 
     const severity = (payload?.severity || "low").toLowerCase();
-    this.logger.log(`[FINAL-VERIFY] Processing Breach: ${payload?.title} (${severity})`);
+    this.logger.log(
+      `[FINAL-VERIFY] Processing Breach: ${payload?.title} (${severity})`,
+    );
 
-    if (severity === "critical" || severity === "high" || severity === "medium") {
+    if (
+      severity === "critical" ||
+      severity === "high" ||
+      severity === "medium"
+    ) {
       this.logger.log(
         `[TRACE] Severity '${severity}' matches threshold. Sending Email...`,
       );

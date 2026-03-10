@@ -10,7 +10,7 @@ export interface Threshold {
     description?: string;
     operator: string;
     limit_value: number;
-    severity_mapping: { warning?: string; critical?: string;[key: string]: any };
+    severity_mapping: { warning?: string; critical?: string;[key: string]: string | undefined };
     created_at: string;
 }
 

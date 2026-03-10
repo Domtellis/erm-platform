@@ -6,7 +6,7 @@ import { CreateRiskAssessmentDto } from "./dto/create-risk-assessment.dto";
 export class RiskService {
   private readonly logger = new Logger(RiskService.name);
 
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async createAssessment(dto: CreateRiskAssessmentDto) {
     // Calculate Risk Level Matrix

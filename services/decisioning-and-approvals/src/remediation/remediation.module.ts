@@ -27,4 +27,4 @@ import { getKafkaBrokers } from "../common/kafka.config";
   providers: [RemediationService],
   exports: [RemediationService],
 })
-export class RemediationModule { }
+export class RemediationModule {}

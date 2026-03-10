@@ -7,15 +7,16 @@ import { getKafkaBrokers } from "./common/kafka.config";
 import { CompressionTypes, CompressionCodecs } from "kafkajs";
 
 // Precise Snappy Codec Registration
-try {
-  const SnappyCodec = require("kafkajs-snappy");
-  CompressionCodecs[CompressionTypes.Snappy] = SnappyCodec;
-  console.log("[STARTUP] KafkaJS Snappy codec registered successfully");
-} catch (err) {
-  console.error("[STARTUP ERROR] Failed to register Snappy codec:", err);
-}
-
 async function bootstrap() {
+  // Precise Snappy Codec Registration (Moved inside bootstrap for async import support)
+  try {
+    const SnappyCodec = await import("kafkajs-snappy");
+    CompressionCodecs[CompressionTypes.Snappy] = SnappyCodec;
+    console.log("[STARTUP] KafkaJS Snappy codec registered successfully");
+  } catch (err) {
+    console.error("[STARTUP ERROR] Failed to register Snappy codec:", err);
+  }
+
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()

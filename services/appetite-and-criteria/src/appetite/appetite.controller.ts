@@ -5,7 +5,7 @@ import { AppetiteService } from "./appetite.service";
 @ApiTags("Appetite & Criteria")
 @Controller("appetites")
 export class AppetiteController {
-  constructor(private readonly appetiteService: AppetiteService) { }
+  constructor(private readonly appetiteService: AppetiteService) {}
 
   @Get("current")
   @ApiOperation({
@@ -25,7 +25,7 @@ export class AppetiteController {
   @ApiOperation({ summary: "Update a threshold limit value" })
   async updateThreshold(
     @Param("id") id: string,
-    @Body() body: { limit_value: number }
+    @Body() body: { limit_value: number },
   ) {
     return this.appetiteService.updateThreshold(id, body.limit_value);
   }

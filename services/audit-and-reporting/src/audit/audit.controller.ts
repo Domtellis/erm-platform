@@ -13,7 +13,7 @@ export class AuditController {
   constructor(
     private prisma: PrismaService,
     private auditService: AuditService,
-  ) { }
+  ) {}
 
   @EventPattern([
     "erm.monitoring.breach-detected.v1",
@@ -22,7 +22,7 @@ export class AuditController {
     "erm.risk.assessment-failed.v1",
     "erm.risk.feedback-recorded.v1",
     "erm.decisioning.decision-approved.v1",
-    "erm.remediation.plan-created.v1"
+    "erm.remediation.plan-created.v1",
   ])
   async handleAuditEvents(@Payload() data: any) {
     this.logger.log(`Received event for auditing: ${data.type}`);

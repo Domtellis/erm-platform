@@ -28,4 +28,4 @@ import { getKafkaBrokers } from "./common/kafka.config";
   controllers: [NotificationController],
   providers: [NotificationService, EmailService, JiraService],
 })
-export class AppModule { }
+export class AppModule {}

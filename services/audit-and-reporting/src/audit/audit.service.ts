@@ -5,11 +5,13 @@ import { PrismaService } from "../prisma/prisma.service";
 export class AuditService {
   private readonly logger = new Logger(AuditService.name);
 
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async handleEvent(event: any) {
     try {
-      this.logger.log(`Sinking event to Audit Store: ${event.type} (${event.id})`);
+      this.logger.log(
+        `Sinking event to Audit Store: ${event.type} (${event.id})`,
+      );
 
       await this.prisma.auditEvent.create({
         data: {

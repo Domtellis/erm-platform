@@ -14,8 +14,9 @@ export class JiraService {
     const hasUser = !!this.jiraUser;
     const hasToken = !!this.jiraToken;
 
-
-    this.logger.log(`[STARTUP] Jira Config Status - URL: ${hasUrl}, User: ${hasUser}, Token: ${hasToken}, Project: ${this.jiraProject || 'KAN'}`);
+    this.logger.log(
+      `[STARTUP] Jira Config Status - URL: ${hasUrl}, User: ${hasUser}, Token: ${hasToken}, Project: ${this.jiraProject || "KAN"}`,
+    );
   }
 
   async createIssue(plan: any) {
