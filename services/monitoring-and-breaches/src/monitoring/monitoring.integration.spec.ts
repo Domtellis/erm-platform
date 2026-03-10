@@ -1,7 +1,7 @@
 import { Test, TestingModule } from "@nestjs/testing";
 import { INestApplication } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
-import { PrismaClientKnownRequestError } from "@prisma/client/monitoring/runtime/library";
+import { PrismaClientKnownRequestError } from "@prisma-clients/monitoring/runtime/library";
 import { PrismaTestEnvironment, truncateDatabase } from "@erm/testing";
 
 describe("Phase 2: Component Integration (Refactored)", () => {

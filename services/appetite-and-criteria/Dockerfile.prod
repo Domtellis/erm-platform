@@ -45,7 +45,7 @@ COPY services/appetite-and-criteria/package.json ./services/appetite-and-criteri
 RUN npm ci --omit=dev --ignore-scripts
 
 # 3. Copy the compiled Prisma Client from the builder
-COPY --from=builder /app/node_modules/@prisma/client/appetite ./node_modules/@prisma/client/appetite
+COPY --from=builder /app/node_modules/@prisma-clients/appetite ./node_modules/@prisma-clients/appetite
 
 # 4. Copy the compiled Javascript and Prisma files from the builder
 COPY --from=builder /app/services/appetite-and-criteria/dist ./services/appetite-and-criteria/dist

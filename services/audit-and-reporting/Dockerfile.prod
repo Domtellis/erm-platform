@@ -31,7 +31,7 @@ ENV NODE_ENV=production
 COPY --from=pruner /app/out/json/ .
 COPY --from=pruner /app/out/package-lock.json ./package-lock.json
 RUN npm ci --omit=dev --ignore-scripts
-COPY --from=builder /app/node_modules/@prisma/client/audit ./node_modules/@prisma/client/audit
+COPY --from=builder /app/node_modules/@prisma-clients/audit ./node_modules/@prisma-clients/audit
 COPY --from=builder /app/services/audit-and-reporting/dist ./services/audit-and-reporting/dist
 COPY --from=builder /app/services/audit-and-reporting/schema.prisma ./services/audit-and-reporting/schema.prisma
 WORKDIR /app/services/audit-and-reporting

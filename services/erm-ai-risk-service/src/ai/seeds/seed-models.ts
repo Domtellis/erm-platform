@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client/ai-risk";
+import { PrismaClient } from "@prisma-clients/ai-risk";
 
 const prisma = new PrismaClient();
 

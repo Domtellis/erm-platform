@@ -4,7 +4,7 @@ import { PrismaService } from "../prisma/prisma.service";
 import { ClientKafka } from "@nestjs/microservices";
 import { Inject } from "@nestjs/common";
 import { kafkaPublishedCount } from "../instrumentation";
-import { Prisma } from "@prisma/client/ai-risk";
+import { Prisma } from "@prisma-clients/ai-risk";
 
 @Injectable()
 export class OutboxService implements OnModuleInit {

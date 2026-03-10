@@ -11,7 +11,7 @@
  *   "standards:seed": "ts-node src/standards/seeds/seed-ilo-clauses.ts"
  */
 
-import { PrismaClient } from "@prisma/client/ai-risk";
+import { PrismaClient } from "@prisma-clients/ai-risk";
 import * as fs from "fs";
 import * as path from "path";
 

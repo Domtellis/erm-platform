@@ -1,6 +1,6 @@
 generator client {
   provider        = "prisma-client-js"
-  output          = "../../node_modules/@prisma/client/appetite"
+  output          = "../../node_modules/@prisma-clients/appetite"
   previewFeatures = ["multiSchema"]
   binaryTargets   = ["native", "linux-musl-openssl-3.0.x", "linux-musl-arm64-openssl-3.0.x"]
 }
