@@ -1,0 +1,5 @@
+metric_name,observed_value,threshold,severity,site_id,bu_id,title,expected_impact_min,expected_impact_max
+"Personnel Radiation Exposure",25.5,20,"High","site-a","bu-radiology","Annual radiation limit exceeded for port scanning operator",4,5
+"Lifeboat Maintenance Latency",45,30,"Medium","site-b","bu-logistics","Lifeboat 03 inspection 15 days overdue",2,3
+"Container Crane Structural Integrity",100,90,"Critical","site-c","bu-loading","Structural cracks detected on primary load-bearing beam of STS-04",5,5
+"PPE Compliance - High-Vis Vests",85,95,"Low","site-d","bu-yards","85% compliance observed in restricted quay zone during night operations",1,2

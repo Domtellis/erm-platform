@@ -24,4 +24,4 @@ import { envSchema } from "./config/env.schema";
     AiModule,
   ],
 })
-export class AppModule { }
+export class AppModule {}

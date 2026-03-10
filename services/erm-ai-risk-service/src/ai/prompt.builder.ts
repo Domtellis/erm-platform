@@ -10,6 +10,7 @@
  */
 
 import { PortClauseContext } from "../standards/port-context.service";
+import * as Joi from "joi";
 
 export const PROMPT_VERSION = "v2.0";
 
@@ -25,12 +26,12 @@ export interface BreachContext {
 }
 
 export interface AiAssessmentResult {
-  impact: number;                 // 1-5
-  likelihood: number;             // 1-5
-  risk_score: number;             // impact × likelihood
-  ilo_clause_applied: string | null;   // e.g. "ILO-PORT-2018 §4.3"
+  impact: number; // 1-5
+  likelihood: number; // 1-5
+  risk_score: number; // impact × likelihood
+  ilo_clause_applied: string | null; // e.g. "ILO-PORT-2018 §4.3"
   ilo_clause_title: string | null;
-  iso_clause_applied: string | null;   // e.g. "ISO 45001:2018 Clause 6.1.2"
+  iso_clause_applied: string | null; // e.g. "ISO 45001:2018 Clause 6.1.2"
   iso_clause_title: string | null;
   unable_to_cite_reason: string | null;
   justification: string;
@@ -62,11 +63,11 @@ The following clauses from the ILO Code of Practice on Safety and Health in Port
 apply to this metric. Use them as grounding for your assessment:
 
 ${portClauses
-        .map(
-          (c) => `### ${c.clause_ref} — ${c.title}
+  .map(
+    (c) => `### ${c.clause_ref} — ${c.title}
 ${c.summary}`,
-        )
-        .join("\n\n")}
+  )
+  .join("\n\n")}
 `
       : `
 ## Port Safety Standards
@@ -130,52 +131,73 @@ Respond ONLY with valid JSON — no markdown, no explanation outside the JSON:
 }
 
 /**
+ * Custom error class for AI parsing failures.
+ * Used by GeminiClient to identify fatal (non-retryable) errors.
+ */
+export class AiParseError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "AiParseError";
+  }
+}
+
+/**
+ * Joi schema for validating the AI risk assessment response.
+ */
+const aiAssessmentSchema = Joi.object({
+  impact: Joi.number().integer().min(1).max(5).required(),
+  likelihood: Joi.number().integer().min(1).max(5).required(),
+  ilo_clause_applied: Joi.string().allow(null, ""),
+  ilo_clause_title: Joi.string().allow(null, ""),
+  iso_clause_applied: Joi.string().allow(null, ""),
+  iso_clause_title: Joi.string().allow(null, ""),
+  unable_to_cite_reason: Joi.string().allow(null, ""),
+  justification: Joi.string().trim().min(5).required(),
+  recommendations: Joi.array().items(Joi.string().trim()).min(1).required(),
+}).options({ stripUnknown: true });
+
+/**
  * Parses and validates the AI response from Gemini.
  * Handles both successful dual-citation and graceful unable-to-cite cases.
  */
 export function parseAiResponse(rawText: string): AiAssessmentResult {
-  const cleaned = rawText
-    .replace(/^```json\s*/i, "")
-    .replace(/^```\s*/i, "")
-    .replace(/```\s*$/i, "")
-    .trim();
+  // S-AIR Phase 3 Hardening: Robust JSON extraction
+  // Find the first '{' and last '}' to strip any conversational filler or markdown
+  const startJSON = rawText.indexOf("{");
+  const endJSON = rawText.lastIndexOf("}");
 
-  const parsed = JSON.parse(cleaned);
+  if (startJSON === -1 || endJSON === -1 || endJSON < startJSON) {
+    throw new AiParseError(
+      "No valid JSON object found in AI response. Ensure the model is directed to respond ONLY with JSON.",
+    );
+  }
 
-  const impact = Number(parsed.impact);
-  const likelihood = Number(parsed.likelihood);
+  const cleaned = rawText.substring(startJSON, endJSON + 1);
 
-  if (!Number.isInteger(impact) || impact < 1 || impact > 5) {
-    throw new Error(`Invalid impact value: ${parsed.impact}`);
+  let parsed: any;
+  try {
+    parsed = JSON.parse(cleaned);
+  } catch (e) {
+    throw new AiParseError(`Invalid JSON format: ${e.message}`);
   }
-  if (!Number.isInteger(likelihood) || likelihood < 1 || likelihood > 5) {
-    throw new Error(`Invalid likelihood value: ${parsed.likelihood}`);
-  }
-  if (
-    typeof parsed.justification !== "string" ||
-    parsed.justification.trim().length === 0
-  ) {
-    throw new Error("Missing or empty justification");
-  }
-  if (
-    !Array.isArray(parsed.recommendations) ||
-    parsed.recommendations.length === 0
-  ) {
-    throw new Error("Missing or empty recommendations");
+
+  // S-AIR Phase 3 Hardening: Industry-standard Schema Validation (Joi)
+  const { error, value } = aiAssessmentSchema.validate(parsed);
+
+  if (error) {
+    throw new AiParseError(`Schema validation failed: ${error.message}`);
   }
 
   return {
-    impact,
-    likelihood,
-    risk_score: impact * likelihood,
-    ilo_clause_applied: parsed.ilo_clause_applied ?? null,
-    ilo_clause_title: parsed.ilo_clause_title ?? null,
-    iso_clause_applied: parsed.iso_clause_applied ?? null,
-    iso_clause_title: parsed.iso_clause_title ?? null,
-    unable_to_cite_reason: parsed.unable_to_cite_reason ?? null,
-    justification: parsed.justification.trim(),
-    recommendations: parsed.recommendations.map((r: unknown) =>
-      String(r).trim(),
-    ),
+    impact: value.impact,
+    likelihood: value.likelihood,
+    risk_score: value.impact * value.likelihood,
+    ilo_clause_applied: value.ilo_clause_applied || null,
+    ilo_clause_title: value.ilo_clause_title || null,
+    iso_clause_applied: value.iso_clause_applied || null,
+    iso_clause_title: value.iso_clause_title || null,
+    unable_to_cite_reason: value.unable_to_cite_reason || null,
+    justification: value.justification,
+    recommendations: value.recommendations,
   };
 }

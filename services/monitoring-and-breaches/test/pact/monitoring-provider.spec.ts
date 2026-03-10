@@ -53,8 +53,8 @@ describe("Pact Verification", () => {
       providerBaseUrl: url,
       pactUrls: [
         path.resolve(
-          process.cwd(),
-          "../../web/portal/pacts/WebPortal-MonitoringService.json",
+          __dirname,
+          "../../../../web/portal/pacts/WebPortal-MonitoringService.json",
         ),
       ],
       stateHandlers: {

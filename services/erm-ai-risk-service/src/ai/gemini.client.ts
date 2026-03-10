@@ -1,4 +1,7 @@
 import { Injectable, Logger } from "@nestjs/common";
+import { lastValueFrom, of, throwError, defer } from "rxjs";
+import { delay, retry, map, catchError } from "rxjs/operators";
+import { from } from "rxjs";
 import { ConfigService } from "@nestjs/config";
 import {
   geminiCallDuration,
@@ -13,6 +16,7 @@ import {
   AiAssessmentResult,
   buildRiskAssessmentPrompt,
   parseAiResponse,
+  AiParseError,
   PROMPT_VERSION,
 } from "./prompt.builder";
 import { PortClauseContext } from "../standards/port-context.service";
@@ -39,6 +43,13 @@ interface GeminiApiResponse {
   }[];
   usageMetadata?: UsageMetadata;
 }
+
+const PRICING = {
+  "gemini-2.0-flash": { input: 0.0000001, output: 0.0000004 },
+  "gemini-2.5-flash-lite": { input: 0.000000075, output: 0.0000003 },
+  // Fallback pricing
+  default: { input: 0.0000001, output: 0.0000004 },
+};
 
 @Injectable()
 export class GeminiClient {
@@ -80,65 +91,56 @@ export class GeminiClient {
   ): Promise<AiAssessmentResult> {
     const prompt = buildRiskAssessmentPrompt(ctx, portClauses);
     const startTime = Date.now();
-    let lastError: Error;
 
-    for (let attempt = 1; attempt <= this.maxRetries; attempt++) {
-      if (attempt > 1) {
-        // Exponential backoff: 500ms, 1000ms, 2000ms
-        const delayMs = 500 * Math.pow(2, attempt - 2);
-        this.logger.warn(
-          `Retry attempt ${attempt}/${this.maxRetries} after ${delayMs}ms`,
-        );
-        geminiRetryCount.add(1, {
-          model: this.model,
-          attempt: String(attempt),
-        });
-        await this.sleep(delayMs);
-      }
-
-      try {
-        const { text, usage, safety } = await this.callGeminiApi(prompt);
+    // Use RxJS for robust, industry-standard retry logic with exponential backoff
+    // CRITICAL: Use defer() to ensure a fresh Promise/fetch is created on every retry!
+    const assessment$ = defer(() => from(this.callGeminiApi(prompt))).pipe(
+      map(({ text, usage, safety }) => {
         const result = parseAiResponse(text);
-
-        // Record Telemetry
         this.recordTelemetry(usage, safety, "success");
+        return { result, usage, safety };
+      }),
+      retry({
+        count: this.maxRetries,
+        delay: (error, retryCount) => {
+          const errorType = this.classifyError(error);
 
-        const latencyMs = Date.now() - startTime;
-        geminiCallDuration.record(latencyMs, {
-          model: this.model,
-          prompt_version: PROMPT_VERSION,
-          status: "success",
-        });
+          // FATAL ERROR: Do not retry on parsing failures or schema violations
+          if (errorType === "parse_error") {
+            return throwError(() => error);
+          }
 
-        this.logger.log(
-          `Gemini assessment complete | model=${this.model} prompt_version=${PROMPT_VERSION} ` +
-          `latency=${latencyMs}ms attempt=${attempt} impact=${result.impact} likelihood=${result.likelihood}`,
-        );
+          // TRANSIENT ERROR: Implement Exponential Backoff (500ms, 1000ms, 2000ms)
+          const backoff = 500 * Math.pow(2, retryCount - 1);
+          this.logger.warn(
+            `Transient error detected (${errorType}). Retry attempt ${retryCount}/${this.maxRetries} after ${backoff}ms: ${error.message}`,
+          );
 
-        return result;
-      } catch (err) {
-        lastError = err;
+          geminiRetryCount.add(1, {
+            model: this.model,
+            attempt: String(retryCount),
+          });
+
+          return of(null).pipe(delay(backoff));
+        },
+      }),
+      catchError((err) => {
         const errorType = this.classifyError(err);
-        this.logger.error(
-          `Gemini call failed (attempt ${attempt}): ${err.message}`,
-        );
         geminiErrorCount.add(1, { model: this.model, error_type: errorType });
+        this.logger.error(`AI Assessment failed definitively: ${err.message}`);
+        return throwError(() => err);
+      }),
+    );
 
-        // Don't retry on parse errors — the response came back but was malformed
-        if (errorType === "parse_error") {
-          break;
-        }
-      }
-    }
+    const { result } = await lastValueFrom(assessment$);
 
-    const latencyMs = Date.now() - startTime;
-    geminiCallDuration.record(latencyMs, {
-      model: this.model,
-      prompt_version: PROMPT_VERSION,
-      status: "failure",
-    });
+    const totalTransactionTime = Date.now() - startTime;
+    this.logger.log(
+      `Gemini assessment complete | model=${this.model} prompt_version=${PROMPT_VERSION} ` +
+        `total_tx_time=${totalTransactionTime}ms impact=${result.impact} likelihood=${result.likelihood}`,
+    );
 
-    throw lastError;
+    return result;
   }
 
   private async callGeminiApi(
@@ -148,6 +150,7 @@ export class GeminiClient {
 
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), this.timeoutMs);
+    const requestStartTime = Date.now();
 
     try {
       const response = await fetch(url, {
@@ -167,18 +170,32 @@ export class GeminiClient {
       if (!response.ok) {
         const body = await response.text().catch(() => "");
         if (response.status === 429) {
-          this.logger.error(`GEMINI QUOTA EXCEEDED (429): ${body}`);
-          throw new Error("Gemini API Quota Exceeded. Please check your billing/tier or try again later.");
+          throw new Error(
+            "Gemini API Quota Exceeded. Please check your billing/tier or try again later.",
+          );
         }
         throw new Error(`Gemini API HTTP ${response.status}: ${body}`);
       }
 
       const data: GeminiApiResponse = await response.json();
-      const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      const candidate = data?.candidates?.[0];
+      const text = candidate?.content?.parts?.[0]?.text;
+      const finishReason = candidate?.finishReason;
+
+      // S-AIR Phase 3 Hardening: Finish Reason Validation
+      if (finishReason && finishReason !== "STOP") {
+        this.logger.error(
+          `Gemini API finishReason is abnormal: ${finishReason}`,
+        );
+        // If it's blocked by safety, we already checked safetyRatings, but this is a double-check
+        throw new Error(
+          `Gemini API failed to complete: finish_reason=${finishReason}`,
+        );
+      }
 
       if (!text) {
         // Check if it was blocked by safety
-        const safety = data?.candidates?.[0]?.safetyRatings;
+        const safety = candidate?.safetyRatings;
         if (safety?.some((s) => s.blocked)) {
           this.recordTelemetry(data.usageMetadata, safety, "safety_blocked");
           throw new Error("Gemini API call blocked by safety filters");
@@ -186,12 +203,30 @@ export class GeminiClient {
         throw new Error("Gemini API returned empty content");
       }
 
+      // Record SUCCESS latency here
+      const requestDuration = Date.now() - requestStartTime;
+      geminiCallDuration.record(requestDuration, {
+        model: this.model,
+        prompt_version: PROMPT_VERSION,
+        status: "success",
+      });
+
       return {
         text,
         usage: data.usageMetadata,
         safety: data?.candidates?.[0]?.safetyRatings,
       };
     } catch (err) {
+      const errorType = this.classifyError(err);
+      const requestDuration = Date.now() - requestStartTime;
+
+      geminiCallDuration.record(requestDuration, {
+        model: this.model,
+        prompt_version: PROMPT_VERSION,
+        status: "failure",
+        error_type: errorType,
+      });
+
       if (err.name === "AbortError") {
         throw new Error(`Gemini API timeout after ${this.timeoutMs}ms`);
       }
@@ -219,11 +254,10 @@ export class GeminiClient {
         type: "completion",
       });
 
-      // Pricing estimated for Gemini 2.0 Flash (as of 2026 approx)
-      // Input: $0.10 / 1M tokens, Output: $0.40 / 1M tokens
+      const rates = (PRICING as any)[this.model] || PRICING.default;
       const cost =
-        usage.promptTokenCount * 0.0000001 +
-        usage.candidatesTokenCount * 0.0000004;
+        usage.promptTokenCount * rates.input +
+        usage.candidatesTokenCount * rates.output;
       aiCostTotal.add(cost, labels);
     }
 
@@ -241,20 +275,10 @@ export class GeminiClient {
   }
 
   private classifyError(err: Error): string {
+    if (err instanceof AiParseError) return "parse_error";
     if (err.message.includes("timeout")) return "timeout";
-    if (
-      err.message.includes("JSON") ||
-      err.message.includes("parse") ||
-      err.message.includes("Invalid") ||
-      err.message.includes("Missing")
-    )
-      return "parse_error";
     if (err.message.includes("HTTP 4") || err.message.includes("HTTP 5"))
       return "api_error";
     return "unknown";
-  }
-
-  private sleep(ms: number): Promise<void> {
-    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }

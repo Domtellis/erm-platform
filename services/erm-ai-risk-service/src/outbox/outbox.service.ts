@@ -4,6 +4,7 @@ import { PrismaService } from "../prisma/prisma.service";
 import { ClientKafka } from "@nestjs/microservices";
 import { Inject } from "@nestjs/common";
 import { kafkaPublishedCount } from "../instrumentation";
+import { Prisma } from "@prisma/client/ai-risk";
 
 @Injectable()
 export class OutboxService implements OnModuleInit {
@@ -12,7 +13,7 @@ export class OutboxService implements OnModuleInit {
   constructor(
     private prisma: PrismaService,
     @Inject("KAFKA_SERVICE") private readonly kafkaClient: ClientKafka,
-  ) { }
+  ) {}
 
   async onModuleInit() {
     await this.kafkaClient.connect();
@@ -20,16 +21,27 @@ export class OutboxService implements OnModuleInit {
 
   /**
    * Enqueue an event to be published via the Outbox pattern.
-   * To be used within a Prisma transaction.
+   * Can be used with or without an existing Prisma transaction.
    */
-  async enqueue(type: string, payload: any, tx?: any) {
-    const prisma = tx || this.prisma;
-    return prisma.outbox.create({
+  async enqueue(type: string, payload: any, tx?: Prisma.TransactionClient) {
+    const prismaClient = tx || this.prisma;
+    return prismaClient.outbox.create({
       data: {
         type,
         payload,
       },
     });
+  }
+
+  /**
+   * Alias for enqueue when a transaction client is explicitly required.
+   */
+  async enqueueWithTx(
+    tx: Prisma.TransactionClient,
+    type: string,
+    payload: any,
+  ) {
+    return this.enqueue(type, payload, tx);
   }
 
   /**
@@ -56,7 +68,7 @@ export class OutboxService implements OnModuleInit {
           specversion: "1.0",
         };
 
-        // NestJS ClientKafka emit requires a key/value payload for non-JSON serialization sometimes, 
+        // NestJS ClientKafka emit requires a key/value payload for non-JSON serialization sometimes,
         // but since pattern is topic, we just send the structured object
         await this.kafkaClient.emit(message.type, cloudEvent).toPromise();
 

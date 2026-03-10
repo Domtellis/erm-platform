@@ -19,8 +19,7 @@ export class AiController {
   private readonly logger = new Logger(AiController.name);
   private readonly version = "1.0.4-hitl-sync"; // Updated version to verify push
 
-
-  constructor(private readonly aiService: AiService) { }
+  constructor(private readonly aiService: AiService) {}
 
   @EventPattern("erm.monitoring.breach-detected.v1")
   async handleBreachDetected(@Payload() data: any) {
@@ -39,7 +38,11 @@ export class AiController {
   @Get("health")
   @ApiOperation({ summary: "Basic health check for the AI service" })
   healthCheck() {
-    return { status: "ok", version: this.version, timestamp: new Date().toISOString() };
+    return {
+      status: "ok",
+      version: this.version,
+      timestamp: new Date().toISOString(),
+    };
   }
 
   @Get("version")

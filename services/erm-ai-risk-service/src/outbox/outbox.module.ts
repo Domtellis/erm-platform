@@ -31,4 +31,4 @@ CompressionCodecs[CompressionTypes.Snappy] = SnappyCodec;
   providers: [OutboxService],
   exports: [OutboxService],
 })
-export class OutboxModule { }
+export class OutboxModule {}

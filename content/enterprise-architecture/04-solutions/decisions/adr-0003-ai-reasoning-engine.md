@@ -31,4 +31,4 @@ We use **Google Gemini 2.0 Flash** as the primary reasoning engine for the Intel
 - The `SyncEngineService` runs weekly to detect ILO publication changes and emit `erm.standards.out-of-sync.v1` if stale.
 - Prompt engineering is optimized for the RAG grounding pattern: **inject → instruct → cite → validate**.
 - Bias monitoring must account for Standards Drift as a new bias vector (see ADR-0009, Layer 6).
-- See [ADR-0011: Standards RAG Strategy](./adr-0011-standards-rag-strategy.md) for detailed rationale on the dual-source approach.
+- See ADR-0011: Standards RAG Strategy (Pending) for detailed rationale on the dual-source approach.

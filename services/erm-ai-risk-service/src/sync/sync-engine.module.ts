@@ -4,8 +4,8 @@ import { PrismaModule } from "../prisma/prisma.module";
 import { OutboxModule } from "../outbox/outbox.module";
 
 @Module({
-    imports: [PrismaModule, OutboxModule],
-    providers: [SyncEngineService],
-    exports: [SyncEngineService],
+  imports: [PrismaModule, OutboxModule],
+  providers: [SyncEngineService],
+  exports: [SyncEngineService],
 })
-export class SyncEngineModule { }
+export class SyncEngineModule {}

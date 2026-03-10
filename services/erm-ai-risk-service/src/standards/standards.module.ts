@@ -9,8 +9,8 @@ import { PrismaModule } from "../prisma/prisma.module";
  * to the rest of the AI Risk Service.
  */
 @Module({
-    imports: [PrismaModule],
-    providers: [PortContextService],
-    exports: [PortContextService],
+  imports: [PrismaModule],
+  providers: [PortContextService],
+  exports: [PortContextService],
 })
-export class StandardsModule { }
+export class StandardsModule {}
