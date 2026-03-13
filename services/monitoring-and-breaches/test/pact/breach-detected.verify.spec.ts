@@ -28,7 +28,7 @@ describe('Breach Detected Event Pact (Provider)', () => {
           }
         }), {
           'contentType': 'application/json',
-          'eventType': 'erm.monitoring.illegal-change.v1'
+          'eventType': 'erm.monitoring.breach-detected.v1'
         }),
       },
     }).verify();
