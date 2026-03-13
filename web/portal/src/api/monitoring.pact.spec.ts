@@ -10,6 +10,7 @@ const provider = new PactV3({
     consumer: 'WebPortal',
     provider: 'MonitoringService',
     dir: path.resolve(process.cwd(), 'pacts'),
+    cors: true,
 });
 
 describe('Monitoring API Pact Test', () => {
@@ -62,8 +63,16 @@ describe('Monitoring API Pact Test', () => {
             // Or use an axios interceptor to redirect?
             // Let's use an axios request interceptor to redirect all localhost:4010 requests to mockServer.url
 
+            const originalAdapter = axios.defaults.adapter;
+            // @ts-ignore
+            axios.defaults.adapter = 'http';
+
             const interceptor = axios.interceptors.request.use((config) => {
-                if (config.url?.includes('localhost:4010')) {
+                // Redirect relative API calls to the Pact Mock Server
+                if (config.url?.startsWith('/api/monitoring')) {
+                    config.baseURL = mockServer.url;
+                    config.url = config.url.replace('/api/monitoring', '');
+                } else if (config.url?.includes('localhost:4010')) {
                     config.baseURL = mockServer.url;
                     config.url = config.url.replace('http://localhost:4010', '');
                 }
@@ -76,6 +85,7 @@ describe('Monitoring API Pact Test', () => {
                 expect(breaches[0].id).toBe('breach-123');
             } finally {
                 axios.interceptors.request.eject(interceptor);
+                axios.defaults.adapter = originalAdapter;
             }
         });
     });

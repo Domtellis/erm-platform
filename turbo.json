@@ -22,6 +22,24 @@
                 "test/**/*.ts"
             ]
         },
+        "test:pact": {
+            "outputs": [
+                "pacts/**"
+            ],
+            "inputs": [
+                "src/**/*.ts",
+                "test/pact/**/*.ts"
+            ]
+        },
+        "pact:verify": {
+            "dependsOn": [
+                "^test:pact"
+            ],
+            "inputs": [
+                "src/**/*.ts",
+                "test/pact/**/*.ts"
+            ]
+        },
         "lint": {
             "outputs": []
         },
