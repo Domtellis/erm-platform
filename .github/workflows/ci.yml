@@ -81,9 +81,29 @@ jobs:
         run: |
           echo "Full filter result: ${{ toJSON(steps.filter.outputs) }}"
 
+  pact-contracts:
+    name: Verify Event Contracts (Pact)
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Verify Pacts (Consumer + Provider)
+        # Single runner execution prevents race conditions and missing file errors
+        run: npx turbo run test:pact pact:verify
+
   build-and-push:
     name: Build & Validate
-    needs: detect-changes
+    needs: [detect-changes, pact-contracts]
     # Only run this job if the matrix is NOT an empty array
     if: needs.detect-changes.outputs.matrix != '[]'
     runs-on: ubuntu-24.04-arm
