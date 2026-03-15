@@ -97,6 +97,11 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
+      - name: Generate Prisma Clients
+        run: |
+          npx prisma generate --schema=./services/erm-ai-risk-service/schema.prisma
+          npx prisma generate --schema=./services/monitoring-and-breaches/schema.prisma
+
       - name: Verify Pacts (Consumer + Provider)
         # Single runner execution prevents race conditions and missing file errors
         run: |
