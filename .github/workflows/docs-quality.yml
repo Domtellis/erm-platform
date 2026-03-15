@@ -54,5 +54,6 @@ jobs:
           codespell \
             --check-filenames \
             --check-hidden \
-            --skip="./.git,./exports,./node_modules" \
+            --skip="./.git,./exports,./node_modules,*package-lock.json,*playwright-report*,*.bak,*backups*" \
+            --ignore-words-list="bu,lod,afterall,fulfilment" \
             .
