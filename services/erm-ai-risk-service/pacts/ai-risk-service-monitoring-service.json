@@ -1,0 +1,140 @@
+{
+  "consumer": {
+    "name": "ai-risk-service"
+  },
+  "messages": [
+    {
+      "contents": {
+        "data": {
+          "breach_case_id": "e2490de5-5bd3-43d5-b7c4-526e33f71304",
+          "bu_id": "BU-001",
+          "metric_name": "LTIFR",
+          "observed_value": 12.5,
+          "severity": "high",
+          "site_id": "SITE-001",
+          "title": "Test Breach"
+        },
+        "id": "e2490de5-5bd3-43d5-b7c4-526e33f71304",
+        "source": "monitoring-service",
+        "time": "2023-01-01T00:00:00.000Z",
+        "type": "erm.monitoring.breach-detected.v1"
+      },
+      "description": "a breach is detected",
+      "generators": {
+        "body": {
+          "$.data.breach_case_id": {
+            "type": "Uuid"
+          },
+          "$.id": {
+            "type": "Uuid"
+          }
+        }
+      },
+      "matchingRules": {
+        "body": {
+          "$.data.breach_case_id": {
+            "combine": "AND",
+            "matchers": [
+              {
+                "match": "regex",
+                "regex": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+              }
+            ]
+          },
+          "$.data.bu_id": {
+            "combine": "AND",
+            "matchers": [
+              {
+                "match": "type"
+              }
+            ]
+          },
+          "$.data.metric_name": {
+            "combine": "AND",
+            "matchers": [
+              {
+                "match": "type"
+              }
+            ]
+          },
+          "$.data.observed_value": {
+            "combine": "AND",
+            "matchers": [
+              {
+                "match": "type"
+              }
+            ]
+          },
+          "$.data.severity": {
+            "combine": "AND",
+            "matchers": [
+              {
+                "match": "type"
+              }
+            ]
+          },
+          "$.data.site_id": {
+            "combine": "AND",
+            "matchers": [
+              {
+                "match": "type"
+              }
+            ]
+          },
+          "$.data.title": {
+            "combine": "AND",
+            "matchers": [
+              {
+                "match": "type"
+              }
+            ]
+          },
+          "$.id": {
+            "combine": "AND",
+            "matchers": [
+              {
+                "match": "regex",
+                "regex": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+              }
+            ]
+          },
+          "$.source": {
+            "combine": "AND",
+            "matchers": [
+              {
+                "match": "type"
+              }
+            ]
+          },
+          "$.time": {
+            "combine": "AND",
+            "matchers": [
+              {
+                "match": "type"
+              }
+            ]
+          }
+        }
+      },
+      "metadata": {
+        "contentType": "application/json",
+        "eventType": "erm.monitoring.breach-detected.v1"
+      }
+    }
+  ],
+  "metadata": {
+    "pact-js": {
+      "version": "16.3.0"
+    },
+    "pactRust": {
+      "ffi": "0.5.3",
+      "models": "1.3.9"
+    },
+    "pactSpecification": {
+      "version": "3.0.0"
+    }
+  },
+  "provider": {
+    "name": "monitoring-service"
+  }
+}

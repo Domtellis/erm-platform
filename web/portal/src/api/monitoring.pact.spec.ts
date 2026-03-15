@@ -64,7 +64,7 @@ describe('Monitoring API Pact Test', () => {
             // Let's use an axios request interceptor to redirect all localhost:4010 requests to mockServer.url
 
             const originalAdapter = axios.defaults.adapter;
-            // @ts-ignore
+            // @ts-expect-error
             axios.defaults.adapter = 'http';
 
             const interceptor = axios.interceptors.request.use((config) => {
