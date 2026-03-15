@@ -33,7 +33,7 @@
         },
         "pact:verify": {
             "dependsOn": [
-                "^test:pact"
+                "test:pact"
             ],
             "inputs": [
                 "src/**/*.ts",
