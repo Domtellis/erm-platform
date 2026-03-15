@@ -10,8 +10,8 @@
         "start:prod": "node dist/main",
         "build": "npx prisma generate --schema=./schema.prisma && npx nest build -p tsconfig.build.json",
         "doc:generate": "ts-node src/generate-openapi.ts",
-        "test:pact:verify": "jest test/pact/monitoring-provider.spec.ts",
-        "pact:verify": "jest test/pact/breach-detected.verify.spec.ts",
+        "test:pact:verify": "jest test/pact/monitoring-provider.spec.ts --testPathIgnorePatterns=\"nonexistent\"",
+        "pact:verify": "jest test/pact/breach-detected.verify.spec.ts --testPathIgnorePatterns=\"nonexistent\"",
         "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
         "test": "jest --passWithNoTests"
     },
