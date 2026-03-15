@@ -99,7 +99,9 @@ jobs:
 
       - name: Verify Pacts (Consumer + Provider)
         # Single runner execution prevents race conditions and missing file errors
-        run: npx turbo run test:pact pact:verify
+        run: |
+          npx turbo run test:pact 
+          npx turbo run pact:verify
 
   build-and-push:
     name: Build & Validate
