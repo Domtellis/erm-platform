@@ -69,7 +69,7 @@ This runbook defines the Standard Operating Procedures (SOPs) for managing **App
     *   If invalid: "Governance Policy Violation" error is displayed.
 
 ### SOP-05: Case Closure
-**Trigger:** Decision approved and remediation planned/completd.
+**Trigger:** Decision approved and remediation planned/completed.
 
 1.  Navigate to **Decisioning**.
 2.  Locate cases with status **Decision Approved**.
