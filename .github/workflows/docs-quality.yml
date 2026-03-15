@@ -55,5 +55,5 @@ jobs:
             --check-filenames \
             --check-hidden \
             --skip="./.git,./exports,./node_modules,*package-lock.json,*playwright-report*,*.bak,*backups*" \
-            --ignore-words-list="bu,lod,afterall,fulfilment" \
+            --ignore-words-list="bu,lod,afterall,fulfilment,ot,bunded,anull" \
             .
